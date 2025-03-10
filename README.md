@@ -2,6 +2,6 @@
 Aryan
 Niklas
 Mathea
-Elise E
+Elise 
 Brynjar
 Chris
