@@ -5,7 +5,7 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 
-class HttpClient {
+class NetworkClient {
     private val ktorHttpClient = HttpClient(CIO) {
         install(ContentNegotiation) {
             json()
