@@ -20,10 +20,10 @@ class SunriseDataSource {
         }
     }
 
-    suspend fun getSunrise() : SunData? {
+    suspend fun getSunrise(lat: String, lon: String, date: String) : SunData? {
         try {
             // TODO : fikse at den henter dagens dato og plassering
-            val response: HttpResponse = ktorHttpClient.get("https://in2000.api.met.no/weatherapi/sunrise/3.0/sun?lat=59.933333&lon=10.716667&date=2025-03-18&offset=+01:00")
+            val response: HttpResponse = ktorHttpClient.get("https://in2000.api.met.no/weatherapi/sunrise/3.0/sun?lat=$lat&lon=$lon&date=$date&offset=+01:00")
             return response.body()
         } catch (e: Exception) {
             return null
