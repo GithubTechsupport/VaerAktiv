@@ -3,7 +3,6 @@ package no.uio.ifi.in2000.EmptyApplication.model.metalerts
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FeaturesResponse(
-    val features: List<Features>,
-    val type : String? = null
+data class When(
+    val interval: List<String>
 )
