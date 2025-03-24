@@ -11,7 +11,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.EmptyApplication.model.loactionforecast.LocationForecastResponse
 
-class LocationForecast {
+class LocationForecastDataSource {
 
     private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
@@ -30,7 +30,7 @@ class LocationForecast {
 }
 
 suspend fun main() {
-    val loc = LocationForecast()
+    val loc = LocationForecastDataSource()
     val response = loc.getResponse("https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=60&lon=11")
     println("${response.properties.timeseries[0]}\n------------------------------------------\n${response.properties.timeseries[1]}\n------------------------------------------\n${response.properties.timeseries[2]}")
 }
