@@ -7,7 +7,7 @@ data class SunData(
     val copyright: String,
     val licenseURL: String,
     val type: String,
-    val geometry: Geometry,
-    val `when`: TimeInterval,
-    val properties: Properties
+    val geometry: SunGeometry,
+    val `when`: SunTimeInterval,
+    val properties: SunProperties
 )
