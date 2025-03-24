@@ -9,6 +9,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import no.uio.ifi.in2000.EmptyApplication.model.loactionforecast.LocationForecastResponse
 
 class LocationForecast {
 
