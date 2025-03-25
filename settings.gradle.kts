@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "EmptyApplication"
+rootProject.name = "VaerAktiv"
 include(":app")
