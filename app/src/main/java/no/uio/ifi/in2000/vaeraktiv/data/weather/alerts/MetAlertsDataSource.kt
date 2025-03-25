@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.data.alerts
+package no.uio.ifi.in2000.vaeraktiv.data.weather.alerts
 
 
 import io.ktor.client.HttpClient

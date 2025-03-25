@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.data.locationforecast
+package no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

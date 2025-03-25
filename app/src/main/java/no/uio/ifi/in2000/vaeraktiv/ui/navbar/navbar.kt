@@ -20,9 +20,9 @@ fun Navbar() {
         bottomBar = { BottomNavigationBar(navController) }
     ) { innerPadding ->
         NavHost(navController, startDestination = "home", Modifier.padding(innerPadding)) {
-            composable("home") { HomeScreen().Home() }
-            composable("activity") { ActivityScreen().Activity() }
-            composable("location") { LocationScreen().Location() }
+            composable("home") { HomeScreen() }
+            composable("activity") { ActivityScreen() }
+            composable("location") { LocationScreen() }
         }
     }
 }

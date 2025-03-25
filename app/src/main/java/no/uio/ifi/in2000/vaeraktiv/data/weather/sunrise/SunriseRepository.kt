@@ -1,9 +1,9 @@
-package no.uio.ifi.in2000.vaeraktiv.data.sunrise
+package no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise
 
 import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SunData
+import javax.inject.Inject
 
-class SunriseRepository {
-    private val sunriseDataSource: SunriseDataSource = SunriseDataSource()
+class SunriseRepository @Inject constructor(private val sunriseDataSource: SunriseDataSource){
 
     suspend fun getSunriseTime(
         lat: String,

@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.data.sunrise
+package no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
