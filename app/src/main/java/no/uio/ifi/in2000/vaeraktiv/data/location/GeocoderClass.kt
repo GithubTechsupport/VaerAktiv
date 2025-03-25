@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.data.weather
+package no.uio.ifi.in2000.vaeraktiv.data.location
 
 import android.content.Context
 import android.location.Address
