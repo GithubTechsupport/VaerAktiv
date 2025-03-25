@@ -5,8 +5,11 @@ import android.location.Address
 import android.location.Geocoder
 import java.io.IOException
 import java.util.Locale
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GeocoderClass(val context: Context) {
+@Singleton
+class GeocoderClass @Inject constructor(private val context: Context) {
 
     private val geocoder = Geocoder(context, Locale.getDefault())
     /**
