@@ -6,7 +6,7 @@ import androidx.core.app.ActivityCompat
 
 class PermissionManager {
     companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 100
+        const val LOCATION_PERMISSION_REQUEST_CODE = 100
 
         fun isLocationPermissionGranted(activity: Activity): Boolean {
             return ActivityCompat.checkSelfPermission(
