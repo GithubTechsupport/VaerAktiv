@@ -78,8 +78,12 @@ dependencies {
     implementation(libs.androidx.material)
 
     // hilt
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+
+    // google play location services
+    implementation(libs.play.services.location)
+
 }
 
 kapt {

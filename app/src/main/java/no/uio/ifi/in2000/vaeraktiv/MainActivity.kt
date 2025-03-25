@@ -10,6 +10,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.VaerAktivTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
