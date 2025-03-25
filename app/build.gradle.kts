@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "no.uio.ifi.in2000.EmptyApplication"
+    namespace = "no.uio.ifi.in2000.vaeraktiv"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "no.uio.ifi.in2000.EmptyApplication"
+        applicationId = "no.uio.ifi.in2000.vaeraktiv"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
