@@ -11,7 +11,7 @@ import javax.inject.Singleton
 @Singleton
 class GeocoderClass @Inject constructor(private val context: Context) {
 
-    private val geocoder = Geocoder(context, Locale.getDefault())
+    private val geocoder = Geocoder(context, Locale.forLanguageTag("no-NO"))
     /**
      * Converts a location name (e.g., "Oslo, Norway") into its latitude and longitude coordinates.
      * @param locationName The name of the location to geocode.
