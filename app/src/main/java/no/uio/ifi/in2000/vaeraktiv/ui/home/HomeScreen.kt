@@ -23,14 +23,17 @@ fun HomeScreen (navController: NavController) {
         .background(color = Color(0xFF6BAEDF)),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        LazyColumn(modifier = Modifier.padding(12.dp)) {
+        LazyColumn(
+            modifier = Modifier.padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+            ) {
             item { CurrentLocation("Oslo") } // Lokasjon
-            item { DisplayWeather("10", "2", "4mm", "5m/s") } // Alle dataene vi trenger ish
             item { DisplayWarning("Masse skummelt kan skje i dag") } // Advarsel hvis det er noe å varsle om
-            item { TodaysWeather(listOf("00:00", "03:00", "06:00", "09:00", "12:00", "15:00", "18:00", "21:00"), listOf("10", "10", "10", "10", "10", "10", "10", "10"), listOf("0", "0", "0", "0", "0", "0", "0", "0")) } // Været i dag
+            item { DisplayWeather("10", "2", "4mm", "5m/s") } // Alle dataene vi trenger ish
+            item { TodaysWeather(10, 18, "Skyet") } // Været i dag
             item { TodaysActivity(data) } // Dagens aktivitet
-            item { WeatherWeek(emptyList()) } // Været resten av uken
-            item { SunRiseSet("08", "23") } // Sol opp/ned
+            item { WeatherWeek(dummyWeatherData) } // Været resten av uken
+            item { SunRiseSet("08:20", "23:45") } // Sol opp/ned
         }
     }
 }
