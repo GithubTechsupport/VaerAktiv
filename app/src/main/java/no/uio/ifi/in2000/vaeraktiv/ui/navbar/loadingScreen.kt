@@ -14,7 +14,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import no.uio.ifi.in2000.vaeraktiv.R
 
-
+/*
+* This function is a loadingscreen. This function is called in navbar.kt. When this function is called a loading screen will be displayed with a sun and a sky image.
+* */
 @Preview(showBackground = true)
 @Composable
 fun LoadingScreen() {
