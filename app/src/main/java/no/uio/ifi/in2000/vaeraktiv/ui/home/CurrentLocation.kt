@@ -36,11 +36,11 @@ fun CurrentLocation(locationName : String) {
                 contentDescription = "Location Icon",
                 modifier = Modifier
                     .size(30.dp)
-                    .padding(end = 1.dp)
+                    .padding(end = 8.dp)
             )
             Text(
                 text = locationName,
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center
             )

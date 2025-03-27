@@ -43,7 +43,7 @@ fun DisplayWarning(warningInfo : String) {
             )
             .clickable { isExpanded = !isExpanded }
             .width(200.dp)
-            .padding(8.dp)
+            .padding(4.dp)
             .animateContentSize(), // Animasjon for størrelse
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

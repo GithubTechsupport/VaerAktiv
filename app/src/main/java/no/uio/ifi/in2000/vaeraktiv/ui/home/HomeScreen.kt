@@ -24,7 +24,7 @@ fun HomeScreen (navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         LazyColumn(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
             ) {
             item { CurrentLocation("Oslo") } // Lokasjon

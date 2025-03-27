@@ -64,7 +64,7 @@ fun DisplayWeather(temp: String, uv: String, rain: String, wind: String) {
                     shape = RoundedCornerShape(cornerDp)
                 )
                 .fillMaxWidth()
-                .padding(8.dp), // Legg til padding inni boksen
+                .padding(20.dp), // Legg til padding inni boksen
             horizontalArrangement = Arrangement.SpaceEvenly // Jevn fordeling
         ) {
             Text(

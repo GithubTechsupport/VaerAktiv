@@ -79,7 +79,9 @@ fun WeatherWeek(data: List<WeatherDay>) {
         Row (
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween, // jevn fordeling
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
         ){
             Text(
                 text = "Dato",

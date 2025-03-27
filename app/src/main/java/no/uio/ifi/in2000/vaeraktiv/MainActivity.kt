@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             VaerAktivTheme{
-                Text(text = "VaerAktiv")
+                Navbar()
            }
         }
     }

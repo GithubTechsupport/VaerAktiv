@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -32,11 +33,13 @@ fun TodaysActivity(weatherData: List<String>) {
                 color = Color(0xFFBCDEFD),
                 shape = RoundedCornerShape(cornerDp))
             .fillMaxWidth()
+            .padding(20.dp)
     ) {
         Row (
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly, // jevn fordeling
             modifier = Modifier.fillMaxWidth()
+                .padding(8.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.walk),
