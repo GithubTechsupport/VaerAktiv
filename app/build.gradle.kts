@@ -84,6 +84,9 @@ dependencies {
     // google play location services
     implementation(libs.play.services.location)
 
+
+    //Deepseek
+    implementation(libs.deepseek.kotlin)
 }
 
 kapt {

@@ -1,5 +1,6 @@
 [versions]
 agp = "8.8.0"
+deepseekKotlin = "0.2.0"
 hiltAndroid = "2.51.1"
 hiltAndroidVersion = "2.50"
 kotlin = "2.0.0"
@@ -24,6 +25,7 @@ playServicesLocation = "21.3.0"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-material = { module = "androidx.compose.material:material", version.ref = "material" }
+deepseek-kotlin = { module = "org.oremif:deepseek-kotlin", version.ref = "deepseekKotlin" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 hilt-android-v250 = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
