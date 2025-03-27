@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 
 class DeviceDateTimeRepository {
-    private val deviceDateTimeDataSource= DeviceDateTimeDataSource()
+    private val deviceDateTimeDataSource = DeviceDateTimeDataSource()
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDateTime(): LocalDateTime? {
