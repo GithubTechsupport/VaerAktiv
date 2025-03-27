@@ -28,23 +28,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 
 @SuppressLint("DiscouragedApi")
 @Composable
 fun PlaceCard(
-    locationName: String,
-    iconForIcon: String,
-    shortDesc: String,
-    highestTemp: String,
-    lowestTemp: String,
-    wind: String,
-    downPour: String,
-    uv: String,
+    location: FavoriteLocation,
     defaultPadding: Dp
 ) {
     val context = LocalContext.current
     val resourceId = context.resources.getIdentifier(
-        iconForIcon,
+        location.iconDesc,
         "drawable",
         context.packageName
     )
@@ -68,7 +62,7 @@ fun PlaceCard(
                     vertical = defaultPadding)
         ) {
             Text(
-                text = locationName,
+                text = location.name,
                 style = MaterialTheme.typography.headlineLarge,
                 modifier = Modifier
                     .padding(defaultPadding)
@@ -94,12 +88,10 @@ fun PlaceCard(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Column(
-
-            ) {
+            Column {
                 Image(
                     painter = painterResource(id = resourceId),
-                    contentDescription = shortDesc,
+                    contentDescription = location.iconDesc,
                     modifier = Modifier
                         .padding(defaultPadding)
                 )
@@ -113,19 +105,19 @@ fun PlaceCard(
                     horizontalArrangement = Arrangement.Center
                 ){
                     Text(
-                        text = shortDesc,
+                        text = location.shortDesc,
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
                     Text(
-                        text = "$uv UV",
+                        text = "${location.uv} UV",
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
                     Text(
-                        text = "${highestTemp}°/${lowestTemp}°",
+                        text = "${location.highestTemp}°/${location.lowestTemp}°",
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .padding(defaultPadding)
@@ -136,17 +128,16 @@ fun PlaceCard(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "$wind m/s",
+                        text = "${location.wind} m/s",
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
                     Text(
-                        text = "nedbør: $downPour ml",
+                        text = "nedbør: ${location.downPour} ml",
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .padding(defaultPadding)
-
                     )
                 }
             }

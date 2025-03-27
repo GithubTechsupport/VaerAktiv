@@ -23,7 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.vaeraktiv.R
 
-
+/*
+* This is a navigation bar for the application, this function is called in the MainActivity.kt.
+* When this function is called a display in the button wil be called, this display will have tre buttons.
+* One for activity, one for home and one for location.
+* I have used a list and a forEach loop to create the buttons. The rest of the code is just styling, on how the buttons should look like.
+* */
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     val navItems = listOf(

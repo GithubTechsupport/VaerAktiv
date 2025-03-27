@@ -55,6 +55,7 @@ fun AddLocationExpanded(defaultPading: Dp) {
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
+            // TODO: Legge til funksjon sånn at den legger til et kort i listen med favorittlokasjoner
             OutlinedTextField(
                 value = searchText,
                 onValueChange = { searchText = it },
