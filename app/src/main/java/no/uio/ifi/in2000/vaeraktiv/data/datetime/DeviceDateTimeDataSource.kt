@@ -1,13 +1,11 @@
 package no.uio.ifi.in2000.vaeraktiv.data.datetime
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import java.time.LocalDateTime
 import java.time.ZoneId
 
 class DeviceDateTimeDataSource {
-
     @RequiresApi(Build.VERSION_CODES.O)
     private val zoneId = ZoneId.systemDefault()
 
