@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.data.weather.alerts
 
 
+import androidx.navigation.Navigator
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
@@ -14,24 +15,19 @@ import kotlinx.coroutines.runBlocking
 import no.uio.ifi.in2000.vaeraktiv.model.metalerts.FeaturesResponse
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import no.uio.ifi.in2000.vaeraktiv.network.httpclient.NetworkClient
+import javax.inject.Inject
+import javax.inject.Named
 
-class MetAlertsDataSource{
-    private val ktorHttpClient = HttpClient(CIO) {
-        install(ContentNegotiation){
-            json(Json {
-                prettyPrint = true
-                ignoreUnknownKeys = true
-            })
-        }
-        defaultRequest {
-            header("User-Agent", "EmptyApplication/1.0")
-        }
-    }
+class MetAlertsDataSource @Inject constructor(@Named("prettyPrint-ignoreUnknownKeys-Client") private val networkClient: NetworkClient){
 
     suspend fun retriveAlertInfo() : FeaturesResponse? = withContext(Dispatchers.IO) {
         return@withContext try {
             //Log.i("MetAlertsDataSource", "Fetching data...")
-            val response : FeaturesResponse = ktorHttpClient.get("https://api.met.no/weatherapi/metalerts/2.0/current.json").body()
+            val response : FeaturesResponse = networkClient.ktorHttpClient
+                .get("https://api.met.no/weatherapi/metalerts/2.0/current.json") {
+                    header("User-Agent", "VaerAktiv/1.0")
+                }.body()
             println(response)
             response
         } catch (e : Exception){
@@ -40,11 +36,14 @@ class MetAlertsDataSource{
             null
         }
     }
-
 }
 
 fun main() = runBlocking{
-    val dataSource = MetAlertsDataSource()
+    val prettyPrintIgnoreUnknownJson = Json {
+        prettyPrint = true
+        ignoreUnknownKeys = true
+    }
+    val dataSource = MetAlertsDataSource(networkClient = NetworkClient(prettyPrintIgnoreUnknownJson))
     val response = dataSource.retriveAlertInfo()
     response?.features?.forEach { feature ->
         println("Feature type: ${feature.type}")
@@ -53,3 +52,15 @@ fun main() = runBlocking{
     }
     println("Main response: $response")
 }
+
+//    private val ktorHttpClient = HttpClient(CIO) {
+//        install(ContentNegotiation){
+//            json(Json {
+//                prettyPrint = true
+//                ignoreUnknownKeys = true
+//            })
+//        }
+//        defaultRequest {
+//            header("User-Agent", "VaerAktiv/1.0")
+//        }
+//    }
