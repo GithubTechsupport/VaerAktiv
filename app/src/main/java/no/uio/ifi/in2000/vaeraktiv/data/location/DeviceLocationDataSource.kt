@@ -45,10 +45,10 @@ class LocationDataSource @Inject constructor(
         awaitClose {}
     }
 
-    // Start receiving continuous location updates as a suspendable functions
+    // Start receiving continuous location updates as suspendable functions
     @SuppressLint("MissingPermission")
-    fun getLocationUpdates(): Flow<Location> = callbackFlow {
-        val locationRequest = LocationRequest.Builder(102,10_1000L).build()
+    fun getLocationUpdates(): Flow<Location?> = callbackFlow {
+        val locationRequest = LocationRequest.Builder(102,1000L).build()
         val callback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
                 result.lastLocation?.let { trySend(it) }

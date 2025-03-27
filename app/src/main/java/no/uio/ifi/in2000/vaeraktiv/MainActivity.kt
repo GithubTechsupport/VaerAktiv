@@ -1,16 +1,20 @@
 package no.uio.ifi.in2000.vaeraktiv
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import no.uio.ifi.in2000.vaeraktiv.data.location.LocationDataSource
+import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
+
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.Navbar
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.VaerAktivTheme
 import no.uio.ifi.in2000.vaeraktiv.utils.PermissionManager
@@ -18,8 +22,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject lateinit var locationDataSource: LocationDataSource
+    @Inject lateinit var locationRepository: LocationRepository
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("MainActivity", "onCreate called")
@@ -54,16 +59,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun collectLastLocation() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                Log.d("MainActivity", "collectLastLocation called")
-                locationDataSource.getLastLocation().collect { location ->
-                    Log.d("MainActivity", location.toString())
-                    location?.let {
-                        Log.d("MainActivity", "Retrieved location: ${it.latitude}, ${it.longitude}")
-                    } ?: Log.d("MainActivity", "Location is null")
-                }
-            }
+        locationRepository.startTracking(this) { location ->
+            Log.d("MainActivity", "Last location: $location")
         }
     }
 }
