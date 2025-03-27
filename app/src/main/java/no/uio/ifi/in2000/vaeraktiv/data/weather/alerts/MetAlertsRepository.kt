@@ -11,7 +11,7 @@ class MetAlertsRepository @Inject constructor(private val metAlertsDataSource: M
         val response = metAlertsDataSource.retriveAlertInfo()
         alertsCache = response?.features ?: emptyList()
     }
-
+    
     suspend fun getAlertForLocation(lat: String, lon: String): Features? {
         if (alertsCache.isEmpty()) {
             fetchAlerts()
@@ -49,18 +49,5 @@ class MetAlertsRepository @Inject constructor(private val metAlertsDataSource: M
             }
         }
         return inside
-    }
-}
-
-suspend fun main() {
-    val metAlertsDataSource = MetAlertsDataSource()
-    val metAlertsRepository = MetAlertsRepository(metAlertsDataSource)
-
-    val alert = metAlertsRepository.getAlertForLocation("65.983", "11.8732")
-
-    if (alert != null) {
-        println("Alert found: ${alert.properties?.title}")
-    } else {
-        println("No alert for this location.")
     }
 }
