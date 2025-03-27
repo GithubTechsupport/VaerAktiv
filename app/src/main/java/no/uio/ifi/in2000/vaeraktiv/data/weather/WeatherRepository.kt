@@ -1,13 +1,10 @@
 package no.uio.ifi.in2000.vaeraktiv.data.weather
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
-import no.uio.ifi.in2000.vaeraktiv.model.loactionforecast.Forecast
-import no.uio.ifi.in2000.vaeraktiv.model.loactionforecast.Instant
+import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(
@@ -31,30 +28,31 @@ class WeatherRepository @Inject constructor(
         */
     }
 
-    private var locations = mutableMapOf(("Oslo" to ("60" to "10")), ("Bergen" to ("62" to "14"))) //bare for testing
-    suspend fun getFavoriteLocationsData(): MutableList<WeatherData> {
-        val locationsData:MutableList<WeatherData> = mutableListOf()
+    private var locations = mutableMapOf( ("Bergen" to ("62" to "14")), ("Oslo" to ("60" to "10")),) //bare for testing
+
+    suspend fun getFavoriteLocationsData(): MutableList<FavoriteLocation> {
+        val locationsData:MutableList<FavoriteLocation> = mutableListOf()
         for (key in locations.keys){
             val pair = locations[key]
             if(pair != null){
                 val (lat, lon) = pair
                 val forecast = locationForecastRepository.getForecast(lat, lon)
                 val data = forecast?.properties?.timeseries?.get(0)?.data
-                val weatherData = WeatherData(
-                    location = key,
-                    weatherCode = data?.next12Hours?.summary?.symbolCode,
-                    maxTemp = data?.next6Hours?.details?.airTemperatureMax.toString(),
-                    minTemp = data?.next6Hours?.details?.airTemperatureMin.toString(),
-                    windSpeed = data?.instant?.details?.windSpeed.toString(),
-                    precipitation = data?.next6Hours?.details?.precipitationAmount.toString()
+                val weatherData = FavoriteLocation(
+                    name = key.toString(),
+                    iconDesc = data?.next12Hours?.summary?.symbolCode.toString(),
+                    shortDesc = "AI",
+                    highestTemp = data?.next6Hours?.details?.airTemperatureMax.toString(),
+                    lowestTemp = data?.next6Hours?.details?.airTemperatureMin.toString(),
+                    wind = data?.instant?.details?.windSpeed.toString(),
+                    downPour = data?.next6Hours?.details?.precipitationAmount.toString(),
+                    uv = data?.instant?.details?.ultravioletIndexClearSky.toString()
                 )
                 locationsData.add(weatherData)
             }
         }
         return locationsData
     }
-
-
 }
 
 suspend fun main() {
@@ -64,18 +62,3 @@ suspend fun main() {
     val test = w.getFavoriteLocationsData()
     println("${test[0]} ${test[1]}")
 }
-
-@Serializable
-data class WeatherData(
-    val location: String? = null,
-
-    val weatherCode: String? = null,
-
-    val maxTemp: String? = null,
-
-    val minTemp: String? = null,
-
-    val windSpeed: String? = null,
-
-    val precipitation: String? = null
-)
