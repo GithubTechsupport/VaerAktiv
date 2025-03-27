@@ -16,11 +16,16 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.model.ui.FavLocation
 
 @Preview
 @Composable
 fun LocationScreen() {
     val defaultPadding = 10.dp
+    var favouriteLocations: List<FavLocation> = mutableListOf(
+        FavLocation("Oslo", "clearsky_day", "Skyfritt", "25", "18", "0", "6", "1"),
+        FavLocation("Tønsberg", "fair_day", "Små skyer", "20", "16", "0", "5", "2.3")
+        )
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -43,38 +48,11 @@ fun LocationScreen() {
         }
         /* TODO: Legge til en liste man sender inn i AddPlace som man fyller opp
         *  Denne listen skal man kjøre en forEach{} på sånn at alle stedene får et PlaceCard*/
-        item { PlaceCard(
-            "Trondheim",
-            "cloudy",
-            "Overskyet",
-            "16",
-            "9",
-            "6",
-            "0.4",
-            "1",
-            defaultPadding
-        ) }
-        item { PlaceCard(
-            "Oslo",
-            "clearsky_day",
-            "Sol",
-            "20",
-            "16",
-            "2",
-            "0",
-            "5",
-            defaultPadding
-        ) }
-        item { PlaceCard(
-            "Bergen",
-            "heavyrain",
-            "Mye regn",
-            "10",
-            "7",
-            "2",
-            "7",
-            "5",
-            defaultPadding
-        ) }
+        item {
+            favouriteLocations.forEach {
+                PlaceCard(it, defaultPadding)
+            }
+        }
+
     }
 }
