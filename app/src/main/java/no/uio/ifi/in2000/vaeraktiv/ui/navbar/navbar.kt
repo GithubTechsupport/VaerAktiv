@@ -25,6 +25,13 @@ import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.location.LocationScreen
 import java.time.Duration
 
+
+/*
+*
+* This function is the navbar. This function is called in MainActivity.kt. When this function is called a display in the button wil be called, this display will
+*  have tre buttons called from the ButtonNavigationBar function.
+*The function also observe and update if the network status changes on the device. If the internet connection is lost a dialog will be displayed. if not the navbar is shown
+* */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navbar() {
@@ -34,6 +41,8 @@ fun Navbar() {
     var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
+
+    // this network observer will update the isOnline variable when the network status changes
     NetworkObserver { newStatus ->
         isOnline = newStatus
         showNoNetworkDialog = !newStatus
@@ -45,7 +54,7 @@ fun Navbar() {
         Box(modifier = Modifier.padding(innerPadding)) {
             if (isLoading) {
                 LoadingScreen() // Show LoadingScreen instead of NavHost
-                LaunchedEffect(Unit) {
+                LaunchedEffect(Unit) { // Launch a coroutine to simulate loading
                     delay(Duration.ofSeconds(1))
                     isLoading = false
                     if (!isOnline) {
@@ -59,6 +68,7 @@ fun Navbar() {
                     composable("activity") { ActivityScreen(isOnline) }
                     composable("location") { LocationScreen(isOnline) }
                 }
+                // Show NoNetworkDialog if isOnline is false
                 if (showNoNetworkDialog) {
                     NoNetworkDialog(
                         onRetry = {
