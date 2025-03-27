@@ -1,9 +1,11 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.location
+package no.uio.ifi.in2000.vaeraktiv.ui.activity
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,9 +19,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 
 @Composable
-fun AddPlace(defaultPadding: Dp) {
+fun ActivityCard(
+    activity: Activity,
+    defaultPadding: Dp
+) {
     var expanded by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
@@ -27,14 +34,13 @@ fun AddPlace(defaultPadding: Dp) {
             .padding(defaultPadding)
             .wrapContentHeight()
             .clickable{expanded = !expanded}
-            .clip(RoundedCornerShape(10))
+            .clip(RoundedCornerShape(10.dp))
             .background(
                 Brush.verticalGradient(
                     colors = listOf(Color(0xFFBCDEFD), Color(0xFF8ACAFB))
                 )
             )
     ) {
-        if (expanded) AddLocationExpanded(defaultPadding) else AddLocationDefault(defaultPadding)
-
+        if (expanded) ActivityCardExpanded(activity) else ActivityCardDefault(activity)
     }
 }
