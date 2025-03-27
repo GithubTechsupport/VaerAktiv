@@ -1,12 +1,13 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.activity
 
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,12 +28,11 @@ fun ActivityCard(
     defaultPadding: Dp
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val rowHeight by animateDpAsState(targetValue = if (expanded) 170.dp else 70.dp)
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(defaultPadding)
-            .height(rowHeight)
+            .wrapContentHeight()
             .clickable{expanded = !expanded}
             .clip(RoundedCornerShape(10.dp))
             .background(
@@ -42,6 +42,5 @@ fun ActivityCard(
             )
     ) {
         if (expanded) ActivityCardExpanded(activity) else ActivityCardDefault(activity)
-
     }
 }

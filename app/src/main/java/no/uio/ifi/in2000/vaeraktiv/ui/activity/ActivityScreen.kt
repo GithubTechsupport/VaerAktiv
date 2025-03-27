@@ -16,8 +16,22 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 @Preview(showBackground = true)
 @Composable
 fun ActivityScreen() {
-    val activitiesDate = ActivityDate("27. mars", listOf(Activity("10-12", "Gå tur", "Nå er det fint vær, en tur langs akerselva hadde vært fint i dag")))
-    val activities: List<ActivityDate> = listOf(activitiesDate)
+    /*TODO: Flytte variablene under til parametere */
+    val activitiesDate1 = ActivityDate("27. mars", listOf(
+        Activity("10:00 - 12:00", "Gå tur", "Nå er det fint vær, en tur langs akerselva hadde vært fint i dag"),
+        Activity("11:00 - 16:00", "Løpe tur", "Nå er det fint vær, en tur langs akerselva hadde vært fint i dag")
+    ))
+    val activitiesDate2 = ActivityDate("28. mars", listOf(
+        Activity("10:00 - 12:00", "Gå tur", "Nå er det fint vær, en tur langs akerselva hadde vært fint i dag"),
+        Activity("11:00 - 16:00", "Løpe tur", "Nå er det fint vær, en tur langs akerselva hadde vært fint i dag"),
+        Activity("11:00 - 16:00", "Løpe tur", "Nå er det fint vær, en tur langs akerselva hadde vært fint i dag")
+    ))
+    val activitiesDate3 = ActivityDate("28. mars", listOf(
+        Activity("10:00 - 12:00", "Gå tur", "Nå er det fint vær, en tur langs akerselva hadde vært fint i dag"),
+        Activity("11:00 - 16:00", "Løpe tur", "Nå er det fint vær, en tur langs akerselva hadde vært fint i dag"),
+        Activity("11:00 - 16:00", "Løpe tur", "Nå er det fint vær, en tur langs akerselva hadde vært fint i dag")
+    ))
+    val activities: List<ActivityDate> = listOf(activitiesDate1, activitiesDate2, activitiesDate3)
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
