@@ -125,7 +125,7 @@ fun PlaceCard(
                             .padding(defaultPadding)
                     )
                     Text(
-                        text = "${highestTemp}C/${lowestTemp}C",
+                        text = "${highestTemp}°/${lowestTemp}°",
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .padding(defaultPadding)
