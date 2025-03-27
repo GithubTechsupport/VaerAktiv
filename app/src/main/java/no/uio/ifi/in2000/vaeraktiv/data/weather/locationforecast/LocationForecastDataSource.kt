@@ -9,6 +9,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import no.uio.ifi.in2000.vaeraktiv.model.Ai.Prompt
 import no.uio.ifi.in2000.vaeraktiv.model.loactionforecast.LocationForecastResponse
 
 class LocationForecastDataSource {
@@ -32,5 +33,6 @@ class LocationForecastDataSource {
 suspend fun main() {
     val loc = LocationForecastDataSource()
     val response = loc.getResponse("https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=60&lon=11")
-    println("${response.properties.timeseries[0]}\n------------------------------------------\n${response.properties.timeseries[1]}\n------------------------------------------\n${response.properties.timeseries[2]}")
+    val prompt = Prompt(response.properties, 5)
+    println(prompt)
 }
