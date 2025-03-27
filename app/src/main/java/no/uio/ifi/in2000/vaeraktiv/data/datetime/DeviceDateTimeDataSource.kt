@@ -6,7 +6,7 @@ import androidx.annotation.RequiresApi
 import java.time.LocalDateTime
 import java.time.ZoneId
 
-class DateTimeDataSource {
+class DeviceDateTimeDataSource {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private val zoneId = ZoneId.systemDefault()

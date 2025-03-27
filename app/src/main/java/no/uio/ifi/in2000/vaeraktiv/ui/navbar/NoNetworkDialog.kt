@@ -1,0 +1,29 @@
+package no.uio.ifi.in2000.vaeraktiv.ui.navbar
+
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun NoNetworkDialog(onRetry: () -> Unit, onClose: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = { },
+        title = { Text("Ingen Internettforbindelse") },
+        text = { Text("Du må være tilkoblet internett for å laste inn data.") },
+        confirmButton = {
+            Button(onClick = { onRetry() }) {
+                Text("Prøv igjen")
+            }
+        },
+        dismissButton = {
+            Button(onClick = { onClose() }) {
+                Text("Avslutt")
+            }
+        },
+        modifier = Modifier.padding(16.dp)
+    )
+}

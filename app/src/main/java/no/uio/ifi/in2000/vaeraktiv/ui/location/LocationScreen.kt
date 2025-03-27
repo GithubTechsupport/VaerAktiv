@@ -18,41 +18,43 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavLocation
 
-@Preview
 @Composable
-fun LocationScreen() {
-    val defaultPadding = 10.dp
-    var favouriteLocations: List<FavLocation> = mutableListOf(
-        FavLocation("Oslo", "clearsky_day", "Skyfritt", "25", "18", "0", "6", "1"),
-        FavLocation("Tønsberg", "fair_day", "Små skyer", "20", "16", "0", "5", "2.3")
+fun LocationScreen(isOnline: Boolean) {
+    if(isOnline) {
+        val defaultPadding = 10.dp
+        var favouriteLocations: List<FavLocation> = mutableListOf(
+            FavLocation("Oslo", "clearsky_day", "Skyfritt", "25", "18", "0", "6", "1"),
+            FavLocation("Tønsberg", "fair_day", "Små skyer", "20", "16", "0", "5", "2.3")
         )
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-            Brush.verticalGradient(
-                colors = listOf(Color(0xFF6BAEDF), Color(0xFF8ACAFF))
-            )
-        ),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        item { AddPlace(defaultPadding) }
-        item {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .padding(defaultPadding)
-                .height(1.dp)
-                .background(color = MaterialTheme.colorScheme.onBackground)
-            )
-        }
-        /* TODO: Legge til en liste man sender inn i AddPlace som man fyller opp
-        *  Denne listen skal man kjøre en forEach{} på sånn at alle stedene får et PlaceCard*/
-        item {
-            favouriteLocations.forEach {
-                PlaceCard(it, defaultPadding)
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(Color(0xFF6BAEDF), Color(0xFF8ACAFF))
+                    )
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            item { AddPlace(defaultPadding) }
+            item {
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(defaultPadding)
+                    .height(1.dp)
+                    .background(color = MaterialTheme.colorScheme.onBackground)
+                )
             }
-        }
+            /* TODO: Legge til en liste man sender inn i AddPlace som man fyller opp
+            *  Denne listen skal man kjøre en forEach{} på sånn at alle stedene får et PlaceCard*/
+            item {
+                favouriteLocations.forEach {
+                    PlaceCard(it, defaultPadding)
+                }
+            }
 
+        }
     }
+
 }
