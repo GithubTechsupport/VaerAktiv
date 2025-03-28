@@ -11,13 +11,13 @@ import javax.inject.Singleton
 @Singleton
 class GeocoderClass @Inject constructor(private val context: Context) {
 
-    private val geocoder = Geocoder(context, Locale.forLanguageTag("no-NO"))
+    private val geocoder = Geocoder(context, Locale.forLanguageTag("nb-NO"))
     /**
      * Converts a location name (e.g., "Oslo, Norway") into its latitude and longitude coordinates.
      * @param locationName The name of the location to geocode.
      * @return A Pair containing the latitude and longitude, or null if the location cannot be found.
      */
-    fun getLocationCoordinates(locationName: String): Pair<Double, Double>? {
+    fun getCoordinatesFromLocation(locationName: String): Pair<Double, Double>? {
         try {
             val addressList: List<Address>? = geocoder.getFromLocationName(locationName, 1)
 
@@ -38,6 +38,25 @@ class GeocoderClass @Inject constructor(private val context: Context) {
             // Handle invalid arguments (e.g., null locationName)
             e.printStackTrace()
             return null
+        }
+    }
+
+    fun getLocationFromCoordinates(coordinates: Pair<Double, Double>): Address? {
+        try {
+            val addressList: List<Address>? = geocoder.getFromLocation(coordinates.first, coordinates.second, 3)
+            if (!addressList.isNullOrEmpty()) {
+                val address: Address = addressList[0]
+                return address
+            } else {
+                // Location not found
+                return null
+            }
+        } catch (e: IOException) {
+            // Handle network or other I/O errors
+            throw e
+        } catch (e: Exception) {
+            // Handle other exceptions
+            throw e
         }
     }
 }

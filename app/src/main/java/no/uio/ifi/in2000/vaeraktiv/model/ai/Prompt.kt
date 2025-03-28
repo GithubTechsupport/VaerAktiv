@@ -1,6 +1,6 @@
-package no.uio.ifi.in2000.vaeraktiv.model.Ai
+package no.uio.ifi.in2000.vaeraktiv.model.ai
 
-import no.uio.ifi.in2000.vaeraktiv.model.loactionforecast.Properties
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Properties
 
 data class Prompt(
     val properties: Properties,
