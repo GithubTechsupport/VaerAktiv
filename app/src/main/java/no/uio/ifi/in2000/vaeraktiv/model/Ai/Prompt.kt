@@ -7,11 +7,11 @@ data class Prompt(
     val limit: Int
 ) {
     override fun toString(): String {
-        val userPrompt = properties.timeseries.take(limit).joinToString("\n\n") { ts ->
+        val userPrompt = properties.timeseries.joinToString("\n\n") {
             """
-            datetime: ${ts.time}
-            temperature: ${ts.data.instant.details.airTemperature}
-            precipitation: ${ts.data.instant.details.precipitationAmount}
+            datetime: ${it.time}
+            temperature: ${it.data.instant.details.airTemperature}
+            precipitation: ${it.data.instant.details.precipitationAmount}
             """.trimIndent()
         }
         return userPrompt

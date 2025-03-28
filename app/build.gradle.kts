@@ -85,8 +85,12 @@ dependencies {
     implementation(libs.play.services.location)
 
 
-    //Deepseek
+    // deepseek
     implementation(libs.deepseek.kotlin)
+
+    // deepseek dependencies (ktor client logging)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.cio)
 }
 
 kapt {
