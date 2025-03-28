@@ -29,10 +29,3 @@ class LocationForecastDataSource {
         return@withContext forecastResponse
     }
 }
-
-suspend fun main() {
-    val loc = LocationForecastDataSource()
-    val response = loc.getResponse("https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=60&lon=11")
-    val prompt = Prompt(response.properties, 5)
-    println(prompt)
-}
