@@ -28,12 +28,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.model.ui.FavLocation
+import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 
 @SuppressLint("DiscouragedApi")
 @Composable
 fun PlaceCard(
-    location: FavLocation,
+    location: FavoriteLocation,
     defaultPadding: Dp
 ) {
     val context = LocalContext.current
@@ -117,7 +117,7 @@ fun PlaceCard(
                             .padding(defaultPadding)
                     )
                     Text(
-                        text = "${location.highetsTemp}°/${location.lowestTemp}°",
+                        text = "${location.highestTemp}°/${location.lowestTemp}°",
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .padding(defaultPadding)
@@ -138,7 +138,6 @@ fun PlaceCard(
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .padding(defaultPadding)
-
                     )
                 }
             }
