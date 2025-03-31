@@ -6,5 +6,5 @@ data class ThisWeeksWeatherData(
     val uvMax : String,
     val iconDesc : String,
     val precipitationAmount : String, // bruker ikke til å begynne med
-    val wind : String // bruker ikke til å begynne med
+    val wind : String // bruker ikke til å begynne med.
 )
