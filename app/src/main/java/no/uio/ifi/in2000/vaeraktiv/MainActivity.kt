@@ -7,12 +7,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
 
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.Navbar
@@ -23,6 +19,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject lateinit var locationRepository: LocationRepository
+    @Inject lateinit var geocoderClass: GeocoderClass
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +57,20 @@ class MainActivity : ComponentActivity() {
 
     private fun collectLastLocation() {
         locationRepository.startTracking(this) { location ->
-            Log.d("MainActivity", "Last location: $location")
+            //val coordinates = Pair(location.latitude, location.longitude)
+            val coordinates = Pair(59.9522, 10.8874)
+            Log.d("MainActivity", "Coordinates: $coordinates")
+            try {
+                val address = geocoderClass.getLocationFromCoordinates(coordinates)
+                if (address != null) {
+                    Log.d("MainActivity", address.toString())
+                } else {
+                    Log.d("MainActivity", "Address is unknown")
+                }
+            } catch (e: Exception) {
+                Log.d("MainActivity", "Error getting location name: ${e.message}")
+            }
+
         }
     }
 }

@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.model.loactionforecast
+package no.uio.ifi.in2000.vaeraktiv.model.nowcast
 
 import kotlinx.serialization.Serializable
 

@@ -84,6 +84,13 @@ dependencies {
     // google play location services
     implementation(libs.play.services.location)
 
+
+    // deepseek
+    implementation(libs.deepseek.kotlin)
+
+    // deepseek dependencies (ktor client logging)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.cio)
 }
 
 kapt {

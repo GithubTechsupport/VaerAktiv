@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.vaeraktiv.ui.location
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -68,13 +70,21 @@ fun PlaceCard(
                     .padding(defaultPadding)
             )
             Spacer(modifier = Modifier.weight(1f))
-            Icon(
-                imageVector = Icons.Filled.FavoriteBorder,
-                contentDescription = "Heart Icon",
+            Box(
                 modifier = Modifier
-                    .padding(defaultPadding)
-                    .size(30.dp)
-            )
+                    .clickable(
+                        onClick = {/* TODO: slett */}
+                    )
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = "Delete Icon",
+                    modifier = Modifier
+                        .padding(defaultPadding)
+                        .size(30.dp)
+                )
+            }
+
         }
         Box(modifier = Modifier
             .fillMaxWidth()
