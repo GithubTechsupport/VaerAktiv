@@ -1,7 +1,7 @@
-package no.uio.ifi.in2000.vaeraktiv.data.Ai
+package no.uio.ifi.in2000.vaeraktiv.data.ai
 
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource
-import no.uio.ifi.in2000.vaeraktiv.model.Ai.Prompt
+import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import org.oremif.deepseek.api.chat
 import org.oremif.deepseek.client.DeepSeekClient
 import org.oremif.deepseek.models.ChatCompletion
@@ -9,11 +9,12 @@ import org.oremif.deepseek.models.ChatModel
 import org.oremif.deepseek.models.ResponseFormat
 import org.oremif.deepseek.models.chatCompletionParams
 
-
 class AiRepository {
     private val deepseekApiKey = "sk-1825ec96e3364d37874ea10a91bb2c73"
-    private val client = DeepSeekClient(deepseekApiKey)
-    private val systemPrompt = "The user will provide a weather forecast. Your job is to pick 3 different time intervals for each day to suggest activities for based on the weather at that time, for the next 5 days.\n\n"
+    private val client = DeepSeekClient(deepseekApiKey) {
+        chatCompletionTimeout(120_000)
+    }
+    private val systemPrompt = "The user will provide a weather forecast. Your job is to pick 3 different time intervals for each day to suggest activities for based on the weather at that time, for the next 5 days."
     private val examplesPrompt =
         """
         NOTE THAT EXAMPLE INPUTS AND OUTPUTS ARE SHORTENED VERSIONS OF THE ACTUAL INPUTS AND OUTPUT YOU WILL PRODUCE.
@@ -82,18 +83,18 @@ class AiRepository {
         
         END OF EXAMPLES
         """.trimIndent()
-    private val completeSystemPrompt = systemPrompt
 
     private val params = chatCompletionParams {
         model = ChatModel.DEEPSEEK_CHAT
         temperature = 0.3
         responseFormat = ResponseFormat.jsonObject
+
     }
 
     suspend fun getResponse(prompt: String): ChatCompletion {
         val response: ChatCompletion = client.chat(params) {
             system(systemPrompt)
-            user("$examplesPrompt\n\n Following is the user prompt:\n$prompt")
+            user("$examplesPrompt\n\nFollowing is the user prompt:\n$prompt")
         }
         return response
     }
@@ -105,5 +106,6 @@ suspend fun main() {
     val locationForecastDataSource = LocationForecastDataSource()
     val response = locationForecastDataSource.getResponse("https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=60&lon=11")
     val prompt = Prompt(response.properties, 5)
+    //println(prompt)
     println(aiRepository.getResponse(prompt.toString()).choices[0].message.content)
 }

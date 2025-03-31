@@ -1,10 +1,11 @@
 package no.uio.ifi.in2000.vaeraktiv.data.weather
 
+import kotlinx.serialization.Serializable
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
-import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
+import no.uio.ifi.in2000.vaeraktiv.model.ui.FavLocation
 import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(

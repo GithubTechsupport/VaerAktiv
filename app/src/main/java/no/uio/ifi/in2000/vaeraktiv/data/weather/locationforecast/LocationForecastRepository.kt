@@ -1,7 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast
 
 
-import no.uio.ifi.in2000.vaeraktiv.model.loactionforecast.LocationForecastResponse
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import javax.inject.Inject
 
 class LocationForecastRepository @Inject constructor(locationForecastDataSource: LocationForecastDataSource){

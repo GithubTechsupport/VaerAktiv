@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.model.Ai
+package no.uio.ifi.in2000.vaeraktiv.model.ai
 
 data class JsonResponse(
     val intervals: List<Interval>
