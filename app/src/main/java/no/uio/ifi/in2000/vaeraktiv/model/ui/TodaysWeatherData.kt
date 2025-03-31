@@ -1,10 +1,11 @@
 package no.uio.ifi.in2000.vaeraktiv.model.ui
 
 data class TodaysWeatherData(
-    val tempNow : String,
-    val tempMax : String,
-    val uv : String,
-    val wind : String,
-    val precipitationAmount : String,
-    val iconDesc : String
+    val tempNow : String, // NowCast
+    val tempMax : String, // Location
+    val tempMin : String, // Location
+    val uv : String, // Location
+    val wind : String, // NowCast
+    val precipitationAmount : String, // NowCast
+    val iconDesc : String // Location
 )
