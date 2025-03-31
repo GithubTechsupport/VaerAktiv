@@ -100,7 +100,7 @@ object AppModule {
         sunriseRepository: SunriseRepository,
         favoriteLocationRepo: FavoriteLocationRepository
     ): WeatherRepository {
-        return WeatherRepository(metAlertsRepository, locationForecastRepository, sunriseRepository, favoriteLocationRepo)
+        return WeatherRepository(metAlertsRepository, locationForecastRepository, sunriseRepository)
     }
 
 

@@ -17,50 +17,51 @@ class WeatherRepository @Inject constructor(
     private val metAlertsRepository: MetAlertsRepository,
     private val locationForecastRepository: LocationForecastRepository,
     private val sunriseRepository: SunriseRepository, //bare nullable for testing
-    private val favoriteLocationRepo: FavoriteLocationRepository
+
 ) {
     private var locations: MutableMap<String, Pair<String, String>> = mutableMapOf()
 
 
 
 
-    suspend fun getUpdates() {
-        val locationsList = favoriteLocationRepo.getAllLocations()
+//    suspend fun getUpdates(locationsList: List<String>) {
+//        val locationsList = favoriteLocationRepo.getAllLocations()
+//
+//        locationsList.forEach { line ->
+//            val parts = line.split(",")
+//            if (parts.size >= 3) {
+//                val name = parts[0]
+//                val lat = parts[1]
+//                val lon = parts[2]
+//                locations[name] = Pair(lat, lon)
+//
+//                locationForecastRepository.getUpdate(lat, lon)
+//            }
+//        }
+//    }
 
+
+    suspend fun getFavoriteLocationsData(locationsList: List<String>): MutableList<FavoriteLocation> {
+        val locationsData:MutableList<FavoriteLocation> = mutableListOf()
         locationsList.forEach { line ->
             val parts = line.split(",")
-            if (parts.size >= 3) {
-                val name = parts[0]
-                val lat = parts[1]
-                val lon = parts[2]
-                locations[name] = Pair(lat, lon)
+            val placeName = parts[0]
+            val lat = parts[1]
+            val lon = parts[2]
+            val forecast = locationForecastRepository.getForecast(lat, lon)
+            val data = forecast?.properties?.timeseries?.get(0)?.data
+            val weatherData = FavoriteLocation(
+                name = placeName,
+                iconDesc = data?.next12Hours?.summary?.symbolCode.toString(),
+                shortDesc = "AI",
+                highestTemp = data?.next6Hours?.details?.airTemperatureMax.toString(),
+                lowestTemp = data?.next6Hours?.details?.airTemperatureMin.toString(),
+                wind = data?.instant?.details?.windSpeed.toString(),
+                downPour = data?.next6Hours?.details?.precipitationAmount.toString(),
+                uv = data?.instant?.details?.ultravioletIndexClearSky.toString()
+            )
+            locationsData.add(weatherData)
 
-                locationForecastRepository.getUpdate(lat, lon)
-            }
-        }
-    }
-
-
-    suspend fun getFavoriteLocationsData(): MutableList<FavoriteLocation> {
-        val locationsData:MutableList<FavoriteLocation> = mutableListOf()
-        for (key in locations.keys){
-            val pair = locations[key]
-            if(pair != null){
-                val (lat, lon) = pair
-                val forecast = locationForecastRepository.getForecast(lat, lon)
-                val data = forecast?.properties?.timeseries?.get(0)?.data
-                val weatherData = FavoriteLocation(
-                    name = key.toString(),
-                    iconDesc = data?.next12Hours?.summary?.symbolCode.toString(),
-                    shortDesc = "AI",
-                    highestTemp = data?.next6Hours?.details?.airTemperatureMax.toString(),
-                    lowestTemp = data?.next6Hours?.details?.airTemperatureMin.toString(),
-                    wind = data?.instant?.details?.windSpeed.toString(),
-                    downPour = data?.next6Hours?.details?.precipitationAmount.toString(),
-                    uv = data?.instant?.details?.ultravioletIndexClearSky.toString()
-                )
-                locationsData.add(weatherData)
-            }
         }
         return locationsData
     }

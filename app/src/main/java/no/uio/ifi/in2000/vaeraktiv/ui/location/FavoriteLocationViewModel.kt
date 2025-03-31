@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.vaeraktiv.ui.location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,8 +31,8 @@ class FavoriteLocationViewModel @Inject constructor(
 
     private fun loadLocationsAndFetchWeather() {
         viewModelScope.launch {
-            weatherRepo.getUpdates()
-            _data.value = weatherRepo.getFavoriteLocationsData()
+            val locations = favoriteLocationRepo.getAllLocations()
+            _data.value = weatherRepo.getFavoriteLocationsData(locations)
         }
     }
 
@@ -39,6 +40,13 @@ class FavoriteLocationViewModel @Inject constructor(
         viewModelScope.launch {
             favoriteLocationRepo.addLocationByName(loc)
             loadLocationsAndFetchWeather()
+        }
+    }
+
+    fun deleteLocation(loc: String) {
+        viewModelScope.launch {
+            favoriteLocationRepo.deleteLocationByName(loc)
+            _data.value = _data.value.filterNot { it.name == loc }
         }
     }
 

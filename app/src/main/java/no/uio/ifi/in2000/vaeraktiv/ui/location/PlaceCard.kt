@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.location
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,13 +31,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 
 @SuppressLint("DiscouragedApi")
 @Composable
 fun PlaceCard(
     location: FavoriteLocation,
-    defaultPadding: Dp
+    defaultPadding: Dp,
+    viewModel: FavoriteLocationViewModel
 ) {
     val context = LocalContext.current
     val resourceId = context.resources.getIdentifier(
@@ -82,6 +85,13 @@ fun PlaceCard(
                     modifier = Modifier
                         .padding(defaultPadding)
                         .size(30.dp)
+                        .clickable(
+                            onClick = {
+                                viewModel.deleteLocation(location.name)
+                                viewModel.getData()
+                            }
+
+                        )
                 )
             }
 

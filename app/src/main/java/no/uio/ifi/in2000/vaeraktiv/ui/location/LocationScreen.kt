@@ -21,11 +21,11 @@ import androidx.compose.ui.unit.dp
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
-fun LocationScreen(isOnline: Boolean, viewmodel: FavoriteLocationViewModel) {
+fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
     if(isOnline) {
         val defaultPadding = 10.dp
 
-        val list by viewmodel.data.collectAsState(initial = emptyList())
+        val list by viewModel.data.collectAsState(initial = emptyList())
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -37,7 +37,7 @@ fun LocationScreen(isOnline: Boolean, viewmodel: FavoriteLocationViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            item { AddPlace(defaultPadding, viewmodel) }
+            item { AddPlace(defaultPadding, viewModel) }
             item {
                 Box(modifier = Modifier
                     .fillMaxWidth()
@@ -52,7 +52,7 @@ fun LocationScreen(isOnline: Boolean, viewmodel: FavoriteLocationViewModel) {
 
             list.forEach {
                 item {
-                    PlaceCard(it, defaultPadding)
+                    PlaceCard(it, defaultPadding, viewModel)
                 }
             }
         }
