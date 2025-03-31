@@ -22,6 +22,7 @@ import no.uio.ifi.in2000.vaeraktiv.MainActivity
 import no.uio.ifi.in2000.vaeraktiv.network.connection.NetworkObserver
 import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreen
+import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.LocationScreen
 import java.time.Duration
 
@@ -34,7 +35,7 @@ import java.time.Duration
 * */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Navbar() {
+fun Navbar(favoriteLocationViewModel:FavoriteLocationViewModel) {
     val navController = rememberNavController()
     var isOnline by remember { mutableStateOf(true) }
     var showNoNetworkDialog by remember { mutableStateOf(false) }
@@ -66,7 +67,7 @@ fun Navbar() {
                 NavHost(navController, startDestination = "home") {
                     composable("home") { HomeScreen(navController, isOnline) }
                     composable("activity") { ActivityScreen(isOnline) }
-                    composable("location") { LocationScreen(isOnline) }
+                    composable("location") { LocationScreen(isOnline, favoriteLocationViewModel) }
                 }
                 // Show NoNetworkDialog if isOnline is false
                 if (showNoNetworkDialog) {

@@ -10,8 +10,9 @@ import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
+import javax.inject.Inject
 
-class LocationForecastDataSource {
+class LocationForecastDataSource @Inject constructor() {
 
     private val client = HttpClient(CIO) {
         install(ContentNegotiation) {

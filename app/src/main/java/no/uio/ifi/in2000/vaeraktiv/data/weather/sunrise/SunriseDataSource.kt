@@ -10,8 +10,9 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SunData
+import javax.inject.Inject
 
-class SunriseDataSource {
+class SunriseDataSource @Inject constructor() {
     private val ktorHttpClient = HttpClient(CIO) {
         install(ContentNegotiation) {
             json(Json{

@@ -6,10 +6,12 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import dagger.hilt.android.AndroidEntryPoint
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
+import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.Navbar
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.VaerAktivTheme
@@ -20,7 +22,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
     @Inject lateinit var locationRepository: LocationRepository
     @Inject lateinit var geocoderClass: GeocoderClass
-
+    private val favoriteLocationViewModel: FavoriteLocationViewModel by viewModels()
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +36,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             VaerAktivTheme{
-                Navbar()
+                Navbar(favoriteLocationViewModel)
             }
         }
     }

@@ -4,13 +4,15 @@ package no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import javax.inject.Inject
 
-class LocationForecastRepository @Inject constructor(locationForecastDataSource: LocationForecastDataSource){
-    private val loc = locationForecastDataSource
+class LocationForecastRepository @Inject constructor(
+    private val dataSource: LocationForecastDataSource
+){
+
     private var forecasts: MutableMap<Pair<String, String>, LocationForecastResponse?> = mutableMapOf()
     private var response: LocationForecastResponse? = null
     suspend fun getUpdate(lat: String, lon: String): LocationForecastResponse? {
 
-        response = loc.getResponse("https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=$lat&lon=$lon")
+        response = dataSource.getResponse("https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=$lat&lon=$lon")
         forecasts[Pair(lat, lon)] = response
         return response
     }

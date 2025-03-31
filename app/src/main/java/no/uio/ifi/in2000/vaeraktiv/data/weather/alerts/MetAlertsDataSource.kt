@@ -14,8 +14,9 @@ import kotlinx.coroutines.runBlocking
 import no.uio.ifi.in2000.vaeraktiv.model.metalerts.FeaturesResponse
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
 
-class MetAlertsDataSource{
+class MetAlertsDataSource @Inject constructor(){
     private val ktorHttpClient = HttpClient(CIO) {
         install(ContentNegotiation){
             json(Json {
