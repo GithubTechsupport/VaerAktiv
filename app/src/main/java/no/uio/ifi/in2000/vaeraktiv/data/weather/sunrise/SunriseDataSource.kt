@@ -9,13 +9,6 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class SunriseDataSource @Inject constructor(@Named("ignoreUnknownKeys-Client") private val networkClient: NetworkClient){
-//    private val ktorHttpClient = HttpClient(CIO) {
-//        install(ContentNegotiation) {
-//            json(Json{
-//                ignoreUnknownKeys = true
-//            })
-//        }
-//    }
 
     suspend fun getSunrise(lat: String, lon: String, date: String) : SunData? {
         try {
@@ -25,7 +18,7 @@ class SunriseDataSource @Inject constructor(@Named("ignoreUnknownKeys-Client") p
         } catch (e: Exception) {
             return null
         } finally {
-            networkClient.ktorHttpClient.close()//ktorHttpClient.close()
+            networkClient.ktorHttpClient.close()
         }
     }
 }
