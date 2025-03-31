@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 
 class HomeViewModel (weatherRepository: WeatherRepository) : ViewModel() {
-
+    /*
     private val weatherData = weatherRepository.getWeatherData()
 
     private val _weatherToday = MutableLiveData<Details>(mutableStateListOf())
@@ -32,5 +32,5 @@ class HomeViewModel (weatherRepository: WeatherRepository) : ViewModel() {
             _weatherThisWeek.value = data
         }
     }
-
+    */
 }
