@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 
 @Composable
-fun AddPlace(defaultPadding: Dp) {
+fun AddPlace(defaultPadding: Dp, viewModel: FavoriteLocationViewModel) {
     var expanded by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
@@ -34,7 +34,7 @@ fun AddPlace(defaultPadding: Dp) {
                 )
             )
     ) {
-        if (expanded) AddLocationExpanded(defaultPadding) else AddLocationDefault(defaultPadding)
+        if (expanded) AddLocationExpanded(defaultPadding, viewModel) else AddLocationDefault(defaultPadding)
 
     }
 }
