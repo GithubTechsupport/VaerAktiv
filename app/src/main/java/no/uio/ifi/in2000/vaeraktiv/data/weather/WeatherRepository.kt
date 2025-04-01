@@ -10,6 +10,9 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecas
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
+import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
+import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Features
+import no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherData
 
 import javax.inject.Inject
 
@@ -17,6 +20,7 @@ class WeatherRepository @Inject constructor(
     private val metAlertsRepository: MetAlertsRepository,
     private val locationForecastRepository: LocationForecastRepository,
     private val sunriseRepository: SunriseRepository, //bare nullable for testing
+    private val nowcastRepository: NowcastRepository
 
 ) {
     private var locations: MutableMap<String, Pair<String, String>> = mutableMapOf()
@@ -65,6 +69,30 @@ class WeatherRepository @Inject constructor(
         }
         return locationsData
     }
+
+    suspend fun getAlert(lat: String, lon: String): Features? {
+        val response = metAlertsRepository.getAlertForLocation(lat, lon)
+        return response
+    }
+
+    suspend fun getTodaysWeatherData(lat: String, lon: String): TodaysWeatherData {
+        val forecast = locationForecastRepository.getForecast(lat, lon)
+        val locationData = forecast?.properties?.timeseries?.get(0)?.data
+        val nowcast = nowcastRepository.getForecast(lat, lon)
+        val nowcastData = nowcast?.properties?.timeseries?.get(0)?.data
+        val todaysWeather = TodaysWeatherData(
+            tempNow = nowcastData?.instant?.details?.airTemperature.toString(), // nowcast
+            tempMax = locationData?.next6Hours?.details?.airTemperatureMax.toString(),
+            tempMin = locationData?.next6Hours?.details?.airTemperatureMin.toString(),
+            uv = locationData?.next6Hours?.details?.ultravioletIndexClearSky.toString(),
+            wind = nowcastData?.instant?.details?.windSpeed.toString(), // nowcast
+            precipitationAmount = nowcastData?.instant?.details?.precipitationAmount.toString(), // nowcast
+            iconDesc = locationData?.next6Hours?.summary?.symbolCode.toString(),
+            iconDescNow = nowcastData?.next1Hours?.summary?.symbolCode.toString() // nowcast
+        )
+        return todaysWeather
+    }
+
 }
 
 suspend fun main() {
