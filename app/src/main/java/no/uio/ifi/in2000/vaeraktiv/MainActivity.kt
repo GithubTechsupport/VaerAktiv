@@ -9,6 +9,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
@@ -62,6 +66,7 @@ class MainActivity : ComponentActivity() {
             //val coordinates = Pair(location.latitude, location.longitude)
             val coordinates = Pair(59.9522, 10.8874)
             Log.d("MainActivity", "Coordinates: $coordinates")
+            CoroutineScope(Dispatchers.Main).launch {
             try {
                 val address = geocoderClass.getLocationFromCoordinates(coordinates)
                 if (address != null) {
@@ -72,7 +77,7 @@ class MainActivity : ComponentActivity() {
             } catch (e: Exception) {
                 Log.d("MainActivity", "Error getting location name: ${e.message}")
             }
-
+            }
         }
     }
 }
