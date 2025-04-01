@@ -1,6 +1,8 @@
 package no.uio.ifi.in2000.vaeraktiv.data.ai
 
+import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource
+import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import org.oremif.deepseek.api.chat
 import org.oremif.deepseek.client.DeepSeekClient
@@ -14,15 +16,25 @@ class AiRepository {
     private val client = DeepSeekClient(deepseekApiKey) {
         chatCompletionTimeout(120_000)
     }
-    private val systemPrompt = "The user will provide a weather forecast. Your job is to pick 3 different time intervals for each day to suggest activities for based on the weather at that time, for the next 5 days."
+    private val systemPrompt = "The user will provide a weather forecast.\nYour job is to pick 3 different time intervals for each day to suggest activities for based on the weather at that time, the location and other requirements defined in the user prompt."
     private val examplesPrompt =
         """
+        All output should be written in Norwegian
+        Based on the weather forecast and the users location, pick 3 different time intervals for every single day to suggest activities for the next 7 days.
+        In total there should be at most 21 different activities, spanning across the next 7 days and 3 time intervals per day.
+        Activities should be realistic and available to do around the user's location.
+        Within the "activity" field should also be a brief explanation for where you could do the activity.
+        Not all activities have to be physical.
+        Activities suggested could be inside or outside activities.
+        
         NOTE THAT EXAMPLE INPUTS AND OUTPUTS ARE SHORTENED VERSIONS OF THE ACTUAL INPUTS AND OUTPUT YOU WILL PRODUCE.
-        TEMPERATURE IS IN CELSIUS.
         
         BEGINNING OF EXAMPLES
         
         EXAMPLE INPUT:
+        
+        WEATHERFORECAST START
+        
         datetime: 2025-06-24T12:00:00Z
         temperature: 13.0
         precipitation: 0.0
@@ -63,40 +75,51 @@ class AiRepository {
         temperature: 10.0
         precipitation: 0.0
         
+        WEATHERFORECAST END
+        
+        USER'S LOCATION: Storgata
+        
         EXAMPLE JSON OUTPUT:
-        [
-            {
-                "month":"6",
-                "dayOfMonth":"24",
-                "timeStart":"14:00",
-                "timeEnd":"16:00",
-                "activity":"Go swimming"
-            }
-            {
-                "month":"6",
-                "dayOfMonth":"25",
-                "timeStart":"11:00",
-                "timeEnd":"13:00",
-                "activity":"Go bowling"
-            }
-        ]
+        {
+            "activities": [
+                {
+                    "month":"6",
+                    "dayOfMonth":"24",
+                    "timeStart":"14:00",
+                    "timeEnd":"16:00",
+                    "activity":"Svømming ved Badedammen Grorud"
+                }
+                {
+                    "month":"6",
+                    "dayOfMonth":"25",
+                    "timeStart":"11:00",
+                    "timeEnd":"13:00",
+                    "activity":"Bowling på Veitvet senter"
+                }
+            ]
+        }
         
         END OF EXAMPLES
         """.trimIndent()
 
     private val params = chatCompletionParams {
         model = ChatModel.DEEPSEEK_CHAT
-        temperature = 0.3
+        temperature = 0.5
         responseFormat = ResponseFormat.jsonObject
 
     }
 
-    suspend fun getResponse(prompt: String): ChatCompletion {
+    suspend fun getResponse(prompt: String): JsonResponse? {
         val response: ChatCompletion = client.chat(params) {
             system(systemPrompt)
-            user("$examplesPrompt\n\nFollowing is the user prompt:\n$prompt")
+            user("$examplesPrompt\n\nFollowing is the user prompt:\n\n<<<\n$prompt\n>>>")
         }
-        return response
+        val parsedResponse = response.choices[0].message.content?.let {
+            Json.decodeFromString<JsonResponse>(
+                it
+            )
+        }
+        return parsedResponse
     }
 
 }
@@ -104,8 +127,8 @@ class AiRepository {
 suspend fun main() {
     val aiRepository = AiRepository()
     val locationForecastDataSource = LocationForecastDataSource()
-    val response = locationForecastDataSource.getResponse("https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=60&lon=11")
-    val prompt = Prompt(response.properties, 5)
+    val response = locationForecastDataSource.getResponse("https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.9111&lon=10.7533")
+    val prompt = Prompt(response.properties, 69, "Oslo Sentralstasjon, Oslo")
     //println(prompt)
-    println(aiRepository.getResponse(prompt.toString()).choices[0].message.content)
+    println(aiRepository.getResponse(prompt.toString()))
 }

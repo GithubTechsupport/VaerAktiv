@@ -1,5 +1,8 @@
 package no.uio.ifi.in2000.vaeraktiv.model.ai
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Interval(
     val month: Int,
     val dayOfMonth: Int,
