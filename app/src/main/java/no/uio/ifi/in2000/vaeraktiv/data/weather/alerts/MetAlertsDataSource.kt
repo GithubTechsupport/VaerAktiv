@@ -9,12 +9,11 @@ import kotlinx.coroutines.runBlocking
 import no.uio.ifi.in2000.vaeraktiv.model.metalerts.FeaturesResponse
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import no.uio.ifi.in2000.vaeraktiv.network.httpclient.NetworkClient
 import javax.inject.Inject
+import no.uio.ifi.in2000.vaeraktiv.network.httpclient.NetworkClient
 import javax.inject.Named
 
 class MetAlertsDataSource @Inject constructor(@Named("prettyPrint-ignoreUnknownKeys-Client") private val networkClient: NetworkClient){
-
     suspend fun retriveAlertInfo() : FeaturesResponse? = withContext(Dispatchers.IO) {
         return@withContext try {
             //Log.i("MetAlertsDataSource", "Fetching data...")
