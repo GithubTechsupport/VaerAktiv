@@ -110,7 +110,7 @@ class AiRepository {
 
     }
 
-    suspend fun getResponse(prompt: String): JsonResponse? {
+    suspend fun getResponse(prompt: Prompt): JsonResponse? {
         val response: ChatCompletion = client.chat(params) {
             system(systemPrompt)
             user("$examplesPrompt\n\nFollowing is the user prompt:\n\n<<<\n$prompt\n>>>")
@@ -131,5 +131,5 @@ suspend fun main() {
     val response = locationForecastDataSource.getResponse("https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.9111&lon=10.7533")
     val prompt = Prompt(response.properties,"Oslo Sentralstasjon, Oslo")
     //println(prompt)
-    println(aiRepository.getResponse(prompt.toString()))
+    println(aiRepository.getResponse(prompt))
 }

@@ -43,16 +43,16 @@ class GeocoderClass @Inject constructor(private val context: Context) {
         }
     }
 
-    suspend fun getLocationFromCoordinates(coordinates: Pair<Double, Double>): Address? = withContext(Dispatchers.IO) {
+    fun getLocationFromCoordinates(coordinates: Pair<Double, Double>): Address? {
 
         try {
             val addressList: List<Address>? = geocoder.getFromLocation(coordinates.first, coordinates.second, 3)
             if (!addressList.isNullOrEmpty()) {
                 val address: Address = addressList[0]
-                return@withContext address
+                return address
             } else {
                 // Location not found
-                return@withContext null
+                return null
             }
         } catch (e: IOException) {
             // Handle network or other I/O errors

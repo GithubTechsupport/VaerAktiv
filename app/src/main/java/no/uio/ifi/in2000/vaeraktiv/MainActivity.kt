@@ -15,6 +15,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
+import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
+import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.Navbar
@@ -24,9 +26,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject lateinit var locationRepository: LocationRepository
-    @Inject lateinit var geocoderClass: GeocoderClass
     private val favoriteLocationViewModel: FavoriteLocationViewModel by viewModels()
+    private val activityViewModel: ActivityViewModel by viewModels()
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +36,12 @@ class MainActivity : ComponentActivity() {
             PermissionManager.requestLocationPermissions(this)
         } else {
             Log.d("MainActivity", "Location permission already granted")
-            collectLastLocation()
+            activityViewModel.startTracking(this)
         }
         enableEdgeToEdge()
         setContent {
             VaerAktivTheme{
-                Navbar(favoriteLocationViewModel)
+                Navbar(favoriteLocationViewModel, activityViewModel)
             }
         }
     }
@@ -54,29 +55,9 @@ class MainActivity : ComponentActivity() {
         if (requestCode == PermissionManager.LOCATION_PERMISSION_REQUEST_CODE) {
             if (PermissionManager.isLocationPermissionGranted(this)) {
                 Log.d("MainActivity", "Location permission granted")
-                collectLastLocation()
+                activityViewModel.startTracking(this)
             } else {
                 Log.d("MainActivity", "Location permission denied")
-            }
-        }
-    }
-
-    private fun collectLastLocation() {
-        locationRepository.startTracking(this) { location ->
-            //val coordinates = Pair(location.latitude, location.longitude)
-            val coordinates = Pair(59.9522, 10.8874)
-            Log.d("MainActivity", "Coordinates: $coordinates")
-            CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val address = geocoderClass.getLocationFromCoordinates(coordinates)
-                if (address != null) {
-                    Log.d("MainActivity", address.toString())
-                } else {
-                    Log.d("MainActivity", "Address is unknown")
-                }
-            } catch (e: Exception) {
-                Log.d("MainActivity", "Error getting location name: ${e.message}")
-            }
             }
         }
     }
