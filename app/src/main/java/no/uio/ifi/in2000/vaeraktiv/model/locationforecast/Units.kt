@@ -36,4 +36,8 @@ data class Units(
     val windFromDirection: String,
     @SerialName("wind_speed")
     val windSpeed: String
-)
+) {
+    override fun toString(): String {
+        return "airTemperature: $airTemperature, precipitationAmount: $precipitationAmount, windSpeed: $windSpeed, cloudAreaFraction: $cloudAreaFraction, fogAreaFraction: $fogAreaFraction, ultravioletIndexClearSky: $ultravioletIndexClearSky"
+    }
+}
