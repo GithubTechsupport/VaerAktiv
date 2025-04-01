@@ -49,7 +49,7 @@ fun Navbar() {
     }
 
     Scaffold(
-        bottomBar = { BottomNavigationBar(navController) }
+        bottomBar = { if (!isLoading) { BottomNavigationBar(navController) } else null }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             if (isLoading) {
