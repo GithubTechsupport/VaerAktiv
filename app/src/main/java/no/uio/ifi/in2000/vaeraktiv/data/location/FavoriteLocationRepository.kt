@@ -20,6 +20,7 @@ class FavoriteLocationRepository @Inject constructor(
             dataSource.addLocation(String.format("%.3f", addresses.first).toDouble(), String.format("%.3f", addresses.second).toDouble(), placeName)
         }
         Log.d("address", "$addresses")
+
     }
 
     fun deleteLocationByName(placeName: String) {
