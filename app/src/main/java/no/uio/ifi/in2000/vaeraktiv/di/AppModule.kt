@@ -20,6 +20,8 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
+import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastDataSource
+import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import javax.inject.Singleton
@@ -68,6 +70,13 @@ object AppModule {
         return FavoriteLocationDataSource(context)
     }
 
+    @Singleton
+    @Provides
+    fun provideNowcastDataSource(
+    ): NowcastDataSource {
+        return NowcastDataSource()
+    }
+
     @Provides
     @Singleton
     fun provideFavoriteLocationRepository(
@@ -107,6 +116,14 @@ object AppModule {
         return LocationRepository(locationDataSource)
     }
 
+    @Singleton
+    @Provides
+    fun provideNowcastRepository(
+        nowcastDataSource: NowcastDataSource
+    ): NowcastRepository {
+        return NowcastRepository(nowcastDataSource)
+    }
+
     @Provides
     @Singleton
     fun provideWeatherRepo(
@@ -116,11 +133,12 @@ object AppModule {
         favoriteLocationRepo: FavoriteLocationRepository,
         aiRepository: AiRepository,
         geocoder: GeocoderClass,
-        locationRepository: LocationRepository
+        locationRepository: LocationRepository,
+        nowcastRepository: NowcastRepository
     ): WeatherRepository {
         return WeatherRepository(
             metAlertsRepository, locationForecastRepository, sunriseRepository,
-            aiRepository, locationRepository, geocoder
+            favoriteLocationRepo, aiRepository, locationRepository, geocoder, nowcastRepository
         )
     }
 

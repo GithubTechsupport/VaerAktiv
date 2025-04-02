@@ -21,7 +21,6 @@ class MetAlertsDataSource @Inject constructor(@Named("prettyPrint-ignoreUnknownK
                 .get("https://api.met.no/weatherapi/metalerts/2.0/current.json") {
                     header("User-Agent", "VaerAktiv/1.0")
                 }.body()
-            println(response)
             response
         } catch (e : Exception){
             //Log.e("MetAlertsDataSource", "Error fetching data: ${e.message}")

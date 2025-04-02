@@ -7,5 +7,6 @@ data class TodaysWeatherData(
     val uv : String, // Location
     val wind : String, // NowCast
     val precipitationAmount : String, // NowCast
-    val iconDesc : String // Location
+    val iconDesc : String, // Location
+    val iconDescNow: String // NowCast
 )
