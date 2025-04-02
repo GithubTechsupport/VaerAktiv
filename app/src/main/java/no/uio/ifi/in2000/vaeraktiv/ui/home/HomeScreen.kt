@@ -14,12 +14,28 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SolarEvent
 import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SunEvent
+import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Properties
 
-val dummyWarningData = no.uio.ifi.in2000.vaeraktiv.model.metalerts.Properties (
-    riskMatrixColor = "red",
-    eventAwarenessName = "wind",
-    description = null
+val dummyWarningData = listOf (
+    Properties(
+        riskMatrixColor = "yellow",
+        eventAwarenessName = "Hei og hå",
+        awareness_type = "3; snow",
+        description = "Ikke gå ut"
+    ),
+    Properties(
+        riskMatrixColor = "red",
+        eventAwarenessName = "Hei og hå",
+        awareness_type = "3; rain",
+        description = "ta med paraply"
+    ),
+    Properties(
+        riskMatrixColor = "red",
+        eventAwarenessName = "Hei og hå",
+        awareness_type = "3; Snow",
+        description = null
     )
+)
 
 val dummyTodaysWeatherData = no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherData(
     tempMax = "20",
@@ -39,6 +55,9 @@ val dummSunData = no.uio.ifi.in2000.vaeraktiv.model.sunrise.SunProperties(
     solarmidnight = SolarEvent(time = "12", discCentreElevation = 12.5, visible = true)
 )
 
+val dummyAiResponse = "Jeg anbefaler kano ellerno sånt no kanskje kanskje maybe!"
+
+val dummyLocation = "Bodø"
 @Composable
 fun HomeScreen (navController: NavController, isOnline: Boolean) {
     val data = emptyList<String>()
@@ -55,11 +74,11 @@ fun HomeScreen (navController: NavController, isOnline: Boolean) {
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                item { CurrentLocation("Oslo") } // Lokasjon
+                item { CurrentLocation(dummyLocation) } // Lokasjon
                 item { DisplayWarning(dummyWarningData) } // Advarsel hvis det er noe å varsle om
                 item { DisplayWeather(dummyTodaysWeatherData) } // Alle dataene vi trenger ish
                 item { TodaysWeather(dummyTodaysWeatherData) } // Været i dag
-                item { TodaysActivity(data) } // Dagens aktivitet
+                item { TodaysActivity(dummyAiResponse) } // Dagens aktivitet
                 item { WeatherWeek(dummyWeatherData) } // Været resten av uken
                 item { SunRiseSet(dummSunData) } // Sol opp/ned
             }

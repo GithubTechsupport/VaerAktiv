@@ -82,14 +82,14 @@ fun WeatherWeek(data: List<ThisWeeksWeatherData>) {
                 modifier = Modifier.weight(1f)
             )
             Text(
-                text = "Max Temp",
+                text = "Maks Temp",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(1f)
             )
             Text(
-                text = "Dagens vær",
+                text = "Dagens Vær",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.End,
@@ -110,32 +110,32 @@ fun WeatherWeek(data: List<ThisWeeksWeatherData>) {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp)
+                    .padding(8.dp)
             ) {
                 Text(
                     text = thisDate,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Start,
                     modifier = Modifier
                         .weight(1f) // Tar tilgjengelig plass til venstre
                 )
-                Spacer(modifier = Modifier.weight(0.25f))
+                Spacer(modifier = Modifier.weight(0.5f))
 
                 Text(
                     text = "${day.maxTemp}°",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .wrapContentWidth() // Tar kun nødvendig bredde for å være sentrert
                 )
-                Spacer(modifier = Modifier.weight(1f)) // Fyller tomrommet til høyre
+                Spacer(modifier = Modifier.weight(1.1f)) // Fyller tomrommet til høyre
                 Image(
                     painter = painterResource(id = if (iconResId != 0) iconResId else R.drawable.sun),
                     contentDescription = "Dagens vær",
                     modifier = Modifier
-                        .size(30.dp)
+                        .size(40.dp)
                         .wrapContentWidth(align = Alignment.End) // Plasserer bildet helt til høyre
                 )
             }

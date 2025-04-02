@@ -47,29 +47,63 @@ fun TodaysWeather(data : TodaysWeatherData) {
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
         )
+        Spacer(modifier = Modifier.height(1.dp))
         Row (
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
+        ){
+            Text(
+                text = "Min temp",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Start,
+                modifier = Modifier.padding(start = 30.dp)
+            )
+            Spacer(modifier = Modifier.weight(1.2f))
+            Text(
+                text = "Maks temp",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.weight(0.8f))
+            Text(
+                text = "Neste 6 timer",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.End,
+                modifier = Modifier.padding(end = 30.dp)
+            )
+        }
+        Spacer(modifier = Modifier.height(0.2.dp))
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .fillMaxWidth()
+                //.padding(8.dp)
         ) {
             Text(
-                text = "Min: ${data.tempMin}°",
-                style = MaterialTheme.typography.bodyLarge,
+                text = "${data.tempMin}°",
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Start,
+                modifier = Modifier.padding(start = 40.dp)
             )
+            Spacer(modifier = Modifier.weight(0.6f))
             Text(
-                text = "Maks: ${data.tempMax}°",
-                style = MaterialTheme.typography.bodyLarge,
+                text = "${data.tempMax}°",
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
+            Spacer(modifier = Modifier.weight(0.42f))
             Image(
                 painter = painterResource(id = iconResId),
                 contentDescription = "Dagens vær",
-                modifier = Modifier.size(80.dp)
+                modifier = Modifier.size(100.dp).padding(end = 40.dp)
             )
         }
     }

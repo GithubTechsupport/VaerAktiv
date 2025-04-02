@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import no.uio.ifi.in2000.vaeraktiv.R
 
 @Composable
@@ -28,21 +29,22 @@ fun CurrentLocation(locationName : String) {
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().padding(8.dp)
     ) {
         Row {
             Image(
                 painter = painterResource(id = R.drawable.location),
                 contentDescription = "Location Icon",
                 modifier = Modifier
-                    .size(30.dp)
-                    .padding(end = 8.dp)
+                    .size(45.dp)
+                    .padding(end = 2.dp)
             )
             Text(
                 text = locationName,
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontSize = 40.sp
             )
         }
         Box(modifier = Modifier
