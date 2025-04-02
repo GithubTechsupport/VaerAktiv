@@ -17,9 +17,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Features
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ThisWeeksWeatherData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherData
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
-import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Features
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ThisWeeksWeatherData
-import no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherData
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
@@ -65,7 +62,30 @@ class WeatherRepository @Inject constructor(
 //    }
 
 
-    suspend fun getFavoriteLocationsData(locationsList: List<String>): MutableList<FavoriteLocation>
+    suspend fun getFavoriteLocationsData(locationsList: List<String>): MutableList<FavoriteLocation> {
+        val locationsData:MutableList<FavoriteLocation> = mutableListOf()
+        locationsList.forEach { line ->
+            val parts = line.split(",")
+            val placeName = parts[0]
+            val lat = parts[1]
+            val lon = parts[2]
+            val forecast = locationForecastRepository.getForecast(lat, lon)
+            val data = forecast?.properties?.timeseries?.get(0)?.data
+            val weatherData = FavoriteLocation(
+                name = placeName,
+                iconDesc = data?.next12Hours?.summary?.symbolCode.toString(),
+                shortDesc = "AI",
+                highestTemp = data?.next6Hours?.details?.airTemperatureMax.toString(),
+                lowestTemp = data?.next6Hours?.details?.airTemperatureMin.toString(),
+                wind = data?.instant?.details?.windSpeed.toString(),
+                downPour = data?.next6Hours?.details?.precipitationAmount.toString(),
+                uv = data?.instant?.details?.ultravioletIndexClearSky.toString()
+            )
+            locationsData.add(weatherData)
+
+        }
+        return locationsData
+    }
 
     suspend fun getAlertForLocation(lat: String, lon: String): Features? {
         val response = metAlertsRepository.getAlertForLocation(lat, lon)
@@ -140,26 +160,6 @@ class WeatherRepository @Inject constructor(
         }
     }
 }
-
-//private fun collectLastLocation() {
-//    locationRepository.startTracking(this) { location ->
-//        //val coordinates = Pair(location.latitude, location.longitude)
-//        val coordinates = Pair(59.9522, 10.8874)
-//        Log.d("MainActivity", "Coordinates: $coordinates")
-//        CoroutineScope(Dispatchers.Main).launch {
-//            try {
-//                val address = geocoderClass.getLocationFromCoordinates(coordinates)
-//                if (address != null) {
-//                    Log.d("MainActivity", address.toString())
-//                } else {
-//                    Log.d("MainActivity", "Address is unknown")
-//                }
-//            } catch (e: Exception) {
-//                Log.d("MainActivity", "Error getting location name: ${e.message}")
-//            }
-//        }
-//    }
-//}
 
 suspend fun main() {
 
