@@ -89,7 +89,27 @@ class WeatherRepository @Inject constructor(
         return locationsData
     }
 
-    suspend fun getAlertForLocation(location: Location): AlertData {
+    suspend fun getAlertsForLocation(location: Location): MutableList<AlertData> {
+        val alertDataList:MutableList<AlertData> = mutableListOf()
+
+        val response = metAlertsRepository.getAlertsForLocation(location.lat.toString(),
+            location.lon.toString())
+        response.forEach { feature ->
+            val alert = AlertData(
+                area = feature.properties.area.toString(),
+                awareness_type = feature.properties.awareness_type.toString(),
+                description = feature.properties.description.toString(),
+                eventAwarenessName = feature.properties.eventAwarenessName.toString(),
+                instruction = feature.properties.instruction.toString(),
+                riskMatrixColor = feature.properties.riskMatrixColor.toString()
+            )
+            alertDataList.add(alert)
+        }
+        return alertDataList
+    }
+
+    /*
+        suspend fun getAlertsForLocation(location: Location): List<AlertData> {
         val response = metAlertsRepository.getAlertForLocation(location.lat.toString(),
             location.lon.toString())
         val alert = AlertData(
@@ -102,6 +122,7 @@ class WeatherRepository @Inject constructor(
         )
         return alert
     }
+     */
 
     suspend fun getTodaysData(location: Location): TodaysWeatherData {
         val forecast = locationForecastRepository.getForecast(location.lat.toString(), location.lon.toString())

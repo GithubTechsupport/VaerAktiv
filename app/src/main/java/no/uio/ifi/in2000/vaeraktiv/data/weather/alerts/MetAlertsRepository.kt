@@ -12,13 +12,13 @@ class MetAlertsRepository @Inject constructor(private val metAlertsDataSource: M
         alertsCache = response?.features ?: emptyList()
     }
     
-    suspend fun getAlertForLocation(lat: String, lon: String): Features? {
+    suspend fun getAlertsForLocation(lat: String, lon: String): List<Features> {
         // Gathers all active alerts and caches it alerts arent already fetched.
         if (alertsCache.isEmpty()) {
             fetchAlerts()
         }
 
-        return alertsCache.firstOrNull { feature ->
+        return alertsCache.filter { feature ->
             val polygon = feature.geometry.getCoordinatesAsList()
             isPointInPolygon(lat, lon, polygon)
         }
