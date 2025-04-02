@@ -26,6 +26,7 @@ fun ActivityScreen(isOnline: Boolean, viewModel: ActivityViewModel) {
     val uiState by viewModel.activityScreenUiState.collectAsState()
 
     LaunchedEffect(Unit) {
+        viewModel.getAlertForLocation()
         viewModel.initialize()
     }
     if (uiState.isLoading) {

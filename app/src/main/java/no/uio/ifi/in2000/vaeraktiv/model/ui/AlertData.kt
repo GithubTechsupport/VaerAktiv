@@ -1,0 +1,10 @@
+package no.uio.ifi.in2000.vaeraktiv.model.ui
+
+data class AlertData(
+    val area: String,
+    val awareness_type: String? = null,
+    val description: String? = null,
+    val eventAwarenessName: String? = null,
+    val instruction: String? = null,
+    val riskMatrixColor: String? = null
+)

@@ -25,12 +25,14 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(
     private val metAlertsRepository: MetAlertsRepository,
     private val locationForecastRepository: LocationForecastRepository,
     private val sunriseRepository: SunriseRepository, //bare nullable for testing
+    private val favoriteLocationRepository: FavoriteLocationRepository,
     private val aiRepository: AiRepository,
     private val deviceLocationRepository: LocationRepository,
     private val geocoderClass: GeocoderClass,
@@ -87,15 +89,24 @@ class WeatherRepository @Inject constructor(
         return locationsData
     }
 
-    suspend fun getAlertForLocation(lat: String, lon: String): Features? {
-        val response = metAlertsRepository.getAlertForLocation(lat, lon)
-        return response
+    suspend fun getAlertForLocation(location: Location): AlertData {
+        val response = metAlertsRepository.getAlertForLocation(location.lat.toString(),
+            location.lon.toString())
+        val alert = AlertData(
+            area = response?.properties?.area.toString(),
+            awareness_type = response?.properties?.awareness_type.toString(),
+            description = response?.properties?.description.toString(),
+            eventAwarenessName = response?.properties?.eventAwarenessName.toString(),
+            instruction = response?.properties?.instruction.toString(),
+            riskMatrixColor = response?.properties?.riskMatrixColor.toString()
+        )
+        return alert
     }
 
-    suspend fun getTodaysData(lat: String, lon: String): TodaysWeatherData {
-        val forecast = locationForecastRepository.getForecast(lat, lon)
+    suspend fun getTodaysData(location: Location): TodaysWeatherData {
+        val forecast = locationForecastRepository.getForecast(location.lat.toString(), location.lon.toString())
         val locationData = forecast?.properties?.timeseries?.get(0)?.data
-        val nowcast = nowcastRepository.getForecast(lat, lon)
+        val nowcast = nowcastRepository.getForecast(location.lat.toString(), location.lon.toString())
         val nowcastData = nowcast?.properties?.timeseries?.get(0)?.data
         val todaysWeather = TodaysWeatherData(
             tempNow = nowcastData?.instant?.details?.airTemperature.toString(), // nowcast
@@ -110,8 +121,9 @@ class WeatherRepository @Inject constructor(
         return todaysWeather
     }
 
-    suspend fun getDayInWeekData(lat: String, lon: String, date: String): ThisWeeksWeatherData {
-        val forecast = locationForecastRepository.getForecastForDate(lat, lon, date) // liste med TimeSeries for datoen
+    suspend fun getDayInWeekData(location: Location, date: String): ThisWeeksWeatherData {
+        val forecast = locationForecastRepository.getForecastForDate(location.lat.toString(),
+            location.lon.toString(), date) // liste med TimeSeries for datoen
         val locationData = forecast?.get(0)?.data // tror dette skal være data fra 00:00 for valgt dato
         val thisWeeksWeather = ThisWeeksWeatherData(
             date = date,
