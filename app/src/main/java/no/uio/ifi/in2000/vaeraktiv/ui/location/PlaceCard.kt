@@ -76,7 +76,10 @@ fun PlaceCard(
             Box(
                 modifier = Modifier
                     .clickable(
-                        onClick = {/* TODO: slett */}
+                        onClick = {
+                            viewModel.deleteLocation(location.name)
+                            viewModel.getData()
+                        }
                     )
             ) {
                 Icon(
@@ -85,13 +88,6 @@ fun PlaceCard(
                     modifier = Modifier
                         .padding(defaultPadding)
                         .size(30.dp)
-                        .clickable(
-                            onClick = {
-                                viewModel.deleteLocation(location.name)
-                                viewModel.getData()
-                            }
-
-                        )
                 )
             }
 
