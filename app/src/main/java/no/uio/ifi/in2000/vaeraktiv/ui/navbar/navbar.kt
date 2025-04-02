@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.navbar
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -17,10 +18,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.time.delay
+import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.MainActivity
 import no.uio.ifi.in2000.vaeraktiv.network.connection.NetworkObserver
 import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityScreen
+import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.LocationScreen
@@ -35,18 +37,18 @@ import java.time.Duration
 * */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Navbar(favoriteLocationViewModel:FavoriteLocationViewModel) {
+fun Navbar (favoriteLocationViewModel: FavoriteLocationViewModel, activityViewModel: ActivityViewModel) {
     val navController = rememberNavController()
     var isOnline by remember { mutableStateOf(true) }
     var showNoNetworkDialog by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-
-    // this network observer will update the isOnline variable when the network status changes
+     //this network observer will update the isOnline variable when the network status changes
     NetworkObserver { newStatus ->
         isOnline = newStatus
         showNoNetworkDialog = !newStatus
+        Log.d("NetworkObserver", "Network status changed to $newStatus")
     }
 
     Scaffold(
@@ -56,7 +58,7 @@ fun Navbar(favoriteLocationViewModel:FavoriteLocationViewModel) {
             if (isLoading) {
                 LoadingScreen() // Show LoadingScreen instead of NavHost
                 LaunchedEffect(Unit) { // Launch a coroutine to simulate loading
-                    delay(Duration.ofSeconds(1))
+                    delay(1000L)
                     isLoading = false
                     if (!isOnline) {
                         showNoNetworkDialog = true
@@ -66,7 +68,7 @@ fun Navbar(favoriteLocationViewModel:FavoriteLocationViewModel) {
                 // Show NavHost only when not loading.
                 NavHost(navController, startDestination = "home") {
                     composable("home") { HomeScreen(navController, isOnline) }
-                    composable("activity") { ActivityScreen(isOnline) }
+                    composable("activity") { ActivityScreen(isOnline, activityViewModel) }
                     composable("location") { LocationScreen(isOnline, favoriteLocationViewModel) }
                 }
                 // Show NoNetworkDialog if isOnline is false

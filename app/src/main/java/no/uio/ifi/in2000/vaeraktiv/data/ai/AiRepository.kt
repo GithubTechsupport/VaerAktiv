@@ -23,6 +23,7 @@ class AiRepository {
         Based on the weather forecast and the users location, pick 3 different time intervals for every single day to suggest activities for the next 7 days.
         In total there should be at most 21 different activities, spanning across the next 7 days and 3 time intervals per day.
         Activities should be realistic and available to do around the user's location.
+        Activities has to match the weather forecast, during rainfall and/or low temperatures, more inside activities should be suggested, but not always, for example you can fish in the rain.
         Within the "activity" field should also be a brief explanation for where you could do the activity.
         Not all activities have to be physical.
         Activities suggested could be inside or outside activities.
@@ -109,7 +110,7 @@ class AiRepository {
 
     }
 
-    suspend fun getResponse(prompt: String): JsonResponse? {
+    suspend fun getResponse(prompt: Prompt): JsonResponse? {
         val response: ChatCompletion = client.chat(params) {
             system(systemPrompt)
             user("$examplesPrompt\n\nFollowing is the user prompt:\n\n<<<\n$prompt\n>>>")
@@ -128,7 +129,7 @@ suspend fun main() {
     val aiRepository = AiRepository()
     val locationForecastDataSource = LocationForecastDataSource()
     val response = locationForecastDataSource.getResponse("https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.9111&lon=10.7533")
-    val prompt = Prompt(response.properties, 69, "Oslo Sentralstasjon, Oslo")
+    val prompt = Prompt(response.properties,"Oslo Sentralstasjon, Oslo")
     //println(prompt)
-    println(aiRepository.getResponse(prompt.toString()))
+    println(aiRepository.getResponse(prompt))
 }

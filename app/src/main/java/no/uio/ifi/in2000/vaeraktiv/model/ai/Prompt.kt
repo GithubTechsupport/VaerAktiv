@@ -4,11 +4,10 @@ import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Properties
 
 data class Prompt(
     val properties: Properties,
-    val limit: Int,
     val location: String
 ) {
     override fun toString(): String {
-        val userPrompt = properties.timeseries.take(limit).joinToString("\n\n") {
+        val userPrompt = properties.timeseries.take(69).joinToString("\n\n") {
             """
             datetime: ${it.time}
             airTemperature: ${it.data.instant.details.airTemperature}
