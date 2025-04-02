@@ -13,6 +13,7 @@ class MetAlertsRepository @Inject constructor(private val metAlertsDataSource: M
     }
     
     suspend fun getAlertForLocation(lat: String, lon: String): Features? {
+        // Gathers all active alerts and caches it alerts arent already fetched.
         if (alertsCache.isEmpty()) {
             fetchAlerts()
         }

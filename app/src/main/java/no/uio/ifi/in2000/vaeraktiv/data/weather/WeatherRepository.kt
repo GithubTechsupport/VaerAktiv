@@ -12,6 +12,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Features
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ThisWeeksWeatherData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherData
 
 import javax.inject.Inject
@@ -70,12 +71,12 @@ class WeatherRepository @Inject constructor(
         return locationsData
     }
 
-    suspend fun getAlert(lat: String, lon: String): Features? {
+    suspend fun getAlertForLocation(lat: String, lon: String): Features? {
         val response = metAlertsRepository.getAlertForLocation(lat, lon)
         return response
     }
 
-    suspend fun getTodaysWeatherData(lat: String, lon: String): TodaysWeatherData {
+    suspend fun getTodaysData(lat: String, lon: String): TodaysWeatherData {
         val forecast = locationForecastRepository.getForecast(lat, lon)
         val locationData = forecast?.properties?.timeseries?.get(0)?.data
         val nowcast = nowcastRepository.getForecast(lat, lon)
@@ -93,10 +94,22 @@ class WeatherRepository @Inject constructor(
         return todaysWeather
     }
 
+    suspend fun getDayInWeekData(lat: String, lon: String, date: String): ThisWeeksWeatherData {
+        val forecast = locationForecastRepository.getForecastForDate(lat, lon, date) // liste med TimeSeries for datoen
+        val locationData = forecast?.get(0)?.data // tror dette skal være data fra 00:00 for valgt dato
+        val thisWeeksWeather = ThisWeeksWeatherData(
+            date = date,
+            maxTemp = locationData?.next12Hours?.details?.airTemperatureMax.toString(), // burde finne maxtemp mellom 00:00 - 23:59 for en dag (neste 24t)
+            uvMax = locationData?.next6Hours?.details?.ultravioletIndexClearSky.toString(), // brukes ikke
+            iconDesc = locationData?.next12Hours?.summary?.symbolCode.toString(), // kanskje helt ikke optimalt
+            precipitationAmount = locationData?.next6Hours?.details?.precipitationAmount.toString(), // brukes ikke
+            wind = locationData?.instant?.details?.windSpeed.toString() // brukes ikke
+        )
+        return thisWeeksWeather
+    }
 }
 
 suspend fun main() {
-
     val d = LocationForecastDataSource()
     val loc = LocationForecastRepository(d)
     //val w = WeatherRepository(null, loc, null)
