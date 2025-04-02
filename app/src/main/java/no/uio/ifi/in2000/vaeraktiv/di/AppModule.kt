@@ -9,10 +9,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationDataSource
+import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
@@ -25,7 +27,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
     @Singleton
     @Provides
     fun provideGeocodeClass(
@@ -92,15 +93,35 @@ object AppModule {
         return SunriseRepository(dataSource)
     }
 
+    @Singleton
+    @Provides
+    fun provideAiRepository(): AiRepository {
+        return AiRepository()
+    }
+
+    @Singleton
+    @Provides
+    fun provideLocationRepository(
+        locationDataSource: LocationDataSource
+    ): LocationRepository {
+        return LocationRepository(locationDataSource)
+    }
+
     @Provides
     @Singleton
     fun provideWeatherRepo(
         metAlertsRepository: MetAlertsRepository,
         locationForecastRepository: LocationForecastRepository,
         sunriseRepository: SunriseRepository,
-        favoriteLocationRepo: FavoriteLocationRepository
+        favoriteLocationRepo: FavoriteLocationRepository,
+        aiRepository: AiRepository,
+        geocoder: GeocoderClass,
+        locationRepository: LocationRepository
     ): WeatherRepository {
-        return WeatherRepository(metAlertsRepository, locationForecastRepository, sunriseRepository)
+        return WeatherRepository(
+            metAlertsRepository, locationForecastRepository, sunriseRepository,
+            aiRepository, locationRepository, geocoder
+        )
     }
 
 

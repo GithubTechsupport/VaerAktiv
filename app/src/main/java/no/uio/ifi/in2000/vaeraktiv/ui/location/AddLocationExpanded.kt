@@ -80,7 +80,6 @@ fun AddLocationExpanded(defaultPading: Dp, viewModel: FavoriteLocationViewModel)
                     .fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
-                    Log.d("add loc", "add loc")
                     if (searchText.isNotBlank()) {
                         viewModel.addLocation(searchText)
                         searchText = ""
