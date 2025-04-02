@@ -42,6 +42,7 @@ val dummyTodaysWeatherData = no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherD
     tempMin = "15",
     tempNow = "18",
     iconDesc = "fog",
+    iconDescNow = "rain",
     wind = "5",
     precipitationAmount = "0",
     uv = "2"

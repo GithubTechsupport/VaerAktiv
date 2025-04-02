@@ -32,7 +32,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherData
 @Composable
 fun DisplayWeather(data : TodaysWeatherData) {
     val context = LocalContext.current
-    val iconResId = context.resources.getIdentifier(data.iconDesc, "drawable", context.packageName)
+    val iconResId = context.resources.getIdentifier(data.iconDescNow, "drawable", context.packageName)
     val cornerDp = 10.dp
     Spacer(modifier = Modifier.height(12.dp))
     Column(
