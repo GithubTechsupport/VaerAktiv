@@ -22,14 +22,18 @@ data class Properties(
     val id: String? = null,
     val instruction: String? = null, // Burde ha med (gir anbefaling til brukeren basert på varselet)
     val resources: List<Resource>? = null,
-    val riskMatrixColor: String? = null,
+    val riskMatrixColor: String? = null, // Må ha med
     val severity: String? = null,
     val status: String? = null,
     val title: String? = null,
     val triggerLevel: String? = null,
     val type: String? = null,
     val web: String? = null
-)
+) {
+    override fun toString(): String {
+        return "Properties(area=$area, description=$description, event=$event, instruction=$instruction, title=$title, type=$type, web=$web)"
+    }
+}
 
 
 

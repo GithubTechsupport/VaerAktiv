@@ -2,6 +2,7 @@ package no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast
 
 
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
 import javax.inject.Inject
 
 class LocationForecastRepository @Inject constructor(
@@ -24,6 +25,14 @@ class LocationForecastRepository @Inject constructor(
 
         return forecasts[Pair(lat, lon)]
     }
+
+    suspend fun getForecastForDate(lat: String, lon: String, date: String): List<TimeSeries>? {
+        val forecast = getForecast(lat, lon)
+
+        return forecast?.properties?.timeseries
+            ?.filter { timeSeries -> timeSeries.time.startsWith(date) } // date format is YYYY-MM-DD
+    }
+
 }
 
 suspend fun main() {

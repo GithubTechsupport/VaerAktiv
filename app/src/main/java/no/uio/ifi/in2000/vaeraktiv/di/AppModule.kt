@@ -9,15 +9,19 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationDataSource
+import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
+import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastDataSource
+import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import javax.inject.Singleton
@@ -25,7 +29,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
     @Singleton
     @Provides
     fun provideGeocodeClass(
@@ -67,6 +70,13 @@ object AppModule {
         return FavoriteLocationDataSource(context)
     }
 
+    @Singleton
+    @Provides
+    fun provideNowcastDataSource(
+    ): NowcastDataSource {
+        return NowcastDataSource()
+    }
+
     @Provides
     @Singleton
     fun provideFavoriteLocationRepository(
@@ -92,15 +102,44 @@ object AppModule {
         return SunriseRepository(dataSource)
     }
 
+    @Singleton
+    @Provides
+    fun provideAiRepository(): AiRepository {
+        return AiRepository()
+    }
+
+    @Singleton
+    @Provides
+    fun provideLocationRepository(
+        locationDataSource: LocationDataSource
+    ): LocationRepository {
+        return LocationRepository(locationDataSource)
+    }
+
+    @Singleton
+    @Provides
+    fun provideNowcastRepository(
+        nowcastDataSource: NowcastDataSource
+    ): NowcastRepository {
+        return NowcastRepository(nowcastDataSource)
+    }
+
     @Provides
     @Singleton
     fun provideWeatherRepo(
         metAlertsRepository: MetAlertsRepository,
         locationForecastRepository: LocationForecastRepository,
         sunriseRepository: SunriseRepository,
-        favoriteLocationRepo: FavoriteLocationRepository
+        favoriteLocationRepo: FavoriteLocationRepository,
+        aiRepository: AiRepository,
+        geocoder: GeocoderClass,
+        locationRepository: LocationRepository,
+        nowcastRepository: NowcastRepository
     ): WeatherRepository {
-        return WeatherRepository(metAlertsRepository, locationForecastRepository, sunriseRepository)
+        return WeatherRepository(
+            metAlertsRepository, locationForecastRepository, sunriseRepository,
+            favoriteLocationRepo, aiRepository, locationRepository, geocoder, nowcastRepository
+        )
     }
 
 

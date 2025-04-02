@@ -3,6 +3,8 @@ package no.uio.ifi.in2000.vaeraktiv.data.location
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
@@ -42,6 +44,7 @@ class GeocoderClass @Inject constructor(private val context: Context) {
     }
 
     fun getLocationFromCoordinates(coordinates: Pair<Double, Double>): Address? {
+
         try {
             val addressList: List<Address>? = geocoder.getFromLocation(coordinates.first, coordinates.second, 3)
             if (!addressList.isNullOrEmpty()) {
