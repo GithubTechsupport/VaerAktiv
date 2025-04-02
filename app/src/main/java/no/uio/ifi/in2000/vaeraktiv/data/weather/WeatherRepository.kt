@@ -120,26 +120,6 @@ class WeatherRepository @Inject constructor(
     }
 }
 
-//private fun collectLastLocation() {
-//    locationRepository.startTracking(this) { location ->
-//        //val coordinates = Pair(location.latitude, location.longitude)
-//        val coordinates = Pair(59.9522, 10.8874)
-//        Log.d("MainActivity", "Coordinates: $coordinates")
-//        CoroutineScope(Dispatchers.Main).launch {
-//            try {
-//                val address = geocoderClass.getLocationFromCoordinates(coordinates)
-//                if (address != null) {
-//                    Log.d("MainActivity", address.toString())
-//                } else {
-//                    Log.d("MainActivity", "Address is unknown")
-//                }
-//            } catch (e: Exception) {
-//                Log.d("MainActivity", "Error getting location name: ${e.message}")
-//            }
-//        }
-//    }
-//}
-
 suspend fun main() {
 
     val d = LocationForecastDataSource()

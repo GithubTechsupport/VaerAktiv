@@ -9,14 +9,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
-import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
-import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityScreenViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.Navbar
@@ -26,8 +20,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val homeScreenViewModel: HomeScreenViewModel by viewModels()
     private val favoriteLocationViewModel: FavoriteLocationViewModel by viewModels()
-    private val activityViewModel: ActivityViewModel by viewModels()
+    private val activityScreenViewModel: ActivityScreenViewModel by viewModels()
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,12 +31,12 @@ class MainActivity : ComponentActivity() {
             PermissionManager.requestLocationPermissions(this)
         } else {
             Log.d("MainActivity", "Location permission already granted")
-            activityViewModel.startTracking(this)
+            homeScreenViewModel.startTracking(this)
         }
         enableEdgeToEdge()
         setContent {
             VaerAktivTheme{
-                Navbar(favoriteLocationViewModel, activityViewModel)
+                Navbar(favoriteLocationViewModel, activityScreenViewModel, homeScreenViewModel)
             }
         }
     }
@@ -55,7 +50,7 @@ class MainActivity : ComponentActivity() {
         if (requestCode == PermissionManager.LOCATION_PERMISSION_REQUEST_CODE) {
             if (PermissionManager.isLocationPermissionGranted(this)) {
                 Log.d("MainActivity", "Location permission granted")
-                activityViewModel.startTracking(this)
+                homeScreenViewModel.startTracking(this)
             } else {
                 Log.d("MainActivity", "Location permission denied")
             }

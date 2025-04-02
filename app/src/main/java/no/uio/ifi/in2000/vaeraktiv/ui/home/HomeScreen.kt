@@ -30,7 +30,7 @@ import no.uio.ifi.in2000.vaeraktiv.network.connection.NetworkConnection
 
 
 @Composable
-fun HomeScreen (navController: NavController, isOnline: Boolean) {
+fun HomeScreen(navController: NavController, isOnline: Boolean, viewModel: HomeScreenViewModel) {
     val data = emptyList<String>()
 
     if(isOnline){

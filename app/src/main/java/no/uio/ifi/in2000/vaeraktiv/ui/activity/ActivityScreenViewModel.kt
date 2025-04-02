@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.activity
 
-import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -17,7 +16,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import javax.inject.Inject
 
 @HiltViewModel
-class ActivityViewModel @Inject constructor(private val weatherRepository: WeatherRepository) : ViewModel() {
+class ActivityScreenViewModel @Inject constructor(private val weatherRepository: WeatherRepository) : ViewModel() {
 
     private var initialized = false
 
@@ -28,10 +27,6 @@ class ActivityViewModel @Inject constructor(private val weatherRepository: Weath
     )
 
     val activityScreenUiState: StateFlow<ActivityScreenUiState> = _activityScreenUiState.asStateFlow()
-
-    fun startTracking(lifecycleOwner: LifecycleOwner) {
-        weatherRepository.trackDeviceLocation(lifecycleOwner)
-    }
 
     fun initialize() {
         if (initialized) return
