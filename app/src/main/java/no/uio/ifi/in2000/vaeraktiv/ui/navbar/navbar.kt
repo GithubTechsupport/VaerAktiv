@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.navbar
 
+//noinspection UsingMaterialAndMaterial3Libraries
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -26,7 +27,6 @@ import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.LocationScreen
-import java.time.Duration
 
 
 /*

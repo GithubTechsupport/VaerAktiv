@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.data.ai
 
+import android.util.Log
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource
 import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
@@ -111,16 +112,22 @@ class AiRepository {
     }
 
     suspend fun getResponse(prompt: Prompt): JsonResponse? {
-        val response: ChatCompletion = client.chat(params) {
-            system(systemPrompt)
-            user("$examplesPrompt\n\nFollowing is the user prompt:\n\n<<<\n$prompt\n>>>")
+        try {
+            val response: ChatCompletion = client.chat(params) {
+                system(systemPrompt)
+                user("$examplesPrompt\n\nFollowing is the user prompt:\n\n<<<\n$prompt\n>>>")
+            }
+            val parsedResponse = response.choices[0].message.content?.let {
+                Json.decodeFromString<JsonResponse>(
+                    it
+                )
+            }
+            return parsedResponse
+        } catch (e: Exception) {
+            Log.d("AiRepository", "Error is: $e")
+            throw e
         }
-        val parsedResponse = response.choices[0].message.content?.let {
-            Json.decodeFromString<JsonResponse>(
-                it
-            )
-        }
-        return parsedResponse
+
     }
 
 }

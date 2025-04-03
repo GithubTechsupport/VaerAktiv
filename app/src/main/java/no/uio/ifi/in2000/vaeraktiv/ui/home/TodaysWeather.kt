@@ -17,11 +17,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherData
 
@@ -36,7 +40,9 @@ fun TodaysWeather(data : TodaysWeatherData) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .background(
-                color = Color(0xFFBCDEFD),
+                Brush.verticalGradient(
+                    colors = listOf(MainCard, SecondaryCard)
+                ),
                 shape = RoundedCornerShape(cornerDp))
             .fillMaxWidth()
             .padding(12.dp)

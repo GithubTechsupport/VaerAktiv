@@ -43,7 +43,9 @@ class ActivityViewModel @Inject constructor(private val weatherRepository: Weath
         viewModelScope.launch{
             _activityScreenUiState.value = ActivityScreenUiState(isLoading = true)
             try {
-                val activities = weatherRepository.getActivities(currentLocation.value!!)
+                Log.d("ActivityViewModel", "Calling getActivities")
+                Log.d("ActivityViewModel", "Current location is: " + currentLocation.value)
+                val activities = weatherRepository.getActivities(Location("Oslo Sentralstasjon, Oslo", 59.9111, 10.7533))
                 _activityScreenUiState.update {
                     it.copy(
                         activities = activities
@@ -55,7 +57,9 @@ class ActivityViewModel @Inject constructor(private val weatherRepository: Weath
                         isError = true,
                         errorMessage = e.message ?: "Unknown error"
                     )
+
                 }
+                Log.d("ActivityViewModel", "Error is: $e")
             } finally {
                 _activityScreenUiState.update {
                     it.copy(
