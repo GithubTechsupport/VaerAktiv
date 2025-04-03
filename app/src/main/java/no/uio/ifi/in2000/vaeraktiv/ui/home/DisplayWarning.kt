@@ -141,15 +141,16 @@ fun DisplayWarning(data: List<AlertData>) {
 @SuppressLint("DiscouragedApi")
 private fun getWarningResId(context: android.content.Context, warningType: String, dangerColor: String): Int {
     val basePrefix = "icon_warning_"
-
-    if (warningType.lowercase() == "extreme" || warningType.split("-").joinToString("") { it.trim()}.lowercase() == "extreme") {
-        val extremeId = context.resources.getIdentifier(warningType, "drawable", context.packageName)
-        if (extremeId != 0) return extremeId
-    }
     val parts = warningType.split("-").filter { it.isNotEmpty() }
+    val noColorIcons = setOf("extreme")
 
     fun tryIcon(type: String): Int {
-        val iconName = (basePrefix + type + "_" + dangerColor).lowercase()
+        val combinedLower = type.lowercase()
+        val iconName = if (combinedLower in noColorIcons) {
+            (basePrefix + combinedLower)
+        } else {
+            (basePrefix + combinedLower + "_" + dangerColor.lowercase())
+        }
         return context.resources.getIdentifier(iconName, "drawable", context.packageName)
     }
 
