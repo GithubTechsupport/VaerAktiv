@@ -2,9 +2,7 @@ package no.uio.ifi.in2000.vaeraktiv.network.connection
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.Network
 import android.net.NetworkCapabilities
-import android.net.NetworkRequest
 /*
 * This object is used to check if the device is connected to the internet or not.
 *

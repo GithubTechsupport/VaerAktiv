@@ -1,11 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.data.location
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.util.Log
-
-import dagger.hilt.android.qualifiers.ApplicationContext
-import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource
-import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
 import javax.inject.Inject
 
 class FavoriteLocationRepository @Inject constructor(
@@ -14,6 +10,7 @@ class FavoriteLocationRepository @Inject constructor(
 ) {
 
 
+    @SuppressLint("DefaultLocale")
     fun addLocationByName(placeName: String) {
         val addresses = geocoder.getCoordinatesFromLocation(placeName)
         if (addresses !=null) {

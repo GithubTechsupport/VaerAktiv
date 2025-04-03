@@ -16,9 +16,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 fun ActivityCardExpanded(
     activity: Activity
 ) {
-    Column(
-
-    ) {
+    Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center

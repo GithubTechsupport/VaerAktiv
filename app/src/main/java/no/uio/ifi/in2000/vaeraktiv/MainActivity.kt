@@ -12,11 +12,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
-
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.Navbar
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.VaerAktivTheme
 import no.uio.ifi.in2000.vaeraktiv.utils.PermissionManager
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

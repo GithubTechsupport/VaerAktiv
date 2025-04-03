@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.di
 
-import android.app.Application
 import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
