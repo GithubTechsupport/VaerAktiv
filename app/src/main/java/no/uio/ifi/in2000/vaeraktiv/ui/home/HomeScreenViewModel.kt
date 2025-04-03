@@ -1,6 +1,8 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -11,16 +13,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
-import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityScreenUiState
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(private val weatherRepository: WeatherRepository) : ViewModel() {
+class HomeScreenViewModel @Inject constructor(private val weatherRepository: WeatherRepository, private val deviceDateTimeRepository: DeviceDateTimeRepository) : ViewModel() {
 
     private var initialized = false
 
@@ -38,35 +40,44 @@ class HomeScreenViewModel @Inject constructor(private val weatherRepository: Wea
 
     fun initialize() {
         if (initialized) return
-        weatherRepository.setCurrentLocation(Location("Oslo Sentralstasjon",59.9111, 10.7533))
+        weatherRepository.setCurrentLocation(Location("Oslo sentralstasjon", 59.911491, 10.757933))
         initialized = true
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getHomeScreenData() {
         viewModelScope.launch {
             _homeScreenUiState.update {
                 it.copy(isLoading = true)
             }
+            Log.d("HomeScreenViewModel", "Getting data ${currentLocation.value}")
             try {
-                //val alerts = weatherRepository.getAlertsForLocation(currentLocation.value!!)
+                Log.d("HomeScreenViewModel", "Getting data ${currentLocation.value}")
                 val todaysWeather = weatherRepository.getForecastToday(currentLocation.value!!)
                 val thisWeeksWeather = weatherRepository.getForecastByDay(currentLocation.value!!)
+                val todaysAlerts = weatherRepository.getAlertsForLocation(currentLocation.value!!)
+                val dateTime = deviceDateTimeRepository.getDateTime()
+                Log.d("HomeScreenViewModel", "DateTime: $dateTime")
+                val todaysSunrise = weatherRepository.getSunRiseData(currentLocation.value!!, dateTime)
+                Log.d("HomeScreenViewModel", "Sunrise: $todaysSunrise")
                 _homeScreenUiState.update {
                     it.copy(
-                        //alerts = alerts,
                         todaysWeather = todaysWeather,
                         thisWeeksWeather = thisWeeksWeather,
-                        locationName = currentLocation.value!!.addressName
+                        locationName = currentLocation.value!!.addressName,
+                        alerts = todaysAlerts,
+                        sunRiseSet = todaysSunrise
                     )
                 }
+                //Log.d("HomeScreenViewModel", "Alerts: ${data}")
             } catch (e: Exception) {
                 _homeScreenUiState.update {
                     it.copy(
                         isError = true,
-                        errorMessage = e.toString() ?: "Unknown error"
+                        errorMessage = e.toString()
                     )
                 }
-                Log.d("HomeScreenViewModel", "Error: ${e}")
+                Log.d("HomeScreenViewModel", "Error: $e")
             } finally {
                 _homeScreenUiState.update {
                     it.copy(
@@ -75,32 +86,6 @@ class HomeScreenViewModel @Inject constructor(private val weatherRepository: Wea
                 }
             }
         }
-
-        /*
-    private val weatherData = weatherRepository.getWeatherData()
-
-    private val _weatherToday = MutableLiveData<Details>(mutableStateListOf())
-    val data : LiveData<List<Details>> = _weatherToday
-
-    private val _weatherThisWeek = MutableLiveData<String>()
-    val data : LiveData<String> = _weatherThisWeek
-
-    init {
-        getDataToday(Location.String)
-    }
-
-    private fun getDataToday(location : String) {
-        _weatherToday.value = weatherData.getWeatherForLocation(location)
-        loadWeatherWeek(location)
-    }
-
-    private fun loadWeatherWeek(location : String) {
-        viewModelScope.launch {
-            val data = weatherData.getWeatherForLocation(location)
-            _weatherThisWeek.value = data
-        }
-    }
-    */
     }
 }
 
@@ -112,4 +97,5 @@ data class HomeScreenUiState(
     val alerts: List<AlertData> = emptyList(),
     val todaysWeather: ForecastToday? = null,
     val thisWeeksWeather: List<ForecastForDay> = emptyList(),
+    val sunRiseSet : List<String> = emptyList()
 )

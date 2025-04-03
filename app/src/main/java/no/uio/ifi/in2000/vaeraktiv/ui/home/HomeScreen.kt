@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
-import android.util.Log
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,70 +19,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainBackground
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryBackground
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
-import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SolarEvent
-import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SunEvent
-import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Properties
 
-val dummyWarningData = listOf (
-    Properties(
-        riskMatrixColor = "yellow",
-        eventAwarenessName = "Hei og hå",
-        awareness_type = "3; snow",
-        description = "Ikke gå ut"
-    ),
-    Properties(
-        riskMatrixColor = "red",
-        eventAwarenessName = "Hei og hå",
-        awareness_type = "3; rain",
-        description = "ta med paraply"
-    ),
-    Properties(
-        riskMatrixColor = "red",
-        eventAwarenessName = "Hei og hå",
-        awareness_type = "3; Snow",
-        description = null
-    )
-)
+const val dummyAiResponse = "I dag er en perfekt dag for å sette seg på Los Tacos, ta seg en pils, og nyte sola!"
 
-val dummyTodaysWeatherData = no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday(
-    tempMax = "20",
-    tempMin = "15",
-    tempNow = "18",
-    icon = "fog",
-    iconNow = "rain",
-    windSpeed = "5",
-    precipitationAmount = "0",
-    uv = "2"
-)
-
-val dummSunData = no.uio.ifi.in2000.vaeraktiv.model.sunrise.SunProperties(
-    body = "Noe",
-    sunrise = SunEvent("12", 12.5),
-    sunset = SunEvent("12", 12.5),
-    solarnoon = SolarEvent(time = "12", discCentreElevation = 12.5, visible = true),
-    solarmidnight = SolarEvent(time = "12", discCentreElevation = 12.5, visible = true)
-)
-
-val dummyAiResponse = "Jeg anbefaler kano ellerno sånt no kanskje kanskje maybe!"
-
-val dummyLocation = "Bodø"
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
-    val data = emptyList<String>()
     val uiState by viewModel.homeScreenUiState.collectAsState()
-    val dummyWeatherData = listOf(
-        ForecastForDay(date = "26. mars", maxTemp = "8", icon = "clearsky_day"),
-        ForecastForDay(date = "27. mars", maxTemp = "1", icon = "cloudy"),
-        ForecastForDay(date = "28. mars", maxTemp = "7", icon = "fog"),
-        ForecastForDay(date = "29. mars", maxTemp = "6", icon = "fog"),
-        ForecastForDay(date = "30. mars", maxTemp = "9", icon = "snow"),
-        ForecastForDay(date = "31. mars", maxTemp = "1", icon = "snow"),
-        ForecastForDay(date = "1. april", maxTemp = "1", icon = "fog"),
-        ForecastForDay(date = "2. april", maxTemp = "1", icon = "snow")
-    )
-
     val currentLocation by viewModel.currentLocation.observeAsState()
 
     LaunchedEffect(Unit) {
@@ -119,12 +64,12 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                 ) {
                     if (uiState.todaysWeather != null) {
                         item { CurrentLocation(uiState.locationName) } // Lokasjon
-                        item { DisplayWarning(dummyWarningData) } // Advarsel hvis det er noe å varsle om
+                        item { DisplayWarning(uiState.alerts) } // Advarsel hvis det er noe å varsle om
                         item { DisplayWeather(uiState.todaysWeather) } // Alle dataene vi trenger ish
                         item { TodaysWeather(uiState.todaysWeather) } // Været i dag
                         item { TodaysActivity(dummyAiResponse) } // Dagens aktivitet
                         item { WeatherWeek(uiState.thisWeeksWeather) } // Været resten av uken
-                        item { SunRiseSet(dummSunData) } // Sol opp/ned
+                        item { SunRiseSet(uiState.sunRiseSet) } // Sol opp/ned
                     }
                 }
             }
