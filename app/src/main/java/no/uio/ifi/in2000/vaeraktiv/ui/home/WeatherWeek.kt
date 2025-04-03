@@ -29,27 +29,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
-
-data class WeatherDay(
-    val date: String,      // Dato (f.eks. "27. mars")
-    val maxTemp: Int,      // Maksimumstemperatur i °C
-    val icon: String       // Placeholder-ikon (f.eks. "☀️"), erstattes senere
-)
-
-// Dummydata for 8 dager (26. mars 2025 og fremover)
-val dummyWeatherData = listOf(
-    WeatherDay(date = "26. mars", maxTemp = 8, icon = "clearsky_day"),
-    WeatherDay(date = "27. mars", maxTemp = 10, icon = "cloudy"),
-    WeatherDay(date = "28. mars", maxTemp = 7, icon = "fog"),
-    WeatherDay(date = "29. mars", maxTemp = 6, icon = "fog"),
-    WeatherDay(date = "30. mars", maxTemp = 9, icon = "snow"),
-    WeatherDay(date = "31. mars", maxTemp = 11, icon = "snow"),
-    WeatherDay(date = "1. april", maxTemp = 12, icon = "fog"),
-    WeatherDay(date = "2. april", maxTemp = 10, icon = "snow")
-)
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 
 @Composable
-fun WeatherWeek(data: List<WeatherDay>) {
+fun WeatherWeek(data: List<ForecastForDay>) {
     val cornerDp = 10.dp
     val context = LocalContext.current
 
@@ -111,7 +94,7 @@ fun WeatherWeek(data: List<WeatherDay>) {
             .height(1.dp)
             .background(color = MaterialTheme.colorScheme.inverseOnSurface)
         )
-        data.take(7).forEach { day ->
+        data.forEach { day ->
             var isExpanded by remember { mutableStateOf(false) }
             val iconResId = context.resources.getIdentifier(day.icon, "drawable", context.packageName)
             Row(

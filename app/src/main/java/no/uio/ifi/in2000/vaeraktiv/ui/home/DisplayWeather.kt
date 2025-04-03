@@ -74,13 +74,13 @@ fun DisplayWeather(temp: String, uv: String, rain: String, wind: String) {
                 textAlign = TextAlign.Center
             )
             Text(
-                text = rain,
+                text = "$rain mm",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black,
                 textAlign = TextAlign.Center
             )
             Text(
-                text = wind,
+                text = "$wind m/s",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black,
                 textAlign = TextAlign.Center

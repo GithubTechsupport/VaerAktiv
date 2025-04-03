@@ -26,23 +26,12 @@ class LocationForecastRepository @Inject constructor(
         return forecasts[Pair(lat, lon)]
     }
 
-    suspend fun getForecastForDate(lat: String, lon: String, date: String): List<TimeSeries>? {
+    suspend fun getForecastByDay(lat: String, lon: String): List<Pair<String, List<TimeSeries>>>? {
         val forecast = getForecast(lat, lon)
-
-        return forecast?.properties?.timeseries
-            ?.filter { timeSeries -> timeSeries.time.startsWith(date) } // date format is YYYY-MM-DD
+        val timeseries = forecast?.properties?.timeseries
+        val groupedTimeSeries = timeseries?.groupBy { it.time.substring(0, 10) }?.toList()?.drop(1)?.dropLast(1)
+        return groupedTimeSeries
     }
 
-}
-
-suspend fun main() {
-    val d = LocationForecastDataSource()
-    val loc = LocationForecastRepository(d)
-    val test = loc.getUpdate("60", "11")
-    println(loc.getForecast("60", "11")?.properties?.timeseries?.get(0))
-    println(loc.getUpdate("60", "5")?.properties?.timeseries?.get(0))
-    if (test != null) {
-        println(test.properties.timeseries[0])
-    }
 }
 

@@ -24,8 +24,7 @@ class MetAlertsDataSource @Inject constructor(@Named("prettyPrint-ignoreUnknownK
             response
         } catch (e : Exception){
             //Log.e("MetAlertsDataSource", "Error fetching data: ${e.message}")
-            e.printStackTrace()
-            null
+            throw e
         }
     }
 }

@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TodaysWeather(minTemp : Int, maxTemp : Int, ikon: String) {
+fun TodaysWeather(minTemp: String, maxTemp: String, icon: String) {
     val cornerDp = 10.dp
     Spacer(modifier = Modifier.height(12.dp))
     Column(
@@ -57,7 +57,7 @@ fun TodaysWeather(minTemp : Int, maxTemp : Int, ikon: String) {
                 textAlign = TextAlign.Center
             )
             Text(
-                text = ikon,
+                text = icon,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center

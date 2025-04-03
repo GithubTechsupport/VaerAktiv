@@ -1,5 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.data.ai
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource
 import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
@@ -110,7 +112,7 @@ class AiRepository {
 
     }
 
-    suspend fun getResponse(prompt: Prompt): JsonResponse? {
+    suspend fun getResponse(prompt: Prompt): JsonResponse? = withContext(Dispatchers.IO) {
         val response: ChatCompletion = client.chat(params) {
             system(systemPrompt)
             user("$examplesPrompt\n\nFollowing is the user prompt:\n\n<<<\n$prompt\n>>>")
@@ -120,16 +122,7 @@ class AiRepository {
                 it
             )
         }
-        return parsedResponse
+        return@withContext parsedResponse
     }
 
-}
-
-suspend fun main() {
-    val aiRepository = AiRepository()
-    val locationForecastDataSource = LocationForecastDataSource()
-    val response = locationForecastDataSource.getResponse("https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.9111&lon=10.7533")
-    val prompt = Prompt(response.properties,"Oslo Sentralstasjon, Oslo")
-    //println(prompt)
-    println(aiRepository.getResponse(prompt))
 }

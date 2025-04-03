@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.activity
 
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -36,7 +37,9 @@ class ActivityScreenViewModel @Inject constructor(private val weatherRepository:
 
     fun getActivities() {
         viewModelScope.launch{
-            _activityScreenUiState.value = ActivityScreenUiState(isLoading = true)
+            _activityScreenUiState.update {
+                it.copy(isLoading = true)
+            }
             try {
                 val activities = weatherRepository.getActivities(currentLocation.value!!)
                 _activityScreenUiState.update {
@@ -48,9 +51,10 @@ class ActivityScreenViewModel @Inject constructor(private val weatherRepository:
                 _activityScreenUiState.update {
                     it.copy(
                         isError = true,
-                        errorMessage = e.message ?: "Unknown error"
+                        errorMessage = e.toString() ?: "Unknown error"
                     )
                 }
+                Log.e("ActivityViewModel", "Error: ", e)
             } finally {
                 _activityScreenUiState.update {
                     it.copy(
