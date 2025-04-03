@@ -14,9 +14,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 
 @Composable
 fun TodaysWeather(minTemp : Int, maxTemp : Int, ikon: String) {
@@ -26,7 +30,9 @@ fun TodaysWeather(minTemp : Int, maxTemp : Int, ikon: String) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .background(
-                color = Color(0xFFBCDEFD),
+                Brush.verticalGradient(
+                    colors = listOf(MainCard, SecondaryCard)
+                ),
                 shape = RoundedCornerShape(cornerDp))
             .fillMaxWidth()
             .padding(12.dp)

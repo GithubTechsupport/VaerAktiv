@@ -17,11 +17,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 
 @Composable
 fun DisplayWeather(temp: String, uv: String, rain: String, wind: String) {
@@ -60,9 +64,10 @@ fun DisplayWeather(temp: String, uv: String, rain: String, wind: String) {
         Row(
             modifier = Modifier
                 .background(
-                    color = Color(0xFFBCDEFD),
-                    shape = RoundedCornerShape(cornerDp)
-                )
+                    Brush.verticalGradient(
+                        colors = listOf(MainCard, SecondaryCard)
+                    ),
+                    shape = RoundedCornerShape(cornerDp))
                 .fillMaxWidth()
                 .padding(20.dp), // Legg til padding inni boksen
             horizontalArrangement = Arrangement.SpaceEvenly // Jevn fordeling

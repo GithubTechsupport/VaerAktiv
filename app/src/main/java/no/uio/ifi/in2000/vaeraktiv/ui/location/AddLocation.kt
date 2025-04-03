@@ -17,6 +17,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 
 @Composable
 fun AddPlace(defaultPadding: Dp, viewModel: FavoriteLocationViewModel) {
@@ -30,7 +32,7 @@ fun AddPlace(defaultPadding: Dp, viewModel: FavoriteLocationViewModel) {
             .clip(RoundedCornerShape(10))
             .background(
                 Brush.verticalGradient(
-                    colors = listOf(Color(0xFFBCDEFD), Color(0xFF8ACAFB))
+                    colors = listOf(MainCard, SecondaryCard)
                 )
             )
     ) {
