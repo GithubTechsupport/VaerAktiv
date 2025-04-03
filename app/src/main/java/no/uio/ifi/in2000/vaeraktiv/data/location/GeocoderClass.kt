@@ -3,8 +3,6 @@ package no.uio.ifi.in2000.vaeraktiv.data.location
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject

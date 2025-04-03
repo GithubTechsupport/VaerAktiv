@@ -16,6 +16,7 @@ class SunriseDataSource @Inject constructor(@Named("ignoreUnknownKeys-Client") p
             val response: HttpResponse = networkClient.ktorHttpClient.get("https://in2000.api.met.no/weatherapi/sunrise/3.0/sun?lat=$lat&lon=$lon&date=$date&offset=+01:00")
             return response.body()
         } catch (e: Exception) {
+            e.printStackTrace()
             return null
         } finally {
             networkClient.ktorHttpClient.close()

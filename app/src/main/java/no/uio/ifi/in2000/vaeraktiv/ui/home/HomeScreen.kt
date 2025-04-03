@@ -12,10 +12,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainBackground
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryBackground
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SolarEvent
 import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SunEvent
 import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Properties
@@ -64,8 +60,7 @@ val dummyAiResponse = "Jeg anbefaler kano ellerno sånt no kanskje kanskje maybe
 
 val dummyLocation = "Bodø"
 @Composable
-fun HomeScreen (navController: NavController, isOnline: Boolean) {
-    val data = emptyList<String>()
+fun HomeScreen (isOnline: Boolean) {
 
     if(isOnline){
         Column (modifier = Modifier
