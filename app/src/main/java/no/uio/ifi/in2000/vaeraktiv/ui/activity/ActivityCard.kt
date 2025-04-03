@@ -21,6 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 
 @Composable
 fun ActivityCard(
@@ -37,7 +39,7 @@ fun ActivityCard(
             .clip(RoundedCornerShape(10.dp))
             .background(
                 Brush.verticalGradient(
-                    colors = listOf(Color(0xFFBCDEFD), Color(0xFF8ACAFB))
+                    colors = listOf(MainCard, SecondaryCard)
                 )
             )
     ) {

@@ -53,6 +53,7 @@ class ActivityScreenViewModel @Inject constructor(private val weatherRepository:
                         isError = true,
                         errorMessage = e.toString() ?: "Unknown error"
                     )
+
                 }
                 Log.e("ActivityViewModel", "Error: ", e)
             } finally {

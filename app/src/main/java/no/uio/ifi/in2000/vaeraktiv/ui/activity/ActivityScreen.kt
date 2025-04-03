@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainBackground
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryBackground
 import java.time.Month
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -62,7 +64,7 @@ fun ActivityScreen(isOnline: Boolean, viewModel: ActivityScreenViewModel) {
                         .fillMaxSize()
                         .background(
                             Brush.verticalGradient(
-                                colors = listOf(Color(0xFF6BAEDF), Color(0xFF8ACAFF))
+                                colors = listOf(MainBackground, SecondaryBackground)
                             )
                         ),
                     horizontalAlignment = Alignment.CenterHorizontally,

@@ -27,6 +27,7 @@ import androidx.lifecycle.MutableLiveData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import javax.inject.Inject
+import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
 
 class WeatherRepository @Inject constructor(
     private val metAlertsRepository: MetAlertsRepository,
@@ -38,6 +39,7 @@ class WeatherRepository @Inject constructor(
     private val geocoderClass: GeocoderClass,
     private val nowcastRepository: NowcastRepository
 ) {
+
 
     private var locations: MutableMap<String, Pair<String, String>> = mutableMapOf()
 
@@ -77,10 +79,13 @@ class WeatherRepository @Inject constructor(
             val lon = parts[2]
             val forecast = locationForecastRepository.getForecast(lat, lon)
             val data = forecast?.properties?.timeseries?.get(0)?.data
+            val icon = data?.next12Hours?.summary?.symbolCode.toString()
+            val key = icon.substringBefore("_")
+            val desc = weatherDescriptions[key] ?: "Ukjent vær"
             val weatherData = FavoriteLocation(
                 name = placeName,
-                iconDesc = data?.next12Hours?.summary?.symbolCode.toString(),
-                shortDesc = "AI",
+                iconDesc = icon,
+                shortDesc = desc,
                 highestTemp = data?.next6Hours?.details?.airTemperatureMax.toString(),
                 lowestTemp = data?.next6Hours?.details?.airTemperatureMin.toString(),
                 wind = data?.instant?.details?.windSpeed.toString(),

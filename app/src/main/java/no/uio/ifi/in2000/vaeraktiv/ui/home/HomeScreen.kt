@@ -13,16 +13,65 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainBackground
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryBackground
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
+import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SolarEvent
+import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SunEvent
+import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Properties
 
+val dummyWarningData = listOf (
+    Properties(
+        riskMatrixColor = "yellow",
+        eventAwarenessName = "Hei og hå",
+        awareness_type = "3; snow",
+        description = "Ikke gå ut"
+    ),
+    Properties(
+        riskMatrixColor = "red",
+        eventAwarenessName = "Hei og hå",
+        awareness_type = "3; rain",
+        description = "ta med paraply"
+    ),
+    Properties(
+        riskMatrixColor = "red",
+        eventAwarenessName = "Hei og hå",
+        awareness_type = "3; Snow",
+        description = null
+    )
+)
 
+val dummyTodaysWeatherData = no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherData(
+    tempMax = "20",
+    tempMin = "15",
+    tempNow = "18",
+    iconDesc = "fog",
+    iconDescNow = "rain",
+    wind = "5",
+    precipitationAmount = "0",
+    uv = "2"
+)
+
+val dummSunData = no.uio.ifi.in2000.vaeraktiv.model.sunrise.SunProperties(
+    body = "Noe",
+    sunrise = SunEvent("12", 12.5),
+    sunset = SunEvent("12", 12.5),
+    solarnoon = SolarEvent(time = "12", discCentreElevation = 12.5, visible = true),
+    solarmidnight = SolarEvent(time = "12", discCentreElevation = 12.5, visible = true)
+)
+
+val dummyAiResponse = "Jeg anbefaler kano ellerno sånt no kanskje kanskje maybe!"
+
+val dummyLocation = "Bodø"
 @Composable
-fun HomeScreen(navController: NavController, isOnline: Boolean, viewModel: HomeScreenViewModel) {
+fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
     val data = emptyList<String>()
     val uiState by viewModel.homeScreenUiState.collectAsState()
     val dummyWeatherData = listOf(
@@ -46,6 +95,7 @@ fun HomeScreen(navController: NavController, isOnline: Boolean, viewModel: HomeS
             viewModel.getHomeScreenData()
         }
     }
+
     if (uiState.isLoading) {
         LoadingScreen()
     } else if (uiState.isError) {
@@ -55,36 +105,29 @@ fun HomeScreen(navController: NavController, isOnline: Boolean, viewModel: HomeS
 
             Column (modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color(0xFF6BAEDF)),
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(MainBackground, SecondaryBackground)
+                    )
+                ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
 
-                // henter viewmodel senere
-                LazyColumn(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    item { CurrentLocation(uiState.locationName) } // Lokasjon
-                    item { DisplayWarning("Masse skummelt kan skje i dag") } // Advarsel hvis det er noe å varsle om
-                    if (uiState.todaysWeather != null) {
-                        item { DisplayWeather(uiState.todaysWeather!!.tempNow, uiState.todaysWeather!!.uv, uiState.todaysWeather!!.precipitationAmount, uiState.todaysWeather!!.windSpeed) } // Alle dataene vi trenger ish
-                        item { TodaysWeather(uiState.todaysWeather!!.tempMin, uiState.todaysWeather!!.tempMax, uiState.todaysWeather!!.iconNow) } // Været i dag
-                        item { TodaysActivity(data) } // Dagens aktivitet
-                        item { WeatherWeek(uiState.thisWeeksWeather) } // Været resten av uken
-                        item { SunRiseSet("08:20", "23:45") } // Sol opp/ned
-                    }
-
-                }
+            // henter viewmodel senere
+            LazyColumn(
+                modifier = Modifier.padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item { CurrentLocation(dummyLocation) } // Lokasjon
+                item { DisplayWarning(dummyWarningData) } // Advarsel hvis det er noe å varsle om
+                item { DisplayWeather(dummyTodaysWeatherData) } // Alle dataene vi trenger ish
+                item { TodaysWeather(dummyTodaysWeatherData) } // Været i dag
+                item { TodaysActivity(dummyAiResponse) } // Dagens aktivitet
+                item { WeatherWeek(dummyWeatherData) } // Været resten av uken
+                item { SunRiseSet(dummSunData) } // Sol opp/ned
             }
         }
-    }
-
-}
-
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    //HomeScreen(navController = NavController(LocalContext.current))
+    }}
 }
 
 
