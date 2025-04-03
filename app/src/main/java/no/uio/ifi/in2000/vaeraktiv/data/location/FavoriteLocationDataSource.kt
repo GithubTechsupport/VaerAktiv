@@ -18,7 +18,16 @@ class FavoriteLocationDataSource @Inject constructor(
     }
 
     fun addLocation(latitude: Double, longitude: Double, placeName: String) {
-        file.appendText("$placeName,$latitude,$longitude\n")
+        val formattedPlaceName = placeName.lowercase().split(" ")
+            .joinToString(" ") { it.replaceFirstChar { char -> char.uppercase() } }
+
+        val existingLocations = file.readLines()
+
+        if (existingLocations.any { it.startsWith("$formattedPlaceName,") }) {
+            return
+        }
+
+        file.appendText("$formattedPlaceName,$latitude,$longitude\n")
     }
 
     fun deleteLocation(placeName: String) {
