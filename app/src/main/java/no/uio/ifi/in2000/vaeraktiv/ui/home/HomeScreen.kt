@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,10 +18,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainBackground
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryBackground
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SolarEvent
@@ -48,13 +45,13 @@ val dummyWarningData = listOf (
     )
 )
 
-val dummyTodaysWeatherData = no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherData(
+val dummyTodaysWeatherData = no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday(
     tempMax = "20",
     tempMin = "15",
     tempNow = "18",
-    iconDesc = "fog",
-    iconDescNow = "rain",
-    wind = "5",
+    icon = "fog",
+    iconNow = "rain",
+    windSpeed = "5",
     precipitationAmount = "0",
     uv = "2"
 )
@@ -86,6 +83,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
     )
 
     val currentLocation by viewModel.currentLocation.observeAsState()
+
     LaunchedEffect(Unit) {
         viewModel.initialize()
     }
@@ -101,33 +99,37 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
     } else if (uiState.isError) {
         Text(text = uiState.errorMessage)
     } else {
-        if(isOnline) {
+        if (isOnline) {
 
-            Column (modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(MainBackground, SecondaryBackground)
-                    )
-                ),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-
-            // henter viewmodel senere
-            LazyColumn(
-                modifier = Modifier.padding(16.dp),
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(MainBackground, SecondaryBackground)
+                        )
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                item { CurrentLocation(dummyLocation) } // Lokasjon
-                item { DisplayWarning(dummyWarningData) } // Advarsel hvis det er noe å varsle om
-                item { DisplayWeather(dummyTodaysWeatherData) } // Alle dataene vi trenger ish
-                item { TodaysWeather(dummyTodaysWeatherData) } // Været i dag
-                item { TodaysActivity(dummyAiResponse) } // Dagens aktivitet
-                item { WeatherWeek(dummyWeatherData) } // Været resten av uken
-                item { SunRiseSet(dummSunData) } // Sol opp/ned
+
+                // henter viewmodel senere
+                LazyColumn(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (uiState.todaysWeather != null) {
+                        item { CurrentLocation(uiState.locationName) } // Lokasjon
+                        item { DisplayWarning(dummyWarningData) } // Advarsel hvis det er noe å varsle om
+                        item { DisplayWeather(uiState.todaysWeather) } // Alle dataene vi trenger ish
+                        item { TodaysWeather(uiState.todaysWeather) } // Været i dag
+                        item { TodaysActivity(dummyAiResponse) } // Dagens aktivitet
+                        item { WeatherWeek(uiState.thisWeeksWeather) } // Været resten av uken
+                        item { SunRiseSet(dummSunData) } // Sol opp/ned
+                    }
+                }
             }
         }
-    }}
+    }
 }
 
 

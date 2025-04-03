@@ -17,6 +17,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -28,19 +32,8 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ThisWeeksWeatherData
 
 
-val dummyWeatherData = listOf(
-    ForecastForDay(date = "26. mars", maxTemp = "8", null, iconDesc = "clearsky_day", null, null),
-    ForecastForDay(date = "27. mars", maxTemp = "10", null, iconDesc = "cloudy", null, null),
-    ForecastForDay(date = "28. mars", maxTemp = "12", null, iconDesc = "rain", null, null),
-    ForecastForDay(date = "29. mars", maxTemp = "14", null, iconDesc = "rain", null, null),
-    ForecastForDay(date = "30. mars", maxTemp = "16", null, iconDesc = "rain", null, null),
-    ForecastForDay(date = "31. mars", maxTemp = "18", null, iconDesc = "rain", null, null),
-    ForecastForDay(date = "1. april", maxTemp = "20", null, iconDesc = "rain", null, null),
-    ForecastForDay(date = "2. april", maxTemp = "22", null, iconDesc = "rain", null, null)
-)
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 
 @SuppressLint("DiscouragedApi")

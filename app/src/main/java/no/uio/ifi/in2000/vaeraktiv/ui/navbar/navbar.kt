@@ -68,7 +68,7 @@ fun Navbar (favoriteLocationViewModel: FavoriteLocationViewModel, activityScreen
             } else {
                 // Show NavHost only when not loading.
                 NavHost(navController, startDestination = "home") {
-                    composable("home") { HomeScreen(navController, isOnline, homeScreenViewModel) }
+                    composable("home") { HomeScreen(isOnline, homeScreenViewModel) }
                     composable("activity") { ActivityScreen(isOnline, activityScreenViewModel) }
                     composable("location") { LocationScreen(isOnline, favoriteLocationViewModel) }
                 }
