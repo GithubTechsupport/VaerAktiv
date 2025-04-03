@@ -75,8 +75,9 @@ fun DisplayWarning(data: List<AlertData>) {
 
             if (isExpanded) {
                 Box(modifier = Modifier
-                    .width(200.dp)
+                    .fillMaxWidth()
                     .padding(top = 4.dp)
+                    .padding(horizontal = 16.dp)
                     .height(1.dp)
                     .background(color = MaterialTheme.colorScheme.onBackground)
                 )
@@ -101,7 +102,7 @@ fun DisplayWarning(data: List<AlertData>) {
                             ) {
                                 Image(
                                     painter = painterResource(id = iconResId),
-                                    contentDescription = "Advarsel ikon",
+                                    contentDescription = "Advarsel ikon: $type, $dangerColor",
                                     modifier = Modifier.size(60.dp)
                                 )
                                 Spacer(modifier = Modifier.width(30.dp))
@@ -141,18 +142,21 @@ fun DisplayWarning(data: List<AlertData>) {
 private fun getWarningResId(context: android.content.Context, warningType: String, dangerColor: String): Int {
     val basePrefix = "icon_warning_"
 
-    val combined = warningType.split("-").joinToString("") { it.trim() }
-    val combinedIcon =(basePrefix + combined + "_" + dangerColor).lowercase()
-    val testCombined = context.resources.getIdentifier(combinedIcon, "drawable", context.packageName)
-    if (testCombined != 0) return testCombined
+    if (warningType.lowercase() == "extreme" || warningType.split("-").joinToString("") { it.trim()}.lowercase() == "extreme") {
+        val extremeId = context.resources.getIdentifier(warningType, "drawable", context.packageName)
+        if (extremeId != 0) return extremeId
+    }
+    val parts = warningType.split("-").filter { it.isNotEmpty() }
 
-    val tryFirst = warningType.split("-").getOrNull(0) ?: "generic"
-    val getFirst = (basePrefix + tryFirst + "_" + dangerColor).lowercase()
-    val testFirst = context.resources.getIdentifier(getFirst, "drawable", context.packageName)
-    if (testFirst != 0) return testFirst
+    fun tryIcon(type: String): Int {
+        val iconName = (basePrefix + type + "_" + dangerColor).lowercase()
+        return context.resources.getIdentifier(iconName, "drawable", context.packageName)
+    }
 
-    val tryLast = warningType.split("-").getOrNull(1) ?: "generic"
-    val getLast = (basePrefix + tryLast + "_" + dangerColor).lowercase()
-    val testLast = context.resources.getIdentifier(getLast, "drawable", context.packageName)
-    return if (testLast != 0) testLast else R.drawable.icon_warning_generic_yellow
+    val combined = parts.joinToString("") { it.trim() }
+    tryIcon(combined).takeIf { it != 0 }?.let {return it}
+    tryIcon(parts.getOrNull(0) ?: "generic").takeIf { it != 0 }?.let { return it }
+    tryIcon(parts.getOrNull(1) ?: "generic").takeIf { it != 0 }?.let { return it }
+
+    return R.drawable.icon_warning_generic_yellow
 }
