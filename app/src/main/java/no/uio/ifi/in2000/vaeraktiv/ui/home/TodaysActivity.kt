@@ -27,7 +27,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 
 @Composable
-fun TodaysActivity(weatherData: List<String>) {
+fun TodaysActivity(aiResponse: String) {
     val cornerDp = 10.dp
     Spacer(modifier = Modifier.height(12.dp))
     Column(
@@ -60,7 +60,7 @@ fun TodaysActivity(weatherData: List<String>) {
             )
         }
         Text(
-            text = "I dag anbeflaer vår KI en aktivitet for deg basert på værmeldingen: ",
+            text = aiResponse,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
