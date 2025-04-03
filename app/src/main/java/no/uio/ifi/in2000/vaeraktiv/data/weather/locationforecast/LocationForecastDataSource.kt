@@ -19,13 +19,14 @@ class LocationForecastDataSource @Inject constructor() {
             json(Json {
                 prettyPrint = true
                 isLenient = true
+                ignoreUnknownKeys = true
             })
         }
     }
 
     suspend fun getResponse(url: String): LocationForecastResponse = withContext(Dispatchers.IO) {
         val response = client.get(url)
-        val forecastResponse = Json{ignoreUnknownKeys = true}.decodeFromString<LocationForecastResponse>(response.body<String>())
+        val forecastResponse = Json.decodeFromString<LocationForecastResponse>(response.body<String>())
         return@withContext forecastResponse
     }
 }

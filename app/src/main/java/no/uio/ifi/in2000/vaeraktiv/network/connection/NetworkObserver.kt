@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import no.uio.ifi.in2000.vaeraktiv.network.connection.NetworkConnection
 
 
 /* This is a composable function that is used to observe the network status of the device.

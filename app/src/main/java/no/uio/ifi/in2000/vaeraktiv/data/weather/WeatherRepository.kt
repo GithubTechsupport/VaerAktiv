@@ -1,33 +1,29 @@
 package no.uio.ifi.in2000.vaeraktiv.data.weather
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
+import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
+import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
+import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
-import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
-import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
-import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Features
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ThisWeeksWeatherData
-import no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherData
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
-import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
-import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
+import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
-import javax.inject.Inject
+import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ThisWeeksWeatherData
+import no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherData
 import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
+import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(
     private val metAlertsRepository: MetAlertsRepository,
@@ -113,22 +109,6 @@ class WeatherRepository @Inject constructor(
         return alertDataList
     }
 
-    /*
-        suspend fun getAlertsForLocation(location: Location): List<AlertData> {
-        val response = metAlertsRepository.getAlertForLocation(location.lat.toString(),
-            location.lon.toString())
-        val alert = AlertData(
-            area = response?.properties?.area.toString(),
-            awareness_type = response?.properties?.awareness_type.toString(),
-            description = response?.properties?.description.toString(),
-            eventAwarenessName = response?.properties?.eventAwarenessName.toString(),
-            instruction = response?.properties?.instruction.toString(),
-            riskMatrixColor = response?.properties?.riskMatrixColor.toString()
-        )
-        return alert
-    }
-     */
-
     suspend fun getTodaysData(location: Location): TodaysWeatherData {
         val forecast = locationForecastRepository.getForecast(location.lat.toString(), location.lon.toString())
         val locationData = forecast?.properties?.timeseries?.get(0)?.data
@@ -175,6 +155,7 @@ class WeatherRepository @Inject constructor(
         }
     }
 
+    @SuppressLint("DefaultLocale")
     fun trackDeviceLocation(lifecycleOwner: LifecycleOwner) {
         deviceLocationRepository.startTracking(lifecycleOwner) {
             deviceLocation.value?.let { devLoc ->
@@ -197,13 +178,4 @@ class WeatherRepository @Inject constructor(
             }
         }
     }
-}
-
-suspend fun main() {
-
-    val d = LocationForecastDataSource()
-    val loc = LocationForecastRepository(d)
-    //val w = WeatherRepository(null, loc, null)
-    //val test = w.getFavoriteLocationsData()
-    //println("${test[0]} ${test[1]}")
 }
