@@ -22,15 +22,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
-import no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherData
 
 @SuppressLint("DiscouragedApi")
 @Composable
-fun TodaysWeather(data : TodaysWeatherData) {
+fun TodaysWeather(data: ForecastToday?) {
     val context = LocalContext.current
-    val iconResId = context.resources.getIdentifier(data.iconDesc, "drawable", context.packageName) // skal bruke iconDescToday
+    val iconResId = context.resources.getIdentifier(data?.icon, "drawable", context.packageName) // skal bruke iconDescToday
     val cornerDp = 10.dp
     Spacer(modifier = Modifier.height(12.dp))
     Column(
@@ -89,7 +89,7 @@ fun TodaysWeather(data : TodaysWeatherData) {
                 //.padding(8.dp)
         ) {
             Text(
-                text = "${data.tempMin}°",
+                text = "${data?.tempMin}°",
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Start,
@@ -97,7 +97,7 @@ fun TodaysWeather(data : TodaysWeatherData) {
             )
             Spacer(modifier = Modifier.weight(0.6f))
             Text(
-                text = "${data.tempMax}°",
+                text = "${data?.tempMax}°",
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center

@@ -12,6 +12,11 @@ import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
+import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
+import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
+import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
+import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Features
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
@@ -19,9 +24,8 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
-import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ThisWeeksWeatherData
-import no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherData
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
+import javax.inject.Inject
 import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
 import javax.inject.Inject
 
@@ -44,6 +48,10 @@ class WeatherRepository @Inject constructor(
 
     private val _deviceLocation = MutableLiveData<Location?>()
     val deviceLocation: LiveData<Location?> get() = _deviceLocation
+
+    fun setCurrentLocation(location: Location) {
+        _currentLocation.value = location
+    }
 
 //    suspend fun getUpdates(locationsList: List<String>) {
 //        val locationsList = favoriteLocationRepo.getAllLocations()
@@ -109,37 +117,46 @@ class WeatherRepository @Inject constructor(
         return alertDataList
     }
 
-    suspend fun getTodaysData(location: Location): TodaysWeatherData {
+suspend fun getForecastToday(location: Location): ForecastToday {
         val forecast = locationForecastRepository.getForecast(location.lat.toString(), location.lon.toString())
         val locationData = forecast?.properties?.timeseries?.get(0)?.data
         val nowcast = nowcastRepository.getForecast(location.lat.toString(), location.lon.toString())
         val nowcastData = nowcast?.properties?.timeseries?.get(0)?.data
-        val todaysWeather = TodaysWeatherData(
+        val forecastToday = ForecastToday(
             tempNow = nowcastData?.instant?.details?.airTemperature.toString(), // nowcast
             tempMax = locationData?.next6Hours?.details?.airTemperatureMax.toString(),
             tempMin = locationData?.next6Hours?.details?.airTemperatureMin.toString(),
-            uv = locationData?.next6Hours?.details?.ultravioletIndexClearSky.toString(),
-            wind = nowcastData?.instant?.details?.windSpeed.toString(), // nowcast
-            precipitationAmount = nowcastData?.instant?.details?.precipitationAmount.toString(), // nowcast
-            iconDesc = locationData?.next6Hours?.summary?.symbolCode.toString(),
-            iconDescNow = nowcastData?.next1Hours?.summary?.symbolCode.toString() // nowcast
+            uv = locationData?.instant?.details?.ultravioletIndexClearSky.toString(),
+            windSpeed = nowcastData?.instant?.details?.windSpeed.toString(), // nowcast
+            precipitationAmount = nowcastData?.next1Hours?.details?.precipitationAmount.toString(), // nowcast
+            icon = locationData?.next6Hours?.summary?.symbolCode.toString(),
+            iconNow = nowcastData?.next1Hours?.summary?.symbolCode.toString() // nowcast
         )
-        return todaysWeather
+        return forecastToday
     }
 
-    suspend fun getDayInWeekData(location: Location, date: String): ThisWeeksWeatherData {
-        val forecast = locationForecastRepository.getForecastForDate(location.lat.toString(),
-            location.lon.toString(), date) // liste med TimeSeries for datoen
-        val locationData = forecast?.get(0)?.data // tror dette skal være data fra 00:00 for valgt dato
-        val thisWeeksWeather = ThisWeeksWeatherData(
-            date = date,
-            maxTemp = locationData?.next12Hours?.details?.airTemperatureMax.toString(), // burde finne maxtemp mellom 00:00 - 23:59 for en dag (neste 24t)
-            uvMax = locationData?.next6Hours?.details?.ultravioletIndexClearSky.toString(), // brukes ikke
-            iconDesc = locationData?.next12Hours?.summary?.symbolCode.toString(), // kanskje helt ikke optimalt
-            precipitationAmount = locationData?.next6Hours?.details?.precipitationAmount.toString(), // brukes ikke
-            wind = locationData?.instant?.details?.windSpeed.toString() // brukes ikke
-        )
-        return thisWeeksWeather
+    suspend fun getForecastByDay(location: Location): List<ForecastForDay> {
+        try {
+            val response = locationForecastRepository.getForecastByDay(location.lat.toString(), location.lon.toString()) // liste med TimeSeries for datoen
+            if (response != null) {
+                val forecast = response.map { (date, timeSeriesList) ->
+                    ForecastForDay(
+                        date = date,
+                        maxTemp = timeSeriesList[0].data.next6Hours?.details?.airTemperatureMax.toString(),
+                        icon = timeSeriesList[0].data.next6Hours?.summary?.symbolCode.toString(),
+                    )
+                }
+                return forecast
+            } else {
+                Log.d("WeatherRepository", "No forecast found")
+                throw Error("No forecast found")
+            }
+        } catch (e: Exception) {
+            Log.e("WeatherRepository", "Error at getForecastByDay: ", e)
+            throw e
+        }
+
+
     }
 
     suspend fun getWeatherForecast(location: Location): LocationForecastResponse? {
@@ -170,10 +187,10 @@ class WeatherRepository @Inject constructor(
                 val location = geocoderClass.getLocationFromCoordinates(Pair(lat, lon))?.let { address ->
                     Location(address.getAddressLine(0), lat, lon)
                 } ?: Location("Unknown location", lat, lon)
-                _deviceLocation.postValue(location)
-                _currentLocation.postValue(location)
+                _deviceLocation.value = location
+                //Log.d("WeatherRepository", "Device location updated: $location")
             } catch (e: Exception) {
-                Log.d("WeatherRepository", "Error getting device location: ${e.message}")
+                Log.e("WeatherRepository", "Error getting device location: ", e)
                 throw e
             }
         }

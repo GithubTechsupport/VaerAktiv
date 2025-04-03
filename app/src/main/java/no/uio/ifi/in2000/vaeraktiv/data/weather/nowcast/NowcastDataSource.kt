@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import io.ktor.client.HttpClient
@@ -10,27 +11,19 @@ import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.vaeraktiv.model.nowcast.NowcastResponse
+import no.uio.ifi.in2000.vaeraktiv.network.httpclient.NetworkClient
+import javax.inject.Inject
+import javax.inject.Named
 
-class NowcastDataSource {
-
-    private val client = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            json(Json {
-                prettyPrint = true
-                isLenient = true
-                ignoreUnknownKeys = true
-            })
+class NowcastDataSource @Inject constructor(@Named("prettyPrint-isLenient-ignoreUnknownKeys-Client") private val networkClient: NetworkClient) {
+    suspend fun getResponse(url: String): NowcastResponse = withContext(Dispatchers.IO) {
+        try {
+            val response = networkClient.ktorHttpClient.get(url)
+            val forecastResponse = Json{ignoreUnknownKeys = true}.decodeFromString<NowcastResponse>(response.body<String>())
+            return@withContext forecastResponse
+        } catch (e: Exception) {
+            Log.e("NowcastDataSource", "Error getting forecast: ", e)
+            throw e
         }
     }
-
-    suspend fun getResponse(url: String): NowcastResponse = withContext(Dispatchers.IO) {
-        val response = client.get(url)
-        val forecastResponse = Json.decodeFromString<NowcastResponse>(response.body<String>())
-        return@withContext forecastResponse
-    }
-}
-
-suspend fun main() {
-    val d = NowcastDataSource()
-    println(d.getResponse("https://api.met.no/weatherapi/nowcast/2.0/complete?lat=60&lon=11"))
 }

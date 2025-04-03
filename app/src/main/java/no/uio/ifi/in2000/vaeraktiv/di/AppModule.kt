@@ -8,6 +8,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
 import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
@@ -28,6 +30,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
     @Singleton
     @Provides
     fun provideGeocodeClass(
@@ -69,13 +72,6 @@ object AppModule {
         return FavoriteLocationDataSource(context)
     }
 
-    @Singleton
-    @Provides
-    fun provideNowcastDataSource(
-    ): NowcastDataSource {
-        return NowcastDataSource()
-    }
-
     @Provides
     @Singleton
     fun provideFavoriteLocationRepository(
@@ -110,17 +106,17 @@ object AppModule {
     @Singleton
     @Provides
     fun provideLocationRepository(
-        locationDataSource: LocationDataSource
+        dataSource: LocationDataSource
     ): LocationRepository {
-        return LocationRepository(locationDataSource)
+        return LocationRepository(dataSource)
     }
 
     @Singleton
     @Provides
     fun provideNowcastRepository(
-        nowcastDataSource: NowcastDataSource
+        dataSource: NowcastDataSource
     ): NowcastRepository {
-        return NowcastRepository(nowcastDataSource)
+        return NowcastRepository(dataSource)
     }
 
     @Provides

@@ -17,7 +17,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import javax.inject.Inject
 
 @HiltViewModel
-class ActivityViewModel @Inject constructor(private val weatherRepository: WeatherRepository) : ViewModel() {
+class ActivityScreenViewModel @Inject constructor(private val weatherRepository: WeatherRepository) : ViewModel() {
 
     private var initialized = false
 
@@ -29,10 +29,6 @@ class ActivityViewModel @Inject constructor(private val weatherRepository: Weath
 
     val activityScreenUiState: StateFlow<ActivityScreenUiState> = _activityScreenUiState.asStateFlow()
 
-    fun startTracking(lifecycleOwner: LifecycleOwner) {
-        weatherRepository.trackDeviceLocation(lifecycleOwner)
-    }
-
     fun initialize() {
         if (initialized) return
         initialized = true
@@ -41,11 +37,11 @@ class ActivityViewModel @Inject constructor(private val weatherRepository: Weath
 
     fun getActivities() {
         viewModelScope.launch{
-            _activityScreenUiState.value = ActivityScreenUiState(isLoading = true)
+            _activityScreenUiState.update {
+                it.copy(isLoading = true)
+            }
             try {
-                Log.d("ActivityViewModel", "Calling getActivities")
-                Log.d("ActivityViewModel", "Current location is: " + currentLocation.value)
-                val activities = weatherRepository.getActivities(Location("Oslo Sentralstasjon, Oslo", 59.9111, 10.7533))
+                val activities = weatherRepository.getActivities(currentLocation.value!!)
                 _activityScreenUiState.update {
                     it.copy(
                         activities = activities
@@ -55,11 +51,11 @@ class ActivityViewModel @Inject constructor(private val weatherRepository: Weath
                 _activityScreenUiState.update {
                     it.copy(
                         isError = true,
-                        errorMessage = e.message ?: "Unknown error"
+                        errorMessage = e.toString() ?: "Unknown error"
                     )
 
                 }
-                Log.d("ActivityViewModel", "Error is: $e")
+                Log.e("ActivityViewModel", "Error: ", e)
             } finally {
                 _activityScreenUiState.update {
                     it.copy(

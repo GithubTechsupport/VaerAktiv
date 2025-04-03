@@ -24,17 +24,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
-import no.uio.ifi.in2000.vaeraktiv.model.ui.TodaysWeatherData
 
 
 
 @SuppressLint("DiscouragedApi")
 @Composable
-fun DisplayWeather(data : TodaysWeatherData) {
+fun DisplayWeather(data : ForecastToday?) {
     val context = LocalContext.current
-    val iconResId = context.resources.getIdentifier(data.iconDescNow, "drawable", context.packageName)
+    val iconResId = context.resources.getIdentifier(data?.iconNow, "drawable", context.packageName)
     val cornerDp = 10.dp
     Spacer(modifier = Modifier.height(12.dp))
     Column(
@@ -53,7 +54,7 @@ fun DisplayWeather(data : TodaysWeatherData) {
             )
             Spacer(modifier = Modifier.width(20.dp))
             Text(
-                text = "${data.tempNow}°",
+                text = "${data?.tempNow}°",
                 style = MaterialTheme.typography.displayLarge, // Større tekst for hovedtemp
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -79,19 +80,19 @@ fun DisplayWeather(data : TodaysWeatherData) {
             horizontalArrangement = Arrangement.SpaceEvenly // Jevn fordeling
         ) {
             Text(
-                text = "${data.uv} UV",
+                text = "${data?.uv} UV",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black,
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "${data.precipitationAmount} mm",
+                text = "${data?.precipitationAmount} mm",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black,
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "${data.wind} m/s",
+                text = "${data?.windSpeed} m/s",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black,
                 textAlign = TextAlign.Center

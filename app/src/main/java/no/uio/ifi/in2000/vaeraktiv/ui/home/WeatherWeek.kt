@@ -17,6 +17,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -27,23 +31,14 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ThisWeeksWeatherData
 
 
-val dummyWeatherData = listOf(
-    ThisWeeksWeatherData(date = "26. mars", maxTemp = "8", null, iconDesc = "clearsky_day", null, null),
-    ThisWeeksWeatherData(date = "27. mars", maxTemp = "10", null, iconDesc = "cloudy", null, null),
-    ThisWeeksWeatherData(date = "28. mars", maxTemp = "12", null, iconDesc = "rain", null, null),
-    ThisWeeksWeatherData(date = "29. mars", maxTemp = "14", null, iconDesc = "rain", null, null),
-    ThisWeeksWeatherData(date = "30. mars", maxTemp = "16", null, iconDesc = "rain", null, null),
-    ThisWeeksWeatherData(date = "31. mars", maxTemp = "18", null, iconDesc = "rain", null, null),
-    ThisWeeksWeatherData(date = "1. april", maxTemp = "20", null, iconDesc = "rain", null, null),
-    ThisWeeksWeatherData(date = "2. april", maxTemp = "22", null, iconDesc = "rain", null, null)
-)
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 
 @SuppressLint("DiscouragedApi")
 @Composable
-fun WeatherWeek(data: List<ThisWeeksWeatherData>) {
+fun WeatherWeek(data: List<ForecastForDay>) {
+
     val cornerDp = 10.dp
     val context = LocalContext.current
     Spacer(modifier = Modifier.height(12.dp))
@@ -108,9 +103,9 @@ fun WeatherWeek(data: List<ThisWeeksWeatherData>) {
                 .height(1.dp)
                 .background(color = MaterialTheme.colorScheme.inverseOnSurface)
         )
-        data.take(7).forEach { day ->
-            val iconResId = context.resources.getIdentifier(day.iconDesc, "drawable", context.packageName)
-            val thisDate = day.date ?: "ingen data"
+        data.forEach { day ->
+            var isExpanded by remember { mutableStateOf(false) }
+            val iconResId = context.resources.getIdentifier(day.icon, "drawable", context.packageName)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -118,7 +113,7 @@ fun WeatherWeek(data: List<ThisWeeksWeatherData>) {
                     .padding(8.dp)
             ) {
                 Text(
-                    text = thisDate,
+                    text = day.date,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Start,

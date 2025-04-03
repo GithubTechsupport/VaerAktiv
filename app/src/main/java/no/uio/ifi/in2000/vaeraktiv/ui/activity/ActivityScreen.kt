@@ -24,20 +24,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
+import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainBackground
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryBackground
 import java.time.Month
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ActivityScreen(isOnline: Boolean, viewModel: ActivityViewModel) {
+fun ActivityScreen(isOnline: Boolean, viewModel: ActivityScreenViewModel) {
     val uiState by viewModel.activityScreenUiState.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.initialize()
     }
     if (uiState.isLoading) {
-        Text(text = "Loading...")
+        LoadingScreen()
     } else if (uiState.isError) {
         Text(text = "Error: ${uiState.errorMessage}")
     } else {

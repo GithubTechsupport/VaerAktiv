@@ -23,8 +23,9 @@ import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.MainActivity
 import no.uio.ifi.in2000.vaeraktiv.network.connection.NetworkObserver
 import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityScreen
-import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreen
+import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.LocationScreen
 
@@ -37,7 +38,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.location.LocationScreen
 * */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Navbar (favoriteLocationViewModel: FavoriteLocationViewModel, activityViewModel: ActivityViewModel) {
+fun Navbar (favoriteLocationViewModel: FavoriteLocationViewModel, activityScreenViewModel: ActivityScreenViewModel, homeScreenViewModel: HomeScreenViewModel) {
     val navController = rememberNavController()
     var isOnline by remember { mutableStateOf(true) }
     var showNoNetworkDialog by remember { mutableStateOf(false) }
@@ -67,8 +68,8 @@ fun Navbar (favoriteLocationViewModel: FavoriteLocationViewModel, activityViewMo
             } else {
                 // Show NavHost only when not loading.
                 NavHost(navController, startDestination = "home") {
-                    composable("home") { HomeScreen(isOnline) }
-                    composable("activity") { ActivityScreen(isOnline, activityViewModel) }
+                    composable("home") { HomeScreen(isOnline, homeScreenViewModel) }
+                    composable("activity") { ActivityScreen(isOnline, activityScreenViewModel) }
                     composable("location") { LocationScreen(isOnline, favoriteLocationViewModel) }
                 }
                 // Show NoNetworkDialog if isOnline is false
