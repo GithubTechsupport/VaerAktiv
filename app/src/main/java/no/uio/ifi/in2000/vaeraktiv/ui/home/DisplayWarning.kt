@@ -87,12 +87,13 @@ fun DisplayWarning(data: List<Properties>) {
                 ) {
                     data.forEach { warning ->
                         val iconType = warning.awareness_type?.split("; ")?.getOrNull(1) ?: "generic"
-                        if (warning.description != null || warning.riskMatrixColor != null || iconType != "generic") {
+                        val doubleIconCheck = iconType.split("-").joinToString("") { it.trim() }
+                        if (warning.description != null || warning.riskMatrixColor != null || doubleIconCheck != "generic") {
                             val dangerColor = warning.riskMatrixColor.orEmpty()
                             val desc = warning.description ?: "Ingen data"
                             val instruct = warning.instruction ?: "Ingen data"
                             val type = warning.eventAwarenessName ?: "Ingen data"
-                            val iconResId = getWarningResId(context = context, warningType = iconType, dangerColor = dangerColor)
+                            val iconResId = getWarningResId(context = context, warningType = doubleIconCheck, dangerColor = dangerColor)
 
                                 Row (
                                     modifier = Modifier
