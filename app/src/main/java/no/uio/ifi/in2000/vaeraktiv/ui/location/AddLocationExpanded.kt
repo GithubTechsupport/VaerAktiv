@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.location
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -85,7 +84,6 @@ fun AddLocationExpanded(defaultPading: Dp, viewModel: FavoriteLocationViewModel)
                         searchText = ""
                         keyboardController?.hide()
                     }
-
                 })
             )
         }

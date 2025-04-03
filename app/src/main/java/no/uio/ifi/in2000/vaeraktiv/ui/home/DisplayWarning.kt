@@ -106,9 +106,7 @@ fun DisplayWarning(data: List<Properties>) {
                                         modifier = Modifier.size(60.dp)
                                     )
                                     Spacer(modifier = Modifier.width(30.dp))
-                                    Column (
-
-                                    ) {
+                                    Column {
                                         Text(
                                             text = type,
                                             style = MaterialTheme.typography.bodyLarge,

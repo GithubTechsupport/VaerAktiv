@@ -3,22 +3,21 @@ package no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SunData
 import no.uio.ifi.in2000.vaeraktiv.network.httpclient.NetworkClient
 import javax.inject.Inject
 import javax.inject.Named
 
 class SunriseDataSource @Inject constructor(@Named("ignoreUnknownKeys-Client") private val networkClient: NetworkClient){
-
-    suspend fun getSunrise(lat: String, lon: String, date: String) : SunData? {
+    suspend fun getSunrise(lat: String, lon: String, date: String) : SunData? = withContext(Dispatchers.IO) {
         try {
             // TODO : fikse at den henter dagens dato og plassering
             val response: HttpResponse = networkClient.ktorHttpClient.get("https://in2000.api.met.no/weatherapi/sunrise/3.0/sun?lat=$lat&lon=$lon&date=$date&offset=+01:00")
-            return response.body()
+            return@withContext response.body()
         } catch (e: Exception) {
-            return null
-        } finally {
-            networkClient.ktorHttpClient.close()
+            throw e
         }
     }
 }

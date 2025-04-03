@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import android.os.Looper
-import android.util.Log
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationCallback
@@ -48,7 +47,7 @@ class LocationDataSource @Inject constructor(
     // Start receiving continuous location updates as suspendable functions
     @SuppressLint("MissingPermission")
     fun getLocationUpdates(): Flow<Location?> = callbackFlow {
-        val locationRequest = LocationRequest.Builder(102,1000L).build()
+        val locationRequest = LocationRequest.Builder(102,30000L).build()
         val callback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
                 result.lastLocation?.let { trySend(it) }

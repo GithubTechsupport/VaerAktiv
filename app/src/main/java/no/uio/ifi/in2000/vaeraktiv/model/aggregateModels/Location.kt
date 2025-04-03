@@ -4,5 +4,4 @@ data class Location(
     val addressName: String,
     val lat: Double,
     val lon: Double
-
 )

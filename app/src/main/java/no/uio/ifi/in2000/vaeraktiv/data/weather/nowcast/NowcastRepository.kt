@@ -23,14 +23,3 @@ class NowcastRepository @Inject constructor(nowcastDataSource: NowcastDataSource
     }
 }
 
-suspend fun main() {
-    val d = NowcastDataSource()
-    val loc = NowcastRepository(d)
-    val test = loc.getUpdate("60", "11")
-    println(loc.getForecast("60", "11")?.properties?.timeseries?.get(0))
-    println(loc.getUpdate("60", "5")?.properties?.timeseries?.get(0))
-    if (test != null) {
-        println(test.properties.timeseries[0])
-    }
-}
-
