@@ -41,10 +41,10 @@ class GeocoderClass @Inject constructor(private val context: Context) {
         }
     }
 
-    fun getLocationFromCoordinates(coordinates: Pair<Double, Double>): Address? {
+    fun getLocationFromCoordinates(coordinates: Pair<String, String>): Address? {
 
         try {
-            val addressList: List<Address>? = geocoder.getFromLocation(coordinates.first, coordinates.second, 3)
+            val addressList: List<Address>? = geocoder.getFromLocation(coordinates.first.toDouble(), coordinates.second.toDouble(), 3)
             if (!addressList.isNullOrEmpty()) {
                 val address: Address = addressList[0]
                 return address

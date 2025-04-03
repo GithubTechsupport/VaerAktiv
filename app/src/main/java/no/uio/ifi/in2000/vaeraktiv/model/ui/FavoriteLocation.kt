@@ -8,5 +8,7 @@ data class FavoriteLocation(
     val lowestTemp: String,
     val downPour: String,
     val uv: String,
-    val wind: String
+    val wind: String,
+    val lat: String,
+    val lon: String
 )

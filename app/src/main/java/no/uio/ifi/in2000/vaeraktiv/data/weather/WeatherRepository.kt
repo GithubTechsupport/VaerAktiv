@@ -14,11 +14,9 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecas
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
-import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Features
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
@@ -27,7 +25,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import javax.inject.Inject
 import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
-import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(
     private val metAlertsRepository: MetAlertsRepository,
@@ -90,7 +87,9 @@ class WeatherRepository @Inject constructor(
                 lowestTemp = data?.next6Hours?.details?.airTemperatureMin.toString(),
                 wind = data?.instant?.details?.windSpeed.toString(),
                 downPour = data?.next6Hours?.details?.precipitationAmount.toString(),
-                uv = data?.instant?.details?.ultravioletIndexClearSky.toString()
+                uv = data?.instant?.details?.ultravioletIndexClearSky.toString(),
+                lat = lat,
+                lon = lon,
             )
             locationsData.add(weatherData)
 
@@ -118,9 +117,9 @@ class WeatherRepository @Inject constructor(
     }
 
 suspend fun getForecastToday(location: Location): ForecastToday {
-        val forecast = locationForecastRepository.getForecast(location.lat.toString(), location.lon.toString())
+        val forecast = locationForecastRepository.getForecast(location.lat, location.lon)
         val locationData = forecast?.properties?.timeseries?.get(0)?.data
-        val nowcast = nowcastRepository.getForecast(location.lat.toString(), location.lon.toString())
+        val nowcast = nowcastRepository.getForecast(location.lat, location.lon)
         val nowcastData = nowcast?.properties?.timeseries?.get(0)?.data
         val forecastToday = ForecastToday(
             tempNow = nowcastData?.instant?.details?.airTemperature.toString(), // nowcast
@@ -137,13 +136,14 @@ suspend fun getForecastToday(location: Location): ForecastToday {
 
     suspend fun getForecastByDay(location: Location): List<ForecastForDay> {
         try {
-            val response = locationForecastRepository.getForecastByDay(location.lat.toString(), location.lon.toString()) // liste med TimeSeries for datoen
+            val response = locationForecastRepository.getForecastByDay(location.lat, location.lon) // liste med TimeSeries for datoen
             if (response != null) {
                 val forecast = response.map { (date, timeSeriesList) ->
+                    val timeSeriesAt12PM = timeSeriesList.find { it.time.substring(11, 16) == "12:00" }
                     ForecastForDay(
                         date = date,
-                        maxTemp = timeSeriesList[0].data.next6Hours?.details?.airTemperatureMax.toString(),
-                        icon = timeSeriesList[0].data.next6Hours?.summary?.symbolCode.toString(),
+                        maxTemp = timeSeriesAt12PM?.data?.next6Hours?.details?.airTemperatureMax.toString(),
+                        icon = timeSeriesAt12PM?.data?.next6Hours?.summary?.symbolCode.toString(),
                     )
                 }
                 return forecast
@@ -176,14 +176,14 @@ suspend fun getForecastToday(location: Location): ForecastToday {
     fun trackDeviceLocation(lifecycleOwner: LifecycleOwner) {
         deviceLocationRepository.startTracking(lifecycleOwner) {
             deviceLocation.value?.let { devLoc ->
-                if (devLoc.lat == it.latitude && devLoc.lon == it.longitude) {
+                if (devLoc.lat == it.latitude.toString() && devLoc.lon == it.longitude.toString()) {
                     Log.d("WeatherRepository", "Device location is already up to date")
                     return@startTracking
                 }
             }
             try {
-                val lat = String.format("%.3f", it.latitude).toDouble()
-                val lon = String.format("%.3f", it.longitude).toDouble()
+                val lat = String.format("%.3f", it.latitude)
+                val lon = String.format("%.3f", it.longitude)
                 val location = geocoderClass.getLocationFromCoordinates(Pair(lat, lon))?.let { address ->
                     Location(address.getAddressLine(0), lat, lon)
                 } ?: Location("Unknown location", lat, lon)

@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
+import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import javax.inject.Inject
 
@@ -27,6 +28,10 @@ class FavoriteLocationViewModel @Inject constructor(
 
     init {
         loadLocationsAndFetchWeather()
+    }
+
+    fun updateCurrentLocation(location: Location) {
+        weatherRepo.setCurrentLocation(location)
     }
 
     private fun loadLocationsAndFetchWeather() {

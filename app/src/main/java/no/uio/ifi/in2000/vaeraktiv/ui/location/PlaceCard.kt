@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.location
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
@@ -37,7 +39,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 fun PlaceCard(
     location: FavoriteLocation,
     defaultPadding: Dp,
-    viewModel: FavoriteLocationViewModel
+    viewModel: FavoriteLocationViewModel,
 ) {
     val context = LocalContext.current
     val resourceId = context.resources.getIdentifier(
@@ -54,6 +56,14 @@ fun PlaceCard(
                 Brush.verticalGradient(
                     colors = listOf(MainCard, SecondaryCard)
                 )
+            )
+            .clickable (
+                onClick = {
+                    Log.d("LocationScreen", "Clicked on ${location.name}")
+                    viewModel.updateCurrentLocation(
+                        Location(location.name, location.lat, location.lon)
+                    )
+                }
             )
     ) {
         Row (

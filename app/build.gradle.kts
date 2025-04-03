@@ -93,6 +93,9 @@ dependencies {
     // deepseek dependencies (ktor client logging)
     implementation(libs.ktor.client.logging)
     implementation(libs.ktor.client.cio)
+
+    // openAI
+    implementation(libs.openai.client)
 }
 
 kapt {
