@@ -6,5 +6,6 @@ data class AlertData(
     val description: String? = null,
     val eventAwarenessName: String? = null,
     val instruction: String? = null,
-    val riskMatrixColor: String? = null
+    val riskMatrixColor: String? = null,
+    val contact : String? = null
 )

@@ -32,15 +32,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Properties
+import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 
 // Her kan vi bygge iconId på en bedre måte etter mvp
 @Composable
-fun DisplayWarning(data: List<Properties>) {
+fun DisplayWarning(data: List<AlertData>) {
     if (data.isNotEmpty()) {
         var isExpanded by remember { mutableStateOf(false) }
         val cornerDp = 10.dp
         val context = LocalContext.current
+        val contactInfo = data[0].contact ?: "N/A"
         Column(
             modifier = Modifier
                 .background(
@@ -48,8 +49,8 @@ fun DisplayWarning(data: List<Properties>) {
                     shape = RoundedCornerShape(cornerDp)
                 )
                 .clickable { isExpanded = !isExpanded }
-                .width(300.dp)
-                .padding(4.dp)
+                .fillMaxWidth()
+                .padding(start = 12.dp, top = 8.dp, bottom = 8.dp, end = 12.dp)
                 .animateContentSize(), // Animasjon for størrelse
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -74,8 +75,9 @@ fun DisplayWarning(data: List<Properties>) {
 
             if (isExpanded) {
                 Box(modifier = Modifier
-                    .width(200.dp)
+                    .fillMaxWidth()
                     .padding(top = 4.dp)
+                    .padding(horizontal = 16.dp)
                     .height(1.dp)
                     .background(color = MaterialTheme.colorScheme.onBackground)
                 )
@@ -89,50 +91,43 @@ fun DisplayWarning(data: List<Properties>) {
                         val iconType = warning.awareness_type?.split("; ")?.getOrNull(1) ?: "generic"
                         if (warning.description != null || warning.riskMatrixColor != null || iconType != "generic") {
                             val dangerColor = warning.riskMatrixColor.orEmpty()
-                            val desc = warning.description ?: "Ingen data"
-                            val instruct = warning.instruction ?: "Ingen data"
+                            val instruct = warning.instruction ?: "N/A"
                             val type = warning.eventAwarenessName ?: "Ingen data"
                             val iconResId = getWarningResId(context = context, warningType = iconType, dangerColor = dangerColor)
 
-                                Row (
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(start = 12.dp, top = 8.dp, bottom = 8.dp, end = 12.dp)
-                                ) {
-                                    Image(
-                                        painter = painterResource(id = iconResId),
-                                        contentDescription = "Advarsel ikon",
-                                        modifier = Modifier.size(60.dp)
+                            Row (
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 12.dp, top = 8.dp, bottom = 8.dp, end = 12.dp)
+                            ) {
+                                Image(
+                                    painter = painterResource(id = iconResId),
+                                    contentDescription = "Advarsel ikon: $type, $dangerColor",
+                                    modifier = Modifier.size(60.dp)
+                                )
+                                Spacer(modifier = Modifier.width(30.dp))
+                                Column {
+                                    Text(
+                                        text = type,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                        textAlign = TextAlign.Center,
+                                        fontSize = 18.sp
                                     )
-                                    Spacer(modifier = Modifier.width(30.dp))
-                                    Column {
-                                        Text(
-                                            text = type,
-                                            style = MaterialTheme.typography.bodyLarge,
-                                            color = MaterialTheme.colorScheme.onSurface,
-                                            textAlign = TextAlign.Center,
-                                            fontSize = 18.sp
-                                        )
-                                        Text(
-                                            text = desc,
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = MaterialTheme.colorScheme.onSurface,
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            text = instruct,
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = MaterialTheme.colorScheme.onSurface,
-                                            textAlign = TextAlign.Center
-                                        )
-                                    }
+                                    Text(
+                                        text = "Instruksjoner: $instruct",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                        textAlign = TextAlign.Start
+                                    )
                                 }
+                            }
 
                             Spacer(modifier = Modifier.height(12.dp))
                         }
                     }
                     Text(
-                        text = "Kontaktinformasjon: ${data[0].contact ?: "Ikke funnet"}",
+                        text = "Kontaktinformasjon: $contactInfo",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center
@@ -145,7 +140,24 @@ fun DisplayWarning(data: List<Properties>) {
 
 @SuppressLint("DiscouragedApi")
 private fun getWarningResId(context: android.content.Context, warningType: String, dangerColor: String): Int {
-    val iconString = "icon_warning_${warningType.lowercase()}_${dangerColor.lowercase()}"
-    val resId = context.resources.getIdentifier(iconString, "drawable", context.packageName)
-    return if (resId != 0) resId else R.drawable.icon_warning_generic_yellow
+    val basePrefix = "icon_warning_"
+    val parts = warningType.split("-").filter { it.isNotEmpty() }
+    val noColorIcons = setOf("extreme")
+
+    fun tryIcon(type: String): Int {
+        val combinedLower = type.lowercase()
+        val iconName = if (combinedLower in noColorIcons) {
+            (basePrefix + combinedLower)
+        } else {
+            (basePrefix + combinedLower + "_" + dangerColor.lowercase())
+        }
+        return context.resources.getIdentifier(iconName, "drawable", context.packageName)
+    }
+
+    val combined = parts.joinToString("") { it.trim() }
+    tryIcon(combined).takeIf { it != 0 }?.let {return it}
+    tryIcon(parts.getOrNull(0) ?: "generic").takeIf { it != 0 }?.let { return it }
+    tryIcon(parts.getOrNull(1) ?: "generic").takeIf { it != 0 }?.let { return it }
+
+    return R.drawable.icon_warning_generic_yellow
 }

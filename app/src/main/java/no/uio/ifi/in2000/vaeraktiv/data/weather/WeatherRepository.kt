@@ -1,19 +1,20 @@
 package no.uio.ifi.in2000.vaeraktiv.data.weather
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
-import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
+import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
+import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Features
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
@@ -34,7 +35,8 @@ class WeatherRepository @Inject constructor(
     private val aiRepository: AiRepository,
     private val deviceLocationRepository: LocationRepository,
     private val geocoderClass: GeocoderClass,
-    private val nowcastRepository: NowcastRepository
+    private val nowcastRepository: NowcastRepository,
+    private val deviceDateTimeRepository: DeviceDateTimeRepository
 ) {
 
 
@@ -45,6 +47,9 @@ class WeatherRepository @Inject constructor(
 
     private val _deviceLocation = MutableLiveData<Location?>()
     val deviceLocation: LiveData<Location?> get() = _deviceLocation
+
+    private val _dateTime = MutableLiveData<String>()
+    val dateTime: LiveData<String> get() = _dateTime
 
     fun setCurrentLocation(location: Location) {
         _currentLocation.value = location
@@ -65,6 +70,18 @@ class WeatherRepository @Inject constructor(
 //            }
 //        }
 //    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getSunRiseData(location: Location, date : String): List<String> {
+        Log.d("WeatherRepository", "getSunRiseData called with location: $location and date: $date")
+        val response = sunriseRepository.getSunriseTime(location.lat.toString(), location.lon.toString(), date)
+        Log.d("WeatherRepository", "getSunRiseData response: $response")
+        return response.map { timestring ->
+            val utcTime = java.time.OffsetDateTime.parse(timestring)
+            val cetTime = utcTime.plusHours(1)
+            cetTime.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"))
+        }
+    }
 
 
     suspend fun getFavoriteLocationsData(locationsList: List<String>): MutableList<FavoriteLocation> {
@@ -109,7 +126,8 @@ class WeatherRepository @Inject constructor(
                 description = feature.properties.description.toString(),
                 eventAwarenessName = feature.properties.eventAwarenessName.toString(),
                 instruction = feature.properties.instruction.toString(),
-                riskMatrixColor = feature.properties.riskMatrixColor.toString()
+                riskMatrixColor = feature.properties.riskMatrixColor.toString(),
+                contact = feature.properties.contact.toString()
             )
             alertDataList.add(alert)
         }
