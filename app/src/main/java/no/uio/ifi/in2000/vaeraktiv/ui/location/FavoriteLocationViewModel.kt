@@ -1,6 +1,8 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.location
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,12 +28,20 @@ class FavoriteLocationViewModel @Inject constructor(
     private val _data = MutableStateFlow<List<FavoriteLocation>>(emptyList())
     val data: StateFlow<List<FavoriteLocation>> = _data.asStateFlow()
 
+    private val _navigateToHome = MutableLiveData(false)
+    val navigateToHome: LiveData<Boolean> get() = _navigateToHome
+
     init {
         loadLocationsAndFetchWeather()
     }
 
     fun updateCurrentLocation(location: Location) {
         weatherRepo.setCurrentLocation(location)
+        _navigateToHome.value = true
+    }
+
+    fun onNavigationHandled() {
+        _navigateToHome.value = false
     }
 
     private fun loadLocationsAndFetchWeather() {
