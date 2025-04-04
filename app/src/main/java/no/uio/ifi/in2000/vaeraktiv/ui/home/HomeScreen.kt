@@ -56,8 +56,6 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                // henter viewmodel senere
                 LazyColumn(
                     modifier = Modifier.padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally

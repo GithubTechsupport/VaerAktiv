@@ -3,12 +3,16 @@ package no.uio.ifi.in2000.vaeraktiv.ui.activity
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -21,7 +25,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
@@ -71,23 +77,15 @@ fun ActivityScreen(isOnline: Boolean, viewModel: ActivityScreenViewModel) {
                     verticalArrangement = Arrangement.Top
                 ) {
                     item{
-                        OutlinedButton(
-                            onClick = { viewModel.getActivities() },
+                        Image(
+                            painter = painterResource(id = R.drawable.refresh),
+                            contentDescription = "Refresh image",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(10.dp),
-                            border = BorderStroke(1.dp, Color.Black),
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                contentColor = Color.Black
-                            )
-
-                        ) {
-                            Text(
-                                text = "Finn nye aktiviteter",
-                                style = MaterialTheme.typography.titleMedium,
-                                modifier = Modifier.padding(10.dp)
-                            )
-                        }
+                                .padding(top = 40.dp, bottom = 0.dp, start = 300.dp, end = 15.dp)
+                                .height(50.dp)
+                                .clickable { viewModel.getActivities() }
+                        )
                     }
                     item {
                         activities.forEach {

@@ -21,7 +21,7 @@ import javax.inject.Inject
 import javax.inject.Named
 import kotlin.time.Duration.Companion.seconds
 
-class AiRepository @Inject constructor(@Named("OpenAi-Client") private val client: AiClient) {
+class AiRepository @Inject constructor(@Named("Deepseek-Client") private val client: AiClient) {
 
     suspend fun getResponse(prompt: Prompt): JsonResponse? = withContext(Dispatchers.IO) {
         return@withContext try {
