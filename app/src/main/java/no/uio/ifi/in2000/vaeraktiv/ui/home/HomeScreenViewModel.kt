@@ -40,7 +40,7 @@ class HomeScreenViewModel @Inject constructor(private val weatherRepository: Wea
 
     fun initialize() {
         if (initialized) return
-        weatherRepository.setCurrentLocation(Location("Oslo sentralstasjon", 59.911491, 10.757933))
+            weatherRepository.setCurrentLocation(Location("Oslo Sentralstasjon","59.9111", "10.7533"))
         initialized = true
     }
 

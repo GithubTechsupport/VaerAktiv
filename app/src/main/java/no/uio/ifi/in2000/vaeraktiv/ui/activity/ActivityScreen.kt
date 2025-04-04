@@ -72,7 +72,7 @@ fun ActivityScreen(isOnline: Boolean, viewModel: ActivityScreenViewModel) {
                 ) {
                     item{
                         OutlinedButton(
-                            onClick = {/*TODO: legg til funksjonalitet*/},
+                            onClick = { viewModel.getActivities() },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(10.dp),
