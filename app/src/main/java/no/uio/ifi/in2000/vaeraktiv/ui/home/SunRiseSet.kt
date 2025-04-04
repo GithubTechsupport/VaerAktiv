@@ -25,10 +25,11 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SunProperties
 
 @Composable
-fun SunRiseSet(sunData : SunProperties) {
+fun SunRiseSet(sunData : List<String>) {
+    val solOpp = sunData.getOrNull(0) ?: "N/A"
+    val solNed = sunData.getOrNull(1) ?: "N/A"
     val cornerDp = 10.dp
     Spacer(modifier = Modifier.height(12.dp))
     Column(
@@ -58,7 +59,7 @@ fun SunRiseSet(sunData : SunProperties) {
             )
 
             Text(
-                text = "Sol opp: ${sunData.sunrise.time}",
+                text = "Sol opp: $solOpp",
                 textAlign = TextAlign.Start,
                 modifier = Modifier
                     .weight(1f)
@@ -74,7 +75,7 @@ fun SunRiseSet(sunData : SunProperties) {
             )
 
             Text(
-                text = "Sol ned: ${sunData.sunset.time}",
+                text = "Sol ned: $solNed",
                 textAlign = TextAlign.End,
                 modifier = Modifier
                     .weight(1f)

@@ -8,9 +8,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
 import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
+import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeDataSource
+import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
@@ -119,6 +119,20 @@ object AppModule {
         return NowcastRepository(dataSource)
     }
 
+    @Singleton
+    @Provides
+    fun provideDeviceDateTimeRepository(
+        dataSource: DeviceDateTimeDataSource
+    ): DeviceDateTimeRepository {
+        return DeviceDateTimeRepository(dataSource)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeviceDateTimeDataSource(): DeviceDateTimeDataSource {
+        return DeviceDateTimeDataSource()
+    }
+
     @Provides
     @Singleton
     fun provideWeatherRepo(
@@ -129,11 +143,12 @@ object AppModule {
         aiRepository: AiRepository,
         geocoder: GeocoderClass,
         locationRepository: LocationRepository,
-        nowcastRepository: NowcastRepository
+        nowcastRepository: NowcastRepository,
+        deviceDateTimeRepository: DeviceDateTimeRepository
     ): WeatherRepository {
         return WeatherRepository(
             metAlertsRepository, locationForecastRepository, sunriseRepository,
-            favoriteLocationRepo, aiRepository, locationRepository, geocoder, nowcastRepository
+            favoriteLocationRepo, aiRepository, locationRepository, geocoder, nowcastRepository, deviceDateTimeRepository
         )
     }
 
