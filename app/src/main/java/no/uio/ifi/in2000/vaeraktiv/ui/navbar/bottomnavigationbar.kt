@@ -30,21 +30,19 @@ import no.uio.ifi.in2000.vaeraktiv.R
 * I have used a list and a forEach loop to create the buttons. The rest of the code is just styling, on how the buttons should look like.
 * */
 @Composable
-fun BottomNavigationBar(navController: NavController) {
+fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> String, setSelectedRoute: (String) -> Unit) {
     val navItems = listOf(
         "activity" to R.drawable.walk,
         "home" to R.drawable.sun,
         "location" to R.drawable.location
     )
 
-    var selectedRoute by remember { mutableStateOf("home") }
-
     BottomNavigation(
         modifier = Modifier.height(80.dp),
         backgroundColor = Color(0xFFBCDEFD)
     ) {
         navItems.forEach { (route, iconId) ->
-            val selected = selectedRoute == route
+            val selected = getSelectedRoute() == route
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -55,11 +53,12 @@ fun BottomNavigationBar(navController: NavController) {
                         shape = RoundedCornerShape(8.dp)
                     )
                     .clickable {
-                        selectedRoute = route
+                        if (selected) return@clickable
                         navController.navigate(route) {
                             popUpTo(navController.graph.startDestinationId)
                             launchSingleTop = true
                         }
+                        setSelectedRoute(route)
                     },
                 contentAlignment = Alignment.Center
             ) {

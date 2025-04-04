@@ -44,6 +44,20 @@ fun Navbar (favoriteLocationViewModel: FavoriteLocationViewModel, activityScreen
     var showNoNetworkDialog by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    var selectedRoute by remember { mutableStateOf("home") }
+
+    LaunchedEffect(favoriteLocationViewModel.navigateToHome) {
+        favoriteLocationViewModel.navigateToHome.observeForever { shouldNavigate ->
+            if (shouldNavigate) {
+                navController.navigate("home") {
+                    popUpTo(navController.graph.startDestinationId)
+                    launchSingleTop = true
+                }
+                favoriteLocationViewModel.onNavigationHandled()
+                selectedRoute = "home"
+            }
+        }
+    }
 
      //this network observer will update the isOnline variable when the network status changes
     NetworkObserver { newStatus ->
@@ -53,7 +67,7 @@ fun Navbar (favoriteLocationViewModel: FavoriteLocationViewModel, activityScreen
     }
 
     Scaffold(
-        bottomBar = { if (!isLoading) { BottomNavigationBar(navController) } else null }
+        bottomBar = { if (!isLoading) { BottomNavigationBar(navController, getSelectedRoute = { selectedRoute }, setSelectedRoute = { newValue -> selectedRoute = newValue }) } else null }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             if (isLoading) {
