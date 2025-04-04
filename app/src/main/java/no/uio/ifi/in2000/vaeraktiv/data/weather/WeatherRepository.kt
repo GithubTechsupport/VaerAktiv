@@ -15,7 +15,6 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
-import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Features
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
@@ -75,7 +74,7 @@ class WeatherRepository @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getSunRiseData(location: Location, date : String): List<String> {
         Log.d("WeatherRepository", "getSunRiseData called with location: $location and date: $date")
-        val response = sunriseRepository.getSunriseTime(location.lat.toString(), location.lon.toString(), date)
+        val response = sunriseRepository.getSunriseTime(location.lat, location.lon, date)
         Log.d("WeatherRepository", "getSunRiseData response: $response")
         return response.map { timestring ->
             val utcTime = java.time.OffsetDateTime.parse(timestring)
@@ -118,8 +117,8 @@ class WeatherRepository @Inject constructor(
     suspend fun getAlertsForLocation(location: Location): MutableList<AlertData> {
         val alertDataList:MutableList<AlertData> = mutableListOf()
 
-        val response = metAlertsRepository.getAlertsForLocation(location.lat.toString(),
-            location.lon.toString())
+        val response = metAlertsRepository.getAlertsForLocation(location.lat,
+            location.lon)
         response.forEach { feature ->
             val alert = AlertData(
                 area = feature.properties.area.toString(),
@@ -179,7 +178,7 @@ suspend fun getForecastToday(location: Location): ForecastToday {
     }
 
     suspend fun getWeatherForecast(location: Location): LocationForecastResponse? {
-        return locationForecastRepository.getForecast(location.lat.toString(), location.lon.toString())
+        return locationForecastRepository.getForecast(location.lat, location.lon)
     }
 
     suspend fun getActivities(location: Location): JsonResponse? {
