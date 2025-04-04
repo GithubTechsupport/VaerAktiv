@@ -16,7 +16,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainBackground
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryBackground
 
 /*
-* This function is a loadingscreen. This function is called in navbar.kt. When this function is called a loading screen will be displayed with a sun and a sky image.
+* This function is a loadingscreen. This function is called in Navbar.kt. When this function is called a loading screen will be displayed with a sun and a sky image.
 * */
 @Preview(showBackground = true)
 @Composable
