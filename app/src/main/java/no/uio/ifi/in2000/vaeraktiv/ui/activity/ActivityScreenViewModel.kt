@@ -36,7 +36,7 @@ class ActivityScreenViewModel @Inject constructor(private val weatherRepository:
     }
 
     fun getActivities() {
-        viewModelScope.launch{
+        viewModelScope.launch {
             _activityScreenUiState.update {
                 it.copy(isLoading = true)
             }
