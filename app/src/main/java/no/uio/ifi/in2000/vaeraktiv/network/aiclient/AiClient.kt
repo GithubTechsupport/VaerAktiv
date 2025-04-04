@@ -43,12 +43,13 @@ abstract class AiClient {
     val systemPrompt = "The user will provide a weather forecast.\nYour job is to pick 3 different time intervals for each day to suggest activities for based on the weather at that time, the location and other requirements defined in the user prompt."
     val examplesPrompt =
         """
-        All output should be written in Norwegian
+        All output should be written in Norwegian, except for the keys in the JSON output, which should be in English, as described in the examples below.
         Based on the weather forecast and the users location, pick 3 different time intervals for every single day to suggest activities for the next 7 days.
         In total there should be at most 21 different activities, spanning across the next 7 days and 3 time intervals per day.
         Activities should be realistic and available to do around the user's location.
         Activities has to match the weather forecast, during rainfall and/or low temperatures, more inside activities should be suggested, but not always, for example you can fish in the rain.
-        Within the "activity" field should also be a brief explanation for where you could do the activity.
+        Within the "activity" field should briefly explain the activity
+        Within the "activityDesc" field should be a more filling description of the activity and an explanation as to where you can do the activity.
         Not all activities have to be physical.
         Activities suggested could be inside or outside activities.
         
@@ -113,6 +114,7 @@ abstract class AiClient {
                     "timeStart":"14:00",
                     "timeEnd":"16:00",
                     "activity":"Svømming ved Badedammen Grorud"
+                    "activityDesc":"Denne dagen er det varmt og mye sol. God dag for svømming ved badedammen ved Grorud."
                 }
                 {
                     "month":"6",
@@ -120,6 +122,7 @@ abstract class AiClient {
                     "timeStart":"11:00",
                     "timeEnd":"13:00",
                     "activity":"Bowling på Veitvet senter"
+                    "activityDesc":"Denne dagen er det kjørligere, og da kan du nyte en innendørs aktivitet på Veitvet senter."
                 }
             ]
         }
@@ -156,7 +159,7 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
             ChatMessage(role = ChatRole.User, content = "$examplesPrompt\n\nFollowing is the user prompt:\n\n<<<\n$prompt\n>>>")
         )
         val request = ChatCompletionRequest (
-            model = ModelId(""),
+            model = ModelId("gpt-4o"),
             messages = messages,
             temperature = 0.5,
             responseFormat = ChatResponseFormat.JsonObject
@@ -187,11 +190,11 @@ object AiClientModule {
     @Singleton
     @Named("OpenAi-Client")
     fun provideOpenAiClient(): AiClient {
-        val apiKey = ""
+        val apiKey = "B3py7sS0KKoV82nqlNPhBzxtpgn44m47s662zFmfWalcnxL0RCSDJQQJ99BDACfhMk5XJ3w3AAABACOGfNox"
         val azureHost = OpenAIHost.azure(
-            resourceName = "<your-resource-name>",
-            deploymentId = "<your-deployment-id>",
-            apiVersion = "<api-version>"
+            resourceName = "UIO-MN-IFI-IN2000-SWE1",
+            deploymentId = "gpt-4o-t31",
+            apiVersion = "2024-12-01-preview"
         )
         val client = OpenAI(
             OpenAIConfig(
