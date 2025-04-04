@@ -1,6 +1,9 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.annotation.SuppressLint
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,10 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -31,14 +30,12 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
-
-
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
 @Composable
 fun WeatherWeek(data: List<ForecastForDay>) {
-
     val cornerDp = 10.dp
     val context = LocalContext.current
     Spacer(modifier = Modifier.height(12.dp))
@@ -103,8 +100,8 @@ fun WeatherWeek(data: List<ForecastForDay>) {
                 .height(1.dp)
                 .background(color = MaterialTheme.colorScheme.inverseOnSurface)
         )
-        data.forEach { day ->
-            var isExpanded by remember { mutableStateOf(false) }
+        data.take(7).forEach { day ->
+            //var isExpanded by remember { mutableStateOf(false) }
             val iconResId = context.resources.getIdentifier(day.icon, "drawable", context.packageName)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -113,7 +110,7 @@ fun WeatherWeek(data: List<ForecastForDay>) {
                     .padding(8.dp)
             ) {
                 Text(
-                    text = day.date,
+                    text = getDayOfWeek(day.date),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Start,
@@ -149,6 +146,27 @@ fun WeatherWeek(data: List<ForecastForDay>) {
         }
     }
 }
+
+@RequiresApi(Build.VERSION_CODES.O)
+private fun getDayOfWeek(date: String): String {
+    return try {
+        val localDate = java.time.LocalDate.parse(date)
+        val dayOfWeek = localDate.dayOfWeek
+        when (dayOfWeek!!) {
+            java.time.DayOfWeek.MONDAY -> "Mandag"
+            java.time.DayOfWeek.TUESDAY -> "Tirsdag"
+            java.time.DayOfWeek.WEDNESDAY -> "Onsdag"
+            java.time.DayOfWeek.THURSDAY -> "Torsdag"
+            java.time.DayOfWeek.FRIDAY -> "Freadg"
+            java.time.DayOfWeek.SATURDAY -> "Lørdag"
+            java.time.DayOfWeek.SUNDAY -> "Søndag"
+        }
+    } catch (e: Exception) {
+        Log.e("WeatherWeek", "Error getting day of week: ", e)
+        "error"
+    }
+}
+
 /*if (isExpanded) {
                 Row {
                     Text(
