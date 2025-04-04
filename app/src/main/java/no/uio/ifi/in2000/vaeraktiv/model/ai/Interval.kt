@@ -8,5 +8,6 @@ data class Interval(
     val dayOfMonth: Int,
     val timeStart: String,
     val timeEnd: String,
-    val activity: String
+    val activity: String,
+    val activityDesc: String,
 )

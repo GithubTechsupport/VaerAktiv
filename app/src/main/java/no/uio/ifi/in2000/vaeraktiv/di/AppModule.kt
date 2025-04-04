@@ -99,12 +99,6 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideAiRepository(): AiRepository {
-        return AiRepository()
-    }
-
-    @Singleton
-    @Provides
     fun provideLocationRepository(
         dataSource: LocationDataSource
     ): LocationRepository {
