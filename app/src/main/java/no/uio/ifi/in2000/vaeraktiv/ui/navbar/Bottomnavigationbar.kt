@@ -39,7 +39,7 @@ fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> St
 
     BottomNavigation(
         modifier = Modifier.height(80.dp),
-        backgroundColor = Color(0xFFBCDEFD)
+        backgroundColor = Color(0xFF3C096C) // Color(0xFFBCDEFD)
     ) {
         navItems.forEach { (route, iconId) ->
             val selected = getSelectedRoute() == route
@@ -49,7 +49,7 @@ fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> St
                     .fillMaxHeight()
                     .padding(8.dp)
                     .background(
-                        color = if (selected) Color(0xFF6BAEDF) else Color.Transparent,
+                        color = if (selected) Color(0xFF7B2CBF) /*0xFF6BAEDF*/ else Color.Transparent,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .clickable {
