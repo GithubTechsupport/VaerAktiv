@@ -22,8 +22,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import no.uio.ifi.in2000.vaeraktiv.fonts.tungstenfontfamily
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
@@ -58,7 +61,7 @@ fun DisplayWeather(data : ForecastToday?) {
                 style = MaterialTheme.typography.displayLarge, // Større tekst for hovedtemp
                 color = MaterialTheme.colorScheme.onBackground
             )
-        }
+        }/*
         Row {
             Text(
                 text = "Stort sett overskyet", // Kanskje lage en when for å sette riktig tekst etter værtype senere
@@ -66,7 +69,7 @@ fun DisplayWeather(data : ForecastToday?) {
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
-        }
+        }*/
         Spacer(modifier = Modifier.height(8.dp))
         Row(
             modifier = Modifier
@@ -76,26 +79,40 @@ fun DisplayWeather(data : ForecastToday?) {
                     ),
                     shape = RoundedCornerShape(cornerDp))
                 .fillMaxWidth()
-                .padding(20.dp), // Legg til padding inni boksen
-            horizontalArrangement = Arrangement.SpaceEvenly // Jevn fordeling
+                .padding(30.dp), // Legg til padding inni boksen
+            horizontalArrangement = Arrangement.SpaceEvenly, // Jevn fordeling
+            verticalAlignment = Alignment.CenterVertically
+
         ) {
             Text(
                 text = "${data?.uv} UV",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontFamily = tungstenfontfamily,
+                fontSize = 26.sp,
+                letterSpacing = 2.sp
+                //fontWeight = FontWeight.Bold
             )
             Text(
                 text = "${data?.precipitationAmount} mm",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontFamily = tungstenfontfamily,
+                fontSize = 26.sp,
+                letterSpacing = 2.sp
+                //fontWeight = FontWeight.Bold
             )
             Text(
                 text = "${data?.windSpeed} m/s",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontFamily = tungstenfontfamily,
+                fontSize = 26.sp,
+                letterSpacing = 2.sp
+                //fontWeight = FontWeight.Bold
             )
         }
     }
