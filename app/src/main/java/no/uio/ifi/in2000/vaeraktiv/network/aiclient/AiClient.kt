@@ -13,14 +13,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.cache.HttpCache
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.http.HttpHeaders
-import io.ktor.http.headers
-import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -28,7 +20,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import org.oremif.deepseek.api.chat
 import org.oremif.deepseek.client.DeepSeekClient
-import org.oremif.deepseek.models.ChatCompletion
 import org.oremif.deepseek.models.ChatCompletionParams
 import org.oremif.deepseek.models.ChatModel
 import org.oremif.deepseek.models.ResponseFormat
@@ -46,11 +37,14 @@ abstract class AiClient {
         All output should be written in Norwegian, except for the keys in the JSON output, which should be in English, as described in the examples below.
         Based on the weather forecast and the users location, pick 3 different time intervals for every single day to suggest activities for the next 7 days.
         In total there should be at most 21 different activities, spanning across the next 7 days and 3 time intervals per day.
+        
         Activities should be realistic and available to do around the user's location.
-        Activities has to match the weather forecast, during rainfall and/or low temperatures, more inside activities should be suggested, but not always, for example you can fish in the rain.
+        Activities has to match the weather forecast, during rainfall (when precipitation is moderate, even low) and/or low temperatures (9 degrees Celsius or lower), more inside activities should be suggested, but not always, for example you can fish in the rain.
+        
         Within the "activity" field should briefly explain the activity
         Within the "activityDesc" field should be a more filling description of the activity and an explanation as to where you can do the activity.
-        Not all activities have to be physical.
+        
+        Not all activities have to be physical, but preferably physical.
         Activities suggested could be inside or outside activities.
         
         NOTE THAT EXAMPLE INPUTS AND OUTPUTS ARE SHORTENED VERSIONS OF THE ACTUAL INPUTS AND OUTPUT YOU WILL PRODUCE.
@@ -190,7 +184,7 @@ object AiClientModule {
     @Singleton
     @Named("OpenAi-Client")
     fun provideOpenAiClient(): AiClient {
-        val apiKey = "B3py7sS0KKoV82nqlNPhBzxtpgn44m47s662zFmfWalcnxL0RCSDJQQJ99BDACfhMk5XJ3w3AAABACOGfNox"
+        val apiKey = "3yoURlTha7POk9V41F9wbifVAKkkrvpEEvfsFZZvBHhLgii2QhXPJQQJ99BDACfhMk5XJ3w3AAABACOG6HGy"
         val azureHost = OpenAIHost.azure(
             resourceName = "UIO-MN-IFI-IN2000-SWE1",
             deploymentId = "gpt-4o-t31",
