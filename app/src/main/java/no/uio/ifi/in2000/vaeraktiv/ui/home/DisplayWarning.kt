@@ -28,10 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import no.uio.ifi.in2000.vaeraktiv.R
+import no.uio.ifi.in2000.vaeraktiv.fonts.tungstenfontfamily
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 
 // Her kan vi bygge iconId på en bedre måte etter mvp
@@ -68,7 +70,7 @@ fun DisplayWarning(data: List<AlertData>) {
                     text = "Advarsel",
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
 
