@@ -89,9 +89,9 @@ fun DisplayWeather(data : ForecastToday?) {
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
-                fontFamily = tungstenfontfamily,
-                fontSize = 26.sp,
-                letterSpacing = 2.sp
+                //fontFamily = tungstenfontfamily,
+                //fontSize = 26.sp,
+                //letterSpacing = 2.sp
                 //fontWeight = FontWeight.Bold
             )
             Text(
@@ -99,9 +99,9 @@ fun DisplayWeather(data : ForecastToday?) {
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
-                fontFamily = tungstenfontfamily,
-                fontSize = 26.sp,
-                letterSpacing = 2.sp
+                //fontFamily = tungstenfontfamily,
+                //fontSize = 26.sp,
+                //letterSpacing = 2.sp
                 //fontWeight = FontWeight.Bold
             )
             Text(
@@ -109,9 +109,9 @@ fun DisplayWeather(data : ForecastToday?) {
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
-                fontFamily = tungstenfontfamily,
-                fontSize = 26.sp,
-                letterSpacing = 2.sp
+                //fontFamily = tungstenfontfamily,
+                //fontSize = 26.sp,
+                //letterSpacing = 2.sp
                 //fontWeight = FontWeight.Bold
             )
         }

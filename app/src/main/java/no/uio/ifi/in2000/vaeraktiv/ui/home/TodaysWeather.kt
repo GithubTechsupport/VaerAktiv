@@ -73,9 +73,9 @@ fun TodaysWeather(data: ForecastToday?) {
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.padding(start = 50.dp),
-                fontFamily = tungstenfontfamily,
-                fontSize = 14.sp,
-                letterSpacing = 2.sp
+                //fontFamily = tungstenfontfamily,
+                //fontSize = 14.sp,
+                //letterSpacing = 2.sp
             )
             Spacer(modifier = Modifier.weight(1.2f))
             Text(
@@ -83,8 +83,8 @@ fun TodaysWeather(data: ForecastToday?) {
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center,
-                fontFamily = tungstenfontfamily,
-                letterSpacing = 2.sp
+                //fontFamily = tungstenfontfamily,
+                //letterSpacing = 2.sp
             )
             Spacer(modifier = Modifier.weight(0.8f))
             Text(
@@ -93,8 +93,8 @@ fun TodaysWeather(data: ForecastToday?) {
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.End,
                 modifier = Modifier.padding(end = 50.dp),
-                fontFamily = tungstenfontfamily,
-                letterSpacing = 2.sp
+                //fontFamily = tungstenfontfamily,
+                //letterSpacing = 2.sp
             )
         }
         Spacer(modifier = Modifier.height(0.2.dp))
@@ -112,8 +112,8 @@ fun TodaysWeather(data: ForecastToday?) {
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.padding(start = 40.dp),
-                fontFamily = tungstenfontfamily,
-                letterSpacing = 2.sp
+                //fontFamily = tungstenfontfamily,
+                //letterSpacing = 2.sp
             )
             Spacer(modifier = Modifier.weight(0.6f))
             Text(
@@ -121,8 +121,8 @@ fun TodaysWeather(data: ForecastToday?) {
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center,
-                fontFamily = tungstenfontfamily,
-                letterSpacing = 2.sp
+                //fontFamily = tungstenfontfamily,
+                //letterSpacing = 2.sp
             )
             Spacer(modifier = Modifier.weight(0.42f))
             Image(

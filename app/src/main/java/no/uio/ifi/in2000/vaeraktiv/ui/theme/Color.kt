@@ -10,28 +10,16 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-//val MainBackground = Color(0xFF6BAEDF)
-//val SecondaryBackground = Color(0xFF8ACAFF)
-//val MainCard = Color(0xFFBCDEFD)
-//val SecondaryCard = Color(0xFF8ACAFB)
-
-//Lilla og orange
-/*val MainBackground = Color(0xFFB67BE6)
-val SecondaryBackground = Color(0xFFCEA7EE)
-val MainCard = Color(0xFFFA8B01)
-val SecondaryCard = Color(0xFFFFCF70)
-*/
-
-//Grønn
+/* Dette er blå fargen vi hadde på MVP la stå instill videre
+val MainBackground = Color(0xFF6BAEDF)
+val SecondaryBackground = Color(0xFF8ACAFF)
+val MainCard = Color(0xFFBCDEFD)
+val SecondaryCard = Color(0xFF8ACAFB)*/
 
 val MainBackground = Color(0xFFF5EED9)
-val SecondaryBackground = Color(0xFFC188EF) // Color(0xFFCF9EF7)
+val SecondaryBackground = Color(0xFFC188EF)
 val MainCard = Color(0xFFF5EED9)
 val SecondaryCard = Color(0xFFF5EED9)
 
-//lille og blå
-/*
-val MainBackground = Color(0xFF8CD0EC)
-val SecondaryBackground = Color(0xFF8CD0EC)
-val MainCard = Color(0xFFFC9E02)
-val SecondaryCard = Color(0xFFFFAF02)*/
+val MainNavBackground = Color(0xFF935DCE)
+val CardNavBackground = Color(0xFFC188EF)
