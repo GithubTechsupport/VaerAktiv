@@ -67,6 +67,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.hilt.android.testing)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
@@ -79,9 +80,12 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.cbor)
     implementation(libs.ktor.serialization.kotlinx.protobuf)
 
-    //navigation
+    // navigation
     implementation(libs.androidx.navigation.compose)
+
+    // materials
     implementation(libs.androidx.material)
+    implementation(libs.material)
 
     // hilt
     implementation(libs.hilt.android)
@@ -104,12 +108,18 @@ dependencies {
     // google maps places api
     implementation(libs.places)
 
-    // junit mock testing
-    testImplementation(libs.junit)
-    testImplementation(libs.mockito.kotlin)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.turbine)
+    // core testing
     testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.turbine)
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    // junit testing
+    testImplementation(libs.junit)
+
+    // mock testing
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.mockito.core)
+    //testImplementation(libs.mockito.inline)
 
     // hilt testing
     testImplementation(libs.hilt.android.testing)
