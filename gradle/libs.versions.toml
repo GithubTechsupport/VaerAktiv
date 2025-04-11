@@ -1,13 +1,16 @@
 [versions]
 agp = "8.8.0"
+coreTesting = "2.2.0"
 deepseekKotlin = "0.2.0"
 hiltAndroid = "2.51.1"
+hiltAndroidCompiler = "2.50"
 hiltAndroidVersion = "2.50"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinxCoroutinesTest = "1.7.3"
 ktorClientAndroid = "3.0.3"
 ktorClientCio = "3.0.3"
 ktorClientCioVersion = "2.3.9"
@@ -19,20 +22,26 @@ activityCompose = "1.10.1"
 composeBom = "2024.04.01"
 firebaseCrashlyticsBuildtools = "3.0.3"
 material = "1.7.8"
+mockitoKotlin = "4.0.0"
 navigationRuntimeAndroid = "2.9.0-alpha08"
 navigationRuntimeDesktop = "2.9.0-alpha08"
 navigationCompose = "2.8.9"
 openaiClient = "4.0.1"
+places = "4.2.0"
 playServicesLocation = "21.3.0"
 media3CommonKtx = "1.6.0"
 runtimeLivedata = "1.7.8"
+turbine = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 androidx-material = { module = "androidx.compose.material:material", version.ref = "material" }
 deepseek-kotlin = { module = "org.oremif:deepseek-kotlin", version.ref = "deepseekKotlin" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
+hilt-android-compiler-v250 = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
+hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroidCompiler" }
 hilt-android-v250 = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -48,6 +57,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroid" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktorClientCio" }
 ktor-client-cio-v239 = { module = "io.ktor:ktor-client-cio", version.ref = "ktorClientCioVersion" }
@@ -60,10 +70,13 @@ ktor-serialization-kotlinx-protobuf = { module = "io.ktor:ktor-serialization-kot
 androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
 androidx-navigation-runtime-desktop = { group = "androidx.navigation", name = "navigation-runtime-desktop", version.ref = "navigationRuntimeDesktop" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 openai-client = { module = "com.aallam.openai:openai-client", version.ref = "openaiClient" }
+places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtx" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -37,7 +37,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-        
+
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -102,7 +102,18 @@ dependencies {
     implementation(libs.openai.client)
 
     // google maps places api
-    implementation("com.google.android.libraries.places:places:4.1.0")
+    implementation(libs.places)
+
+    // junit mock testing
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
+    testImplementation(libs.androidx.core.testing)
+
+    // hilt testing
+    testImplementation(libs.hilt.android.testing)
+    kaptTest(libs.hilt.android.compiler)
 }
 
 kapt {

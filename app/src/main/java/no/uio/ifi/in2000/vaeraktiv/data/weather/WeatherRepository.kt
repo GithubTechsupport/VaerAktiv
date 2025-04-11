@@ -100,7 +100,7 @@ class WeatherRepository @Inject constructor(
             val lon = parts[2]
             val forecast = locationForecastRepository.getForecast(lat, lon)
             val data = forecast?.properties?.timeseries?.get(0)?.data
-            val icon = data?.next12Hours?.summary?.symbolCode.toString()
+            val icon = data?.next6Hours?.summary?.symbolCode.toString() //bruk nowcast
             val key = icon.substringBefore("_")
             val desc = weatherDescriptions[key] ?: "Ukjent vær"
             val weatherData = FavoriteLocation(
