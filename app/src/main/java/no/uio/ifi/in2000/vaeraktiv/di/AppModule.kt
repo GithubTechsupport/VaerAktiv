@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.vaeraktiv.di
 import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.libraries.places.api.net.PlacesClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,6 +17,7 @@ import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
+import no.uio.ifi.in2000.vaeraktiv.data.places.placesRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
@@ -127,6 +129,12 @@ object AppModule {
         return DeviceDateTimeDataSource()
     }
 
+    @Singleton
+    @Provides
+    fun providePlacesRepository(placesClient: PlacesClient): placesRepository {
+        return placesRepository(placesClient)
+    }
+
     @Provides
     @Singleton
     fun provideWeatherRepo(
@@ -138,11 +146,12 @@ object AppModule {
         geocoder: GeocoderClass,
         locationRepository: LocationRepository,
         nowcastRepository: NowcastRepository,
-        deviceDateTimeRepository: DeviceDateTimeRepository
+        deviceDateTimeRepository: DeviceDateTimeRepository,
+        placesRepository: placesRepository
     ): WeatherRepository {
         return WeatherRepository(
             metAlertsRepository, locationForecastRepository, sunriseRepository,
-            favoriteLocationRepo, aiRepository, locationRepository, geocoder, nowcastRepository, deviceDateTimeRepository
+            favoriteLocationRepo, aiRepository, locationRepository, geocoder, nowcastRepository, deviceDateTimeRepository, placesRepository
         )
     }
 

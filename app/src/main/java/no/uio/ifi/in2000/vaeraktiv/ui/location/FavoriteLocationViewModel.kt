@@ -5,6 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.libraries.places.api.model.AutocompletePrediction
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
+import com.google.android.libraries.places.api.net.PlacesClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,18 +22,25 @@ import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import javax.inject.Inject
 
-
 @HiltViewModel
 class FavoriteLocationViewModel @Inject constructor(
     private val weatherRepo: WeatherRepository,
-    private val favoriteLocationRepo: FavoriteLocationRepository
+    private val favoriteLocationRepo: FavoriteLocationRepository,
 ) : ViewModel() {
 
+    // Existing state for favorite locations
     private val _data = MutableStateFlow<List<FavoriteLocation>>(emptyList())
     val data: StateFlow<List<FavoriteLocation>> = _data.asStateFlow()
 
+    // Navigation flag
     private val _navigateToHome = MutableLiveData(false)
     val navigateToHome: LiveData<Boolean> get() = _navigateToHome
+
+    // New state for autocomplete predictions
+    private val _predictions = MutableStateFlow<List<AutocompletePrediction>>(emptyList())
+    val predictions: StateFlow<List<AutocompletePrediction>> = _predictions.asStateFlow()
+
+    private var sessionToken : AutocompleteSessionToken? = null
 
     init {
         loadLocationsAndFetchWeather()
@@ -54,11 +65,13 @@ class FavoriteLocationViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 // Log the exception or update UI state accordingly
-                Log.e("FavoriteLocationVM", "Error fetching data", e)
+                e.printStackTrace()
             }
         }
     }
+
     fun addLocation(loc: String) {
+        sessionToken = null
         viewModelScope.launch(Dispatchers.IO) {
             favoriteLocationRepo.addLocationByName(loc)
             loadLocationsAndFetchWeather()
@@ -75,5 +88,26 @@ class FavoriteLocationViewModel @Inject constructor(
 
     fun getData() {
         loadLocationsAndFetchWeather()
+    }
+
+    // New function for fetching autocomplete predictions
+    fun fetchPredictions(query: String) {
+        Log.d("FavoriteLocationViewModel", "fetchPredictions called with query: $query")
+        if (query.isBlank()) {
+            _predictions.value = emptyList()
+            sessionToken = null
+            Log.d("FavoriteLocationViewModel", "fetchPredictions returned with predictions: ${_predictions.value}")
+            return
+        }
+        if (sessionToken == null) {
+            sessionToken = AutocompleteSessionToken.newInstance()
+        }
+        val token = sessionToken!!
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = weatherRepo.getAutocompletePredictions(query, token)
+            withContext(Dispatchers.Main) {
+                _predictions.value = response
+            }
+        }
     }
 }

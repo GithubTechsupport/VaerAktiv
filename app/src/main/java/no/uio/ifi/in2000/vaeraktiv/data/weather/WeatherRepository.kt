@@ -7,6 +7,12 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.google.android.libraries.places.api.model.AutocompletePrediction
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
 import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
@@ -15,6 +21,7 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
+import no.uio.ifi.in2000.vaeraktiv.data.places.placesRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
@@ -36,9 +43,9 @@ class WeatherRepository @Inject constructor(
     private val deviceLocationRepository: LocationRepository,
     private val geocoderClass: GeocoderClass,
     private val nowcastRepository: NowcastRepository,
-    private val deviceDateTimeRepository: DeviceDateTimeRepository
+    private val deviceDateTimeRepository: DeviceDateTimeRepository,
+    private val placesRepository: placesRepository
 ) {
-
 
     private var locations: MutableMap<String, Pair<String, String>> = mutableMapOf()
 
@@ -212,5 +219,9 @@ suspend fun getForecastToday(location: Location): ForecastToday {
                 throw e
             }
         }
+    }
+
+    suspend fun getAutocompletePredictions(query: String, sessionToken: AutocompleteSessionToken): List<AutocompletePrediction> {
+        return placesRepository.getAutocompletePredictions(query, sessionToken)
     }
 }

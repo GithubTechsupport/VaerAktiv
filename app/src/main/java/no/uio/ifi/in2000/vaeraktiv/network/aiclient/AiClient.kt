@@ -16,14 +16,15 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import no.uio.ifi.in2000.vaeraktiv.BuildConfig
 import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
-import org.oremif.deepseek.api.chat
-import org.oremif.deepseek.client.DeepSeekClient
-import org.oremif.deepseek.models.ChatCompletionParams
-import org.oremif.deepseek.models.ChatModel
-import org.oremif.deepseek.models.ResponseFormat
-import org.oremif.deepseek.models.chatCompletionParams
+//import org.oremif.deepseek.api.chat
+//import org.oremif.deepseek.client.DeepSeekClient
+//import org.oremif.deepseek.models.ChatCompletionParams
+//import org.oremif.deepseek.models.ChatModel
+//import org.oremif.deepseek.models.ResponseFormat
+//import org.oremif.deepseek.models.chatCompletionParams
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -126,25 +127,25 @@ abstract class AiClient {
     abstract suspend fun getResponse(prompt: Prompt): JsonResponse?
 }
 
-class DeepseekClientWrapper @Inject constructor(private val client: DeepSeekClient) : AiClient() {
-    private val params : ChatCompletionParams = chatCompletionParams {
-        model = ChatModel.DEEPSEEK_CHAT
-        temperature = 0.5
-        responseFormat = ResponseFormat.jsonObject
-    }
-
-    override suspend fun getResponse(prompt: Prompt): JsonResponse? = withContext(Dispatchers.IO) {
-        val response: org.oremif.deepseek.models.ChatCompletion = client.chat(params) {
-            system(systemPrompt)
-            user("$examplesPrompt\n\nFollowing is the user prompt:\n\n<<<\n$prompt\n>>>")
-        }
-        val parsedResponse = response.choices.firstOrNull()?.message?.content?.let {
-            Json.decodeFromString<JsonResponse>(it)
-        }
-        return@withContext parsedResponse
-    }
-
-}
+//class DeepseekClientWrapper @Inject constructor(private val client: DeepSeekClient) : AiClient() {
+//    private val params : ChatCompletionParams = chatCompletionParams {
+//        model = ChatModel.DEEPSEEK_CHAT
+//        temperature = 0.5
+//        responseFormat = ResponseFormat.jsonObject
+//    }
+//
+//    override suspend fun getResponse(prompt: Prompt): JsonResponse? = withContext(Dispatchers.IO) {
+//        val response: org.oremif.deepseek.models.ChatCompletion = client.chat(params) {
+//            system(systemPrompt)
+//            user("$examplesPrompt\n\nFollowing is the user prompt:\n\n<<<\n$prompt\n>>>")
+//        }
+//        val parsedResponse = response.choices.firstOrNull()?.message?.content?.let {
+//            Json.decodeFromString<JsonResponse>(it)
+//        }
+//        return@withContext parsedResponse
+//    }
+//
+//}
 
 class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiClient() {
     override suspend fun getResponse(prompt: Prompt): JsonResponse? = withContext(Dispatchers.IO) {
@@ -169,22 +170,23 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
 @Module
 @InstallIn(SingletonComponent::class)
 object AiClientModule {
-    @Provides
-    @Singleton
-    @Named("Deepseek-Client")
-    fun provideDeepseekClient(): AiClient {
-        val apiKey = "sk-1825ec96e3364d37874ea10a91bb2c73"
-        val client = DeepSeekClient(apiKey) {
-            chatCompletionTimeout(120_000)
-        }
-        return DeepseekClientWrapper(client)
-    }
+
+//    @Provides
+//    @Singleton
+//    @Named("Deepseek-Client")
+//    fun provideDeepseekClient(): AiClient {
+//        val apiKey = ""
+//        val client = DeepSeekClient(apiKey) {
+//            chatCompletionTimeout(120_000)
+//        }
+//        return DeepseekClientWrapper(client)
+//    }
 
     @Provides
     @Singleton
     @Named("OpenAi-Client")
     fun provideOpenAiClient(): AiClient {
-        val apiKey = "3yoURlTha7POk9V41F9wbifVAKkkrvpEEvfsFZZvBHhLgii2QhXPJQQJ99BDACfhMk5XJ3w3AAABACOG6HGy"
+        val apiKey = BuildConfig.OPENAI_API_KEY
         val azureHost = OpenAIHost.azure(
             resourceName = "UIO-MN-IFI-IN2000-SWE1",
             deploymentId = "gpt-4o-t31",

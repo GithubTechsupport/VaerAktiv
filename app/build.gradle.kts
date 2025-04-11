@@ -6,6 +6,9 @@ plugins {
     kotlin("plugin.serialization") version "1.9.22"
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+
+    // secrets gradle plugin
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -14,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId = "no.uio.ifi.in2000.vaeraktiv"
-        minSdk = 24
+        minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -41,6 +44,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -88,7 +92,7 @@ dependencies {
 
 
     // deepseek
-    implementation(libs.deepseek.kotlin)
+//    implementation(libs.deepseek.kotlin)
 
     // deepseek dependencies (ktor client logging)
     implementation(libs.ktor.client.logging)
@@ -96,8 +100,16 @@ dependencies {
 
     // openAI
     implementation(libs.openai.client)
+
+    // google maps places api
+    implementation("com.google.android.libraries.places:places:4.1.0")
 }
 
 kapt {
     correctErrorTypes = true
+}
+
+secrets {
+    propertiesFileName = "secrets.properties"
+    defaultPropertiesFileName = "local.defaults.properties"
 }
