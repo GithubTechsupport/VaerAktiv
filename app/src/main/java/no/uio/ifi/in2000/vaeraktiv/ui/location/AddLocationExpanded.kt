@@ -1,12 +1,17 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.location
 
+import SuggestionsOverlay
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
@@ -19,6 +24,7 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,19 +42,21 @@ import androidx.compose.ui.unit.dp
 fun AddLocationExpanded(defaultPading: Dp, viewModel: FavoriteLocationViewModel) {
     var searchText by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
-    Column {
+    val predictions = viewModel.predictions.collectAsState()
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        // Title row
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ){
-            androidx.compose.material.Text(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(defaultPading)
+        ) {
+            Text(
                 text = "Legg til sted",
-                style = MaterialTheme.typography.titleMedium ,
+                style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Left,
-                modifier = Modifier
-                    .padding(defaultPading)
+                modifier = Modifier.weight(1f)
             )
-            Spacer(modifier = Modifier.weight(1f))
             Icon(
                 imageVector = Icons.Filled.AddCircle,
                 contentDescription = "Add Circle Icon",
@@ -57,36 +65,54 @@ fun AddLocationExpanded(defaultPading: Dp, viewModel: FavoriteLocationViewModel)
                     .size(50.dp)
             )
         }
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            // TODO: Legge til funksjon sånn at den legger til et kort i listen med favorittlokasjoner
-            OutlinedTextField(
-                value = searchText,
-                onValueChange = { searchText = it },
-                placeholder = { Text("Søk") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = "Search Icon"
-                    )
+
+        // Search input
+        OutlinedTextField(
+            value = searchText,
+            onValueChange = {
+                searchText = it
+                viewModel.fetchPredictions(it)
+            },
+            placeholder = { Text("Søk") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "Search Icon"
+                )
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            ),
+            modifier = Modifier
+                .padding(defaultPading)
+                .fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = {
+                if (searchText.isNotBlank()) {
+                    viewModel.addLocation(searchText)
+                    searchText = ""
+                    keyboardController?.hide()
+                }
+            })
+        )
+
+        // Suggestions list
+        if (predictions.value.isNotEmpty()) {
+            SuggestionsOverlay(
+                predictions = predictions.value,
+                onSuggestionClick = { prediction ->
+                    val fullText = prediction.getFullText(null).toString()
+                    val primaryText = prediction.getPrimaryText(null).toString()
+                    viewModel.addLocation(fullText)
+                    searchText = ""
+                    viewModel.fetchPredictions("")
+                    keyboardController?.hide()
                 },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
                 modifier = Modifier
-                    .padding(defaultPading)
-                    .fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = {
-                    if (searchText.isNotBlank()) {
-                        viewModel.addLocation(searchText)
-                        searchText = ""
-                        keyboardController?.hide()
-                    }
-                })
+                    .fillMaxWidth()
+                    .heightIn(max = 200.dp)
+                    .padding(horizontal = defaultPading)
             )
         }
     }
-
 }

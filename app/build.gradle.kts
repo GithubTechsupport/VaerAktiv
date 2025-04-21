@@ -6,6 +6,9 @@ plugins {
     kotlin("plugin.serialization") version "1.9.22"
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+
+    // secrets gradle plugin
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -14,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId = "no.uio.ifi.in2000.vaeraktiv"
-        minSdk = 24
+        minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -34,13 +37,14 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-        
+
     }
     kotlinOptions {
         jvmTarget = "11"
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -63,6 +67,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.hilt.android.testing)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
@@ -75,9 +80,12 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.cbor)
     implementation(libs.ktor.serialization.kotlinx.protobuf)
 
-    //navigation
+    // navigation
     implementation(libs.androidx.navigation.compose)
+
+    // materials
     implementation(libs.androidx.material)
+    implementation(libs.material)
 
     // hilt
     implementation(libs.hilt.android)
@@ -88,7 +96,7 @@ dependencies {
 
 
     // deepseek
-    implementation(libs.deepseek.kotlin)
+//    implementation(libs.deepseek.kotlin)
 
     // deepseek dependencies (ktor client logging)
     implementation(libs.ktor.client.logging)
@@ -96,8 +104,33 @@ dependencies {
 
     // openAI
     implementation(libs.openai.client)
+
+    // google maps places api
+    implementation(libs.places)
+
+    // core testing
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.turbine)
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    // junit testing
+    testImplementation(libs.junit)
+
+    // mock testing
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.mockito.core)
+    //testImplementation(libs.mockito.inline)
+
+    // hilt testing
+    testImplementation(libs.hilt.android.testing)
+    kaptTest(libs.hilt.android.compiler)
 }
 
 kapt {
     correctErrorTypes = true
+}
+
+secrets {
+    propertiesFileName = "secrets.properties"
+    defaultPropertiesFileName = "local.defaults.properties"
 }
