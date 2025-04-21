@@ -106,9 +106,9 @@ fun DisplayWeather(data: ForecastToday?) {
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color.Black,
                         textAlign = TextAlign.Center,
-                        fontFamily = tungstenfontfamily,
-                        fontSize = 26.sp,
-                        letterSpacing = 2.sp
+                        //fontFamily = tungstenfontfamily,
+                        fontSize = 20.sp,
+                        //letterSpacing = 2.sp
                     )
                 }
                 // Precipitation details
@@ -123,9 +123,9 @@ fun DisplayWeather(data: ForecastToday?) {
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color.Black,
                         textAlign = TextAlign.Center,
-                        fontFamily = tungstenfontfamily,
-                        fontSize = 26.sp,
-                        letterSpacing = 2.sp
+                        //fontFamily = tungstenfontfamily,
+                        fontSize = 20.sp,
+                        //letterSpacing = 2.sp
                     )
                 }
                 // Wind speed details
@@ -140,9 +140,9 @@ fun DisplayWeather(data: ForecastToday?) {
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color.Black,
                         textAlign = TextAlign.Center,
-                        fontFamily = tungstenfontfamily,
-                        fontSize = 26.sp,
-                        letterSpacing = 2.sp
+                        //fontFamily = tungstenfontfamily,
+                        fontSize = 20.sp,
+                        //letterSpacing = 2.sp
                     )
                 }
             }
