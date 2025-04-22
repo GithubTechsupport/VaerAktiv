@@ -22,16 +22,16 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(private val weatherRepository: WeatherRepository, private val deviceDateTimeRepository: DeviceDateTimeRepository) : ViewModel() {
+class HomeScreenViewModel @Inject constructor(
+    private val weatherRepository: WeatherRepository,
+    private val deviceDateTimeRepository: DeviceDateTimeRepository
+) : ViewModel() {
 
     private var initialized = false
 
     val currentLocation: LiveData<Location?> = weatherRepository.currentLocation
 
-    private val _homeScreenUiState = MutableStateFlow(
-        HomeScreenUiState()
-    )
-
+    private val _homeScreenUiState = MutableStateFlow(HomeScreenUiState())
     val homeScreenUiState: StateFlow<HomeScreenUiState> = _homeScreenUiState.asStateFlow()
 
     fun startTracking(lifecycleOwner: LifecycleOwner) {
@@ -40,62 +40,103 @@ class HomeScreenViewModel @Inject constructor(private val weatherRepository: Wea
 
     fun initialize() {
         if (initialized) return
-        weatherRepository.setCurrentLocation(Location("Oslo Sentralstasjon","59.9111", "10.7533"))
+
+        // For demonstration, setting a default location if none exists.
+        weatherRepository.setCurrentLocation(
+            Location("Oslo Sentralstasjon", "59.9111", "10.7533")
+        )
         initialized = true
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getHomeScreenData() {
+        val location = currentLocation.value ?: return
+
         viewModelScope.launch {
-            _homeScreenUiState.update {
-                it.copy(isLoading = true)
-            }
-            Log.d("HomeScreenViewModel", "Getting data ${currentLocation.value}")
+            _homeScreenUiState.update { it.copy(isLoading = true) }
+
+            var todaysWeather: ForecastToday? = null
+            var todaysWeatherError: String? = null
+
+            var thisWeeksWeather: List<ForecastForDay> = emptyList()
+            var thisWeeksWeatherError: String? = null
+
+            var alerts: List<AlertData> = emptyList()
+            var alertsError: String? = null
+
+            var sunRiseSet: List<String> = emptyList()
+            var sunRiseSetError: String? = null
+
             try {
-                Log.d("HomeScreenViewModel", "Getting data ${currentLocation.value}")
-                val todaysWeather = weatherRepository.getForecastToday(currentLocation.value!!)
-                val thisWeeksWeather = weatherRepository.getForecastByDay(currentLocation.value!!)
-                val todaysAlerts = weatherRepository.getAlertsForLocation(currentLocation.value!!)
-                val dateTime = deviceDateTimeRepository.getDateTime()
-                Log.d("HomeScreenViewModel", "DateTime: $dateTime")
-                val todaysSunrise = weatherRepository.getSunRiseData(currentLocation.value!!, dateTime)
-                Log.d("HomeScreenViewModel", "Sunrise: $todaysSunrise")
-                _homeScreenUiState.update {
-                    it.copy(
-                        todaysWeather = todaysWeather,
-                        thisWeeksWeather = thisWeeksWeather,
-                        locationName = currentLocation.value!!.addressName,
-                        alerts = todaysAlerts,
-                        sunRiseSet = todaysSunrise
-                    )
-                }
-                //Log.d("HomeScreenViewModel", "Alerts: ${data}")
+                todaysWeather = weatherRepository.getForecastToday(location)
+                todaysWeatherError = null
             } catch (e: Exception) {
-                _homeScreenUiState.update {
-                    it.copy(
-                        isError = true,
-                        errorMessage = e.toString()
-                    )
-                }
-                Log.d("HomeScreenViewModel", "Error: $e")
-            } finally {
-                _homeScreenUiState.update {
-                    it.copy(
-                        isLoading = false
-                    )
-                }
+                todaysWeatherError = e.toString()
+
             }
+
+            // Fetch weekly forecast
+            try {
+                thisWeeksWeather = weatherRepository.getForecastByDay(location)
+                thisWeeksWeatherError = null
+            } catch (e: Exception) {
+                thisWeeksWeatherError = e.toString()
+
+            }
+
+            // Fetch alerts for location
+            try {
+                alerts = weatherRepository.getAlertsForLocation(location)
+                alertsError = null
+            } catch (e: Exception) {
+                alertsError = e.toString()
+
+            }
+
+            // Retrieve device date time and then sunrise/sunset data
+            try {
+                val dateTime = deviceDateTimeRepository.getDateTime()
+                sunRiseSet = weatherRepository.getSunRiseData(location, dateTime)
+                sunRiseSetError = null
+            } catch (e: Exception) {
+                sunRiseSetError = e.toString()
+
+            }
+
+
+            // Update the UI state after collecting all data/errors.
+            _homeScreenUiState.update { currentState ->
+                currentState.copy(
+                    todaysWeather = todaysWeather,
+                    thisWeeksWeather = thisWeeksWeather,
+                    locationName = location.addressName,
+                    alerts = alerts,
+                    sunRiseSet = sunRiseSet,
+                    todaysWeatherError = todaysWeatherError,
+                    thisWeeksWeatherError = thisWeeksWeatherError,
+                    alertsError = alertsError,
+                    sunRiseSetError = sunRiseSetError
+                )
+            }
+
+            // End loading state.
+            _homeScreenUiState.update { it.copy(isLoading = false) }
         }
     }
 }
 
 data class HomeScreenUiState(
     val isLoading: Boolean = false,
-    val isError: Boolean = false,
-    val errorMessage: String = "",
     val locationName: String = "",
     val alerts: List<AlertData> = emptyList(),
     val todaysWeather: ForecastToday? = null,
     val thisWeeksWeather: List<ForecastForDay> = emptyList(),
-    val sunRiseSet : List<String> = emptyList()
+    val sunRiseSet: List<String> = emptyList(),
+
+    // errors
+    val todaysWeatherError: String? = null,
+    val thisWeeksWeatherError: String? = null,
+    val alertsError: String? = null,
+    val sunRiseSetError: String? = null
 )

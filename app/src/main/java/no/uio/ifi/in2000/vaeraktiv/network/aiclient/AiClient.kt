@@ -13,26 +13,18 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.cache.HttpCache
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.http.HttpHeaders
-import io.ktor.http.headers
-import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import no.uio.ifi.in2000.vaeraktiv.BuildConfig
 import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
-import org.oremif.deepseek.api.chat
-import org.oremif.deepseek.client.DeepSeekClient
-import org.oremif.deepseek.models.ChatCompletion
-import org.oremif.deepseek.models.ChatCompletionParams
-import org.oremif.deepseek.models.ChatModel
-import org.oremif.deepseek.models.ResponseFormat
-import org.oremif.deepseek.models.chatCompletionParams
+//import org.oremif.deepseek.api.chat
+//import org.oremif.deepseek.client.DeepSeekClient
+//import org.oremif.deepseek.models.ChatCompletionParams
+//import org.oremif.deepseek.models.ChatModel
+//import org.oremif.deepseek.models.ResponseFormat
+//import org.oremif.deepseek.models.chatCompletionParams
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -46,11 +38,14 @@ abstract class AiClient {
         All output should be written in Norwegian, except for the keys in the JSON output, which should be in English, as described in the examples below.
         Based on the weather forecast and the users location, pick 3 different time intervals for every single day to suggest activities for the next 7 days.
         In total there should be at most 21 different activities, spanning across the next 7 days and 3 time intervals per day.
+        
         Activities should be realistic and available to do around the user's location.
-        Activities has to match the weather forecast, during rainfall and/or low temperatures, more inside activities should be suggested, but not always, for example you can fish in the rain.
+        Activities has to match the weather forecast, during rainfall (when precipitation is moderate, even low) and/or low temperatures (9 degrees Celsius or lower), more inside activities should be suggested, but not always, for example you can fish in the rain.
+        
         Within the "activity" field should briefly explain the activity
         Within the "activityDesc" field should be a more filling description of the activity and an explanation as to where you can do the activity.
-        Not all activities have to be physical.
+        
+        Not all activities have to be physical, but preferably physical.
         Activities suggested could be inside or outside activities.
         
         NOTE THAT EXAMPLE INPUTS AND OUTPUTS ARE SHORTENED VERSIONS OF THE ACTUAL INPUTS AND OUTPUT YOU WILL PRODUCE.
@@ -132,25 +127,25 @@ abstract class AiClient {
     abstract suspend fun getResponse(prompt: Prompt): JsonResponse?
 }
 
-class DeepseekClientWrapper @Inject constructor(private val client: DeepSeekClient) : AiClient() {
-    private val params : ChatCompletionParams = chatCompletionParams {
-        model = ChatModel.DEEPSEEK_CHAT
-        temperature = 0.5
-        responseFormat = ResponseFormat.jsonObject
-    }
-
-    override suspend fun getResponse(prompt: Prompt): JsonResponse? = withContext(Dispatchers.IO) {
-        val response: org.oremif.deepseek.models.ChatCompletion = client.chat(params) {
-            system(systemPrompt)
-            user("$examplesPrompt\n\nFollowing is the user prompt:\n\n<<<\n$prompt\n>>>")
-        }
-        val parsedResponse = response.choices.firstOrNull()?.message?.content?.let {
-            Json.decodeFromString<JsonResponse>(it)
-        }
-        return@withContext parsedResponse
-    }
-
-}
+//class DeepseekClientWrapper @Inject constructor(private val client: DeepSeekClient) : AiClient() {
+//    private val params : ChatCompletionParams = chatCompletionParams {
+//        model = ChatModel.DEEPSEEK_CHAT
+//        temperature = 0.5
+//        responseFormat = ResponseFormat.jsonObject
+//    }
+//
+//    override suspend fun getResponse(prompt: Prompt): JsonResponse? = withContext(Dispatchers.IO) {
+//        val response: org.oremif.deepseek.models.ChatCompletion = client.chat(params) {
+//            system(systemPrompt)
+//            user("$examplesPrompt\n\nFollowing is the user prompt:\n\n<<<\n$prompt\n>>>")
+//        }
+//        val parsedResponse = response.choices.firstOrNull()?.message?.content?.let {
+//            Json.decodeFromString<JsonResponse>(it)
+//        }
+//        return@withContext parsedResponse
+//    }
+//
+//}
 
 class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiClient() {
     override suspend fun getResponse(prompt: Prompt): JsonResponse? = withContext(Dispatchers.IO) {
@@ -175,22 +170,23 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
 @Module
 @InstallIn(SingletonComponent::class)
 object AiClientModule {
-    @Provides
-    @Singleton
-    @Named("Deepseek-Client")
-    fun provideDeepseekClient(): AiClient {
-        val apiKey = "sk-1825ec96e3364d37874ea10a91bb2c73"
-        val client = DeepSeekClient(apiKey) {
-            chatCompletionTimeout(120_000)
-        }
-        return DeepseekClientWrapper(client)
-    }
+
+//    @Provides
+//    @Singleton
+//    @Named("Deepseek-Client")
+//    fun provideDeepseekClient(): AiClient {
+//        val apiKey = ""
+//        val client = DeepSeekClient(apiKey) {
+//            chatCompletionTimeout(120_000)
+//        }
+//        return DeepseekClientWrapper(client)
+//    }
 
     @Provides
     @Singleton
     @Named("OpenAi-Client")
     fun provideOpenAiClient(): AiClient {
-        val apiKey = "3yoURlTha7POk9V41F9wbifVAKkkrvpEEvfsFZZvBHhLgii2QhXPJQQJ99BDACfhMk5XJ3w3AAABACOG6HGy"
+        val apiKey = BuildConfig.OPENAI_API_KEY
         val azureHost = OpenAIHost.azure(
             resourceName = "UIO-MN-IFI-IN2000-SWE1",
             deploymentId = "gpt-4o-t31",

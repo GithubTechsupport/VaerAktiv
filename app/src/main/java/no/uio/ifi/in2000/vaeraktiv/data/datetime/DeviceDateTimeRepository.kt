@@ -6,11 +6,7 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 
-class DeviceDateTimeRepository @Inject constructor(private val deviceDateTimeDataSource : DeviceDateTimeDataSource) {
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getDateTime(): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val formattedDateTime = deviceDateTimeDataSource.getCurrentLocalDateTime().format(formatter)
-        return formattedDateTime
-    }
+interface DeviceDateTimeRepository {
+
+    fun getDateTime(): String
 }

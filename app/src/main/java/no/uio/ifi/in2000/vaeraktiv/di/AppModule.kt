@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.vaeraktiv.di
 import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.libraries.places.api.net.PlacesClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,12 +12,15 @@ import dagger.hilt.components.SingletonComponent
 import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
 import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeRepository
+import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeRepositoryDefault
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
+import no.uio.ifi.in2000.vaeraktiv.data.places.placesRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
+import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepositoryDefault
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource
@@ -118,7 +122,7 @@ object AppModule {
     fun provideDeviceDateTimeRepository(
         dataSource: DeviceDateTimeDataSource
     ): DeviceDateTimeRepository {
-        return DeviceDateTimeRepository(dataSource)
+        return DeviceDateTimeRepositoryDefault(dataSource)
     }
 
     @Singleton
@@ -127,9 +131,15 @@ object AppModule {
         return DeviceDateTimeDataSource()
     }
 
+    @Singleton
+    @Provides
+    fun providePlacesRepository(placesClient: PlacesClient): placesRepository {
+        return placesRepository(placesClient)
+    }
+
     @Provides
     @Singleton
-    fun provideWeatherRepo(
+    fun provideWeatherRepository(
         metAlertsRepository: MetAlertsRepository,
         locationForecastRepository: LocationForecastRepository,
         sunriseRepository: SunriseRepository,
@@ -138,11 +148,12 @@ object AppModule {
         geocoder: GeocoderClass,
         locationRepository: LocationRepository,
         nowcastRepository: NowcastRepository,
-        deviceDateTimeRepository: DeviceDateTimeRepository
+        placesRepository: placesRepository
     ): WeatherRepository {
-        return WeatherRepository(
+        return WeatherRepositoryDefault(
             metAlertsRepository, locationForecastRepository, sunriseRepository,
-            favoriteLocationRepo, aiRepository, locationRepository, geocoder, nowcastRepository, deviceDateTimeRepository
+            favoriteLocationRepo, aiRepository, locationRepository, geocoder,
+            nowcastRepository, placesRepository
         )
     }
 

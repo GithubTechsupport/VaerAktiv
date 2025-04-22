@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.vaeraktiv.data.location
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
+import android.util.Log
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
@@ -17,15 +18,19 @@ class GeocoderClass @Inject constructor(private val context: Context) {
      * @param locationName The name of the location to geocode.
      * @return A Pair containing the latitude and longitude, or null if the location cannot be found.
      */
-    fun getCoordinatesFromLocation(locationName: String): Pair<Double, Double>? {
+    fun getCoordinatesFromLocation(locationName: String): Pair<String, Pair<Double, Double>>? {
         try {
             val addressList: List<Address>? = geocoder.getFromLocationName(locationName, 1)
 
             if (!addressList.isNullOrEmpty()) {
                 val address: Address = addressList[0]
+
+                val returnedName = address.locality ?: address.featureName ?: ""
+
+
                 val latitude: Double = address.latitude
                 val longitude: Double = address.longitude
-                return Pair(latitude, longitude)
+                return Pair(returnedName, Pair(latitude, longitude))
             } else {
                 // Location not found
                 return null

@@ -12,12 +12,19 @@ class FavoriteLocationRepository @Inject constructor(
 
     @SuppressLint("DefaultLocale")
     fun addLocationByName(placeName: String) {
-        val addresses = geocoder.getCoordinatesFromLocation(placeName)
-        if (addresses !=null) {
-            dataSource.addLocation(String.format("%.3f", addresses.first).toDouble(), String.format("%.3f", addresses.second).toDouble(), placeName)
-        }
-        Log.d("address", "$addresses")
+        val response = geocoder.getCoordinatesFromLocation(placeName)
+        val name = response?.first
+        val addresses = response?.second
 
+        if (addresses !=null) {
+            if (name != null) {
+                dataSource.addLocation(
+                    name,
+                    String.format("%.3f", addresses.first).toDouble(),
+                    String.format("%.3f", addresses.second).toDouble()
+                )
+            }
+        }
     }
 
     fun deleteLocationByName(placeName: String) {
