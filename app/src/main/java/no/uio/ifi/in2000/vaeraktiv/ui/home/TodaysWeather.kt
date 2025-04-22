@@ -35,7 +35,7 @@ fun TodaysWeather(data: ForecastToday?) {
     val iconResId = context.resources.getIdentifier(data?.icon, "drawable", context.packageName)
     val cornerDp = 10.dp
 
-    val labelFontSize = 23.sp
+    val labelFontSize = 20.sp
     val valueFontSize = 30.sp
 
     Spacer(modifier = Modifier.height(12.dp))
@@ -67,9 +67,9 @@ fun TodaysWeather(data: ForecastToday?) {
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
-                    fontFamily = tungstenfontfamily,
+                    //fontFamily = tungstenfontfamily,
                     fontSize = labelFontSize,
-                    letterSpacing = 2.sp
+                    //letterSpacing = 2.sp
                 )
             }
             Box(
@@ -83,9 +83,9 @@ fun TodaysWeather(data: ForecastToday?) {
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
-                    fontFamily = tungstenfontfamily,
+                    //fontFamily = tungstenfontfamily,
                     fontSize = labelFontSize,
-                    letterSpacing = 2.sp
+                    //letterSpacing = 2.sp
                 )
             }
             Box(
@@ -99,9 +99,9 @@ fun TodaysWeather(data: ForecastToday?) {
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
-                    fontFamily = tungstenfontfamily,
+                    //fontFamily = tungstenfontfamily,
                     fontSize = labelFontSize,
-                    letterSpacing = 2.sp
+                    //letterSpacing = 2.sp
                 )
             }
         }
@@ -124,9 +124,9 @@ fun TodaysWeather(data: ForecastToday?) {
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
-                    fontFamily = tungstenfontfamily,
+                    //fontFamily = tungstenfontfamily,
                     fontSize = valueFontSize,
-                    letterSpacing = 2.sp
+                    //letterSpacing = 2.sp
                 )
             }
             Box(
@@ -140,9 +140,9 @@ fun TodaysWeather(data: ForecastToday?) {
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
-                    fontFamily = tungstenfontfamily,
+                    //fontFamily = tungstenfontfamily,
                     fontSize = valueFontSize,
-                    letterSpacing = 2.sp
+                    //letterSpacing = 2.sp
                 )
             }
             Box(
