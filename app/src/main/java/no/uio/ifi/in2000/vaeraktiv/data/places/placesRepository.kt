@@ -46,22 +46,16 @@ class placesRepository @Inject constructor(private val placesClient: PlacesClien
         var places: List<Place> = emptyList()
 
         val includedTypes: List<String> = listOf(
-        "park", "museum", "restaurant", "cafe",
-        "tourist_attraction", "point_of_interest",
-        "amusement_park", "aquarium", "art_gallery",
-        "campground", "library", "movie_theater",
-        "spa", "stadium", "zoo",
-        )
-        val excludedTypes: List<String> = listOf(
-        "gas_station", "parking", "car_repair",
-        "car_wash", "convenience_store", "bank",
-        "atm", "grocery_or_supermarket", "hardware_store",
-        "home_goods_store", "shopping_mall", "store"
+        "adventure_sports_center", "skateboard_park", "hiking_area",
+        "water_park", "botanical_garden", "cycling_park",
+        "beach", "arena", "athletic_field", "fitness_center",
+        "gym", "ice_skating_rink", "ski_resort", "sports_activity_location",
+        "sports_club", "sports_complex", "swimming_pool"
         )
         val placeFields: List<Place.Field> = listOf(
             Place.Field.ID, Place.Field.DISPLAY_NAME, Place.Field.PRIMARY_TYPE,
             Place.Field.PRIMARY_TYPE_DISPLAY_NAME, Place.Field.TYPES,
-            Place.Field.ADDRESS, Place.Field.LAT_LNG,
+            Place.Field.FORMATTED_ADDRESS, Place.Field.LOCATION,
         )
 
         var currentRadius = initialRadius
@@ -73,7 +67,7 @@ class placesRepository @Inject constructor(private val placesClient: PlacesClien
                     placeFields
                     )
                     .setIncludedTypes(includedTypes)
-                    .setExcludedTypes(excludedTypes)
+                    //.setExcludedTypes(excludedTypes)
                     .setMaxResultCount(20)
                     .build()
 
@@ -95,4 +89,5 @@ class placesRepository @Inject constructor(private val placesClient: PlacesClien
         }
         return@withContext places
     }
+
 }

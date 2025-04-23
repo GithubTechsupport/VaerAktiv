@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv
 
-import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
