@@ -35,7 +35,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 fun DisplayWeather(data: ForecastToday?) {
     val context = LocalContext.current
     val iconResId = context.resources.getIdentifier(data?.iconNow, "drawable", context.packageName)
-    val cornerDp = 10.dp
+    //val cornerDp = 10.dp
 
     Spacer(modifier = Modifier.height(12.dp))
     Column(
@@ -76,19 +76,19 @@ fun DisplayWeather(data: ForecastToday?) {
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        //Spacer(modifier = Modifier.height(0.dp))
 
         // Second row: UV, precipitation, and wind speed details in a background box
         Box(
             modifier = Modifier
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(MainCard, SecondaryCard)
-                    ),
-                    shape = RoundedCornerShape(cornerDp)
-                )
+                //.background(
+                //    Brush.verticalGradient(
+                //        colors = listOf(MainCard, SecondaryCard)
+                //    ),
+                //    shape = RoundedCornerShape(cornerDp)
+                //)
                 .fillMaxWidth()
-                .padding(15.dp) // Use the same overall padding as above
+                .padding(horizontal = 15.dp) // Use the same overall padding as above
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),

@@ -30,7 +30,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 
 @SuppressLint("DiscouragedApi")
 @Composable
-fun TodaysWeather(data: ForecastToday?) {
+fun TodaysWeather(data: ForecastToday?) { // kan slettes kanskje
     val context = LocalContext.current
     val iconResId = context.resources.getIdentifier(data?.icon, "drawable", context.packageName)
     val cornerDp = 10.dp
@@ -39,124 +39,5 @@ fun TodaysWeather(data: ForecastToday?) {
     val valueFontSize = 30.sp
 
     Spacer(modifier = Modifier.height(12.dp))
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(MainCard, SecondaryCard)
-                ),
-                shape = RoundedCornerShape(cornerDp)
-            )
-            .fillMaxWidth()
-            .padding(15.dp)
-    ) {
-        // First row: labels
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 8.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Min temp",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    textAlign = TextAlign.Center,
-                    //fontFamily = tungstenfontfamily,
-                    fontSize = labelFontSize,
-                    //letterSpacing = 2.sp
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 8.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Maks temp",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    textAlign = TextAlign.Center,
-                    //fontFamily = tungstenfontfamily,
-                    fontSize = labelFontSize,
-                    //letterSpacing = 2.sp
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 8.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Neste 6 timer",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    textAlign = TextAlign.Center,
-                    //fontFamily = tungstenfontfamily,
-                    fontSize = labelFontSize,
-                    //letterSpacing = 2.sp
-                )
-            }
-        }
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Second row: values and icon
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 8.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "${data?.tempMin}°",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    textAlign = TextAlign.Center,
-                    //fontFamily = tungstenfontfamily,
-                    fontSize = valueFontSize,
-                    //letterSpacing = 2.sp
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 8.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "${data?.tempMax}°",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    textAlign = TextAlign.Center,
-                    //fontFamily = tungstenfontfamily,
-                    fontSize = valueFontSize,
-                    //letterSpacing = 2.sp
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 8.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(id = iconResId),
-                    contentDescription = "Dagens vær",
-                    modifier = Modifier.size(100.dp)
-                )
-            }
-        }
-    }
 }
