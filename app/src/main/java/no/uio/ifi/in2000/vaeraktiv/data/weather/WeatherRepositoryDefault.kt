@@ -29,6 +29,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import javax.inject.Inject
@@ -153,6 +154,22 @@ class WeatherRepositoryDefault @Inject constructor(
             iconNow = nowcastData?.next1Hours?.summary?.symbolCode.toString() // nowcast
         )
         return forecastToday
+    }
+
+    override suspend fun getTimeSeriesForDay(dayNr: Int, location: Location) : List<TimeSeries> {
+        try {
+            val response = locationForecastRepository.getForecastByDay(location.lat, location.lon)
+            if (response != null) {
+                val timeSeries = response.get(dayNr).second
+                return timeSeries
+            } else {
+                Log.d("WeatherRepository", "No forecast found")
+                throw Error("No forecast found")
+            }
+        } catch (e: Exception) {
+            Log.e("WeatherRepository", "Error at getTimeSeriesForDay: ", e)
+            throw e
+        }
     }
 
     override suspend fun getForecastByDay(location: Location): List<ForecastForDay> {
