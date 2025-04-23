@@ -61,7 +61,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
             ) {
                 // Always show the current location.
                 item {
-                    CurrentLocation(uiState.locationName)
+                    CurrentLocation(uiState.locationName, "Oslo")
                 }
 
                 // Alerts Section
