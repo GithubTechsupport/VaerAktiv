@@ -49,7 +49,7 @@ fun WeatherWeek(data: List<ForecastForDay>) {
         Text(
             text = "7-dagersvarsel",
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 4.dp)
         )
@@ -69,21 +69,21 @@ fun WeatherWeek(data: List<ForecastForDay>) {
             Text(
                 text = "Dato",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.weight(1f)
             )
             Text(
                 text = "Maks Temp",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(1f)
             )
             Text(
                 text = "Dagens Vær",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.End,
                 modifier = Modifier.weight(1f)
             )
@@ -107,7 +107,7 @@ fun WeatherWeek(data: List<ForecastForDay>) {
                 Text(
                     text = getDayOfWeek(day.date),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Start,
                     modifier = Modifier
                         .weight(1f) // Tar tilgjengelig plass til venstre
@@ -117,7 +117,7 @@ fun WeatherWeek(data: List<ForecastForDay>) {
                 Text(
                     text = "${day.maxTemp}°",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .wrapContentWidth() // Tar kun nødvendig bredde for å være sentrert

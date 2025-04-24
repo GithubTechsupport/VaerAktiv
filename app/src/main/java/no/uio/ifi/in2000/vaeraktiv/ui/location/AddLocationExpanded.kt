@@ -1,17 +1,13 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.location
 
 import SuggestionsOverlay
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
@@ -54,6 +50,7 @@ fun AddLocationExpanded(defaultPading: Dp, viewModel: FavoriteLocationViewModel)
             Text(
                 text = "Legg til sted",
                 style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Left,
                 modifier = Modifier.weight(1f)
             )

@@ -65,7 +65,7 @@ fun DisplayWeather(data: ForecastToday?) {
                 Text(
                     text = "${data?.tempNow}°",
                     style = MaterialTheme.typography.displayLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
                 )
             }
@@ -97,7 +97,7 @@ fun DisplayWeather(data: ForecastToday?) {
                     Text(
                         text = "${data?.uv} UV",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center,
                         //fontFamily = tungstenfontfamily,
                         fontSize = 20.sp,
@@ -114,7 +114,7 @@ fun DisplayWeather(data: ForecastToday?) {
                     Text(
                         text = "${data?.precipitationAmount} mm",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center,
                         //fontFamily = tungstenfontfamily,
                         fontSize = 20.sp,
@@ -131,7 +131,7 @@ fun DisplayWeather(data: ForecastToday?) {
                     Text(
                         text = "${data?.windSpeed} m/s",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center,
                         //fontFamily = tungstenfontfamily,
                         fontSize = 20.sp,

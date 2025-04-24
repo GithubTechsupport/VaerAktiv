@@ -26,6 +26,7 @@ fun AddLocationDefault(defaultPadding: Dp) {
         Text(
             text = "Legg til sted",
             style = MaterialTheme.typography.titleMedium ,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Left,
             modifier = Modifier
                 .padding(defaultPadding)

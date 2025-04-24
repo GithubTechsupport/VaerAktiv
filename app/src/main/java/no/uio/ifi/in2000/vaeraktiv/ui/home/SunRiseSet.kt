@@ -56,6 +56,7 @@ fun SunRiseSet(sunData : List<String>) {
             Text(
                 text = "Sol opp: $solOpp",
                 textAlign = TextAlign.Start,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .weight(1f)
                     .padding(12.dp)
@@ -72,6 +73,7 @@ fun SunRiseSet(sunData : List<String>) {
             Text(
                 text = "Sol ned: $solNed",
                 textAlign = TextAlign.End,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .weight(1f)
                     .padding(12.dp)

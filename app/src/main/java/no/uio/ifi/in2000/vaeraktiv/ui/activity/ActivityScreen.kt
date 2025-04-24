@@ -77,7 +77,8 @@ fun ActivityScreen(isOnline: Boolean, viewModel: ActivityScreenViewModel) {
                         ) {
                             Text(
                                 text = "Finn nye aktiviteter",
-                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                style = MaterialTheme.typography.headlineSmall,
                                 modifier = Modifier.padding(10.dp)
                             )
                         }
