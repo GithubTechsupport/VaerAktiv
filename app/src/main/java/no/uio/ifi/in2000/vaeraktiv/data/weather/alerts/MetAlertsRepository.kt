@@ -3,7 +3,7 @@ package no.uio.ifi.in2000.vaeraktiv.data.weather.alerts
 import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Features
 import javax.inject.Inject
 
-class MetAlertsRepository @Inject constructor(private val metAlertsDataSource: MetAlertsDataSource) {
+class MetAlertsRepository @Inject constructor(private val metAlertsDataSource: MetAlertsDataSource): IMetAlertsRepository {
 
     private var alertsCache: List<Features> = emptyList()
 
@@ -12,7 +12,7 @@ class MetAlertsRepository @Inject constructor(private val metAlertsDataSource: M
         alertsCache = response?.features ?: emptyList()
     }
     
-    suspend fun getAlertsForLocation(lat: String, lon: String): List<Features> {
+    override suspend fun getAlertsForLocation(lat: String, lon: String): List<Features> {
         // Gathers all active alerts and caches it alerts arent already fetched.
         if (alertsCache.isEmpty()) {
             fetchAlerts()
