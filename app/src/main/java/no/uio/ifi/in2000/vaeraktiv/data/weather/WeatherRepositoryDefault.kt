@@ -32,6 +32,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastRespon
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import javax.inject.Inject
 import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
 
@@ -139,6 +140,7 @@ class WeatherRepositoryDefault @Inject constructor(
     }
 
     override suspend fun getForecastToday(location: Location): ForecastToday {
+        getForecastForHour(location)
         val forecast = locationForecastRepository.getForecast(location.lat, location.lon)
         val locationData = forecast?.properties?.timeseries?.get(0)?.data
         val nowcast = nowcastRepository.getForecast(location.lat, location.lon)
@@ -193,8 +195,21 @@ class WeatherRepositoryDefault @Inject constructor(
             Log.e("WeatherRepository", "Error at getForecastByDay: ", e)
             throw e
         }
+    }
 
-
+    override suspend fun getForecastForHour(location: Location): List<ForecastForHour> {
+        val response = locationForecastRepository.getNext24Hours(location.lat, location.lon)
+        Log.d("WeatherRepository", "getWeatherForHour response: $response")
+        val hourDataList:List<ForecastForHour> = response?.map { timeSeries ->
+            val forecastForHour = ForecastForHour(
+                temp = timeSeries.data.instant.details.airTemperature.toString(),
+                windSpeed = timeSeries.data.instant.details.windSpeed.toString(),
+                precipitationAmount = timeSeries.data.next1Hours?.details?.precipitationAmount.toString(),
+                icon = timeSeries.data.next1Hours?.summary?.symbolCode.toString())
+            forecastForHour
+        } ?: emptyList()
+        Log.d("WeatherRepository", "getWeatherForHour response: $hourDataList")
+        return hourDataList
     }
 
     override suspend fun getWeatherForecast(location: Location): LocationForecastResponse? {
