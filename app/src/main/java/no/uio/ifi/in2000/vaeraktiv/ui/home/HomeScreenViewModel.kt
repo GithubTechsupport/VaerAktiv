@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
+import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
@@ -46,7 +47,7 @@ class HomeScreenViewModel @Inject constructor(
             Location("Oslo Sentralstasjon", "59.9111", "10.7533")
         )
         initialized = true
-
+        getActivities() // fra ActivityScreenViewModel
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -124,6 +125,37 @@ class HomeScreenViewModel @Inject constructor(
             _homeScreenUiState.update { it.copy(isLoading = false) }
         }
     }
+
+    fun getActivities() { // fra ActivityScreenViewModel
+        viewModelScope.launch {
+            _homeScreenUiState.update {
+                it.copy(isLoading = true)
+            }
+            try {
+                val activities = weatherRepository.getActivities(currentLocation.value!!)
+                _homeScreenUiState.update {
+                    it.copy(
+                        activities = activities
+                    )
+                }
+            } catch (e: Exception) {
+                _homeScreenUiState.update {
+                    it.copy(
+                        isError = true,
+                        errorMessage = e.toString() ?: "Unknown error"
+                    )
+
+                }
+                Log.e("ActivityViewModel", "Error: ", e)
+            } finally {
+                _homeScreenUiState.update {
+                    it.copy(
+                        isLoading = false
+                    )
+                }
+            }
+        }
+    }
 }
 
 data class HomeScreenUiState(
@@ -138,5 +170,8 @@ data class HomeScreenUiState(
     val todaysWeatherError: String? = null,
     val thisWeeksWeatherError: String? = null,
     val alertsError: String? = null,
-    val sunRiseSetError: String? = null
+    val sunRiseSetError: String? = null,
+    val isError: Boolean = false, // fra Activity
+    val errorMessage: String = "", // fra Actitivty
+    val activities: JsonResponse? = null // fra ActivityScreenViewModel
 )

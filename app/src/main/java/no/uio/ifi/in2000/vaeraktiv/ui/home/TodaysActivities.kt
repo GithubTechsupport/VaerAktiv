@@ -25,7 +25,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 
 @Composable
-fun TodaysActivity(aiResponse: String) {
+fun TodaysActivities(aiResponse: String) {
     val cornerDp = 10.dp
     Spacer(modifier = Modifier.height(12.dp))
     Column(

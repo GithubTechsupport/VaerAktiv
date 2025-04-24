@@ -31,7 +31,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 
 @Composable
-fun CurrentLocation(locationName : String, locationNow : String) {
+fun CurrentLocation(locationName : String) {
     var isExpanded by remember { mutableStateOf(false) }
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,

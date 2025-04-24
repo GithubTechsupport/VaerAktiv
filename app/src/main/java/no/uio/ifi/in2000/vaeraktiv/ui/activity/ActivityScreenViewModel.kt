@@ -65,19 +65,6 @@ class ActivityScreenViewModel @Inject constructor(private val weatherRepository:
             }
         }
     }
-
-    // BARE FOR TESTING. Kan tas vekk senere.
-    /*
-    fun getAlertForLocation() {
-    viewModelScope.launch {
-        val alert = weatherRepository.getAlertForLocation(Location("Tromsø", 69.64, 18.95))
-        Log.d("ActivityViewModel", "Alert for location: ${alert[0].description}")
-        }
-    }
- */
-
-
-
 }
 
 data class ActivityScreenUiState(
