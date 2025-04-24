@@ -17,6 +17,7 @@ fun AddActivitiesForDay(
     Column {
         Text(
             text = activity.date,
+            color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.headlineLarge,
             modifier = Modifier
                 .padding(10.dp)

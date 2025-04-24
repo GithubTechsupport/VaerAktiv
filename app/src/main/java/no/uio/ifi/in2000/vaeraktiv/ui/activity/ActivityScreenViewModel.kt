@@ -1,7 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.activity
 
 import android.util.Log
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
