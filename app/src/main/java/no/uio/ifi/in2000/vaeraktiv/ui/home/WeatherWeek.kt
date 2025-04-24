@@ -166,30 +166,3 @@ private fun getDayOfWeek(date: String): String {
         "error"
     }
 }
-
-/*if (isExpanded) {
-                Row {
-                    Text(
-                        text = "3 UV",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.weight(1f)
-
-                    )
-                    Text(
-                        text = "Nedbør mm",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.weight(1f)
-                    )
-                    Text(
-                        text = "Vind m/s",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        textAlign = TextAlign.End,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-            }*/

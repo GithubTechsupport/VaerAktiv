@@ -8,11 +8,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,6 +33,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainBackground
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryBackground
+import java.time.LocalDate
 import java.time.Month
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -100,37 +103,68 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                     }
                 }
 
-                // Today's Activity (always displays dummy text for now)
+                // Today's Activities
                 item {
-                    if (uiState.isError) {
-                        ErrorMessage(message = "Error fetching activities ${uiState.errorMessage}")
-                    } else if (uiState.activities != null) {
-                        val activities = uiState.activities!!.activities
-                            .groupBy { "${it.dayOfMonth}. ${Month.of(it.month).name.lowercase()}" }
-                            .map { (date, activities) ->
-                                ActivityDate(
-                                    date,
-                                    activities.map {
-                                        Activity(
-                                            "${it.timeStart} - ${it.timeEnd}",
-                                            it.activity,
-                                            it.activityDesc,
-                                        )
-                                    }
-                                )
-                            }
-
-                        Column (
+                    Column (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ){
+                        Row (
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
+                                .padding(bottom = 8.dp),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            activities.forEach {
-                                AddActivitiesForDay(it)
+                            Text(
+                                text = "Dagens aktiviteter",
+                                style = MaterialTheme.typography.headlineSmall,
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
+                            RefreshButton (
+                                onClick = {viewModel.getActivities()},
+                                isLoading = uiState.isLoadingTodaysActivites
+                            )
+                        }
+                        if (uiState.isErrorTodaysActivites) {
+                            ErrorMessage(
+                                message = "Error fetching today's activities: ${uiState.errorMessageTodaysActivites}"
+                            )
+                        } else if (uiState.todaysActivites != null) {
+                            val activities = uiState.todaysActivites!!.activities.map {
+                                Activity(
+                                    "${it.timeStart} - ${it.timeEnd}",
+                                    it.activity,
+                                    it.activityDesc
+                                )
                             }
+                            AddActivitiesForDay(ActivityDate("I dag", activities))
+                        } else {
+                            Text (
+                                text = "Finner ingen aktiviteter",
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
                         }
                     }
+                }
+
+                items(6) { index ->
+                    val date = LocalDate.now().plusDays(index + 1L)
+                    val dateString = "${date.dayOfMonth}. ${Month.of(date.monthValue).name.lowercase()}"
+                    val activities = uiState.futureActivities[date]
+                    val isLoading = uiState.loadingFutureActivities.contains(date)
+                    ActivityCard(
+                        date = date,
+                        dateString = dateString,
+                        activities = activities,
+                        isLoading = isLoading,
+                        isError = uiState.isErrorFutureActivities,
+                        errorMessage = uiState.errorMessageFutureActivities,
+                        onExpand = { viewModel.getActivitesForDate(date) }
+                    )
                 }
 
                 // Weekly Weather Forecast Section

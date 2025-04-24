@@ -20,6 +20,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,6 +40,7 @@ class HomeScreenViewModel @Inject constructor(
         weatherRepository.trackDeviceLocation(lifecycleOwner)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun initialize() {
         if (initialized) return
 
@@ -126,32 +128,70 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getActivities() { // fra ActivityScreenViewModel
         viewModelScope.launch {
             _homeScreenUiState.update {
-                it.copy(isLoading = true)
+                it.copy(isLoadingTodaysActivites = true)
             }
             try {
-                val activities = weatherRepository.getActivities(currentLocation.value!!)
+                val today = LocalDate.now()
+                val activities = weatherRepository.getActivitiesForDate(
+                    currentLocation.value!!,
+                    today
+                )
                 _homeScreenUiState.update {
                     it.copy(
-                        activities = activities
+                        todaysActivites = activities,
+                        isErrorTodaysActivites = false,
+                        errorMessageTodaysActivites = "",
                     )
                 }
             } catch (e: Exception) {
                 _homeScreenUiState.update {
                     it.copy(
-                        isError = true,
-                        errorMessage = e.toString() ?: "Unknown error"
+                        isErrorFutureActivities = true,
+                        errorMessageFutureActivities = e.toString() ?: "Unknown error"
                     )
 
                 }
-                Log.e("ActivityViewModel", "Error: ", e)
+                Log.e("ActivityViewModel", "Error fetching todays activites: ", e)
             } finally {
                 _homeScreenUiState.update {
+                    it.copy(isLoadingTodaysActivites = false)
+                }
+            }
+        }
+    }
+
+    fun getActivitesForDate(date: LocalDate) {
+        viewModelScope.launch {
+            _homeScreenUiState.update {
+                it.copy(loadingFutureActivities = it.loadingFutureActivities + date)
+            }
+            try {
+                val activities = weatherRepository.getActivitiesForDate(
+                    currentLocation.value!!,
+                    date
+                )
+                _homeScreenUiState.update {
                     it.copy(
-                        isLoading = false
+                        futureActivities = activities,
+                        isErrorFutureActivities = false,
+                        errorMessageFutureActivities = "",
                     )
+                }
+            } catch (e: Exception) {
+                _homeScreenUiState.update {
+                    it.copy(
+                        isErrorFutureActivities = true,
+                        errorMessageFutureActivities = e.toString() ?: "Unknown error"
+                    )
+                }
+                Log.e("ActivityViewModel", "Error fetching activites for $date: ", e)
+            } finally {
+                _homeScreenUiState.update {
+                    it.copy(loadingFutureActivities = it.loadingFutureActivities - date)
                 }
             }
         }
@@ -165,13 +205,19 @@ data class HomeScreenUiState(
     val todaysWeather: ForecastToday? = null,
     val thisWeeksWeather: List<ForecastForDay> = emptyList(),
     val sunRiseSet: List<String> = emptyList(),
-
-    // errors
+    // todays activities
+    val todaysActivites: JsonResponse? = null, // fra ActivityScreenViewModel
+    val isLoadingTodaysActivites: Boolean = false,
+    val isErrorTodaysActivites: Boolean = false,
+    val errorMessageTodaysActivites: String = "",
+    // rest of the week
+    val futureActivities: Map<LocalDate, JsonResponse> = emptyMap(), // fra ActivityScreenViewModel
+    val loadingFutureActivities: Set<LocalDate> = emptySet(),
+    val isErrorFutureActivities: Boolean = false,
+    val errorMessageFutureActivities: String = "",
+    // errors for other data
     val todaysWeatherError: String? = null,
     val thisWeeksWeatherError: String? = null,
     val alertsError: String? = null,
     val sunRiseSetError: String? = null,
-    val isError: Boolean = false, // fra Activity
-    val errorMessage: String = "", // fra Actitivty
-    val activities: JsonResponse? = null // fra ActivityScreenViewModel
 )
