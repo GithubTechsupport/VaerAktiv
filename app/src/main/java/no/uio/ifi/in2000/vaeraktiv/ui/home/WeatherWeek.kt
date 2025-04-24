@@ -22,14 +22,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -43,9 +40,7 @@ fun WeatherWeek(data: List<ForecastForDay>) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .background(
-              Brush.verticalGradient(
-                colors = listOf(MainCard, SecondaryCard)
-                ),
+                color = MaterialTheme.colorScheme.inversePrimary,
                 shape = RoundedCornerShape(cornerDp)
             )
             .fillMaxWidth()

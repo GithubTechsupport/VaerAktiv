@@ -19,14 +19,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainBackground
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryBackground
 import java.time.Month
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -62,11 +59,7 @@ fun ActivityScreen(isOnline: Boolean, viewModel: ActivityScreenViewModel) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(MainBackground, SecondaryBackground)
-                            )
-                        ),
+                        .background(color = MaterialTheme.colorScheme.primaryContainer),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top
                 ) {

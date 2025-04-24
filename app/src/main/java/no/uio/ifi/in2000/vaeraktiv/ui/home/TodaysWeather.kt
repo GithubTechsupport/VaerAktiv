@@ -17,16 +17,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import no.uio.ifi.in2000.vaeraktiv.fonts.tungstenfontfamily
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 
 @SuppressLint("DiscouragedApi")
 @Composable
@@ -43,9 +39,7 @@ fun TodaysWeather(data: ForecastToday?) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .background(
-                Brush.verticalGradient(
-                    colors = listOf(MainCard, SecondaryCard)
-                ),
+                color = MaterialTheme.colorScheme.inversePrimary,
                 shape = RoundedCornerShape(cornerDp)
             )
             .fillMaxWidth()

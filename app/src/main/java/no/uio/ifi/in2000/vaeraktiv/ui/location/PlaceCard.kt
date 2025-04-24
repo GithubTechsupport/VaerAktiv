@@ -24,15 +24,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 
 @SuppressLint("DiscouragedApi")
 @Composable
@@ -53,9 +50,7 @@ fun PlaceCard(
             .padding(defaultPadding)
             .clip(RoundedCornerShape(10.dp))
             .background(
-                Brush.verticalGradient(
-                    colors = listOf(MainCard, SecondaryCard)
-                )
+                color = MaterialTheme.colorScheme.inversePrimary
             )
             .clickable (
                 onClick = {
