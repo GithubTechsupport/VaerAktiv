@@ -29,7 +29,7 @@ fun TodaysActivity(aiResponse: String) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .background(
-                color = MaterialTheme.colorScheme.inversePrimary,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = RoundedCornerShape(cornerDp))
             .fillMaxWidth()
             .padding(20.dp)
@@ -48,14 +48,14 @@ fun TodaysActivity(aiResponse: String) {
             Text (
                 text = "Dagens Aktivitet",
                 style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 textAlign = TextAlign.Center
             )
         }
         Text(
             text = aiResponse,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             textAlign = TextAlign.Center
         )
     }

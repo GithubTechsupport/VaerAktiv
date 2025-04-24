@@ -50,7 +50,7 @@ fun AddLocationExpanded(defaultPading: Dp, viewModel: FavoriteLocationViewModel)
             Text(
                 text = "Legg til sted",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 textAlign = TextAlign.Left,
                 modifier = Modifier.weight(1f)
             )

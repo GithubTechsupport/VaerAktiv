@@ -27,7 +27,7 @@ fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.primaryContainer),
+                .background(color = MaterialTheme.colorScheme.background),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {

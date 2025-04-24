@@ -28,7 +28,7 @@ fun AddPlace(defaultPadding: Dp, viewModel: FavoriteLocationViewModel) {
             .clickable{expanded = !expanded}
             .clip(RoundedCornerShape(10))
             .background(
-                color = MaterialTheme.colorScheme.inversePrimary
+                color = MaterialTheme.colorScheme.primaryContainer
             )
     ) {
         if (expanded) AddLocationExpanded(defaultPadding, viewModel) else AddLocationDefault(defaultPadding)

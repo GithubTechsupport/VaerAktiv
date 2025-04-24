@@ -46,7 +46,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.primaryContainer)
+                .background(color = MaterialTheme.colorScheme.background)
                 ,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

@@ -50,7 +50,7 @@ fun PlaceCard(
             .padding(defaultPadding)
             .clip(RoundedCornerShape(10.dp))
             .background(
-                color = MaterialTheme.colorScheme.inversePrimary
+                color = MaterialTheme.colorScheme.primaryContainer
             )
             .clickable (
                 onClick = {
@@ -72,7 +72,7 @@ fun PlaceCard(
             Text(
                 text = location.name,
                 style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
                     .padding(defaultPadding)
             )
@@ -127,21 +127,21 @@ fun PlaceCard(
                     Text(
                         text = location.shortDesc,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
                     Text(
                         text = "${location.uv} UV",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
                     Text(
                         text = "${location.highestTemp}°/${location.lowestTemp}°",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
@@ -153,14 +153,14 @@ fun PlaceCard(
                     Text(
                         text = "${location.wind} m/s",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
                     Text(
                         text = "nedbør: ${location.downPour} ml",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )

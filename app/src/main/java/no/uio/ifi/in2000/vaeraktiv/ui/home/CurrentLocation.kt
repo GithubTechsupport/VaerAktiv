@@ -29,7 +29,7 @@ fun CurrentLocation(locationName : String) {
             Text(
                 text = locationName,
                 style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center,
                 fontSize = 40.sp
             )
@@ -39,7 +39,7 @@ fun CurrentLocation(locationName : String) {
             .padding(top = 4.dp)
             .height(1.dp)
             .background(
-                color = MaterialTheme.colorScheme.inversePrimary
+                color = MaterialTheme.colorScheme.primaryContainer
             )
         )
     }

@@ -33,7 +33,7 @@ fun ActivityCard(
             .clickable{expanded = !expanded}
             .clip(RoundedCornerShape(10.dp))
             .background(
-                color = MaterialTheme.colorScheme.inversePrimary
+                color = MaterialTheme.colorScheme.primaryContainer
             )
     ) {
         if (expanded) ActivityCardExpanded(activity) else ActivityCardDefault(activity)

@@ -59,7 +59,7 @@ fun ActivityScreen(isOnline: Boolean, viewModel: ActivityScreenViewModel) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(color = MaterialTheme.colorScheme.primaryContainer),
+                        .background(color = MaterialTheme.colorScheme.background),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top
                 ) {
@@ -77,7 +77,7 @@ fun ActivityScreen(isOnline: Boolean, viewModel: ActivityScreenViewModel) {
                         ) {
                             Text(
                                 text = "Finn nye aktiviteter",
-                                color = MaterialTheme.colorScheme.onSurface,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 style = MaterialTheme.typography.headlineSmall,
                                 modifier = Modifier.padding(10.dp)
                             )

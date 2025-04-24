@@ -39,7 +39,7 @@ fun TodaysWeather(data: ForecastToday?) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .background(
-                color = MaterialTheme.colorScheme.inversePrimary,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = RoundedCornerShape(cornerDp)
             )
             .fillMaxWidth()
@@ -59,7 +59,7 @@ fun TodaysWeather(data: ForecastToday?) {
                 Text(
                     text = "Min temp",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     textAlign = TextAlign.Center,
                     //fontFamily = tungstenfontfamily,
                     fontSize = labelFontSize,
@@ -75,7 +75,7 @@ fun TodaysWeather(data: ForecastToday?) {
                 Text(
                     text = "Maks temp",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     textAlign = TextAlign.Center,
                     //fontFamily = tungstenfontfamily,
                     fontSize = labelFontSize,
@@ -91,7 +91,7 @@ fun TodaysWeather(data: ForecastToday?) {
                 Text(
                     text = "Neste 6 timer",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     textAlign = TextAlign.Center,
                     //fontFamily = tungstenfontfamily,
                     fontSize = labelFontSize,
@@ -116,7 +116,7 @@ fun TodaysWeather(data: ForecastToday?) {
                 Text(
                     text = "${data?.tempMin}°",
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     textAlign = TextAlign.Center,
                     //fontFamily = tungstenfontfamily,
                     fontSize = valueFontSize,
@@ -132,7 +132,7 @@ fun TodaysWeather(data: ForecastToday?) {
                 Text(
                     text = "${data?.tempMax}°",
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     textAlign = TextAlign.Center,
                     //fontFamily = tungstenfontfamily,
                     fontSize = valueFontSize,

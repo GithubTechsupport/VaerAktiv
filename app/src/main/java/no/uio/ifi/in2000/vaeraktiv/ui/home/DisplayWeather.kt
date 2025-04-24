@@ -65,7 +65,7 @@ fun DisplayWeather(data: ForecastToday?) {
                 Text(
                     text = "${data?.tempNow}°",
                     style = MaterialTheme.typography.displayLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
             }
@@ -77,7 +77,7 @@ fun DisplayWeather(data: ForecastToday?) {
         Box(
             modifier = Modifier
                 .background(
-                    color = MaterialTheme.colorScheme.inversePrimary,
+                    color = MaterialTheme.colorScheme.primaryContainer,
                     shape = RoundedCornerShape(cornerDp)
                 )
                 .fillMaxWidth()
@@ -97,7 +97,7 @@ fun DisplayWeather(data: ForecastToday?) {
                     Text(
                         text = "${data?.uv} UV",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         textAlign = TextAlign.Center,
                         //fontFamily = tungstenfontfamily,
                         fontSize = 20.sp,
@@ -114,7 +114,7 @@ fun DisplayWeather(data: ForecastToday?) {
                     Text(
                         text = "${data?.precipitationAmount} mm",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         textAlign = TextAlign.Center,
                         //fontFamily = tungstenfontfamily,
                         fontSize = 20.sp,
@@ -131,7 +131,7 @@ fun DisplayWeather(data: ForecastToday?) {
                     Text(
                         text = "${data?.windSpeed} m/s",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         textAlign = TextAlign.Center,
                         //fontFamily = tungstenfontfamily,
                         fontSize = 20.sp,

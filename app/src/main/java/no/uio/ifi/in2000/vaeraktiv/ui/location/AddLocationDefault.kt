@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.location
 
+import android.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,7 +27,7 @@ fun AddLocationDefault(defaultPadding: Dp) {
         Text(
             text = "Legg til sted",
             style = MaterialTheme.typography.titleMedium ,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             textAlign = TextAlign.Left,
             modifier = Modifier
                 .padding(defaultPadding)

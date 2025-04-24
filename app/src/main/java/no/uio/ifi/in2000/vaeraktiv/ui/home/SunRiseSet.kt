@@ -33,7 +33,7 @@ fun SunRiseSet(sunData : List<String>) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .background(
-                color = MaterialTheme.colorScheme.inversePrimary,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = RoundedCornerShape(cornerDp))
             .fillMaxWidth()
             .padding(10.dp)
@@ -56,7 +56,7 @@ fun SunRiseSet(sunData : List<String>) {
             Text(
                 text = "Sol opp: $solOpp",
                 textAlign = TextAlign.Start,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
                     .weight(1f)
                     .padding(12.dp)
@@ -67,13 +67,13 @@ fun SunRiseSet(sunData : List<String>) {
                     .width(1.dp)
                     .padding(top = 4.dp)
                     .height(80.dp)
-                    .background(color = MaterialTheme.colorScheme.inverseOnSurface)
+                    .background(color = MaterialTheme.colorScheme.primaryContainer)
             )
 
             Text(
                 text = "Sol ned: $solNed",
                 textAlign = TextAlign.End,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
                     .weight(1f)
                     .padding(12.dp)
