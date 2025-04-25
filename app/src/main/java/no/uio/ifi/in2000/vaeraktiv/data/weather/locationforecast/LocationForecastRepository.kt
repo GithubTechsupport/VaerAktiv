@@ -33,5 +33,11 @@ class LocationForecastRepository @Inject constructor(
         return groupedTimeSeries
     }
 
+    suspend fun getNext24Hours(lat: String, lon: String): List<TimeSeries>? {
+        val forecast = getForecast(lat, lon)
+        val timeseries = forecast?.properties?.timeseries
+        return timeseries?.drop(1)?.take(24)
+    }
+
 }
 

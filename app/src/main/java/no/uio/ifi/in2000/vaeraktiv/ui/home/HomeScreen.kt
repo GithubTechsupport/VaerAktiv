@@ -81,6 +81,15 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                     }
                 }
                 item {
+                    if (uiState.next24HoursError != null) {
+                        ErrorMessage(
+                            message = "Error fetching today's weather: ${uiState.next24HoursError}"
+                        )
+                    } else if (uiState.next24Hours != null) {
+                        DisplayHourlyForecast(uiState.next24Hours)
+                    }
+                }
+                item {
                     if (uiState.todaysWeatherError == null && uiState.todaysWeather != null) {
                         TodaysWeather(uiState.todaysWeather)
                     }
@@ -116,6 +125,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
         }
     }
 }
+
 
 @Composable
 fun ErrorMessage(message: String, modifier: Modifier = Modifier.padding(8.dp)) {

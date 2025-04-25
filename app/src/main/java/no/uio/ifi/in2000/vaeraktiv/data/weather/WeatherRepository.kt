@@ -24,6 +24,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastRespon
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 
 interface WeatherRepository {
 
@@ -50,6 +51,9 @@ interface WeatherRepository {
 
     // Retrieves a forecast segmented by day.
     suspend fun getForecastByDay(location: Location): List<ForecastForDay>
+
+    // Retrieves a forecast segmented by hour.
+    suspend fun getForecastForHour(location: Location): List<ForecastForHour>
 
     // Retrieves the full weather forecast for the provided location.
     suspend fun getWeatherForecast(location: Location): LocationForecastResponse?
