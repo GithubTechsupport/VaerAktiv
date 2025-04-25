@@ -22,6 +22,7 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecas
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.places.placesRepository
+import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.IMetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
@@ -29,15 +30,16 @@ import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import javax.inject.Inject
 import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
 
 class WeatherRepositoryDefault @Inject constructor(
-    private val metAlertsRepository: MetAlertsRepository,
+    private val metAlertsRepository: IMetAlertsRepository,
     private val locationForecastRepository: LocationForecastRepository,
-    private val sunriseRepository: SunriseRepository, //bare nullable for testing
+    private val sunriseRepository: SunriseRepository,
     private val favoriteLocationRepository: FavoriteLocationRepository,
     private val aiRepository: AiRepository,
     private val deviceLocationRepository: LocationRepository,
@@ -153,6 +155,22 @@ class WeatherRepositoryDefault @Inject constructor(
             iconNow = nowcastData?.next1Hours?.summary?.symbolCode.toString() // nowcast
         )
         return forecastToday
+    }
+
+    override suspend fun getTimeSeriesForDay(dayNr: Int, location: Location) : List<TimeSeries> {
+        try {
+            val response = locationForecastRepository.getForecastByDay(location.lat, location.lon)
+            if (response != null) {
+                val timeSeries = response.get(dayNr).second
+                return timeSeries
+            } else {
+                Log.d("WeatherRepository", "No forecast found")
+                throw Error("No forecast found")
+            }
+        } catch (e: Exception) {
+            Log.e("WeatherRepository", "Error at getTimeSeriesForDay: ", e)
+            throw e
+        }
     }
 
     override suspend fun getForecastByDay(location: Location): List<ForecastForDay> {

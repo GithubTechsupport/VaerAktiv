@@ -94,6 +94,9 @@ dependencies {
     // google play location services
     implementation(libs.play.services.location)
 
+    // saving favorite locations with json
+    implementation(libs.gson)
+
 
     // deepseek
 //    implementation(libs.deepseek.kotlin)
@@ -119,11 +122,17 @@ dependencies {
     // mock testing
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.mockito.core)
-    //testImplementation(libs.mockito.inline)
+    testImplementation(libs.mockito.inline)
+
+    // Needed for testing of final classes
+    testImplementation(libs.byte.buddy)
+    testImplementation(libs.byte.buddy.agent)
 
     // hilt testing
     testImplementation(libs.hilt.android.testing)
     kaptTest(libs.hilt.android.compiler)
+
+
 }
 
 kapt {
