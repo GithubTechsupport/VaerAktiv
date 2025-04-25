@@ -12,18 +12,11 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 
 @Composable
 fun AddActivitiesForDay(
-    activity: ActivityDate
+    activityDate: ActivityDate
     ) {
     Column {
-        Text(
-            text = activity.date,
-            style = MaterialTheme.typography.headlineLarge,
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
-        )
-        activity.activeties.forEach {
-            ActivityCard(it, 10.dp)
+        activityDate.activeties.forEach { activity ->
+            ActivityCard(activity)
         }
     }
 }

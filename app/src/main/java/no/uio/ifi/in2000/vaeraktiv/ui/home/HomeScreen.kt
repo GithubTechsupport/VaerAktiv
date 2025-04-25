@@ -103,12 +103,12 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                     }
                 }
 
-                // Today's Activities
+                // Today's Activities (always expanded)
                 item {
                     Column (
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
+                            .padding(horizontal = 16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ){
                         Row (
@@ -122,10 +122,6 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                                 text = "Dagens aktiviteter",
                                 style = MaterialTheme.typography.headlineSmall,
                                 modifier = Modifier.padding(start = 8.dp)
-                            )
-                            RefreshButton (
-                                onClick = {viewModel.getActivities()},
-                                isLoading = uiState.isLoadingTodaysActivites
                             )
                         }
                         if (uiState.isErrorTodaysActivites) {
@@ -154,16 +150,18 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                 items(6) { index ->
                     val date = LocalDate.now().plusDays(index + 1L)
                     val dateString = "${date.dayOfMonth}. ${Month.of(date.monthValue).name.lowercase()}"
+                    val dayName = date.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }
                     val activities = uiState.futureActivities[date]
                     val isLoading = uiState.loadingFutureActivities.contains(date)
-                    ActivityCard(
+                    ActivityDayRow (
                         date = date,
                         dateString = dateString,
+                        dayName = dayName,
                         activities = activities,
                         isLoading = isLoading,
                         isError = uiState.isErrorFutureActivities,
                         errorMessage = uiState.errorMessageFutureActivities,
-                        onExpand = { viewModel.getActivitesForDate(date) }
+                        onClick = { viewModel.getActivitesForDate(date) }
                     )
                 }
 

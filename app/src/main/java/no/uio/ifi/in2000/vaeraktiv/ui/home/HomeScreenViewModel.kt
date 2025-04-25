@@ -137,7 +137,7 @@ class HomeScreenViewModel @Inject constructor(
             try {
                 val today = LocalDate.now()
                 val activities = weatherRepository.getActivitiesForDate(
-                    currentLocation.value!!,
+                    currentLocation.value ?: throw Exception("No location"),
                     today
                 )
                 _homeScreenUiState.update {
@@ -158,7 +158,7 @@ class HomeScreenViewModel @Inject constructor(
                 Log.e("ActivityViewModel", "Error fetching todays activites: ", e)
             } finally {
                 _homeScreenUiState.update {
-                    it.copy(isLoadingTodaysActivites = false)
+                    it.copy()
                 }
             }
         }
@@ -176,7 +176,7 @@ class HomeScreenViewModel @Inject constructor(
                 )
                 _homeScreenUiState.update {
                     it.copy(
-                        futureActivities = activities,
+                        futureActivities = it.futureActivities + (date to activities),
                         isErrorFutureActivities = false,
                         errorMessageFutureActivities = "",
                     )
@@ -199,6 +199,10 @@ class HomeScreenViewModel @Inject constructor(
 }
 
 data class HomeScreenUiState(
+    val todayActivities: JsonResponse? = null,
+    val isLoadingTodayActivities: Boolean = false,
+    val isErrorTodayActivities: Boolean = false,
+    val errorMessageTodayActivities: String = "",
     val isLoading: Boolean = false,
     val locationName: String = "",
     val alerts: List<AlertData> = emptyList(),

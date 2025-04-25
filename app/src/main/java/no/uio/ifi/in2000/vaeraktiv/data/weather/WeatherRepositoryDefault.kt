@@ -26,6 +26,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
+import no.uio.ifi.in2000.vaeraktiv.model.ai.Interval
 import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
@@ -33,6 +34,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import javax.inject.Inject
 import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
+import java.time.LocalDate
 
 class WeatherRepositoryDefault @Inject constructor(
     private val metAlertsRepository: MetAlertsRepository,
@@ -184,13 +186,151 @@ class WeatherRepositoryDefault @Inject constructor(
         return locationForecastRepository.getForecast(location.lat, location.lon)
     }
 
-    override suspend fun getActivities(location: Location): JsonResponse? {
-        val weatherForecast = getWeatherForecast(location)
-        if (weatherForecast == null) {
-            throw Exception("Weather forecast is null")
-        } else {
-            return aiRepository.getResponse(Prompt(weatherForecast.properties, location.addressName))
+    @RequiresApi(Build.VERSION_CODES.O)
+    override suspend fun getActivities(location: Location): JsonResponse {
+        // Simulerer alle aktiviteter for 7 dager
+        val activities = (0..6).flatMap { days ->
+            val date = LocalDate.now().plusDays(days.toLong())
+            getActivitiesForDate(location, date).activities
         }
+        return JsonResponse(activities = activities)
+    }
+//    override suspend fun getActivities(location: Location): JsonResponse? {
+//        val weatherForecast = getWeatherForecast(location)
+//        if (weatherForecast == null) {
+//            throw Exception("Weather forecast is null")
+//        } else {
+//            return aiRepository.getResponse(Prompt(weatherForecast.properties, location.addressName))
+//        }
+//    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override suspend fun getActivitiesForDate(location: Location, date: LocalDate): JsonResponse {
+        // Simulerer dummydata for aktiviteter
+        val activities = when (date) {
+            LocalDate.now() -> listOf(
+                Interval(
+                    dayOfMonth = date.dayOfMonth,
+                    month = date.monthValue,
+                    timeStart = "10:00",
+                    timeEnd = "11:30",
+                    activity = "Morgenyoga",
+                    activityDesc = "En rolig yogaøkt i parken for å starte dagen."
+                ),
+                Interval(
+                    dayOfMonth = date.dayOfMonth,
+                    month = date.monthValue,
+                    timeStart = "14:00",
+                    timeEnd = "15:30",
+                    activity = "Sykkeltur",
+                    activityDesc = "En avslappende sykkeltur langs elven."
+                )
+            )
+            LocalDate.now().plusDays(1) -> listOf(
+                Interval(
+                    dayOfMonth = date.dayOfMonth,
+                    month = date.monthValue,
+                    timeStart = "09:00",
+                    timeEnd = "10:30",
+                    activity = "Joggetur",
+                    activityDesc = "En energisk joggetur i nærområdet."
+                ),
+                Interval(
+                    dayOfMonth = date.dayOfMonth,
+                    month = date.monthValue,
+                    timeStart = "16:00",
+                    timeEnd = "17:00",
+                    activity = "Frisbee",
+                    activityDesc = "Spill frisbee med venner i parken."
+                )
+            )
+            LocalDate.now().plusDays(2) -> listOf(
+                Interval(
+                    dayOfMonth = date.dayOfMonth,
+                    month = date.monthValue,
+                    timeStart = "11:00",
+                    timeEnd = "12:30",
+                    activity = "Vandring",
+                    activityDesc = "En kort vandretur i skogen."
+                )
+            )
+            LocalDate.now().plusDays(3) -> listOf(
+                Interval(
+                    dayOfMonth = date.dayOfMonth,
+                    month = date.monthValue,
+                    timeStart = "13:00",
+                    timeEnd = "14:30",
+                    activity = "Svømming",
+                    activityDesc = "En forfriskende svømmetur i bassenget."
+                )
+            )
+            LocalDate.now().plusDays(4) -> listOf(
+                Interval(
+                    dayOfMonth = date.dayOfMonth,
+                    month = date.monthValue,
+                    timeStart = "15:00",
+                    timeEnd = "16:30",
+                    activity = "Fotball",
+                    activityDesc = "Spill fotball med venner på banen."
+                )
+            )
+            LocalDate.now().plusDays(5) -> listOf(
+                Interval(
+                    dayOfMonth = date.dayOfMonth,
+                    month = date.monthValue,
+                    timeStart = "10:00",
+                    timeEnd = "11:00",
+                    activity = "Stretching",
+                    activityDesc = "En lett stretching-økt hjemme."
+                )
+            )
+            LocalDate.now().plusDays(6) -> listOf(
+                Interval(
+                    dayOfMonth = date.dayOfMonth,
+                    month = date.monthValue,
+                    timeStart = "14:00",
+                    timeEnd = "15:30",
+                    activity = "Piknik",
+                    activityDesc = "Nyt en piknik i parken med familie."
+                )
+            )
+            else -> emptyList()
+        }
+        return JsonResponse(activities = activities)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override suspend fun getNewActivityForDate(location: Location, date: LocalDate): Interval {
+        if (date == LocalDate.now()) {
+            val alternativeActivities = listOf(
+                Interval(
+                    dayOfMonth = date.dayOfMonth,
+                    month = date.monthValue,
+                    timeStart = "08:00",
+                    timeEnd = "09:30",
+                    activity = "Soloppgangsvandring",
+                    activityDesc = "En tidlig morgentur for å se soloppgangen."
+                ),
+                Interval(
+                    dayOfMonth = date.dayOfMonth,
+                    month = date.monthValue,
+                    timeStart = "12:00",
+                    timeEnd = "13:30",
+                    activity = "Piknik i parken",
+                    activityDesc = "Nyt lunsj utendørs med venner."
+                ),
+                Interval(
+                    dayOfMonth = date.dayOfMonth,
+                    month = date.monthValue,
+                    timeStart = "16:00",
+                    timeEnd = "17:30",
+                    activity = "Klatring",
+                    activityDesc = "Prøv klatring i et nærliggende klatresenter."
+                )
+            )
+            return alternativeActivities.random()
+        }
+        throw IllegalArgumentException("Invalid date for getNewActivityForDate")
     }
 
     @SuppressLint("DefaultLocale")

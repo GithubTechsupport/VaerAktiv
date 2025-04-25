@@ -18,11 +18,13 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
+import no.uio.ifi.in2000.vaeraktiv.model.ai.Interval
 import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
+import java.time.LocalDate
 
 interface WeatherRepository {
 
@@ -53,6 +55,10 @@ interface WeatherRepository {
 
     // Uses AI to get activities based on the weather forecast.
     suspend fun getActivities(location: Location): JsonResponse?
+
+    suspend fun getActivitiesForDate(location: Location, date: LocalDate): JsonResponse
+
+    suspend fun getNewActivityForDate(location: Location, date: LocalDate): Interval
 
     // Starts tracking the device location, providing updates to observers.
     fun trackDeviceLocation(lifecycleOwner: LifecycleOwner)
