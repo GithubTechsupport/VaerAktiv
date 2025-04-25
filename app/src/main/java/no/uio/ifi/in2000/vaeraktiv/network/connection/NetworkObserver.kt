@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -23,8 +24,10 @@ fun NetworkObserver(onNetworkStatusChanged: (Boolean) -> Unit) {
     val context = LocalContext.current
     var networkCallback by remember { mutableStateOf<ConnectivityManager.NetworkCallback?>(null) } // networkCallback is a variable that is used to get the network status.
     var isOnline by remember { mutableStateOf(NetworkConnection.isOnline(context)) }
+    println("NetworkObserver: Composed")
 
     LaunchedEffect(Unit) {
+        Log.d("Network observer", "NetworkObserver: $isOnline")
         onNetworkStatusChanged(isOnline) // Send initial status
     }
 
@@ -33,10 +36,12 @@ fun NetworkObserver(onNetworkStatusChanged: (Boolean) -> Unit) {
             override fun onAvailable(network: Network) { // onAvailable is a function that is called when the network is available.
                 isOnline = true
                 onNetworkStatusChanged(true)
+                Log.d("Network observer", "NetworkObserver: Network Available")
             }
             override fun onLost(network: Network) { // onLost is a function that is called when the network is lost.
                 isOnline = false
                 onNetworkStatusChanged(false)
+                Log.d("Network observer","NetworkObserver: Network Lost")
             }
         } // networkCallbackInner is a variable that is used to get the network status.
 

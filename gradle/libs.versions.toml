@@ -1,4 +1,5 @@
 [versions]
+
 agp = "8.8.0"
 byteBuddy = "1.14.14"
 coreTesting = "2.2.0"
