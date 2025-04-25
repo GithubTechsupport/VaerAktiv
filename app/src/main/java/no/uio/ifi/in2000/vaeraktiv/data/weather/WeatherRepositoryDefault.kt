@@ -8,8 +8,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
+import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +32,8 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
+import no.uio.ifi.in2000.vaeraktiv.model.places.NearbyPlaceSuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.places.NearbyPlacesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import javax.inject.Inject
@@ -236,5 +240,20 @@ class WeatherRepositoryDefault @Inject constructor(
 
     override suspend fun getAutocompletePredictions(query: String, sessionToken: AutocompleteSessionToken): List<AutocompletePrediction> {
         return placesRepository.getAutocompletePredictions(query, sessionToken)
+    }
+
+    override suspend fun getNearbyPlaces(location: Location): NearbyPlacesSuggestions {
+        val response = placesRepository.getNearbyPlaces(LatLng(location.lat.toDouble(), location.lon.toDouble()))
+        return NearbyPlacesSuggestions(response.map { place ->
+            NearbyPlaceSuggestion(
+                id = place.id,
+                displayName = place.displayName,
+                formattedAddress = place.formattedAddress,
+                coordinates = place.location?.let { Pair(it.latitude, it.longitude) },
+                primaryType = place.primaryType,
+                primaryTypeDisplayName = place.primaryTypeDisplayName,
+                types = place.placeTypes
+            )
+        })
     }
 }

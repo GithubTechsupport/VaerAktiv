@@ -27,6 +27,8 @@ import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.LocationScreen
+import no.uio.ifi.in2000.vaeraktiv.ui.map.MapScreen
+import no.uio.ifi.in2000.vaeraktiv.ui.map.MapScreenViewModel
 
 
 /*
@@ -37,7 +39,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.location.LocationScreen
 * */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Navbar (favoriteLocationViewModel: FavoriteLocationViewModel, activityScreenViewModel: ActivityScreenViewModel, homeScreenViewModel: HomeScreenViewModel) {
+fun Navbar (favoriteLocationViewModel: FavoriteLocationViewModel, activityScreenViewModel: ActivityScreenViewModel, homeScreenViewModel: HomeScreenViewModel, mapScreenViewModel: MapScreenViewModel) {
     val navController = rememberNavController()
     var isOnline by remember { mutableStateOf(true) }
     var showNoNetworkDialog by remember { mutableStateOf(false) }
@@ -84,6 +86,7 @@ fun Navbar (favoriteLocationViewModel: FavoriteLocationViewModel, activityScreen
                     composable("home") { HomeScreen(isOnline, homeScreenViewModel) }
                     composable("activity") { ActivityScreen(isOnline, activityScreenViewModel) }
                     composable("location") { LocationScreen(isOnline, favoriteLocationViewModel) }
+                    composable("map") { MapScreen(mapScreenViewModel) }
                 }
                 // Show NoNetworkDialog if isOnline is false
                 if (showNoNetworkDialog) {

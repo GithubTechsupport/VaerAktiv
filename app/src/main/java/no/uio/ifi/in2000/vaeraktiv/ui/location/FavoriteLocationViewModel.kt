@@ -90,7 +90,6 @@ class FavoriteLocationViewModel @Inject constructor(
         loadLocationsAndFetchWeather()
     }
 
-    // New function for fetching autocomplete predictions
     fun fetchPredictions(query: String) {
         Log.d("FavoriteLocationViewModel", "fetchPredictions called with query: $query")
         if (query.isBlank()) {

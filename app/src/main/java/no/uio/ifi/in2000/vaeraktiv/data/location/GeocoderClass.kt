@@ -26,11 +26,11 @@ class GeocoderClass @Inject constructor(private val context: Context) {
                 val address: Address = addressList[0]
 
                 val returnedName = address.locality ?: address.featureName ?: ""
-
+                Log.d("GeocoderClass", "Returned name: $address")
 
                 val latitude: Double = address.latitude
                 val longitude: Double = address.longitude
-                return Pair(returnedName, Pair(latitude, longitude))
+                return Pair(locationName, Pair(latitude, longitude))
             } else {
                 // Location not found
                 return null

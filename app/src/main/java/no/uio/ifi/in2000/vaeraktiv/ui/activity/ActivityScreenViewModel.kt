@@ -41,11 +41,15 @@ class ActivityScreenViewModel @Inject constructor(private val weatherRepository:
                 it.copy(isLoading = true)
             }
             try {
-                val activities = weatherRepository.getActivities(currentLocation.value!!)
-                _activityScreenUiState.update {
-                    it.copy(
-                        activities = activities
-                    )
+                if (currentLocation.value != null) {
+                    val placesSuggestions = weatherRepository.getNearbyPlaces(currentLocation.value!!)
+                    Log.d("ActivityViewModel", placesSuggestions.toString())
+                    val activities = weatherRepository.getActivities(currentLocation.value!!)
+                    _activityScreenUiState.update {
+                        it.copy(
+                            activities = activities
+                        )
+                    }
                 }
             } catch (e: Exception) {
                 _activityScreenUiState.update {
