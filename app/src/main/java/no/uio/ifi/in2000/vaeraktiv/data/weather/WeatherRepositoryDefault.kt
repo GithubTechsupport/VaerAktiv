@@ -22,6 +22,7 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecas
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.places.placesRepository
+import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.IMetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
@@ -36,9 +37,9 @@ import javax.inject.Inject
 import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
 
 class WeatherRepositoryDefault @Inject constructor(
-    private val metAlertsRepository: MetAlertsRepository,
+    private val metAlertsRepository: IMetAlertsRepository,
     private val locationForecastRepository: LocationForecastRepository,
-    private val sunriseRepository: SunriseRepository, //bare nullable for testing
+    private val sunriseRepository: SunriseRepository,
     private val favoriteLocationRepository: FavoriteLocationRepository,
     private val aiRepository: AiRepository,
     private val deviceLocationRepository: LocationRepository,
