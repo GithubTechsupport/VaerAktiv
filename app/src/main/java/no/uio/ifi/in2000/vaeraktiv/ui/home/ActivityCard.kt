@@ -39,7 +39,11 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 import java.time.LocalDate
 
 @Composable
-fun ActivityCard(activity: Activity) {
+fun ActivityCard(
+    activity: Activity,
+    isToday: Boolean,
+    onRefresh: (() -> Unit)? = null
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -83,6 +87,12 @@ fun ActivityCard(activity: Activity) {
                 modifier = Modifier.padding(top = 8.dp),
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
+            )
+        }
+        if (isToday && onRefresh != null) {
+            RefreshButton(
+                onClick = onRefresh,
+                isLoading = false
             )
         }
     }

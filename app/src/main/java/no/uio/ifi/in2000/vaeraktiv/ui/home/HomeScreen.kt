@@ -129,14 +129,17 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                                 message = "Error fetching today's activities: ${uiState.errorMessageTodaysActivites}"
                             )
                         } else if (uiState.todaysActivites != null) {
-                            val activities = uiState.todaysActivites!!.activities.map {
+                            val activities = uiState.todaysActivites!!.activities.mapIndexed { index, response ->
                                 Activity(
-                                    "${it.timeStart} - ${it.timeEnd}",
-                                    it.activity,
-                                    it.activityDesc
-                                )
+                                    timeOfDay = "${response.timeStart} - ${response.timeEnd}",
+                                    name = response.activity,
+                                    desc = response.activityDesc
+                                ) to index
                             }
-                            AddActivitiesForDay(ActivityDate("I dag", activities))
+                            AddActivitiesForDay(
+                                activityDate = ActivityDate("I dag", activities.map { it.first }),
+                                onRefresh = { index -> viewModel.refreshSingelActivity(index) }
+                            )
                         } else {
                             Text (
                                 text = "Finner ingen aktiviteter",

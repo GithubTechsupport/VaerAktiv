@@ -196,6 +196,37 @@ class HomeScreenViewModel @Inject constructor(
             }
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun refreshSingelActivity(index: Int) {
+        viewModelScope.launch {
+            try {
+                val today = LocalDate.now()
+                val location = currentLocation.value ?: throw Exception("No location")
+                val newActivity = weatherRepository.getNewActivityForDate(location, today)
+
+                _homeScreenUiState.update { currentState ->
+                    val currentActivities = currentState.todaysActivites?.activities?.toMutableList() ?: mutableListOf()
+                    if (index in currentActivities.indices) {
+                        currentActivities[index] = newActivity
+                    }
+                    currentState.copy(
+                        todaysActivites = JsonResponse(activities = currentActivities),
+                        isErrorTodaysActivites = false,
+                        errorMessageTodaysActivites = "",
+                    )
+                }
+            } catch (e: Exception) {
+                _homeScreenUiState.update {
+                    it.copy(
+                        isErrorTodaysActivites = true,
+                        errorMessageTodaysActivites = e.toString() ?: "Unknown error"
+                    )
+                }
+                Log.e("Melding fra HomeScreenViewModel", "Error fetching todays activites: ", e)
+            }
+        }
+    }
 }
 
 data class HomeScreenUiState(

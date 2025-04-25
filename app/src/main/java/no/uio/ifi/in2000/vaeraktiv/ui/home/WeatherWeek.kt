@@ -157,7 +157,7 @@ private fun getDayOfWeek(date: String): String {
             java.time.DayOfWeek.TUESDAY -> "Tirsdag"
             java.time.DayOfWeek.WEDNESDAY -> "Onsdag"
             java.time.DayOfWeek.THURSDAY -> "Torsdag"
-            java.time.DayOfWeek.FRIDAY -> "Freadg"
+            java.time.DayOfWeek.FRIDAY -> "Fredag"
             java.time.DayOfWeek.SATURDAY -> "Lørdag"
             java.time.DayOfWeek.SUNDAY -> "Søndag"
         }
