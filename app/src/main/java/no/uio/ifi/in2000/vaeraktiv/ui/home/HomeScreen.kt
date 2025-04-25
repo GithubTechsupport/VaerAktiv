@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,12 +17,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainBackground
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryBackground
 
 const val dummyAiResponse = "I dag er en perfekt dag for å sette seg på Los Tacos, ta seg en pils, og nyte sola!"
 
@@ -48,11 +46,8 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(MainBackground, SecondaryBackground)
-                    )
-                ),
+                .background(color = MaterialTheme.colorScheme.background)
+                ,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LazyColumn(
@@ -83,6 +78,15 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                         )
                     } else if (uiState.todaysWeather != null) {
                         DisplayWeather(uiState.todaysWeather)
+                    }
+                }
+                item {
+                    if (uiState.next24HoursError != null) {
+                        ErrorMessage(
+                            message = "Error fetching today's weather: ${uiState.next24HoursError}"
+                        )
+                    } else if (uiState.next24Hours != null) {
+                        DisplayHourlyForecast(uiState.next24Hours)
                     }
                 }
                 item {
@@ -121,6 +125,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
         }
     }
 }
+
 
 @Composable
 fun ErrorMessage(message: String, modifier: Modifier = Modifier.padding(8.dp)) {

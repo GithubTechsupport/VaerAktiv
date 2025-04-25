@@ -32,6 +32,7 @@ fun SuggestionsOverlay(
             ) {
                 Text(
                     text = prediction.getFullText(null).toString(),
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(16.dp)
                 )
             }

@@ -5,15 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainBackground
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryBackground
 
 /*
 * This function is a loadingscreen. This function is called in Navbar.kt. When this function is called a loading screen will be displayed with a sun and a sky image.
@@ -25,9 +23,7 @@ fun LoadingScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(
-                Brush.verticalGradient(
-                    colors = listOf(MainBackground, SecondaryBackground)
-                )
+                color = MaterialTheme.colorScheme.primaryContainer
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center

@@ -23,11 +23,13 @@ fun ActivityCardDefault(
             text = activity.timeOfDay,
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier
-                .padding(10.dp)
-        )
+                .padding(10.dp),
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
         Text(
             text = activity.name,
             style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier
                 .padding(10.dp)
         )

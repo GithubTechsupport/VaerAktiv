@@ -23,12 +23,14 @@ fun ActivityCardExpanded(
         ) {
             Text(
                 text = activity.timeOfDay,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier
                     .padding(10.dp)
             )
             Text(
                 text = activity.name,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier
                     .padding(10.dp)
@@ -36,6 +38,7 @@ fun ActivityCardExpanded(
         }
         Text(
             text = activity.desc,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier
                 .padding(10.dp)
