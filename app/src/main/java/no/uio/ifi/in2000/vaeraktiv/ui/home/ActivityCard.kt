@@ -78,6 +78,12 @@ fun ActivityCard(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+                if (isToday && onRefresh != null) {
+                    RefreshButton(
+                        onClick = onRefresh,
+                        isLoading = false
+                    )
+                }
             }
             // Beskrivelse under
             Text(
@@ -87,12 +93,6 @@ fun ActivityCard(
                 modifier = Modifier.padding(top = 8.dp),
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
-            )
-        }
-        if (isToday && onRefresh != null) {
-            RefreshButton(
-                onClick = onRefresh,
-                isLoading = false
             )
         }
     }

@@ -23,13 +23,6 @@ fun AddActivitiesForDay(
             .padding(vertical = 8.dp),
         horizontalAlignment = Alignment.Start
     ){
-        if (activityDate.date == "I dag") {
-            Text(
-                text = activityDate.date,
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
         activityDate.activeties.forEachIndexed { index, activity ->
             ActivityCard(
                 activity = activity,

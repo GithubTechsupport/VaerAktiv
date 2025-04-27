@@ -38,7 +38,7 @@ fun RefreshButton(onClick: () -> Unit, isLoading: Boolean) {
         painter = painterResource(id = R.drawable.refresh),
         contentDescription = "Refresh button",
         modifier = Modifier
-            .size(40.dp)
+            .size(30.dp)
             .rotate(rotation.value)
             .clickable(enabled = !isLoading) { onClick() }
             .padding(4.dp)

@@ -107,23 +107,15 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                 item {
                     Column (
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
+                            .fillMaxWidth(),
+                            //.padding(horizontal = 4.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ){
-                        Row (
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 8.dp),
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Dagens aktiviteter",
-                                style = MaterialTheme.typography.headlineSmall,
-                                modifier = Modifier.padding(start = 8.dp)
-                            )
-                        }
+                        Text(
+                            text = "Dagens anbefalte aktiviteter",
+                            style = MaterialTheme.typography.headlineSmall,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
                         if (uiState.isErrorTodaysActivites) {
                             ErrorMessage(
                                 message = "Error fetching today's activities: ${uiState.errorMessageTodaysActivites}"
@@ -150,24 +142,6 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                     }
                 }
 
-                items(6) { index ->
-                    val date = LocalDate.now().plusDays(index + 1L)
-                    val dateString = "${date.dayOfMonth}. ${Month.of(date.monthValue).name.lowercase()}"
-                    val dayName = date.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }
-                    val activities = uiState.futureActivities[date]
-                    val isLoading = uiState.loadingFutureActivities.contains(date)
-                    ActivityDayRow (
-                        date = date,
-                        dateString = dateString,
-                        dayName = dayName,
-                        activities = activities,
-                        isLoading = isLoading,
-                        isError = uiState.isErrorFutureActivities,
-                        errorMessage = uiState.errorMessageFutureActivities,
-                        onClick = { viewModel.getActivitesForDate(date) }
-                    )
-                }
-
                 // Weekly Weather Forecast Section
                 item {
                     if (uiState.thisWeeksWeatherError != null) {
@@ -175,7 +149,11 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                             message = "Error fetching weekly forecast: ${uiState.thisWeeksWeatherError}"
                         )
                     } else {
-                        WeatherWeek(uiState.thisWeeksWeather)
+                        WeatherWeek(
+                            data = uiState.thisWeeksWeather,
+                            viewModel = viewModel,
+                            uiState = uiState
+                        )
                     }
                 }
 
