@@ -8,6 +8,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +20,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -125,7 +130,7 @@ fun WeatherWeek(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 4.dp)
+                    .padding(top = 2.dp)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -137,34 +142,58 @@ fun WeatherWeek(
                             }
                             expanded = !expanded
                         }
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(
                         text = getDayOfWeek(day.date),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onBackground,
                         textAlign = TextAlign.Start,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 20.dp)
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+                    //Spacer(modifier = Modifier.weight(0.7f))
                     Text(
                         text = "${day.maxTemp}°",
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onBackground,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.wrapContentWidth()
-                    )
-                    Spacer(modifier = Modifier.weight(1.5f))
-                    Image(
-                        painter = painterResource(
-                            id = context.resources.getIdentifier(day.icon, "drawable", context.packageName)
-                                .takeIf { it != 0 } ?: R.drawable.icon_warning_generic_red
-                        ),
-                        contentDescription = "Vær for ${getDayOfWeek(day.date)}",
                         modifier = Modifier
-                            .size(40.dp)
-                            //.weight(1f, fill = false)
-                            .wrapContentWidth(align = Alignment.End)
+                            .weight(1f)
+                            .padding(end = 65.dp)
                     )
+                    //Spacer(modifier = Modifier.weight(0.7f))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.weight(0.5f)
+                    ) {
+                        Image(
+                            painter = painterResource(
+                                id = context.resources.getIdentifier(
+                                    day.icon,
+                                    "drawable",
+                                    context.packageName
+                                )
+                                    .takeIf { it != 0 } ?: R.drawable.icon_warning_generic_red
+                            ),
+                            contentDescription = "Vær for ${getDayOfWeek(day.date)}",
+                            modifier = Modifier
+                                .size(36.dp)
+                                .weight(1f, fill = false)
+                                .wrapContentWidth(align = Alignment.End)
+                        )
+                        //Spacer(modifier = Modifier.weight(0.7f))
+                        Icon(
+                            imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                            contentDescription = if (expanded) "Kollaps" else "Ekspander",
+                            modifier = Modifier
+                                .size(15.dp)
+                                .weight(0.5f),
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
                 }
                 AnimatedVisibility(visible = expanded) {
                     Column(
