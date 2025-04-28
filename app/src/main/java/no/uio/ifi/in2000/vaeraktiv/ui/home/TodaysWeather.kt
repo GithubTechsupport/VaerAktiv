@@ -23,14 +23,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import no.uio.ifi.in2000.vaeraktiv.fonts.tungstenfontfamily
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 
 @SuppressLint("DiscouragedApi")
 @Composable
-fun TodaysWeather(data: ForecastToday?) { // kan slettes kanskje
+fun TodaysWeather(data: ForecastToday?) {
     val context = LocalContext.current
     val iconResId = context.resources.getIdentifier(data?.icon, "drawable", context.packageName)
     val cornerDp = 10.dp

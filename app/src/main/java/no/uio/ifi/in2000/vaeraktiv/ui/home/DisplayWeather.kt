@@ -25,17 +25,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import no.uio.ifi.in2000.vaeraktiv.fonts.tungstenfontfamily
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 
 @SuppressLint("DiscouragedApi")
 @Composable
 fun DisplayWeather(data: ForecastToday?) {
     val context = LocalContext.current
     val iconResId = context.resources.getIdentifier(data?.iconNow, "drawable", context.packageName)
-    //val cornerDp = 10.dp
+    val cornerDp = 10.dp
 
     Spacer(modifier = Modifier.height(12.dp))
     Column(
@@ -76,17 +73,15 @@ fun DisplayWeather(data: ForecastToday?) {
             }
         }
 
-        //Spacer(modifier = Modifier.height(0.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         // Second row: UV, precipitation, and wind speed details in a background box
         Box(
             modifier = Modifier
-                //.background(
-                //    Brush.verticalGradient(
-                //        colors = listOf(MainCard, SecondaryCard)
-                //    ),
-                //    shape = RoundedCornerShape(cornerDp)
-                //)
+                .background(
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = RoundedCornerShape(cornerDp)
+                )
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp) // Use the same overall padding as above
         ) {
@@ -104,7 +99,7 @@ fun DisplayWeather(data: ForecastToday?) {
                     Text(
                         text = "${data?.uv} UV",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         textAlign = TextAlign.Center,
                         //fontFamily = tungstenfontfamily,
                         fontSize = 20.sp,
@@ -121,7 +116,7 @@ fun DisplayWeather(data: ForecastToday?) {
                     Text(
                         text = "${data?.precipitationAmount} mm",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         textAlign = TextAlign.Center,
                         //fontFamily = tungstenfontfamily,
                         fontSize = 20.sp,
@@ -138,7 +133,7 @@ fun DisplayWeather(data: ForecastToday?) {
                     Text(
                         text = "${data?.windSpeed} m/s",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         textAlign = TextAlign.Center,
                         //fontFamily = tungstenfontfamily,
                         fontSize = 20.sp,

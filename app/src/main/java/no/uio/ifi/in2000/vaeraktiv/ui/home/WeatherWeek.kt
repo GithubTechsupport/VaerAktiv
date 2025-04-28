@@ -62,9 +62,7 @@ fun WeatherWeek(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .background(
-              Brush.verticalGradient(
-                colors = listOf(MainCard, SecondaryCard)
-                ),
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = RoundedCornerShape(cornerDp)
             )
             .fillMaxWidth()
@@ -73,7 +71,7 @@ fun WeatherWeek(
         Text(
             text = "7-dagersvarsel",
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 4.dp)
         )
@@ -82,170 +80,89 @@ fun WeatherWeek(
                 .width(150.dp)
                 .padding(top = 4.dp)
                 .height(1.dp)
-                .background(color = MaterialTheme.colorScheme.onBackground)
+                .background(color = MaterialTheme.colorScheme.primary)
         )
-        // Titles
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(8.dp)
-//        ) {
-//            Text(
-//                text = "Dato",
-//                style = MaterialTheme.typography.bodySmall,
-//                color = MaterialTheme.colorScheme.onBackground,
-//                textAlign = TextAlign.Start,
-//                modifier = Modifier.weight(1f)
-//            )
-//            Text(
-//                text = "Maks Temp",
-//                style = MaterialTheme.typography.bodySmall,
-//                color = MaterialTheme.colorScheme.onBackground,
-//                textAlign = TextAlign.Center,
-//                modifier = Modifier.weight(1f)
-//            )
-//            Text(
-//                text = "Dagens Vær",
-//                style = MaterialTheme.typography.bodySmall,
-//                color = MaterialTheme.colorScheme.onBackground,
-//                textAlign = TextAlign.End,
-//                modifier = Modifier.weight(1f)
-//            )
-//        }
-//        Box(
-//            modifier = Modifier
-//                .width(200.dp)
-//                .padding(top = 4.dp)
-//                .height(1.dp)
-//                .background(color = MaterialTheme.colorScheme.inverseOnSurface)
-//        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Text(
+                text = "Dato",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                textAlign = TextAlign.Start,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "Maks Temp",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "Dagens Vær",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                textAlign = TextAlign.End,
+                modifier = Modifier.weight(1f)
+            )
+        }
+        Box(
+            modifier = Modifier
+                .width(200.dp)
+                .padding(top = 4.dp)
+                .height(1.dp)
+                .background(color = MaterialTheme.colorScheme.primary)
+        )
         data.take(7).forEach { day ->
-            val date = LocalDate.parse(day.date)
-            val activities = uiState.futureActivities[date]
-            val isLoading = uiState.loadingFutureActivities.contains(date)
-            var expanded by remember { mutableStateOf(false) }
-            //val iconResId = context.resources.getIdentifier(day.icon, "drawable", context.packageName)
-            Column(
+            //var isExpanded by remember { mutableStateOf(false) }
+            val iconResId = context.resources.getIdentifier(day.icon, "drawable", context.packageName)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 4.dp)
+                    .padding(8.dp)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                Text(
+                    text = getDayOfWeek(day.date),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    textAlign = TextAlign.Start,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            Log.d("WeatherWeek", "Clicked on ${day.date}, expanded: $expanded")
-                            if (activities == null && !isLoading) {
-                                Log.d("WeatherWeek", "Fetching activites for ${day.date}")
-                                viewModel.getActivitiesForDate(date)
-                            }
-                            expanded = !expanded
-                        }
-                        .padding(horizontal = 8.dp, vertical = 2.dp)
-                ) {
-                    Text(
-                        text = getDayOfWeek(day.date),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 20.dp)
-                    )
-                    //Spacer(modifier = Modifier.weight(0.7f))
-                    Text(
-                        text = "${day.maxTemp}°",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 65.dp)
-                    )
-                    //Spacer(modifier = Modifier.weight(0.7f))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.weight(0.5f)
-                    ) {
-                        Image(
-                            painter = painterResource(
-                                id = context.resources.getIdentifier(
-                                    day.icon,
-                                    "drawable",
-                                    context.packageName
-                                )
-                                    .takeIf { it != 0 } ?: R.drawable.icon_warning_generic_red
-                            ),
-                            contentDescription = "Vær for ${getDayOfWeek(day.date)}",
-                            modifier = Modifier
-                                .size(36.dp)
-                                .weight(1f, fill = false)
-                                .wrapContentWidth(align = Alignment.End)
-                        )
-                        //Spacer(modifier = Modifier.weight(0.7f))
-                        Icon(
-                            imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                            contentDescription = if (expanded) "Kollaps" else "Ekspander",
-                            modifier = Modifier
-                                .size(15.dp)
-                                .weight(0.5f),
-                            tint = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
-                }
-                AnimatedVisibility(visible = expanded) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 4.dp, bottom = 12.dp)
-                    ) {
-                        if (isLoading) {
-                            CircularProgressIndicator(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .align(Alignment.CenterHorizontally)
-                            )
-                        } else if (uiState.isErrorFutureActivities) {
-                            ErrorMessage(message = "Feil ved henting av aktiviteter: ${uiState.errorMessageFutureActivities}")
-                        } else if (activities != null && activities.activities.isNotEmpty() ){
-                            val activityList = activities.activities.map {
-                                Activity (
-                                    timeOfDay = "${it.timeStart} - ${it.timeEnd}",
-                                    name = it.activity,
-                                    desc = it.activityDesc
-                                )
-                            }
-                            AddActivitiesForDay(
-                                ActivityDate(
-                                    date = getDayOfWeek(day.date),
-                                    activeties = activityList
-                                )
-                            )
-                        } else {
-                            Text(
-                                text = "Ingen aktiviteter tilgjengelig for ${getDayOfWeek(day.date)}",
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                modifier = Modifier.padding(8.dp)
-                            )
-                        }
-                    }
-                }
+                        .weight(1f) // Tar tilgjengelig plass til venstre
+                )
+                Spacer(modifier = Modifier.weight(0.5f))
+
+                Text(
+                    text = "${day.maxTemp}°",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .wrapContentWidth() // Tar kun nødvendig bredde for å være sentrert
+                )
+                Spacer(modifier = Modifier.weight(1.1f)) // Fyller tomrommet til høyre
+                Image(
+                    painter = painterResource(id = if (iconResId != 0) iconResId else R.drawable.sun),
+                    contentDescription = "Dagens vær",
+                    modifier = Modifier
+                        .size(40.dp)
+                        .wrapContentWidth(align = Alignment.End) // Plasserer bildet helt til høyre
+                )
             }
             Box(
                 modifier = Modifier
                     .width(200.dp)
                     .padding(top = 4.dp)
                     .height(1.dp)
-                    .background(color = MaterialTheme.colorScheme.inverseOnSurface)
+                    .background(color = MaterialTheme.colorScheme.primary)
             )
         }
     }
 }
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 private fun getDayOfWeek(date: String): String {

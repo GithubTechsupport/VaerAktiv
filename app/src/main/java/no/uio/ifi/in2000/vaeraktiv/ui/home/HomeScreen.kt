@@ -51,11 +51,8 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(MainBackground, SecondaryBackground)
-                    )
-                ),
+                .background(color = MaterialTheme.colorScheme.background)
+                ,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LazyColumn(
@@ -86,6 +83,15 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                         )
                     } else if (uiState.weatherToday != null) {
                         DisplayWeather(uiState.weatherToday)
+                    }
+                }
+                item {
+                    if (uiState.next24HoursError != null) {
+                        ErrorMessage(
+                            message = "Error fetching today's weather: ${uiState.next24HoursError}"
+                        )
+                    } else if (uiState.next24Hours != null) {
+                        DisplayHourlyForecast(uiState.next24Hours)
                     }
                 }
                 item {
@@ -163,6 +169,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
         }
     }
 }
+
 
 @Composable
 fun ErrorMessage(message: String, modifier: Modifier = Modifier.padding(8.dp)) {

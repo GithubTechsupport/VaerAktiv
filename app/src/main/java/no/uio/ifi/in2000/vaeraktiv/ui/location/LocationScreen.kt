@@ -15,10 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainBackground
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryBackground
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
@@ -30,11 +27,8 @@ fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(MainBackground, SecondaryBackground)
-                    )
-                ),
+                .background(color = MaterialTheme.colorScheme.background)
+                .padding(horizontal = 0.dp, vertical = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {

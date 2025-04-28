@@ -22,6 +22,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import java.time.LocalDate
 import javax.inject.Inject
@@ -74,6 +75,9 @@ class HomeScreenViewModel @Inject constructor(
             var sunRiseSet: List<String> = emptyList()
             var sunRiseSetError: String? = null
 
+            var next24Hours: List<ForecastForHour> = emptyList()
+            var next24HoursError: String? = null
+
             try {
                 todaysWeather = weatherRepository.getForecastToday(location)
                 todaysWeatherError = null
@@ -110,6 +114,13 @@ class HomeScreenViewModel @Inject constructor(
 
             }
 
+            try {
+                next24Hours = weatherRepository.getForecastForHour(location)
+                next24HoursError = null
+            } catch (e: Exception) {
+                next24HoursError = e.toString()
+            }
+
 
             // Update the UI state after collecting all data/errors.
             _homeScreenUiState.update { currentState ->
@@ -119,10 +130,13 @@ class HomeScreenViewModel @Inject constructor(
                     locationName = location.addressName,
                     alerts = alerts,
                     sunRiseSet = sunRiseSet,
+                    next24Hours = next24Hours,
+                    todaysWeatherError = todaysWeatherError,
                     weatherTodayError = todaysWeatherError,
                     thisWeeksWeatherError = thisWeeksWeatherError,
                     alertsError = alertsError,
-                    sunRiseSetError = sunRiseSetError
+                    sunRiseSetError = sunRiseSetError,
+                    next24HoursError = next24HoursError
                 )
             }
 
@@ -301,6 +315,10 @@ data class HomeScreenUiState(
     val weatherToday: ForecastToday? = null,
     val thisWeeksWeather: List<ForecastForDay> = emptyList(),
     val sunRiseSet: List<String> = emptyList(),
+    val next24Hours: List<ForecastForHour> = emptyList(),
+
+    // errors
+    val todaysWeatherError: String? = null,
     val isRefreshingActivity: Set<Int> = emptySet(),
     // todays activities
     val activitiesToday: JsonResponse? = null, // fra ActivityScreenViewModel
@@ -316,5 +334,7 @@ data class HomeScreenUiState(
     val weatherTodayError: String? = null,
     val thisWeeksWeatherError: String? = null,
     val alertsError: String? = null,
+    val sunRiseSetError: String? = null,
+    val next24HoursError: String? = null
     val sunRiseSetError: String? = null,
 )

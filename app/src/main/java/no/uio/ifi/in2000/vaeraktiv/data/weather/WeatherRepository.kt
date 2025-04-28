@@ -22,8 +22,10 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.Interval
 import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import java.time.LocalDate
 
 interface WeatherRepository {
@@ -47,8 +49,13 @@ interface WeatherRepository {
     // Retrieves today's forecast for the provided location.
     suspend fun getForecastToday(location: Location): ForecastToday
 
+    suspend fun getTimeSeriesForDay(dayNr: Int, location: Location): List<TimeSeries>
+
     // Retrieves a forecast segmented by day.
     suspend fun getForecastByDay(location: Location): List<ForecastForDay>
+
+    // Retrieves a forecast segmented by hour.
+    suspend fun getForecastForHour(location: Location): List<ForecastForHour>
 
     // Retrieves the full weather forecast for the provided location.
     suspend fun getWeatherForecast(location: Location): LocationForecastResponse?

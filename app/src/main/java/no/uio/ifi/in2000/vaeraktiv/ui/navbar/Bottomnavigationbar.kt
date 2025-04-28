@@ -19,8 +19,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.CardNavBackground
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainNavBackground
 
 /*
 * This is a navigation bar for the application, this function is called in the MainActivity.kt.
@@ -31,15 +29,15 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainNavBackground
 @Composable
 fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> String, setSelectedRoute: (String) -> Unit) {
     val navItems = listOf(
-        "activity" to R.drawable.walk,
+        "settings" to R.drawable.walk,
         "home" to R.drawable.sun,
         "location" to R.drawable.location
     )
 
     BottomAppBar(
         modifier = Modifier.height(80.dp),
-        containerColor = MainNavBackground,
-        contentColor = CardNavBackground
+        containerColor = MaterialTheme.colorScheme.surfaceTint,
+        contentColor = Color.Black
     ) {
         navItems.forEach { (route, iconId) ->
             val selected = getSelectedRoute() == route
@@ -49,7 +47,7 @@ fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> St
                     .fillMaxHeight()
                     .padding(4.dp)
                     .background(
-                        color = if (selected) CardNavBackground else Color.Transparent,
+                        color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.surfaceTint,
                         shape = RoundedCornerShape(12.dp)
                     )
                     .clickable {
@@ -66,7 +64,7 @@ fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> St
                     Icon(
                         painter = painterResource(id = iconId),
                         contentDescription = route,
-                        tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        tint = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface
                     )
                 }
             }

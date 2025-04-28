@@ -32,98 +32,130 @@ import kotlin.time.Duration.Companion.seconds
 
 
 abstract class AiClient {
-    val systemPrompt = "The user will provide a weather forecast.\nYour job is to pick 3 different time intervals for each day to suggest activities for based on the weather at that time, the location and other requirements defined in the user prompt."
-    val examplesPrompt =
-        """
-        All output should be written in Norwegian, except for the keys in the JSON output, which should be in English, as described in the examples below.
-        Based on the weather forecast and the users location, pick 3 different time intervals for every single day to suggest activities for the next 7 days.
-        In total there should be at most 21 different activities, spanning across the next 7 days and 3 time intervals per day.
-        
-        Activities should be realistic and available to do around the user's location.
-        Activities has to match the weather forecast, during rainfall (when precipitation is moderate, even low) and/or low temperatures (9 degrees Celsius or lower), more inside activities should be suggested, but not always, for example you can fish in the rain.
-        
-        Within the "activity" field should briefly explain the activity
-        Within the "activityDesc" field should be a more filling description of the activity and an explanation as to where you can do the activity.
-        
-        Not all activities have to be physical, but preferably physical.
-        Activities suggested could be inside or outside activities.
-        
-        NOTE THAT EXAMPLE INPUTS AND OUTPUTS ARE SHORTENED VERSIONS OF THE ACTUAL INPUTS AND OUTPUT YOU WILL PRODUCE.
-        
-        BEGINNING OF EXAMPLES
-        
-        EXAMPLE INPUT:
-        
-        WEATHERFORECAST START
-        
-        datetime: 2025-06-24T12:00:00Z
-        temperature: 13.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-24T13:00:00Z
-        temperature: 17.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-24T14:00:00Z
-        temperature: 22.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-24T15:00:00Z
-        temperature: 20.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-24T16:00:00Z
-        temperature: 19.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-25T12:00:00Z
-        temperature: 9.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-25T13:00:00Z
-        temperature: 10.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-25T14:00:00Z
-        temperature: 12.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-25T15:00:00Z
-        temperature: 10.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-25T16:00:00Z
-        temperature: 10.0
-        precipitation: 0.0
-        
-        WEATHERFORECAST END
-        
-        USER'S LOCATION: Storgata
-        
-        EXAMPLE JSON OUTPUT:
-        {
-            "activities": [
-                {
-                    "month":"6",
-                    "dayOfMonth":"24",
-                    "timeStart":"14:00",
-                    "timeEnd":"16:00",
-                    "activity":"Svømming ved Badedammen Grorud"
-                    "activityDesc":"Denne dagen er det varmt og mye sol. God dag for svømming ved badedammen ved Grorud."
-                }
-                {
-                    "month":"6",
-                    "dayOfMonth":"25",
-                    "timeStart":"11:00",
-                    "timeEnd":"13:00",
-                    "activity":"Bowling på Veitvet senter"
-                    "activityDesc":"Denne dagen er det kjørligere, og da kan du nyte en innendørs aktivitet på Veitvet senter."
-                }
-            ]
-        }
-        
-        END OF EXAMPLES
-        """.trimIndent()
+    val systemPrompt = """The user will provide a weather forecast. Your task is to select 3 different time intervals per day and suggest one physical activity for each interval, based on the weather conditions, the user's location, and any other requirements defined in the user prompt."""
+
+    val examplesPrompt = """
+            All output should be written in Norwegian, except for the keys in the JSON output, which should be in English, as described in the examples below.
+            
+            Based on the weather forecast and the user's location, choose 3 different time intervals for each day and suggest one physical activity for each interval for the next 7 days.
+            In total, there should be a maximum of 21 different activities, spread across 7 days and 3 time intervals per day.
+            
+            All activities must be physical and involve movement, either indoors or outdoors. Examples of physical activities include: hiking, cycling, swimming, climbing, bowling, squash, dancing, yoga, trampoline park, gym workout, ice skating, skiing, frisbee golf, obstacle course, etc.
+            Suggestions such as "going to a café," "cinema," "museum," or similar should NOT be suggested, as these are not physical activities.
+            
+            Activities must be realistic and available near the user's location. They should be adapted to the weather conditions: On days with rain or low temperatures (9°C or lower), more indoor activities should be suggested, but outdoor activities can also be included if suitable (e.g., fishing in the rain, ice skating, etc.).
+            
+            The "activity" field should contain a brief description of the activity (e.g., "Hiking along Akerselva").
+            The "activityDesc" field should provide a more detailed description and explain where and how the activity can be carried out.
+            
+            The example input and output below are shortened versions of what you will actually produce.
+            
+            BEGINNING OF EXAMPLES
+            
+            EXAMPLE INPUT:
+            
+            WEATHERFORECAST START
+            
+            datetime: 2025-06-24T12:00:00Z
+            temperature: 13.0
+            precipitation: 0.0
+            
+            datetime: 2025-06-24T13:00:00Z
+            temperature: 17.0
+            precipitation: 0.0
+            
+            datetime: 2025-06-24T14:00:00Z
+            temperature: 22.0
+            precipitation: 0.0
+            
+            datetime: 2025-06-24T15:00:00Z
+            temperature: 20.0
+            precipitation: 0.0
+            
+            datetime: 2025-06-24T16:00:00Z
+            temperature: 19.0
+            precipitation: 0.0
+            
+            datetime: 2025-06-25T12:00:00Z
+            temperature: 9.0
+            precipitation: 0.0
+            
+            datetime: 2025-06-25T13:00:00Z
+            temperature: 10.0
+            precipitation: 0.0
+            
+            datetime: 2025-06-25T14:00:00Z
+            temperature: 12.0
+            precipitation: 0.0
+            
+            datetime: 2025-06-25T15:00:00Z
+            temperature: 10.0
+            precipitation: 0.0
+            
+            datetime: 2025-06-25T16:00:00Z
+            temperature: 10.0
+            precipitation: 0.0
+            
+            WEATHERFORECAST END
+            
+            USER'S LOCATION: Storgata
+            
+            EXAMPLE JSON OUTPUT:
+            {
+                "activities": [
+                    {
+                        "month": "6",
+                        "dayOfMonth": "24",
+                        "timeStart": "12:00",
+                        "timeEnd": "14:00",
+                        "activity": "Hiking along Akerselva",
+                        "activityDesc": "The weather is dry and the temperature is comfortable. Start at Storgata and walk along the Akerselva river towards Grünerløkka. This route offers fresh air and a scenic walk."
+                    },
+                    {
+                        "month": "6",
+                        "dayOfMonth": "24",
+                        "timeStart": "14:00",
+                        "timeEnd": "16:00",
+                        "activity": "Cycling to Sognsvann",
+                        "activityDesc": "It’s warm and sunny. Rent a city bike and cycle from downtown to Sognsvann for an active and nature-filled experience."
+                    },
+                    {
+                        "month": "6",
+                        "dayOfMonth": "24",
+                        "timeStart": "16:00",
+                        "timeEnd": "18:00",
+                        "activity": "Frisbee golf in Torshovparken",
+                        "activityDesc": "The temperature is still high. Play frisbee golf in Torshovparken – a fun and social activity suitable for all ages."
+                    },
+                    {
+                        "month": "6",
+                        "dayOfMonth": "25",
+                        "timeStart": "12:00",
+                        "timeEnd": "14:00",
+                        "activity": "Indoor climbing at Oslo Klatresenter",
+                        "activityDesc": "It’s chilly outside, so try indoor bouldering or rope climbing at Oslo Klatresenter in Torshov. Suitable for both beginners and experienced climbers."
+                    },
+                    {
+                        "month": "6",
+                        "dayOfMonth": "25",
+                        "timeStart": "14:00",
+                        "timeEnd": "16:00",
+                        "activity": "Squash at Bislett Squash",
+                        "activityDesc": "With low temperatures, indoor squash is a great way to get active. Bislett Squash offers court rentals and equipment."
+                    },
+                    {
+                        "month": "6",
+                        "dayOfMonth": "25",
+                        "timeStart": "16:00",
+                        "timeEnd": "18:00",
+                        "activity": "Gym workout at SATS Storo",
+                        "activityDesc": "End the day with a workout at the gym. SATS Storo offers both strength and cardio training indoors."
+                    }
+                ]
+            }
+            
+            END OF EXAMPLES
+            """.trimIndent()
     abstract suspend fun getResponse(prompt: Prompt): JsonResponse?
 }
 

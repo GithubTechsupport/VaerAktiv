@@ -7,8 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
-import com.google.android.libraries.places.api.net.PlacesClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,7 +57,9 @@ class FavoriteLocationViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val locations = favoriteLocationRepo.getAllLocations()
+                Log.d("New Location", locations.toString())
                 val favoriteData = weatherRepo.getFavoriteLocationsData(locations)
+                Log.d("New Location", favoriteData.toString())
                 withContext(Dispatchers.Main) {
                     _data.value = favoriteData
                 }

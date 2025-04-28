@@ -1,15 +1,17 @@
 package no.uio.ifi.in2000.vaeraktiv.network.connection
 
-
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 /* This is a composable function that is used to observe the network status of the device.
@@ -18,37 +20,63 @@ import androidx.compose.ui.platform.LocalContext
 
  This will always observe the network status of the device.
  */
+
 @Composable
 fun NetworkObserver(onNetworkStatusChanged: (Boolean) -> Unit) {
     val context = LocalContext.current
-    var networkCallback by remember { mutableStateOf<ConnectivityManager.NetworkCallback?>(null) } // networkCallback is a variable that is used to get the network status.
-    var isOnline by remember { mutableStateOf(NetworkConnection.isOnline(context)) }
+    var networkCallback by remember { mutableStateOf<ConnectivityManager.NetworkCallback?>(null) }
+    var isOnline by remember { mutableStateOf<Boolean?>(null) }
+    val coroutineScope = rememberCoroutineScope()
+    var isDebouncing by remember { mutableStateOf(false) }
+    var isLostDebouncing by remember { mutableStateOf(false) }
+
+    println("NetworkObserver: Composed")
 
     LaunchedEffect(Unit) {
-        onNetworkStatusChanged(isOnline) // Send initial status
+        Log.d("NetworkObserver", "LaunchedEffect: Initial network state is ${NetworkConnection.isOnline(context)}")
     }
 
-    DisposableEffect(Unit) { // DisposableEffect is used to dispose of the network callback when the composable is disposed. Witch means when the composable is removed from the composition.
+    DisposableEffect(Unit) {
         val networkCallbackInner = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) { // onAvailable is a function that is called when the network is available.
-                isOnline = true
-                onNetworkStatusChanged(true)
+            override fun onAvailable(network: Network) {
+                coroutineScope.launch {
+                    isDebouncing = true
+                    Log.d("NetworkObserver", "Network Available (debouncing)")
+                    delay(500) // debounce time of 500 ms.
+                    if (isDebouncing) {
+                        Log.d("NetworkObserver", "Network Available (sending update)")
+                        isOnline = true
+                        onNetworkStatusChanged(true)
+                    }
+                    isLostDebouncing = false
+                }
             }
-            override fun onLost(network: Network) { // onLost is a function that is called when the network is lost.
-                isOnline = false
-                onNetworkStatusChanged(false)
-            }
-        } // networkCallbackInner is a variable that is used to get the network status.
 
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            override fun onLost(network: Network) {
+                coroutineScope.launch {
+                    isDebouncing = false
+                    isLostDebouncing = true
+                    Log.d("NetworkObserver", "Network Lost (debouncing)")
+                    delay(5000) // delay time of 5 seconds.
+                    if (isLostDebouncing) {
+                        Log.d("NetworkObserver", "Network Lost (sending update)")
+                        isOnline = false
+                        onNetworkStatusChanged(false)
+                    }
+                }
+            }
+        }
+
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkRequest = NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .build()
 
         connectivityManager.registerNetworkCallback(networkRequest, networkCallbackInner)
-        networkCallback = networkCallbackInner // Store the callback
+        networkCallback = networkCallbackInner
 
-        onDispose { // onDispose is a function that is called when the composable is disposed.
+        onDispose {
             connectivityManager.unregisterNetworkCallback(networkCallbackInner)
         }
     }

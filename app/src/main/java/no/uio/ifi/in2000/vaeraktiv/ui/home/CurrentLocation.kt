@@ -48,7 +48,7 @@ fun CurrentLocation(locationName : String) {
             Text(
                 text = locationName,
                 style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center,
                 fontSize = 35.sp
             )
@@ -72,9 +72,7 @@ fun CurrentLocation(locationName : String) {
             .padding(horizontal = 50.dp)
             .height(1.dp)
             .background(
-                Brush.verticalGradient(
-                    colors = listOf(MainCard, SecondaryCard)
-                )
+                color = MaterialTheme.colorScheme.primaryContainer
             )
         )
     }
