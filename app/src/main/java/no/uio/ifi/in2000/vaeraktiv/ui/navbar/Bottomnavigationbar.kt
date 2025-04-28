@@ -29,7 +29,7 @@ import no.uio.ifi.in2000.vaeraktiv.R
 @Composable
 fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> String, setSelectedRoute: (String) -> Unit) {
     val navItems = listOf(
-        "activity" to R.drawable.walk,
+        "settings" to R.drawable.walk,
         "home" to R.drawable.sun,
         "location" to R.drawable.location
     )
