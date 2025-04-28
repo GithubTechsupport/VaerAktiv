@@ -13,7 +13,7 @@ class FavoriteLocationRepository @Inject constructor(
     @SuppressLint("DefaultLocale")
     fun addLocationByName(placeName: String) {
         val response = geocoder.getCoordinatesFromLocation(placeName)
-        val name = response?.first
+        val name = placeName.split(",")[0]
         val addresses = response?.second
         Log.d("FavoriteLocationRepository", "addLocationByName: $name")
         if (addresses != null) {
