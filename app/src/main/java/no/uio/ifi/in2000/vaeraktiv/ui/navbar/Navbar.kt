@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -21,8 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.MainActivity
 import no.uio.ifi.in2000.vaeraktiv.network.connection.NetworkObserver
-import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityScreen
-import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityScreenViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.activity.SettingsScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
@@ -37,7 +36,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.location.LocationScreen
 * */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Navbar (favoriteLocationViewModel: FavoriteLocationViewModel, activityScreenViewModel: ActivityScreenViewModel, homeScreenViewModel: HomeScreenViewModel) {
+fun Navbar (favoriteLocationViewModel: FavoriteLocationViewModel, homeScreenViewModel: HomeScreenViewModel) {
     val navController = rememberNavController()
     var isOnline by remember { mutableStateOf(true) }
     var showNoNetworkDialog by remember { mutableStateOf(false) }
@@ -82,7 +81,7 @@ fun Navbar (favoriteLocationViewModel: FavoriteLocationViewModel, activityScreen
                 // Show NavHost only when not loading.
                 NavHost(navController, startDestination = "home") {
                     composable("home") { HomeScreen(isOnline, homeScreenViewModel) }
-                    composable("activity") { ActivityScreen(isOnline, activityScreenViewModel) }
+                    composable("settings") { SettingsScreen(isOnline) }
                     composable("location") { LocationScreen(isOnline, favoriteLocationViewModel) }
                 }
                 // Show NoNetworkDialog if isOnline is false
