@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,19 +16,23 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 fun AddActivitiesForDay(
     activityDate: ActivityDate,
     modifier: Modifier = Modifier,
-    onRefresh: ((Int) -> Unit)? = null
+    onRefresh: ((Int) -> Unit)? = null,
+    isRefreshing: ((Int) -> Boolean)? = null
     ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .fillMaxWidth(),
+            //.padding(bottom = 8.dp),
         horizontalAlignment = Alignment.Start
     ){
         activityDate.activeties.forEachIndexed { index, activity ->
+            val isCurrentlyRefreshing = isRefreshing?.invoke(index) ?: false
+            Log.d("AddActivitiesForDay", "Index: $index, isRefreshing: $isCurrentlyRefreshing")
             ActivityCard(
                 activity = activity,
                 isToday = activityDate.date == "I dag",
-                onRefresh = if (activityDate.date == "I dag") {{ onRefresh?.invoke(index) }} else null
+                onRefresh = if (activityDate.date == "I dag") {{ onRefresh?.invoke(index) }} else null,
+                isRefreshing = isCurrentlyRefreshing
             )
         }
     }

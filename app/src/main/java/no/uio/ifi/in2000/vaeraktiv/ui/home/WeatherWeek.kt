@@ -45,7 +45,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
-import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -123,26 +122,28 @@ fun WeatherWeek(
 //        )
         data.take(7).forEach { day ->
             val date = LocalDate.parse(day.date)
-            val activites = uiState.futureActivities[date]
+            val activities = uiState.futureActivities[date]
             val isLoading = uiState.loadingFutureActivities.contains(date)
             var expanded by remember { mutableStateOf(false) }
             //val iconResId = context.resources.getIdentifier(day.icon, "drawable", context.packageName)
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 2.dp)
+                    .padding(top = 4.dp)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            if (activites == null && !isLoading) {
-                                viewModel.getActivitesForDate(date)
+                            Log.d("WeatherWeek", "Clicked on ${day.date}, expanded: $expanded")
+                            if (activities == null && !isLoading) {
+                                Log.d("WeatherWeek", "Fetching activites for ${day.date}")
+                                viewModel.getActivitiesForDate(date)
                             }
                             expanded = !expanded
                         }
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .padding(horizontal = 8.dp, vertical = 2.dp)
                 ) {
                     Text(
                         text = getDayOfWeek(day.date),
@@ -199,7 +200,7 @@ fun WeatherWeek(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 8.dp)
+                            .padding(top = 4.dp, bottom = 12.dp)
                     ) {
                         if (isLoading) {
                             CircularProgressIndicator(
@@ -209,8 +210,8 @@ fun WeatherWeek(
                             )
                         } else if (uiState.isErrorFutureActivities) {
                             ErrorMessage(message = "Feil ved henting av aktiviteter: ${uiState.errorMessageFutureActivities}")
-                        } else if (activites != null && activites.activities.isNotEmpty() ){
-                            val activityList = activites.activities.map {
+                        } else if (activities != null && activities.activities.isNotEmpty() ){
+                            val activityList = activities.activities.map {
                                 Activity (
                                     timeOfDay = "${it.timeStart} - ${it.timeEnd}",
                                     name = it.activity,

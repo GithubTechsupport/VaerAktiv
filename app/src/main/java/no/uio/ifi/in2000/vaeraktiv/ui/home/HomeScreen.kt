@@ -3,15 +3,10 @@ package no.uio.ifi.in2000.vaeraktiv.ui.home
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
@@ -25,16 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainBackground
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryBackground
-import java.time.LocalDate
-import java.time.Month
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -89,17 +80,17 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
 
                 // Today's Weather Section
                 item {
-                    if (uiState.todaysWeatherError != null) {
+                    if (uiState.weatherTodayError != null) {
                         ErrorMessage(
-                            message = "Error fetching today's weather: ${uiState.todaysWeatherError}"
+                            message = "Error fetching today's weather: ${uiState.weatherTodayError}"
                         )
-                    } else if (uiState.todaysWeather != null) {
-                        DisplayWeather(uiState.todaysWeather)
+                    } else if (uiState.weatherToday != null) {
+                        DisplayWeather(uiState.weatherToday)
                     }
                 }
                 item {
-                    if (uiState.todaysWeatherError == null && uiState.todaysWeather != null) {
-                        TodaysWeather(uiState.todaysWeather)
+                    if (uiState.weatherTodayError == null && uiState.weatherToday != null) {
+                        TodaysWeather(uiState.weatherToday)
                     }
                 }
 
@@ -116,12 +107,12 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                             style = MaterialTheme.typography.headlineSmall,
                             modifier = Modifier.padding(start = 8.dp)
                         )
-                        if (uiState.isErrorTodaysActivites) {
+                        if (uiState.isErrorActivitiesToday) {
                             ErrorMessage(
-                                message = "Error fetching today's activities: ${uiState.errorMessageTodaysActivites}"
+                                message = "Error fetching today's activities: ${uiState.errorMessageActivitiesToday}"
                             )
-                        } else if (uiState.todaysActivites != null) {
-                            val activities = uiState.todaysActivites!!.activities.mapIndexed { index, response ->
+                        } else if (uiState.activitiesToday != null) {
+                            val activities = uiState.activitiesToday!!.activities.mapIndexed { index, response ->
                                 Activity(
                                     timeOfDay = "${response.timeStart} - ${response.timeEnd}",
                                     name = response.activity,
@@ -130,7 +121,8 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                             }
                             AddActivitiesForDay(
                                 activityDate = ActivityDate("I dag", activities.map { it.first }),
-                                onRefresh = { index -> viewModel.refreshSingelActivity(index) }
+                                onRefresh = { index -> viewModel.refreshSingleActivity(index) },
+                                isRefreshing = { index -> uiState.isRefreshingActivity.contains(index) }
                             )
                         } else {
                             Text (

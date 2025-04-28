@@ -9,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -19,7 +20,11 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 
 @Composable
-fun RefreshButton(onClick: () -> Unit, isLoading: Boolean) {
+fun RefreshButton(
+    onClick: () -> Unit,
+    isLoading: Boolean,
+    enabled: Boolean
+) {
     val rotation = remember { Animatable(0f) }
     LaunchedEffect(isLoading) {
         if (isLoading) {
@@ -36,11 +41,11 @@ fun RefreshButton(onClick: () -> Unit, isLoading: Boolean) {
     }
     Image(
         painter = painterResource(id = R.drawable.refresh),
-        contentDescription = "Refresh button",
+        contentDescription = "Refresh button/Get new activity",
         modifier = Modifier
             .size(30.dp)
-            .rotate(rotation.value)
-            .clickable(enabled = !isLoading) { onClick() }
+            .rotate(if (enabled) rotation.value else 0f)
+            .clickable(enabled = enabled) { onClick() }
             .padding(4.dp)
     )
 }

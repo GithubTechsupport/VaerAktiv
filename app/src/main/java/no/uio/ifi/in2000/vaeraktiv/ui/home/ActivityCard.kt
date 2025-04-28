@@ -42,7 +42,8 @@ import java.time.LocalDate
 fun ActivityCard(
     activity: Activity,
     isToday: Boolean,
-    onRefresh: (() -> Unit)? = null
+    onRefresh: (() -> Unit)? = null,
+    isRefreshing: Boolean = false
 ) {
     Card(
         modifier = Modifier
@@ -78,12 +79,11 @@ fun ActivityCard(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-                if (isToday && onRefresh != null) {
-                    RefreshButton(
-                        onClick = onRefresh,
-                        isLoading = false
-                    )
-                }
+                RefreshButton(
+                    onClick = {onRefresh?.invoke()},
+                    isLoading = isRefreshing,
+                    enabled = onRefresh != null
+                )
             }
             // Beskrivelse under
             Text(
