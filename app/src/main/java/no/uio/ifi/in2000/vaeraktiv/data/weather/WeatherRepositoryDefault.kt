@@ -115,9 +115,12 @@ class WeatherRepositoryDefault @Inject constructor(
                 lon = lon,
             )
             locationsData.add(weatherData)
+            Log.d("WeatherRepo","locationsData: $weatherData")
 
         }
+        Log.d("WeatherRepo","locationsData: $locationsData")
         return locationsData
+
     }
 
     override suspend fun getAlertsForLocation(location: Location): MutableList<AlertData> {
