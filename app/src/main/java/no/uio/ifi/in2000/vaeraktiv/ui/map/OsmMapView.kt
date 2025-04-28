@@ -7,14 +7,14 @@ import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.ui.viewinterop.AndroidView
 import no.uio.ifi.in2000.vaeraktiv.model.ai.RouteSuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.places.NearbyPlaceSuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlaceSuggestion
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
-//import org.osmdroid.bonuspack.utils.PolylineEncoder
+import org.osmdroid.util.BoundingBox
 
 @Composable
 fun OsmMapView(
@@ -43,29 +43,50 @@ fun OsmMapView(
         },
         update = { mapView ->
             mapView.overlays.clear()
+            mapView.controller.setZoom(16.0)
             places.forEach { place ->
                 place.coordinates?.let { (lat, lon) ->
                     Marker(mapView).apply {
                         position = GeoPoint(lat, lon)
-                        title = place.displayName
+                        title = place.placeName
                         mapView.overlays.add(this)
                     }
                 }
             }
+            val allPoints = mutableListOf<GeoPoint>()
             routes.forEach { route ->
                 val points = decodePolyline(route.polyline)
-                //val points: List<GeoPoint> = PolylineEncoder.decode(route.polyline, 5, false)
-                Log.d("OsmMapView", "route=${route.id} points=${points.size}")
+                allPoints += points
+                Log.d("OsmMapView", "Points: $points")
+                points.firstOrNull()?.let { start ->
+                    Marker(mapView).apply {
+                        position = start
+                        title = "Start ${route.id}"
+                        mapView.overlays.add(this)
+                    }
+                }
+                points.lastOrNull()?.let { end ->
+                    Marker(mapView).apply {
+                        position = end
+                        title = "End ${route.id}"
+                        mapView.overlays.add(this)
+                    }
+                }
                 val lineOverlay = Polyline().apply {
-                    title = route.name
+                    title = route.routeName
                     outlinePaint.apply {
                         strokeWidth = 10f
                         color = Color.RED
                     }
                     setPoints(points)
-                }
-                mapView.overlayManager.add(lineOverlay)
+                }.also { mapView.overlays.add(it) }
             }
+
+//            if (allPoints.isNotEmpty()) {
+//                val bbox = BoundingBox.fromGeoPoints(allPoints)
+//                mapView.zoomToBoundingBox(bbox, false, 50)
+//            }
+
             mapView.invalidate()
         }
     )

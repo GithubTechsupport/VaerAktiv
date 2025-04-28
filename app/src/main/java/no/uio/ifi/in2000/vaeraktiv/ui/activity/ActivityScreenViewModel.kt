@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
-import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
+import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,7 +43,7 @@ class ActivityScreenViewModel @Inject constructor(private val weatherRepository:
                 if (currentLocation.value != null) {
                     val placesSuggestions = weatherRepository.getNearbyPlaces(currentLocation.value!!)
                     Log.d("ActivityViewModel", placesSuggestions.toString())
-                    val activities = weatherRepository.getActivities(currentLocation.value!!)
+                    val activities = weatherRepository.getSuggestedActivitiesForOneDay(currentLocation.value!!, 0)
                     _activityScreenUiState.update {
                         it.copy(
                             activities = activities
@@ -87,5 +87,5 @@ data class ActivityScreenUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val errorMessage: String = "",
-    val activities: JsonResponse? = null
+    val activities: SuggestedActivities? = null
 )

@@ -8,7 +8,7 @@ data class RoutesSuggestions(
 ) {
     override fun toString(): String {
         return suggestions.joinToString(separator = "\n"){
-            "${it.name} - ${it.distance} meters | ${it.polyline}"
+            "${it.routeName} - ${it.distance} meters | ${it.polyline}"
         }
     }
 }
@@ -16,7 +16,7 @@ data class RoutesSuggestions(
 @Serializable
 data class RouteSuggestion(
     val id: String,                  // Strava segment ID or generated Overpass UUID
-    val name: String,
+    val routeName: String,
     val distance: Double,            // meters
     val elevationGain: Double?,      // meters (nullable for flat paths)
     val averageGrade: Double?,       // percent (nullable)

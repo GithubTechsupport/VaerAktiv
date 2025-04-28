@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     //plugins for seialization
-    kotlin("plugin.serialization") version "1.9.22"
+    alias(libs.plugins.kotlin.serialization)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 
@@ -137,7 +137,6 @@ dependencies {
 
     // osm
     implementation(libs.osmdroid.android)
-    //implementation(libs.osmbonuspack)
 }
 
 kapt {

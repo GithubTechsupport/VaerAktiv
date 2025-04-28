@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.model.places
+package no.uio.ifi.in2000.vaeraktiv.model.ai.places
 
 import kotlinx.serialization.Serializable
 
@@ -7,14 +7,14 @@ data class NearbyPlacesSuggestions(
 ) {
     override fun toString(): String {
         return suggestions.joinToString(separator = "\n") {
-            "${it.displayName} - ${it.formattedAddress} - ${it.primaryTypeDisplayName} - ${it.primaryType} - ${it.types?.joinToString(", ")}"
+            "${it.placeName} - ${it.formattedAddress} - ${it.primaryTypeDisplayName} - ${it.primaryType} - ${it.types?.joinToString(", ")}"
         }
     }
 }
 
 data class NearbyPlaceSuggestion(
     val id: String? = null,
-    val displayName: String? = null,
+    val placeName: String? = null,
     val formattedAddress: String? = null,
     val coordinates: Pair<Double, Double>? = null,
     val primaryType: String? = null,

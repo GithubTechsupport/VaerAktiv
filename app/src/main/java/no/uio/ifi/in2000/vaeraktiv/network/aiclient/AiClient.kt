@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.network.aiclient
 
+import android.util.Log
 import com.aallam.openai.api.chat.ChatCompletionRequest
 import com.aallam.openai.api.chat.ChatMessage
 import com.aallam.openai.api.chat.ChatResponseFormat
@@ -17,8 +18,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.vaeraktiv.BuildConfig
-import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
+import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
+import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
+import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
+import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 //import org.oremif.deepseek.api.chat
 //import org.oremif.deepseek.client.DeepSeekClient
 //import org.oremif.deepseek.models.ChatCompletionParams
@@ -32,99 +36,9 @@ import kotlin.time.Duration.Companion.seconds
 
 
 abstract class AiClient {
-    val systemPrompt = "The user will provide a weather forecast.\nYour job is to pick 3 different time intervals for each day to suggest activities for based on the weather at that time, the location and other requirements defined in the user prompt."
-    val examplesPrompt =
-        """
-        All output should be written in Norwegian, except for the keys in the JSON output, which should be in English, as described in the examples below.
-        Based on the weather forecast and the users location, pick 3 different time intervals for every single day to suggest activities for the next 7 days.
-        In total there should be at most 21 different activities, spanning across the next 7 days and 3 time intervals per day.
-        
-        Activities should be realistic and available to do around the user's location.
-        Activities has to match the weather forecast, during rainfall (when precipitation is moderate, even low) and/or low temperatures (9 degrees Celsius or lower), more inside activities should be suggested, but not always, for example you can fish in the rain.
-        
-        Within the "activity" field should briefly explain the activity
-        Within the "activityDesc" field should be a more filling description of the activity and an explanation as to where you can do the activity.
-        
-        Not all activities have to be physical, but preferably physical.
-        Activities suggested could be inside or outside activities.
-        
-        NOTE THAT EXAMPLE INPUTS AND OUTPUTS ARE SHORTENED VERSIONS OF THE ACTUAL INPUTS AND OUTPUT YOU WILL PRODUCE.
-        
-        BEGINNING OF EXAMPLES
-        
-        EXAMPLE INPUT:
-        
-        WEATHERFORECAST START
-        
-        datetime: 2025-06-24T12:00:00Z
-        temperature: 13.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-24T13:00:00Z
-        temperature: 17.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-24T14:00:00Z
-        temperature: 22.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-24T15:00:00Z
-        temperature: 20.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-24T16:00:00Z
-        temperature: 19.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-25T12:00:00Z
-        temperature: 9.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-25T13:00:00Z
-        temperature: 10.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-25T14:00:00Z
-        temperature: 12.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-25T15:00:00Z
-        temperature: 10.0
-        precipitation: 0.0
-        
-        datetime: 2025-06-25T16:00:00Z
-        temperature: 10.0
-        precipitation: 0.0
-        
-        WEATHERFORECAST END
-        
-        USER'S LOCATION: Storgata
-        
-        EXAMPLE JSON OUTPUT:
-        {
-            "activities": [
-                {
-                    "month":"6",
-                    "dayOfMonth":"24",
-                    "timeStart":"14:00",
-                    "timeEnd":"16:00",
-                    "activity":"Svømming ved Badedammen Grorud"
-                    "activityDesc":"Denne dagen er det varmt og mye sol. God dag for svømming ved badedammen ved Grorud."
-                }
-                {
-                    "month":"6",
-                    "dayOfMonth":"25",
-                    "timeStart":"11:00",
-                    "timeEnd":"13:00",
-                    "activity":"Bowling på Veitvet senter"
-                    "activityDesc":"Denne dagen er det kjørligere, og da kan du nyte en innendørs aktivitet på Veitvet senter."
-                }
-            ]
-        }
-        
-        END OF EXAMPLES
-        """.trimIndent()
-    abstract suspend fun getResponse(prompt: Prompt): JsonResponse?
+    val prompt = Prompt()
+    abstract suspend fun getSuggestionsForEveryDay(forecastData: FormattedForecastDataForPrompt): SuggestedActivities?
+    abstract suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions): SuggestedActivities?
 }
 
 //class DeepseekClientWrapper @Inject constructor(private val client: DeepSeekClient) : AiClient() {
@@ -148,10 +62,10 @@ abstract class AiClient {
 //}
 
 class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiClient() {
-    override suspend fun getResponse(prompt: Prompt): JsonResponse? = withContext(Dispatchers.IO) {
+    override suspend fun getSuggestionsForEveryDay(forecastData: FormattedForecastDataForPrompt): SuggestedActivities? = withContext(Dispatchers.IO) {
         val messages = listOf(
-            ChatMessage(role = ChatRole.System, content = systemPrompt),
-            ChatMessage(role = ChatRole.User, content = "$examplesPrompt\n\nFollowing is the user prompt:\n\n<<<\n$prompt\n>>>")
+            ChatMessage(role = ChatRole.System, content = prompt.systemPrompt),
+            ChatMessage(role = ChatRole.User, content = "${prompt.fullPrompt}\n\nFollowing is the user prompt:\n\n<<<\n$forecastData\n>>>")
         )
         val request = ChatCompletionRequest (
             model = ModelId("gpt-4o"),
@@ -161,10 +75,30 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
         )
         val response: com.aallam.openai.api.chat.ChatCompletion = client.chatCompletion(request)
         val parsedResponse = response.choices.firstOrNull()?.message?.content?.let {
-            Json.decodeFromString<JsonResponse>(it)
+            Json.decodeFromString<SuggestedActivities>(it)
         }
         return@withContext parsedResponse
     }
+
+    override suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions): SuggestedActivities? = withContext(Dispatchers.IO) {
+        Log.d("OpenAiClientWrapper", "getSuggestionsForOneDay: $forecastData")
+        val messages = listOf(
+            ChatMessage(role = ChatRole.System, content = prompt.systemPrompt),
+            ChatMessage(role = ChatRole.User, content = "${prompt.fullPrompt}\n\nFollowing is the user prompt:\n\n<<<\n$forecastData\n>>>\n\nFollowing is nearby places data:\n\n<<<\n$nearbyPlaces\n>>>\n\nFollowing is the nearby routes data:\n\n<<<\n$routes\n>>>")
+        )
+        val request = ChatCompletionRequest (
+            model = ModelId("gpt-4o"),
+            messages = messages,
+            temperature = prompt.temperature,
+            responseFormat = ChatResponseFormat.JsonObject
+        )
+        val response: com.aallam.openai.api.chat.ChatCompletion = client.chatCompletion(request)
+        val parsedResponse = response.choices.firstOrNull()?.message?.content?.let {
+            Json.decodeFromString<SuggestedActivities>(it)
+        }
+        return@withContext parsedResponse
+    }
+
 }
 
 @Module

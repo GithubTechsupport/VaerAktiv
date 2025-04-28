@@ -49,7 +49,7 @@ fun ActivityScreen(isOnline: Boolean, viewModel: ActivityScreenViewModel) {
                             activities.map {
                                 Activity(
                                     "${it.timeStart} - ${it.timeEnd}",
-                                    it.activity,
+                                    it.activityName,
                                     it.activityDesc,
                                 )
                             }

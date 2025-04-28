@@ -14,8 +14,8 @@ import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.RouteSource
 import no.uio.ifi.in2000.vaeraktiv.model.ai.RouteSuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
-import no.uio.ifi.in2000.vaeraktiv.model.places.NearbyPlaceSuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.places.NearbyPlacesSuggestions
+import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlaceSuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,98 +30,40 @@ class MapScreenViewModel @Inject constructor(
 
     init {
         val dummyPlaces = NearbyPlacesSuggestions(
-            listOf(
+            suggestions = listOf(
                 NearbyPlaceSuggestion(
-                    id = "1",
-                    displayName = "Central Park",
-                    formattedAddress = "Central Park, New York, NY",
-                    coordinates = 40.785091 to -73.968285,
+                    id = "start",
+                    placeName = "Central Park Entrance",
+                    formattedAddress = "5th Ave & E 72nd St, New York, NY",
+                    coordinates = Pair(40.785091, -73.968285),
                     primaryType = "park",
                     primaryTypeDisplayName = "Park",
                     types = listOf("park", "tourist_attraction")
                 ),
                 NearbyPlaceSuggestion(
-                    id = "2",
-                    displayName = "Metropolitan Museum of Art",
-                    formattedAddress = "1000 5th Ave, New York, NY",
-                    coordinates = 40.779437 to -73.963244,
-                    primaryType = "museum",
-                    primaryTypeDisplayName = "Museum",
-                    types = listOf("museum", "art_gallery")
-                ),
-                NearbyPlaceSuggestion(
-                    id = "3",
-                    displayName = "Shake Shack",
-                    formattedAddress = "Madison Ave &, E 86th St, New York, NY",
-                    coordinates = 40.776927 to -73.976610,
-                    primaryType = "restaurant",
-                    primaryTypeDisplayName = "Restaurant",
-                    types = listOf("restaurant", "fast_food")
+                    id = "end",
+                    placeName = "The Lake",
+                    formattedAddress = "Mid-Park at E 72nd St, New York, NY",
+                    coordinates = Pair(40.789623, -73.959893),
+                    primaryType = "attraction",
+                    primaryTypeDisplayName = "Point of Interest",
+                    types = listOf("point_of_interest")
                 )
             )
         )
 
+// Dummy route connecting the two places
         val dummyRoutes = RoutesSuggestions(
-            listOf(
-                // your original two…
+            suggestions = listOf(
                 RouteSuggestion(
                     id = "route1",
-                    name = "Central Park Loop",
-                    distance = 10000.0,
-                    elevationGain = 75.0,
-                    averageGrade = 0.5,
-                    polyline = "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
-                    startPosition = 40.785091 to -73.968285,
-                    endPosition = 40.785091 to -73.968285,
-                    source = RouteSource.OVERPASS
-                ),
-                RouteSuggestion(
-                    id = "route2",
-                    name = "Museum Mile Ride",
-                    distance = 5000.0,
-                    elevationGain = 30.0,
-                    averageGrade = 0.3,
-                    polyline = "a~l~Fjk~uOwHJy@P",
-                    startPosition = 40.779437 to -73.963244,
-                    endPosition = 40.776927 to -73.976610,
-                    source = RouteSource.STRAVA
-                ),
-
-                // new longer routes…
-                RouteSuggestion(
-                    id = "route3",
-                    name = "Reservoir Grand Circuit",
-                    distance = 15000.0,              // ~15 km
-                    elevationGain = 50.0,
-                    averageGrade = 0.3,
-                    // winds around the Jacqueline Kennedy Onassis Reservoir
-                    polyline = "sz|jFjm~uOe@eCgByDoAmCgA{Ci@uBeAqA",
-                    startPosition = 40.785091 to -73.968285,
-                    endPosition = 40.785091 to -73.968285,
-                    source = RouteSource.OVERPASS
-                ),
-                RouteSuggestion(
-                    id = "route4",
-                    name = "Full Park Perimeter Challenge",
-                    distance = 21000.0,              // ~21 km
-                    elevationGain = 120.0,
-                    averageGrade = 0.6,
-                    // an outer loop sticking to park drives
-                    polyline = "}_ojFzn{uOPd@Tl@Jh@Hx@Jp@Nx@Rf@Tb@Vt@Xd@Xf@Zf@",
-                    startPosition = 40.776927 to -73.976610,
-                    endPosition = 40.776927 to -73.976610,
-                    source = RouteSource.STRAVA
-                ),
-                RouteSuggestion(
-                    id = "route5",
-                    name = "East-West Crosscut Tour",
-                    distance = 18000.0,              // ~18 km
-                    elevationGain = 80.0,
-                    averageGrade = 0.4,
-                    // zig-zagging east-west along transverse roads and park paths
-                    polyline = "klwjF`h|uO}B~@kDlAqEjBgGh@cAtA",
-                    startPosition = 40.779437 to -73.963244,
-                    endPosition = 40.785091 to -73.968285,
+                    routeName = "Central Park Walk",
+                    distance = 600.0,
+                    elevationGain = 5.0,
+                    averageGrade = 1.0,
+                    polyline = "yy|wFv|mbMi[ms@", // Encoded polyline between the two points
+                    startPosition = Pair(40.785091, -73.968285),
+                    endPosition = Pair(40.789623, -73.959893),
                     source = RouteSource.OVERPASS
                 )
             )

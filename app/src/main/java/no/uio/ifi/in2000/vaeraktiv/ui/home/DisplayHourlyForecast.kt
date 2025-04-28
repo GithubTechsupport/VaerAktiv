@@ -32,8 +32,6 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
@@ -61,7 +59,7 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                         .width(80.dp)
                         .height(160.dp)
                         .background(
-                            brush = Brush.verticalGradient(colors = listOf(MainCard, SecondaryCard)),
+                            brush = Brush.verticalGradient(colors = listOf(MaterialTheme.colorScheme.onPrimaryContainer, MaterialTheme.colorScheme.onPrimaryContainer)),
                             shape = RoundedCornerShape(12.dp)
                         ),
                     contentAlignment = Alignment.Center

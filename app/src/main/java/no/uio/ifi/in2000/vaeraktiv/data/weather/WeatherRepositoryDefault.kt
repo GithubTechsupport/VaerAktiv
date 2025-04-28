@@ -7,34 +7,29 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
-import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.places.placesRepository
+import no.uio.ifi.in2000.vaeraktiv.data.strava.StravaRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.IMetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
-import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
-import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
+import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
+import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
-import no.uio.ifi.in2000.vaeraktiv.model.places.NearbyPlaceSuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.places.NearbyPlacesSuggestions
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
+import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlaceSuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
@@ -50,7 +45,8 @@ class WeatherRepositoryDefault @Inject constructor(
     private val deviceLocationRepository: LocationRepository,
     private val geocoderClass: GeocoderClass,
     private val nowcastRepository: NowcastRepository,
-    private val placesRepository: placesRepository
+    private val placesRepository: placesRepository,
+    private val stravaRepository: StravaRepository
 ) : WeatherRepository {
 
     private var locations: MutableMap<String, Pair<String, String>> = mutableMapOf()
@@ -163,12 +159,14 @@ class WeatherRepositoryDefault @Inject constructor(
         return forecastToday
     }
 
-    override suspend fun getTimeSeriesForDay(dayNr: Int, location: Location) : List<TimeSeries> {
+    override suspend fun getTimeSeriesForDay(location: Location, dayNr: Int) : Pair<List<TimeSeries>, Units?> {
         try {
             val response = locationForecastRepository.getForecastByDay(location.lat, location.lon)
-            if (response != null) {
-                val timeSeries = response.get(dayNr).second
-                return timeSeries
+            val fullTimeseries = response.first
+            val units = response.second
+            if (fullTimeseries != null) {
+                val timeseries = fullTimeseries.get(dayNr).second
+                return Pair(timeseries, units)
             } else {
                 Log.d("WeatherRepository", "No forecast found")
                 throw Error("No forecast found")
@@ -181,7 +179,7 @@ class WeatherRepositoryDefault @Inject constructor(
 
     override suspend fun getForecastByDay(location: Location): List<ForecastForDay> {
         try {
-            val response = locationForecastRepository.getForecastByDay(location.lat, location.lon) // liste med TimeSeries for datoen
+            val response = locationForecastRepository.getForecastByDay(location.lat, location.lon).first?.drop(1)?.dropLast(1) // liste med TimeSeries for datoen
             if (response != null) {
                 val forecast = response.map { (date, timeSeriesList) ->
                     val timeSeriesAt12PM = timeSeriesList.find { it.time.substring(11, 16) == "12:00" }
@@ -221,13 +219,22 @@ class WeatherRepositoryDefault @Inject constructor(
         return locationForecastRepository.getForecast(location.lat, location.lon)
     }
 
-    override suspend fun getActivities(location: Location): JsonResponse? {
-        val weatherForecast = getWeatherForecast(location)
-        if (weatherForecast == null) {
+    override suspend fun getSuggestedActivitiesForOneDay(location: Location, dayNr: Int): SuggestedActivities? {
+        val response = getTimeSeriesForDay(location, dayNr)
+        val timeseries = response.first
+        val units = response.second
+        val places = getNearbyPlaces(location)
+        val routes = stravaRepository.getRouteSuggestions(location)
+        if (timeseries == null) {
             throw Exception("Weather forecast is null")
-        } else {
-            return aiRepository.getResponse(Prompt(weatherForecast.properties, location.addressName))
         }
+        if (units == null) {
+            throw Exception("Units are null")
+        }
+        if (places == null) {
+            throw Exception("Places are null")
+        }
+        return aiRepository.getSuggestionsForOneDay(FormattedForecastDataForPrompt(timeseries, units, location.addressName), places, routes)
     }
 
     @SuppressLint("DefaultLocale")
@@ -263,7 +270,7 @@ class WeatherRepositoryDefault @Inject constructor(
         return NearbyPlacesSuggestions(response.map { place ->
             NearbyPlaceSuggestion(
                 id = place.id,
-                displayName = place.displayName,
+                placeName = place.displayName,
                 formattedAddress = place.formattedAddress,
                 coordinates = place.location?.let { Pair(it.latitude, it.longitude) },
                 primaryType = place.primaryType,
