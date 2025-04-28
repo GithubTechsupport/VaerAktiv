@@ -3,6 +3,8 @@ package no.uio.ifi.in2000.vaeraktiv.data.location
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
+import android.os.Handler
+import android.os.HandlerThread
 import android.os.Looper
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
@@ -12,9 +14,11 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -47,7 +51,10 @@ class LocationDataSource @Inject constructor(
     // Start receiving continuous location updates as suspendable functions
     @SuppressLint("MissingPermission")
     fun getLocationUpdates(): Flow<Location?> = callbackFlow {
-        val locationRequest = LocationRequest.Builder(102,30000L).build()
+        val thread = HandlerThread("LocationUpdatesThread").apply { start() }
+        val handler = Handler(thread.looper)
+
+        val locationRequest = LocationRequest.Builder(102,120_000L).build()
         val callback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
                 result.lastLocation?.let { trySend(it) }
@@ -56,8 +63,11 @@ class LocationDataSource @Inject constructor(
         fusedLocationProviderClient.requestLocationUpdates(
             locationRequest,
             callback,
-            Looper.getMainLooper()
+            handler.looper
         )
-        awaitClose { fusedLocationProviderClient.removeLocationUpdates(callback) }
-    }
+        awaitClose {
+            fusedLocationProviderClient.removeLocationUpdates(callback)
+            thread.quitSafely()
+        }
+    }.flowOn(Dispatchers.IO)
 }

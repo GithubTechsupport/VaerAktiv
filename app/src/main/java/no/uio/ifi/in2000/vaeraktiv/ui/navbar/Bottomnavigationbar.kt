@@ -31,7 +31,8 @@ fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> St
     val navItems = listOf(
         "settings" to R.drawable.walk,
         "home" to R.drawable.sun,
-        "location" to R.drawable.location
+        "location" to R.drawable.location,
+        "map" to R.drawable.map
     )
 
     BottomAppBar(
