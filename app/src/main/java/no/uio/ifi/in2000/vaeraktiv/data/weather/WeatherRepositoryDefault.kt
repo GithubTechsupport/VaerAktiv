@@ -276,8 +276,8 @@ class WeatherRepositoryDefault @Inject constructor(
                     month = date.monthValue,
                     timeStart = "16:00",
                     timeEnd = "17:00",
-                    activity = "Frisbee",
-                    activityDesc = "Spill frisbee med venner i parken."
+                    activity = "Fotball med venner på Ak", // 22
+                    activityDesc = "Denne dagen er været veldig fint. Det er mange gode løyper i storgata. Start ved tbanen som er gansle Kul og Hei og Håp" // 63
                 )
             )
             LocalDate.now().plusDays(2) -> listOf(

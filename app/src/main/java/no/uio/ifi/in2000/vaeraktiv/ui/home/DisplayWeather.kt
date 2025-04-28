@@ -16,6 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -33,7 +35,7 @@ fun DisplayWeather(data: ForecastToday?) {
     val context = LocalContext.current
     val iconResId = context.resources.getIdentifier(data?.iconNow, "drawable", context.packageName)
     val cornerDp = 10.dp
-
+    var expanded = remember { mutableStateOf(false) }
     Spacer(modifier = Modifier.height(12.dp))
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
