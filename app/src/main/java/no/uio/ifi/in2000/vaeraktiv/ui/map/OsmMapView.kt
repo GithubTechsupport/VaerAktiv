@@ -6,7 +6,9 @@ import android.preference.PreferenceManager
 import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.ui.viewinterop.AndroidView
+import no.uio.ifi.in2000.vaeraktiv.model.ai.PlacesActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.RouteSuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlaceSuggestion
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -19,8 +21,8 @@ import org.osmdroid.util.BoundingBox
 @Composable
 fun OsmMapView(
     context: Context,
-    places: List<NearbyPlaceSuggestion>,
-    routes: List<RouteSuggestion>
+    places: List<PlacesActivitySuggestion>,
+    routes: List<StravaActivitySuggestion>
 ) {
     AndroidView(
         factory = { ctx ->
@@ -58,20 +60,6 @@ fun OsmMapView(
                 val points = decodePolyline(route.polyline)
                 allPoints += points
                 Log.d("OsmMapView", "Points: $points")
-                points.firstOrNull()?.let { start ->
-                    Marker(mapView).apply {
-                        position = start
-                        title = "Start ${route.id}"
-                        mapView.overlays.add(this)
-                    }
-                }
-                points.lastOrNull()?.let { end ->
-                    Marker(mapView).apply {
-                        position = end
-                        title = "End ${route.id}"
-                        mapView.overlays.add(this)
-                    }
-                }
                 val lineOverlay = Polyline().apply {
                     title = route.routeName
                     outlinePaint.apply {

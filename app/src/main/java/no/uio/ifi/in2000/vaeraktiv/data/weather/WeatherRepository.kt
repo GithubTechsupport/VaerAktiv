@@ -7,6 +7,7 @@ import com.google.android.libraries.places.api.model.AutocompleteSessionToken
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
+import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
@@ -21,6 +22,7 @@ interface WeatherRepository {
     // LiveData properties exposed for observing current values
     val currentLocation: LiveData<Location?>
     val deviceLocation: LiveData<Location?>
+    val activities: LiveData<List<SuggestedActivities?>>
 
     // Updates the current location value.
     fun setCurrentLocation(location: Location)
@@ -61,4 +63,15 @@ interface WeatherRepository {
     ): List<AutocompletePrediction>
 
     suspend fun getNearbyPlaces(location: Location): NearbyPlacesSuggestions
+
+    fun replaceActivitiesForDay(
+        dayNr: Int,
+        newActivities: SuggestedActivities
+    )
+
+    fun replaceActivityInDay(
+        dayNr: Int,
+        index: Int,
+        newActivity: ActivitySuggestion
+    )
 }

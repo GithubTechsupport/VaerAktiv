@@ -16,7 +16,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.vaeraktiv.BuildConfig
 import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
@@ -34,11 +33,20 @@ import javax.inject.Named
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.seconds
 
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
+import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.PlacesActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
+
 
 abstract class AiClient {
     val prompt = Prompt()
     abstract suspend fun getSuggestionsForEveryDay(forecastData: FormattedForecastDataForPrompt): SuggestedActivities?
-    abstract suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions): SuggestedActivities?
+    abstract suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions): String?
 }
 
 //class DeepseekClientWrapper @Inject constructor(private val client: DeepSeekClient) : AiClient() {
@@ -80,11 +88,11 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
         return@withContext parsedResponse
     }
 
-    override suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions): SuggestedActivities? = withContext(Dispatchers.IO) {
+    override suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions): String? = withContext(Dispatchers.IO) {
         Log.d("OpenAiClientWrapper", "getSuggestionsForOneDay: $forecastData")
         val messages = listOf(
             ChatMessage(role = ChatRole.System, content = prompt.systemPrompt),
-            ChatMessage(role = ChatRole.User, content = "${prompt.fullPrompt}\n\nFollowing is the user prompt:\n\n<<<\n$forecastData\n>>>\n\nFollowing is nearby places data:\n\n<<<\n$nearbyPlaces\n>>>\n\nFollowing is the nearby routes data:\n\n<<<\n$routes\n>>>")
+            ChatMessage(role = ChatRole.User, content = "${prompt.fullPrompt}\n\nWEATHERFORECAST START:\n\n<<<\n$forecastData\n>>>\n\nWEATHERFORECAST END\n\nNEARBY PLACES START:\n\n<<<\n$nearbyPlaces\n>>>\n\nNEARBY PLACES END\n\nNEARBY ROUTES START:\n\n<<<\n$routes\n>>>\n\nNEARBY ROUTES END")
         )
         val request = ChatCompletionRequest (
             model = ModelId("gpt-4o"),
@@ -92,11 +100,8 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
             temperature = prompt.temperature,
             responseFormat = ChatResponseFormat.JsonObject
         )
-        val response: com.aallam.openai.api.chat.ChatCompletion = client.chatCompletion(request)
-        val parsedResponse = response.choices.firstOrNull()?.message?.content?.let {
-            Json.decodeFromString<SuggestedActivities>(it)
-        }
-        return@withContext parsedResponse
+        val response: String? = client.chatCompletion(request).choices.firstOrNull()?.message?.content
+        return@withContext response
     }
 
 }

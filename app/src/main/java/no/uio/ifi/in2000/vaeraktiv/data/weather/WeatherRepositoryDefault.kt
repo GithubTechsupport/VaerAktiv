@@ -23,6 +23,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
+import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
@@ -56,6 +57,9 @@ class WeatherRepositoryDefault @Inject constructor(
 
     private val _deviceLocation = MutableLiveData<Location?>()
     override val deviceLocation: LiveData<Location?> get() = _deviceLocation
+
+    private val _activities = MutableLiveData<List<SuggestedActivities?>>(List(7) { null })
+    override val activities: LiveData<List<SuggestedActivities?>> get() = _activities
 
     override fun setCurrentLocation(location: Location) {
         _currentLocation.value = location
@@ -238,6 +242,28 @@ class WeatherRepositoryDefault @Inject constructor(
             throw Exception("Places are null")
         }
         return aiRepository.getSuggestionsForOneDay(FormattedForecastDataForPrompt(timeseries, units, location.addressName), places, routes)
+    }
+
+    override fun replaceActivitiesForDay(dayNr: Int, newActivities: SuggestedActivities) {
+        val current = _activities.value ?: return
+        val updated = current.toMutableList().apply {
+            this[dayNr] = newActivities
+        }
+        _activities.value = updated
+    }
+
+    override fun replaceActivityInDay(dayNr: Int, index: Int, newActivity: ActivitySuggestion) {
+        val current = _activities.value ?: return
+        val activitiesAtDay = current[dayNr] ?: return
+        val newList = activitiesAtDay.activities.toMutableList().apply {
+            this[index] = newActivity
+        }
+        val updatedDay = activitiesAtDay.copy(activities = newList)
+
+        val updated = current.toMutableList().apply {
+            this[dayNr] = updatedDay
+        }
+        _activities.value = updated
     }
 
     @SuppressLint("DefaultLocale")
