@@ -7,6 +7,9 @@ import com.google.android.libraries.places.api.model.AutocompleteSessionToken
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
+import no.uio.ifi.in2000.vaeraktiv.model.ai.Interval
+import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
+import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
@@ -15,6 +18,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
+import java.time.LocalDate
 
 interface WeatherRepository {
 
@@ -50,6 +54,10 @@ interface WeatherRepository {
 
     // Uses AI to get activities based on the weather forecast.
     suspend fun getSuggestedActivitiesForOneDay(location: Location, dayNr: Int): SuggestedActivities?
+
+    suspend fun getActivitiesForDate(location: Location, date: LocalDate): JsonResponse
+
+    suspend fun getNewActivityForDate(location: Location, date: LocalDate): Interval
 
     // Starts tracking the device location, providing updates to observers.
     fun trackDeviceLocation(lifecycleOwner: LifecycleOwner)
