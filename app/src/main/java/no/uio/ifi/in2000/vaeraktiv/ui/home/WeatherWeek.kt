@@ -23,7 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,7 +33,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -42,9 +40,8 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.MainCard
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryCard
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
+import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -73,92 +70,126 @@ fun WeatherWeek(
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 4.dp)
         )
         Box(
             modifier = Modifier
                 .width(150.dp)
-                .padding(top = 4.dp)
+                .padding(bottom = 4.dp)
                 .height(1.dp)
                 .background(color = MaterialTheme.colorScheme.primary)
         )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            Text(
-                text = "Dato",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.weight(1f)
-            )
-            Text(
-                text = "Maks Temp",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.weight(1f)
-            )
-            Text(
-                text = "Dagens Vær",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                textAlign = TextAlign.End,
-                modifier = Modifier.weight(1f)
-            )
-        }
-        Box(
-            modifier = Modifier
-                .width(200.dp)
-                .padding(top = 4.dp)
-                .height(1.dp)
-                .background(color = MaterialTheme.colorScheme.primary)
-        )
-        data.take(7).forEach { day ->
-            //var isExpanded by remember { mutableStateOf(false) }
-            val iconResId = context.resources.getIdentifier(day.icon, "drawable", context.packageName)
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                Text(
-                    text = getDayOfWeek(day.date),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .weight(1f) // Tar tilgjengelig plass til venstre
-                )
-                Spacer(modifier = Modifier.weight(0.5f))
 
-                Text(
-                    text = "${day.maxTemp}°",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    textAlign = TextAlign.Center,
+        data.take(7).forEach { day ->
+            val date = LocalDate.parse(day.date)
+            val activitiesss = uiState.futureActivities[date]
+            val isLoading = uiState.loadingFutureActivities.contains(date)
+            var expanded by remember { mutableStateOf(false) }
+            //val iconResId = context.resources.getIdentifier(day.icon, "drawable", context.packageName)
+            Column(
+                modifier = Modifier
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = RoundedCornerShape(cornerDp)
+                    )
+                    .fillMaxWidth()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
-                        .wrapContentWidth() // Tar kun nødvendig bredde for å være sentrert
-                )
-                Spacer(modifier = Modifier.weight(1.1f)) // Fyller tomrommet til høyre
-                Image(
-                    painter = painterResource(id = if (iconResId != 0) iconResId else R.drawable.sun),
-                    contentDescription = "Dagens vær",
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .clickable {
+                            if (activitiesss == null && !isLoading) {
+                                viewModel.getActivitiesForDate(date)
+                            }
+                            expanded = !expanded
+                        }
+                ) {
+                    Text(
+                        text = getDayOfWeek(day.date),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .width(80.dp)// Tar tilgjengelig plass til venstre
+                    )
+                    Spacer(modifier = Modifier.weight(0.8f))
+                    Text(
+                        text = "${day.maxTemp}°",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .wrapContentWidth() // Tar kun nødvendig bredde for å være sentrert
+                    )
+                    Spacer(modifier = Modifier.weight(1f)) // Fyller tomrommet til høyre
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.wrapContentWidth().weight(1f)
+                    ) {
+                        Image(
+                            painter = painterResource(
+                                id = context.resources.getIdentifier(
+                                    day.icon,
+                                    "drawable",
+                                    context.packageName
+                                ).takeIf { it != 0 } ?: R.drawable.icon_warning_extreme),
+                            contentDescription = "Dagens vær",
+                            modifier = Modifier
+                                .size(40.dp)
+                        )
+                        Icon(
+                            imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                            contentDescription = "Expand/Collapse",
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier
+                                .size(12.dp)
+                        )
+                    }
+                }
+            }
+            AnimatedVisibility(visible = expanded) {
+                Column (
                     modifier = Modifier
-                        .size(40.dp)
-                        .wrapContentWidth(align = Alignment.End) // Plasserer bildet helt til høyre
-                )
+                        .fillMaxWidth()
+                        .padding(top = 4.dp)
+                ){
+                    if (isLoading) {
+                        LoadingScreen()
+                    } else if (uiState.isErrorFutureActivities) {
+                        ErrorMessage("Faen")
+                    } else if (activitiesss != null && activitiesss.activities.isNotEmpty()){
+                        val activitiesList = activitiesss.activities.map {
+                            Activity(
+                                timeOfDay = "${it.timeStart} - ${it.timeEnd}",
+                                name = it.activity,
+                                desc = it.activityDesc
+                            )
+                        }
+                        AddActivitiesForDay(
+                            activityDate = ActivityDate(
+                                date = getDayOfWeek(day.date),
+                                activities = activitiesList
+                            )
+                        )
+                    } else {
+                        Text(
+                            text = "Finner ingen aktiviteter",
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
             }
             Box(
                 modifier = Modifier
-                    .width(200.dp)
-                    .padding(top = 4.dp)
+                    .fillMaxWidth()
+                    .padding(top = 2.dp)
+                    .padding(horizontal = 8.dp)
                     .height(1.dp)
-                    .background(color = MaterialTheme.colorScheme.primary)
+                    .background(color = MaterialTheme.colorScheme.onSecondary)
             )
         }
     }

@@ -336,5 +336,4 @@ data class HomeScreenUiState(
     val alertsError: String? = null,
     val sunRiseSetError: String? = null,
     val next24HoursError: String? = null
-    val sunRiseSetError: String? = null,
 )
