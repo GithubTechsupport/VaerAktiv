@@ -91,11 +91,6 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                         DisplayHourlyForecast(uiState.next24Hours)
                     }
                 }
-                item {
-                    if (uiState.weatherTodayError == null && uiState.weatherToday != null) {
-                        TodaysWeather(uiState.weatherToday)
-                    }
-                }
 
                 // Today's Activities (always expanded)
                 item {
