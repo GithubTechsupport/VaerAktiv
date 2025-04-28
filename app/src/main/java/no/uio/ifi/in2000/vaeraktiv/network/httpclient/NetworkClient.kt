@@ -61,6 +61,7 @@ object NetworkModule {
         return Json {
             prettyPrint = true
             isLenient = true
+            ignoreUnknownKeys = true
         }
     }
     @Provides

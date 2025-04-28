@@ -1,8 +1,10 @@
 package no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast
 
 
+import android.util.Log
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
 import javax.inject.Inject
 
 class LocationForecastRepository @Inject constructor(
@@ -26,11 +28,12 @@ class LocationForecastRepository @Inject constructor(
         return forecasts[Pair(lat, lon)]
     }
 
-    suspend fun getForecastByDay(lat: String, lon: String): List<Pair<String, List<TimeSeries>>>? {
+    suspend fun getForecastByDay(lat: String, lon: String): Pair<List<Pair<String, List<TimeSeries>>>?, Units?> {
         val forecast = getForecast(lat, lon)
         val timeseries = forecast?.properties?.timeseries
-        val groupedTimeSeries = timeseries?.groupBy { it.time.substring(0, 10) }?.toList()?.drop(1)?.dropLast(1)
-        return groupedTimeSeries
+        val units = forecast?.properties?.meta?.units
+        val groupedTimeSeries = timeseries?.groupBy { it.time.substring(0, 10) }?.toList()
+        return Pair(groupedTimeSeries, units)
     }
 
     suspend fun getNext24Hours(lat: String, lon: String): List<TimeSeries>? {

@@ -4,25 +4,17 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
-import kotlinx.coroutines.Deferred
-import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
-import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeRepository
-import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
-import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
-import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
-import no.uio.ifi.in2000.vaeraktiv.data.places.placesRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Interval
 import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
+import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
+import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
@@ -49,7 +41,7 @@ interface WeatherRepository {
     // Retrieves today's forecast for the provided location.
     suspend fun getForecastToday(location: Location): ForecastToday
 
-    suspend fun getTimeSeriesForDay(dayNr: Int, location: Location): List<TimeSeries>
+    suspend fun getTimeSeriesForDay(location: Location, dayNr: Int): Pair<List<TimeSeries>, Units?>
 
     // Retrieves a forecast segmented by day.
     suspend fun getForecastByDay(location: Location): List<ForecastForDay>
@@ -61,7 +53,7 @@ interface WeatherRepository {
     suspend fun getWeatherForecast(location: Location): LocationForecastResponse?
 
     // Uses AI to get activities based on the weather forecast.
-    suspend fun getActivities(location: Location): JsonResponse?
+    suspend fun getSuggestedActivitiesForOneDay(location: Location, dayNr: Int): SuggestedActivities?
 
     suspend fun getActivitiesForDate(location: Location, date: LocalDate): JsonResponse
 
@@ -75,4 +67,6 @@ interface WeatherRepository {
         query: String,
         sessionToken: AutocompleteSessionToken
     ): List<AutocompletePrediction>
+
+    suspend fun getNearbyPlaces(location: Location): NearbyPlacesSuggestions
 }
