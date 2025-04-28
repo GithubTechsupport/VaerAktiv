@@ -9,7 +9,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import dagger.hilt.android.AndroidEntryPoint
-import no.uio.ifi.in2000.vaeraktiv.ui.activity.ActivityScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.Navbar
@@ -20,7 +19,6 @@ import no.uio.ifi.in2000.vaeraktiv.utils.PermissionManager
 class MainActivity : ComponentActivity() {
     private val homeScreenViewModel: HomeScreenViewModel by viewModels()
     private val favoriteLocationViewModel: FavoriteLocationViewModel by viewModels()
-    private val activityScreenViewModel: ActivityScreenViewModel by viewModels()
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +32,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             VaerAktivTheme{
-                Navbar(favoriteLocationViewModel, activityScreenViewModel, homeScreenViewModel)
+                Navbar(favoriteLocationViewModel, homeScreenViewModel)
             }
         }
     }

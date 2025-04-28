@@ -15,55 +15,58 @@ import no.uio.ifi.in2000.vaeraktiv.model.preferences.Preference
 
 
 @Composable
-fun ActivityScreen(isOnline: Boolean, viewModel: ActivityScreenViewModel) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.background),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        item{
-            Text(
-                text = "Instillinger",
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier
-                    .padding(10.dp),
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        }
-        item {
-            Text(
-                text = "Hvilke aktiviteter liker du?",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier
-                    .padding(10.dp),
-            )
-            Activity(Preference("Ballsport", false))
-            Activity(Preference("Håndtverk", false))
-            Activity(Preference("Friluftsliv", false))
-            Activity(Preference("Gå turer", false))
-            Activity(Preference("Trening", false))
+fun SettingsScreen(isOnline: Boolean) {
+    if (isOnline) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.background),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            item{
+                Text(
+                    text = "Instillinger",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier
+                        .padding(10.dp),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+            item {
+                Text(
+                    text = "Hvilke aktiviteter liker du?",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier
+                        .padding(10.dp),
+                )
+                Activity(Preference("Ballsport", false))
+                Activity(Preference("Håndtverk", false))
+                Activity(Preference("Friluftsliv", false))
+                Activity(Preference("Gå turer", false))
+                Activity(Preference("Trening", false))
 
 
-            Text(
-                text = "Liker du å være sosial, eller gjøre ting alene?",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier
-                    .padding(10.dp),
-            )
-            Activity(Preference("Sammen med andre", false))
-            Activity(Preference("Alene", false))
-        }
+                Text(
+                    text = "Liker du å være sosial, eller gjøre ting alene?",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier
+                        .padding(10.dp),
+                )
+                Activity(Preference("Sammen med andre", false))
+                Activity(Preference("Alene", false))
+            }
 
-        item {
-            Text(
-                text = "Vil du bli tilbydt aktiviteter som koster penger?",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier
-                    .padding(10.dp),
-            )
-            Activity(Preference("Ja", false))
+            item {
+                Text(
+                    text = "Vil du bli tilbydt aktiviteter som koster penger?",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier
+                        .padding(10.dp),
+                )
+                Activity(Preference("Ja", false))
+            }
         }
     }
+
 }
