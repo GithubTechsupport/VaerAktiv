@@ -79,16 +79,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                             message = "Error fetching today's weather: ${uiState.weatherTodayError}"
                         )
                     } else if (uiState.weatherToday != null) {
-                        DisplayWeather(uiState.weatherToday)
-                    }
-                }
-                item {
-                    if (uiState.next24HoursError != null) {
-                        ErrorMessage(
-                            message = "Error fetching today's weather: ${uiState.next24HoursError}"
-                        )
-                    } else if (uiState.next24Hours != null) {
-                        DisplayHourlyForecast(uiState.next24Hours)
+                        DisplayWeather(uiState.weatherToday, uiState)
                     }
                 }
 
@@ -147,16 +138,6 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                     }
                 }
 
-                // SunRise/SunSet Section
-                item {
-                    if (uiState.sunRiseSetError != null) {
-                        ErrorMessage(
-                            message = "Error fetching sunrise/sunset data: ${uiState.sunRiseSetError}"
-                        )
-                    } else {
-                        SunRiseSet(uiState.sunRiseSet)
-                    }
-                }
             }
         }
     }
