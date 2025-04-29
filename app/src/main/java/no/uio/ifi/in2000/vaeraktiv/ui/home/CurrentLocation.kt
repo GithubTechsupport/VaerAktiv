@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import no.uio.ifi.in2000.vaeraktiv.R
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
 fun CurrentLocation(locationName : String) {
@@ -44,7 +46,7 @@ fun CurrentLocation(locationName : String) {
             Text(
                 text = locationName,
                 style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = OnContainer,
                 textAlign = TextAlign.Center,
                 fontSize = 35.sp
             )
@@ -52,12 +54,14 @@ fun CurrentLocation(locationName : String) {
                 Row (modifier = Modifier) {
                     Text(
                         text = "Din posisjon",
-                        fontSize = 20.sp
+                        fontSize = 20.sp,
+                        color = OnContainer
                     )
-                    Image(
+                    Icon(
                         painter = painterResource(id = R.drawable.location),
                         contentDescription = "Location",
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp),
+                        tint = OnContainer
                     )
                 } // skal være clickable
             }
@@ -68,7 +72,7 @@ fun CurrentLocation(locationName : String) {
             .padding(horizontal = 50.dp)
             .height(1.dp)
             .background(
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = OnContainer
             )
         )
     }

@@ -42,6 +42,9 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -59,16 +62,16 @@ fun WeatherWeek(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .background(
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = Container,
                 shape = RoundedCornerShape(cornerDp)
             )
             .fillMaxWidth()
             .padding(20.dp)
     ) {
         Text(
-            text = "7-dagersvarsel",
+            text = "Ukens aktiviteter",
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            color = OnContainer,
             textAlign = TextAlign.Center,
         )
         Box(
@@ -76,7 +79,7 @@ fun WeatherWeek(
                 .width(150.dp)
                 .padding(bottom = 4.dp)
                 .height(1.dp)
-                .background(color = MaterialTheme.colorScheme.primary)
+                .background(OnContainer)
         )
 
         data.take(7).forEach { day ->
@@ -87,10 +90,6 @@ fun WeatherWeek(
             //val iconResId = context.resources.getIdentifier(day.icon, "drawable", context.packageName)
             Column(
                 modifier = Modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = RoundedCornerShape(cornerDp)
-                    )
                     .fillMaxWidth()
             ) {
                 Row(
@@ -109,7 +108,7 @@ fun WeatherWeek(
                     Text(
                         text = getDayOfWeek(day.date),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = OnContainer,
                         textAlign = TextAlign.Start,
                         modifier = Modifier
                             .width(80.dp)// Tar tilgjengelig plass til venstre
@@ -118,7 +117,7 @@ fun WeatherWeek(
                     Text(
                         text = "${day.maxTemp}°",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = SecondaryOnContainer,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .wrapContentWidth() // Tar kun nødvendig bredde for å være sentrert
@@ -178,6 +177,7 @@ fun WeatherWeek(
                         Text(
                             text = "Finner ingen aktiviteter",
                             style = MaterialTheme.typography.bodyMedium,
+                            color = OnContainer,
                             modifier = Modifier.padding(start = 8.dp)
                         )
                     }
@@ -189,7 +189,7 @@ fun WeatherWeek(
                     .padding(top = 2.dp)
                     .padding(horizontal = 8.dp)
                     .height(1.dp)
-                    .background(color = MaterialTheme.colorScheme.onSecondary)
+                    .background(color = OnContainer)
             )
         }
     }

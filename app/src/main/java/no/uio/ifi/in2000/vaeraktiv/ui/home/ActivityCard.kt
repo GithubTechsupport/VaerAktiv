@@ -12,9 +12,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.PrimaryNavbar
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
 
 @Composable
 fun ActivityCard(
@@ -23,13 +29,13 @@ fun ActivityCard(
     onRefresh: (() -> Unit)? = null,
     isRefreshing: Boolean = false
 ) {
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 6.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface
+            Container
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -44,16 +50,9 @@ fun ActivityCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = activity.timeOfDay,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
                     text = activity.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = OnContainer,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -63,13 +62,21 @@ fun ActivityCard(
                     enabled = onRefresh != null
                 )
             }
+            Row {
+                Text(
+                    text = "Beste tidspunkt: ${activity.timeOfDay}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = OnContainer,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
             // Beskrivelse under
             Text(
                 text = activity.desc,
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = SecondaryOnContainer,
                 modifier = Modifier.padding(top = 8.dp),
-                maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
         }

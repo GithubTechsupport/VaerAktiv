@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
 fun AddLocationDefault(defaultPadding: Dp) {
@@ -27,7 +29,7 @@ fun AddLocationDefault(defaultPadding: Dp) {
         Text(
             text = "Legg til sted",
             style = MaterialTheme.typography.titleMedium ,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            color = OnContainer,
             textAlign = TextAlign.Left,
             modifier = Modifier
                 .padding(defaultPadding)
@@ -38,7 +40,8 @@ fun AddLocationDefault(defaultPadding: Dp) {
             contentDescription = "Add Circle Icon",
             modifier = Modifier
                 .padding(defaultPadding)
-                .size(50.dp)
+                .size(50.dp),
+            tint = OnContainer
         )
     }
 }

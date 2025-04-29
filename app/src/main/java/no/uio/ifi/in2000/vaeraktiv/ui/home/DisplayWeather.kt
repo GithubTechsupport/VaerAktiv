@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -33,6 +34,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.PrimaryNavbar
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
@@ -53,7 +57,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 indication = null
             ){ expanded = !expanded }
             .background(
-                if (isPressed) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.primaryContainer,
+                Container,
                 shape = RoundedCornerShape(10.dp)
             )
     ) {
@@ -84,13 +88,13 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 Text(
                     text = "${data?.tempNow}°",
                     style = MaterialTheme.typography.displayLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = OnContainer,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "${data?.uv} UV",
                     style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = OnContainer,
                     textAlign = TextAlign.Center
                 )
             }
@@ -117,7 +121,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "L: ${data?.tempMin}°",
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = OnContainer,
                             textAlign = TextAlign.Center,
                             fontSize = 20.sp,
                         )
@@ -132,7 +136,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "H: ${data?.tempMax}°",
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = OnContainer,
                             textAlign = TextAlign.Center,
                             fontSize = 20.sp,
                         )
@@ -146,7 +150,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "${data?.precipitationAmount} mm",
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = OnContainer,
                             textAlign = TextAlign.Center,
                             fontSize = 20.sp,
                         )
@@ -161,7 +165,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "${data?.windSpeed} m/s",
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = OnContainer,
                             textAlign = TextAlign.Center,
                             fontSize = 20.sp,
                         )
