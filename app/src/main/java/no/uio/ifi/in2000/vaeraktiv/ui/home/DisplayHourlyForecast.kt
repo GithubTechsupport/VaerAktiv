@@ -75,6 +75,12 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
+                            text = "${hour.temp}°C", // Assumes you have `temperature` in ForecastForHour
+                            style = MaterialTheme.typography.labelSmall,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
                             text = "${hour.precipitationAmount}mm", // Assumes you have `temperature` in ForecastForHour
                             style = MaterialTheme.typography.labelSmall,
                             textAlign = TextAlign.Center
@@ -82,12 +88,6 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "${hour.windSpeed}m/s", // Assumes you have `temperature` in ForecastForHour
-                            style = MaterialTheme.typography.labelSmall,
-                            textAlign = TextAlign.Center
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "${hour.temp}°C", // Assumes you have `temperature` in ForecastForHour
                             style = MaterialTheme.typography.labelSmall,
                             textAlign = TextAlign.Center
                         )

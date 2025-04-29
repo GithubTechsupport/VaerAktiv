@@ -33,60 +33,134 @@ fun SunRiseSet(sunData : List<String>) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .background(
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.onSurface,
                 shape = RoundedCornerShape(cornerDp))
             .fillMaxWidth()
             .padding(10.dp)
     ) {
         Row (
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp)
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.sun),
-                contentDescription = "Soloppgang",
+            Box(
                 modifier = Modifier
-                    .size(80.dp)
-                    .padding(12.dp)
-            )
-
-            Text(
-                text = "Sol opp: $solOpp",
-                textAlign = TextAlign.Start,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(12.dp)
-            )
+                    .padding(end = 8.dp)
+                    .width(80.dp)
+                    .height(160.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Text(
+                        text = solOpp, // "HH:mm"
+                        style = MaterialTheme.typography.labelMedium,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.sunset_color),
+                        contentDescription = "Sunrise icon",
+                        modifier = Modifier.size(50.dp)
+                    )
+                    Spacer(modifier = Modifier.height(25.dp))
+                    Text(
+                        text = "Sol opp", // Assumes you have `temperature` in ForecastForHour
+                        style = MaterialTheme.typography.labelSmall,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(25.dp))
+                }
+            }
 
             Box(
                 modifier = Modifier
-                    .width(1.dp)
-                    .padding(top = 4.dp)
-                    .height(80.dp)
-                    .background(color = MaterialTheme.colorScheme.primaryContainer)
-            )
-
-            Text(
-                text = "Sol ned: $solNed",
-                textAlign = TextAlign.End,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(12.dp)
-            )
-
-            Image(
-                painter = painterResource(id = R.drawable.wb_twilight),
-                contentDescription = "Solnedgang",
-                modifier = Modifier
-                    .size(80.dp)
-                    .padding(12.dp)
-            )
-
+                    .padding(end = 8.dp)
+                    .width(80.dp)
+                    .height(160.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Text(
+                        text = solNed, // "HH:mm"
+                        style = MaterialTheme.typography.labelMedium,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.sunset2_color),
+                        contentDescription = "Weather icon",
+                        modifier = Modifier.size(40.dp)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Sol ned", // Assumes you have `temperature` in ForecastForHour
+                        style = MaterialTheme.typography.labelSmall,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
         }
+//        Row (
+//            verticalAlignment = Alignment.CenterVertically,
+//            horizontalArrangement = Arrangement.SpaceEvenly,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(4.dp)
+//        ) {
+//            Image(
+//                painter = painterResource(id = R.drawable.sunrise1_color),
+//                contentDescription = "Soloppgang",
+//                modifier = Modifier
+//                    .size(80.dp)
+//                    .padding(12.dp)
+//            )
+//
+//            Text(
+//                text = "Sol opp: $solOpp",
+//                textAlign = TextAlign.Start,
+//                color = MaterialTheme.colorScheme.onPrimaryContainer,
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .padding(12.dp)
+//            )
+//
+//            Box(
+//                modifier = Modifier
+//                    .width(1.dp)
+//                    .padding(top = 4.dp)
+//                    .height(80.dp)
+//                    .background(color = MaterialTheme.colorScheme.primaryContainer)
+//            )
+//
+//            Text(
+//                text = "Sol ned: $solNed",
+//                textAlign = TextAlign.End,
+//                color = MaterialTheme.colorScheme.onPrimaryContainer,
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .padding(12.dp)
+//            )
+//
+//            Image(
+//                painter = painterResource(id = R.drawable.sunset2_color),
+//                contentDescription = "Solnedgang",
+//                modifier = Modifier
+//                    .size(80.dp)
+//                    .padding(12.dp)
+//            )
+//
+//        }
     }
 }
