@@ -39,11 +39,11 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
     val context = LocalContext.current
 
     Column {
-        Text(
-            text = "Hourly Forecast",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
+//        Text(
+//            text = "Hourly Forecast",
+//            style = MaterialTheme.typography.titleMedium,
+//            modifier = Modifier.padding(bottom = 8.dp)
+//        )
 
         LazyRow(
             modifier = Modifier.fillMaxWidth()

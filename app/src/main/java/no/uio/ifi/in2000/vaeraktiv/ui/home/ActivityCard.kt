@@ -33,10 +33,8 @@ fun ActivityCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 6.dp),
-        colors = CardDefaults.cardColors(
-            Container
-        ),
+            .padding(bottom = 8.dp),
+        colors = CardDefaults.cardColors(BackGroundColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
@@ -51,7 +49,7 @@ fun ActivityCard(
             ) {
                 Text(
                     text = activity.name,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     color = OnContainer,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

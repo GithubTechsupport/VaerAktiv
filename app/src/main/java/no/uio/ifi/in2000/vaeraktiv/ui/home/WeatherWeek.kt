@@ -59,7 +59,7 @@ fun WeatherWeek(
     val context = LocalContext.current
     Spacer(modifier = Modifier.height(12.dp))
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.Start,
         modifier = Modifier
             .background(
                 color = Container,
@@ -69,17 +69,20 @@ fun WeatherWeek(
             .padding(20.dp)
     ) {
         Text(
-            text = "Ukens aktiviteter",
-            style = MaterialTheme.typography.titleSmall,
+            text = "Kommende uke",
+            style = MaterialTheme.typography.labelLarge,
             color = OnContainer,
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Start,
+            modifier = Modifier
+                .padding(start = 8.dp)
         )
         Box(
             modifier = Modifier
-                .width(150.dp)
-                .padding(bottom = 4.dp)
-                .height(1.dp)
-                .background(OnContainer)
+                .fillMaxWidth()
+                .padding(top = 2.dp)
+                .padding(horizontal = 8.dp)
+                .height(0.2.dp)
+                .background(color = OnContainer)
         )
 
         data.take(7).forEach { day ->
@@ -170,8 +173,10 @@ fun WeatherWeek(
                         AddActivitiesForDay(
                             activityDate = ActivityDate(
                                 date = getDayOfWeek(day.date),
-                                activities = activitiesList
-                            )
+                                activities = activitiesList,
+                            ),
+                            isToday = day.date == LocalDate.now().toString()
+
                         )
                     } else {
                         Text(
@@ -188,7 +193,7 @@ fun WeatherWeek(
                     .fillMaxWidth()
                     .padding(top = 2.dp)
                     .padding(horizontal = 8.dp)
-                    .height(1.dp)
+                    .height(0.2.dp)
                     .background(color = OnContainer)
             )
         }

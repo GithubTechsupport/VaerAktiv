@@ -46,7 +46,6 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
     val iconResId = context.resources.getIdentifier(data?.iconNow, "drawable", context.packageName)
     var expanded by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
     Spacer(modifier = Modifier.height(12.dp))
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,7 +74,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 Image(
                     painter = painterResource(id = iconResId),
                     contentDescription = "Ikon",
-                    modifier = Modifier.size(135.dp)
+                    modifier = Modifier.size(145.dp)
                 )
             }
             // Temperature cell and uv
@@ -87,30 +86,27 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
             ) {
                 Text(
                     text = "${data?.tempNow}°",
-                    style = MaterialTheme.typography.displayLarge,
+                    style = MaterialTheme.typography.displaySmall,
                     color = OnContainer,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "${data?.uv} UV",
-                    style = MaterialTheme.typography.displaySmall,
+                    style = MaterialTheme.typography.headlineSmall,
                     color = OnContainer,
                     textAlign = TextAlign.Center
                 )
             }
         }
         if (expanded) {
-            Spacer(modifier = Modifier.height(8.dp))
+            //Spacer(modifier = Modifier.height(4.dp))
             // Second row: UV, precipitation, and wind speed details in a background box
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 15.dp) // Use the same overall padding as above
+                    .padding(horizontal = 16.dp) // Use the same overall padding as above
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Row {
                     // UV details
                     Box(
                         modifier = Modifier
@@ -120,10 +116,9 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                     ) {
                         Text(
                             text = "L: ${data?.tempMin}°",
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = MaterialTheme.typography.titleMedium,
                             color = OnContainer,
                             textAlign = TextAlign.Center,
-                            fontSize = 20.sp,
                         )
                     }
                     // Precipitation details
@@ -135,10 +130,9 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                     ) {
                         Text(
                             text = "H: ${data?.tempMax}°",
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = MaterialTheme.typography.titleMedium,
                             color = OnContainer,
                             textAlign = TextAlign.Center,
-                            fontSize = 20.sp,
                         )
                     }
                     Box(
@@ -149,10 +143,9 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                     ) {
                         Text(
                             text = "${data?.precipitationAmount} mm",
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = MaterialTheme.typography.titleMedium,
                             color = OnContainer,
                             textAlign = TextAlign.Center,
-                            fontSize = 20.sp,
                         )
                     }
                     // Wind speed details
@@ -164,13 +157,13 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                     ) {
                         Text(
                             text = "${data?.windSpeed} m/s",
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = MaterialTheme.typography.titleMedium,
                             color = OnContainer,
                             textAlign = TextAlign.Center,
-                            fontSize = 20.sp,
                         )
                     }
                 }
+                Spacer(modifier = Modifier.height(8.dp))
                 if (uiState.next24HoursError != null) {
                     ErrorMessage(
                         message = "Error fetching today's weather: ${uiState.next24HoursError}"
@@ -187,6 +180,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 } else {
                     SunRiseSet(uiState.sunRiseSet)
                 }
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }

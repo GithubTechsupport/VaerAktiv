@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,11 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -56,12 +58,14 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LazyColumn(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Always show the current location.
                 item {
-                    CurrentLocation(uiState.locationName)
+                    CurrentLocation(uiState.locationName, currentLocation) // ikke riktig data for currentLocation (skal være lokasjon til device)
                 }
 
                 // Alerts Section
@@ -91,38 +95,74 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                     Column (
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 8.dp),
+                            .padding(top = 8.dp)
+                            .background(Container, shape = RoundedCornerShape(10.dp)),
                         horizontalAlignment = Alignment.Start
                     ){
                         Text(
                             text = "I dag",
                             style = MaterialTheme.typography.headlineSmall,
                             color = OnContainer,
-                            modifier = Modifier.padding(start = 8.dp)
+                            modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 4.dp)
                         )
-                        if (uiState.isErrorActivitiesToday) {
-                            ErrorMessage(
-                                message = "Error fetching today's activities: ${uiState.errorMessageActivitiesToday}"
-                            )
-                        } else if (uiState.activitiesToday != null) {
-                            val activities = uiState.activitiesToday!!.activities.mapIndexed { index, response ->
-                                Activity(
-                                    timeOfDay = "${response.timeStart} - ${response.timeEnd}",
-                                    name = response.activity,
-                                    desc = response.activityDesc
-                                ) to index
+                        Column (
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                        ){
+                            if (uiState.isErrorActivitiesToday) {
+                                ErrorMessage(
+                                    message = "Error fetching today's activities: ${uiState.errorMessageActivitiesToday}"
+                                )
+                            } else if (uiState.activitiesToday != null) {
+                                val activities =
+                                    uiState.activitiesToday!!.activities.mapIndexed { index, response ->
+                                        Activity(
+                                            timeOfDay = "${response.timeStart} - ${response.timeEnd}",
+                                            name = response.activity,
+                                            desc = response.activityDesc
+                                        ) to index
+                                    }
+                                AddActivitiesForDay(
+                                    activityDate = ActivityDate(
+                                        "I dag",
+                                        activities.map { it.first }),
+                                    onRefresh = { index -> viewModel.refreshSingleActivity(index) },
+                                    isRefreshing = { index ->
+                                        uiState.isRefreshingActivity.contains(
+                                            index
+                                        )
+                                    },
+                                    weatherData = listOf(
+                                        ForecastForDay(
+                                            date = "00-06",
+                                            maxTemp = "15°C",
+                                            icon = "rain"
+                                        ),
+                                        ForecastForDay(
+                                            date = "06-12",
+                                            maxTemp = "18°C",
+                                            icon = "fog"
+                                        ),
+                                        ForecastForDay(
+                                            date = "12-18",
+                                            maxTemp = "20°C",
+                                            icon = "snow"
+                                        ),
+                                        ForecastForDay(
+                                            date = "18-24",
+                                            maxTemp = "16°C",
+                                            icon = "cloudy"
+                                        )
+                                    )
+                                )
+                            } else {
+                                Text(
+                                    text = "Finner ingen aktiviteter",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    modifier = Modifier.padding(start = 8.dp)
+                                )
                             }
-                            AddActivitiesForDay(
-                                activityDate = ActivityDate("I dag", activities.map { it.first }),
-                                onRefresh = { index -> viewModel.refreshSingleActivity(index) },
-                                isRefreshing = { index -> uiState.isRefreshingActivity.contains(index) }
-                            )
-                        } else {
-                            Text (
-                                text = "Finner ingen aktiviteter",
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.padding(start = 8.dp)
-                            )
                         }
                     }
                 }
