@@ -15,13 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
+import android.util.Log
 
 @Composable
 fun ActivityCard(
     activity: Activity,
     isToday: Boolean,
-    onRefresh: (() -> Unit)? = null,
-    isRefreshing: Boolean = false
+    onRefresh: (() -> Unit),
 ) {
     Card(
         modifier = Modifier
@@ -58,8 +58,10 @@ fun ActivityCard(
                     overflow = TextOverflow.Ellipsis
                 )
                 RefreshButton(
-                    onClick = {onRefresh?.invoke()},
-                    isLoading = isRefreshing,
+                    onClick = {
+                        onRefresh.invoke()
+                              },
+                    isLoading = false,
                     enabled = onRefresh != null
                 )
             }

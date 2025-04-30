@@ -38,9 +38,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
+import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 import java.time.LocalDate
 
@@ -48,12 +48,13 @@ import java.time.LocalDate
 @SuppressLint("DiscouragedApi")
 @Composable
 fun WeatherWeek(
-    data: List<ForecastForDay>,
+    activities: List<SuggestedActivities?>?,
     viewModel: HomeScreenViewModel,
     uiState: HomeScreenUiState
 ) {
     val cornerDp = 10.dp
     val context = LocalContext.current
+    val data = uiState.thisWeeksWeather
     Spacer(modifier = Modifier.height(12.dp))
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -79,11 +80,11 @@ fun WeatherWeek(
                 .background(color = MaterialTheme.colorScheme.primary)
         )
 
-        data.take(7).forEach { day ->
-            val date = LocalDate.parse(day.date)
-            val activitiesss = uiState.futureActivities[date]
-            val isLoading = uiState.loadingFutureActivities.contains(date)
+        data.take(7).forEachIndexed { index, day ->
+            val dayNr = index + 1
+            val isLoading = uiState.loadingFutureActivities.contains(dayNr)
             var expanded by remember { mutableStateOf(false) }
+            val activitiesForThisDay = activities?.get(dayNr)
             //val iconResId = context.resources.getIdentifier(day.icon, "drawable", context.packageName)
             Column(
                 modifier = Modifier
@@ -100,8 +101,8 @@ fun WeatherWeek(
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                         .clickable {
-                            if (activitiesss == null && !isLoading) {
-                                viewModel.getActivitiesForDate(date)
+                            if (activitiesForThisDay == null && !isLoading) {
+                                viewModel.getActivitiesForAFutureDay(dayNr)
                             }
                             expanded = !expanded
                         }
@@ -160,19 +161,22 @@ fun WeatherWeek(
                         LoadingScreen()
                     } else if (uiState.isErrorFutureActivities) {
                         ErrorMessage("Faen")
-                    } else if (activitiesss != null && activitiesss.activities.isNotEmpty()){
-                        val activitiesList = activitiesss.activities.map {
+                    } else if (activitiesForThisDay != null && activitiesForThisDay.activities.isNotEmpty()){
+                        val activitiesList = activitiesForThisDay.activities.map {
                             Activity(
                                 timeOfDay = "${it.timeStart} - ${it.timeEnd}",
-                                name = it.activity,
-                                desc = it.activityDesc
+                                name = it.activityName,
+                                desc = it.activityDesc,
                             )
                         }
                         AddActivitiesForDay(
-                            activityDate = ActivityDate(
+                            dayNr = dayNr,
+                            activityDate = ActivityDate (
                                 date = getDayOfWeek(day.date),
                                 activities = activitiesList
-                            )
+                            ),
+                            isLoading = { uiState.loadingActivities },
+                            onRefresh = { dayNr, indexParam, activityName -> viewModel.replaceActivityInDay(dayNr, indexParam, activityName) }
                         )
                     } else {
                         Text(
