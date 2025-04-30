@@ -19,6 +19,7 @@ import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.places.placesRepository
+import no.uio.ifi.in2000.vaeraktiv.data.strava.StravaRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepositoryDefault
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsDataSource
@@ -148,12 +149,13 @@ object AppModule {
         geocoder: GeocoderClass,
         locationRepository: LocationRepository,
         nowcastRepository: NowcastRepository,
-        placesRepository: placesRepository
+        placesRepository: placesRepository,
+        stravaRepository: StravaRepository,
     ): WeatherRepository {
         return WeatherRepositoryDefault(
             metAlertsRepository, locationForecastRepository, sunriseRepository,
             favoriteLocationRepo, aiRepository, locationRepository, geocoder,
-            nowcastRepository, placesRepository
+            nowcastRepository, placesRepository, stravaRepository
         )
     }
 

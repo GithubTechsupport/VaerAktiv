@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.network.aiclient
 
+import android.util.Log
 import com.aallam.openai.api.chat.ChatCompletionRequest
 import com.aallam.openai.api.chat.ChatMessage
 import com.aallam.openai.api.chat.ChatResponseFormat
@@ -15,10 +16,12 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.vaeraktiv.BuildConfig
-import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
+import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
+import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
+import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
+import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 //import org.oremif.deepseek.api.chat
 //import org.oremif.deepseek.client.DeepSeekClient
 //import org.oremif.deepseek.models.ChatCompletionParams
@@ -30,133 +33,20 @@ import javax.inject.Named
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.seconds
 
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
+import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.PlacesActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
+
 
 abstract class AiClient {
-    val systemPrompt = """The user will provide a weather forecast. Your task is to select 3 different time intervals per day and suggest one physical activity for each interval, based on the weather conditions, the user's location, and any other requirements defined in the user prompt."""
-
-    val examplesPrompt = """
-            All output should be written in Norwegian, except for the keys in the JSON output, which should be in English, as described in the examples below.
-            
-            Based on the weather forecast and the user's location, choose 3 different time intervals for each day and suggest one physical activity for each interval for the next 7 days.
-            In total, there should be a maximum of 21 different activities, spread across 7 days and 3 time intervals per day.
-            
-            All activities must be physical and involve movement, either indoors or outdoors. Examples of physical activities include: hiking, cycling, swimming, climbing, bowling, squash, dancing, yoga, trampoline park, gym workout, ice skating, skiing, frisbee golf, obstacle course, etc.
-            Suggestions such as "going to a café," "cinema," "museum," or similar should NOT be suggested, as these are not physical activities.
-            
-            Activities must be realistic and available near the user's location. They should be adapted to the weather conditions: On days with rain or low temperatures (9°C or lower), more indoor activities should be suggested, but outdoor activities can also be included if suitable (e.g., fishing in the rain, ice skating, etc.).
-            
-            The "activity" field should contain a brief description of the activity (e.g., "Hiking along Akerselva").
-            The "activityDesc" field should provide a more detailed description and explain where and how the activity can be carried out.
-            
-            The example input and output below are shortened versions of what you will actually produce.
-            
-            BEGINNING OF EXAMPLES
-            
-            EXAMPLE INPUT:
-            
-            WEATHERFORECAST START
-            
-            datetime: 2025-06-24T12:00:00Z
-            temperature: 13.0
-            precipitation: 0.0
-            
-            datetime: 2025-06-24T13:00:00Z
-            temperature: 17.0
-            precipitation: 0.0
-            
-            datetime: 2025-06-24T14:00:00Z
-            temperature: 22.0
-            precipitation: 0.0
-            
-            datetime: 2025-06-24T15:00:00Z
-            temperature: 20.0
-            precipitation: 0.0
-            
-            datetime: 2025-06-24T16:00:00Z
-            temperature: 19.0
-            precipitation: 0.0
-            
-            datetime: 2025-06-25T12:00:00Z
-            temperature: 9.0
-            precipitation: 0.0
-            
-            datetime: 2025-06-25T13:00:00Z
-            temperature: 10.0
-            precipitation: 0.0
-            
-            datetime: 2025-06-25T14:00:00Z
-            temperature: 12.0
-            precipitation: 0.0
-            
-            datetime: 2025-06-25T15:00:00Z
-            temperature: 10.0
-            precipitation: 0.0
-            
-            datetime: 2025-06-25T16:00:00Z
-            temperature: 10.0
-            precipitation: 0.0
-            
-            WEATHERFORECAST END
-            
-            USER'S LOCATION: Storgata
-            
-            EXAMPLE JSON OUTPUT:
-            {
-                "activities": [
-                    {
-                        "month": "6",
-                        "dayOfMonth": "24",
-                        "timeStart": "12:00",
-                        "timeEnd": "14:00",
-                        "activity": "Hiking along Akerselva",
-                        "activityDesc": "The weather is dry and the temperature is comfortable. Start at Storgata and walk along the Akerselva river towards Grünerløkka. This route offers fresh air and a scenic walk."
-                    },
-                    {
-                        "month": "6",
-                        "dayOfMonth": "24",
-                        "timeStart": "14:00",
-                        "timeEnd": "16:00",
-                        "activity": "Cycling to Sognsvann",
-                        "activityDesc": "It’s warm and sunny. Rent a city bike and cycle from downtown to Sognsvann for an active and nature-filled experience."
-                    },
-                    {
-                        "month": "6",
-                        "dayOfMonth": "24",
-                        "timeStart": "16:00",
-                        "timeEnd": "18:00",
-                        "activity": "Frisbee golf in Torshovparken",
-                        "activityDesc": "The temperature is still high. Play frisbee golf in Torshovparken – a fun and social activity suitable for all ages."
-                    },
-                    {
-                        "month": "6",
-                        "dayOfMonth": "25",
-                        "timeStart": "12:00",
-                        "timeEnd": "14:00",
-                        "activity": "Indoor climbing at Oslo Klatresenter",
-                        "activityDesc": "It’s chilly outside, so try indoor bouldering or rope climbing at Oslo Klatresenter in Torshov. Suitable for both beginners and experienced climbers."
-                    },
-                    {
-                        "month": "6",
-                        "dayOfMonth": "25",
-                        "timeStart": "14:00",
-                        "timeEnd": "16:00",
-                        "activity": "Squash at Bislett Squash",
-                        "activityDesc": "With low temperatures, indoor squash is a great way to get active. Bislett Squash offers court rentals and equipment."
-                    },
-                    {
-                        "month": "6",
-                        "dayOfMonth": "25",
-                        "timeStart": "16:00",
-                        "timeEnd": "18:00",
-                        "activity": "Gym workout at SATS Storo",
-                        "activityDesc": "End the day with a workout at the gym. SATS Storo offers both strength and cardio training indoors."
-                    }
-                ]
-            }
-            
-            END OF EXAMPLES
-            """.trimIndent()
-    abstract suspend fun getResponse(prompt: Prompt): JsonResponse?
+    val prompt = Prompt()
+    abstract suspend fun getSuggestionsForEveryDay(forecastData: FormattedForecastDataForPrompt): SuggestedActivities?
+    abstract suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions): String?
 }
 
 //class DeepseekClientWrapper @Inject constructor(private val client: DeepSeekClient) : AiClient() {
@@ -180,10 +70,10 @@ abstract class AiClient {
 //}
 
 class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiClient() {
-    override suspend fun getResponse(prompt: Prompt): JsonResponse? = withContext(Dispatchers.IO) {
+    override suspend fun getSuggestionsForEveryDay(forecastData: FormattedForecastDataForPrompt): SuggestedActivities? = withContext(Dispatchers.IO) {
         val messages = listOf(
-            ChatMessage(role = ChatRole.System, content = systemPrompt),
-            ChatMessage(role = ChatRole.User, content = "$examplesPrompt\n\nFollowing is the user prompt:\n\n<<<\n$prompt\n>>>")
+            ChatMessage(role = ChatRole.System, content = prompt.systemPrompt),
+            ChatMessage(role = ChatRole.User, content = "${prompt.fullPrompt}\n\nFollowing is the user prompt:\n\n<<<\n$forecastData\n>>>")
         )
         val request = ChatCompletionRequest (
             model = ModelId("gpt-4o"),
@@ -193,10 +83,27 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
         )
         val response: com.aallam.openai.api.chat.ChatCompletion = client.chatCompletion(request)
         val parsedResponse = response.choices.firstOrNull()?.message?.content?.let {
-            Json.decodeFromString<JsonResponse>(it)
+            Json.decodeFromString<SuggestedActivities>(it)
         }
         return@withContext parsedResponse
     }
+
+    override suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions): String? = withContext(Dispatchers.IO) {
+        Log.d("OpenAiClientWrapper", "getSuggestionsForOneDay: $forecastData")
+        val messages = listOf(
+            ChatMessage(role = ChatRole.System, content = prompt.systemPrompt),
+            ChatMessage(role = ChatRole.User, content = "${prompt.fullPrompt}\n\nWEATHERFORECAST START:\n\n<<<\n$forecastData\n>>>\n\nWEATHERFORECAST END\n\nNEARBY PLACES START:\n\n<<<\n$nearbyPlaces\n>>>\n\nNEARBY PLACES END\n\nNEARBY ROUTES START:\n\n<<<\n$routes\n>>>\n\nNEARBY ROUTES END")
+        )
+        val request = ChatCompletionRequest (
+            model = ModelId("gpt-4o"),
+            messages = messages,
+            temperature = prompt.temperature,
+            responseFormat = ChatResponseFormat.JsonObject
+        )
+        val response: String? = client.chatCompletion(request).choices.firstOrNull()?.message?.content
+        return@withContext response
+    }
+
 }
 
 @Module

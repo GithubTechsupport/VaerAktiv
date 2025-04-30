@@ -8,20 +8,33 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import dagger.hilt.android.AndroidEntryPoint
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.map.MapScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.Navbar
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.VaerAktivTheme
+import no.uio.ifi.in2000.vaeraktiv.utils.KeepAliveManager
 import no.uio.ifi.in2000.vaeraktiv.utils.PermissionManager
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val homeScreenViewModel: HomeScreenViewModel by viewModels()
     private val favoriteLocationViewModel: FavoriteLocationViewModel by viewModels()
+    private val mapScreenViewModel: MapScreenViewModel by viewModels()
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        KeepAliveManager().apply {
+            start()
+            lifecycle.addObserver(object : DefaultLifecycleObserver {
+                override fun onDestroy(owner: LifecycleOwner) {
+                    stop()
+                }
+            })
+        }
         Log.d("MainActivity", "onCreate called")
         if (!PermissionManager.isLocationPermissionGranted(this)) {
             PermissionManager.requestLocationPermissions(this)
@@ -31,8 +44,8 @@ class MainActivity : ComponentActivity() {
         }
         enableEdgeToEdge()
         setContent {
-            VaerAktivTheme{
-                Navbar(favoriteLocationViewModel, homeScreenViewModel)
+            VaerAktivTheme {
+                Navbar(favoriteLocationViewModel, homeScreenViewModel, mapScreenViewModel)
             }
         }
     }

@@ -29,12 +29,15 @@ import java.time.LocalDate
 @SuppressLint("DiscouragedApi")
 @Composable
 fun AddActivitiesForDay(
+    dayNr: Int,
     activityDate: ActivityDate,
     modifier: Modifier = Modifier,
     onRefresh: ((Int) -> Unit)? = null,
-    isRefreshing: ((Int) -> Boolean)? = null,
+    //isRefreshing: ((Int) -> Boolean)? = null,
     isToday: Boolean? = null, // en eller annen form for sjekk om vi skal vise dagens kort eller fremtidig dato
     weatherData: List<ForecastForDay>? = null
+    isLoading: () -> Set<Pair<Int, Int>>,
+    onRefresh: (Int, Int, String) -> Unit
     ) {
     val context = LocalContext.current
     Column(
@@ -71,14 +74,15 @@ fun AddActivitiesForDay(
             }
         }
         activityDate.activities.forEachIndexed { index, activity ->
-            val isCurrentlyRefreshing = isRefreshing?.invoke(index) ?: false
-            Log.d("AddActivitiesForDay", "Index: $index, isRefreshing: $isCurrentlyRefreshing")
-            ActivityCard(
-                activity = activity,
-                isToday = activityDate.date == "I dag",
-                onRefresh = if (activityDate.date == "I dag") {{ onRefresh?.invoke(index) }} else null,
-                isRefreshing = isCurrentlyRefreshing
-            )
+            if ((dayNr to index) in isLoading.invoke()) {
+                LoadingActivityCard()
+            } else {
+                ActivityCard(
+                    activity = activity,
+                    isToday = activityDate.date == "I dag",
+                    onRefresh = { onRefresh(dayNr, index, activity.name) },
+                )
+            }
         }
     }
 }

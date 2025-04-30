@@ -21,13 +21,14 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.PrimaryNavbar
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
+import android.util.Log
+
 
 @Composable
 fun ActivityCard(
     activity: Activity,
     isToday: Boolean,
-    onRefresh: (() -> Unit)? = null,
-    isRefreshing: Boolean = false
+    onRefresh: (() -> Unit),
 ) {
 
     Card(
@@ -55,8 +56,10 @@ fun ActivityCard(
                     overflow = TextOverflow.Ellipsis
                 )
                 RefreshButton(
-                    onClick = {onRefresh?.invoke()},
-                    isLoading = isRefreshing,
+                    onClick = {
+                        onRefresh.invoke()
+                              },
+                    isLoading = false,
                     enabled = onRefresh != null
                 )
             }

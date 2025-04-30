@@ -7,37 +7,36 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
-import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.places.placesRepository
+import no.uio.ifi.in2000.vaeraktiv.data.strava.StravaRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.IMetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
-import no.uio.ifi.in2000.vaeraktiv.model.ai.Interval
-import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
-import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
+import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
+import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
+import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlaceSuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import javax.inject.Inject
 import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
-import java.time.LocalDate
 
 class WeatherRepositoryDefault @Inject constructor(
     private val metAlertsRepository: IMetAlertsRepository,
@@ -48,7 +47,8 @@ class WeatherRepositoryDefault @Inject constructor(
     private val deviceLocationRepository: LocationRepository,
     private val geocoderClass: GeocoderClass,
     private val nowcastRepository: NowcastRepository,
-    private val placesRepository: placesRepository
+    private val placesRepository: placesRepository,
+    private val stravaRepository: StravaRepository
 ) : WeatherRepository {
 
     private var locations: MutableMap<String, Pair<String, String>> = mutableMapOf()
@@ -58,6 +58,9 @@ class WeatherRepositoryDefault @Inject constructor(
 
     private val _deviceLocation = MutableLiveData<Location?>()
     override val deviceLocation: LiveData<Location?> get() = _deviceLocation
+
+    private val _activities = MutableLiveData<List<SuggestedActivities?>?>(List(8) { null })
+    override val activities: LiveData<List<SuggestedActivities?>?> get() = _activities
 
     override fun setCurrentLocation(location: Location) {
         _currentLocation.value = location
@@ -164,12 +167,14 @@ class WeatherRepositoryDefault @Inject constructor(
         return forecastToday
     }
 
-    override suspend fun getTimeSeriesForDay(dayNr: Int, location: Location) : List<TimeSeries> {
+    override suspend fun getTimeSeriesForDay(location: Location, dayNr: Int) : Pair<List<TimeSeries>, Units?> {
         try {
             val response = locationForecastRepository.getForecastByDay(location.lat, location.lon)
-            if (response != null) {
-                val timeSeries = response.get(dayNr).second
-                return timeSeries
+            val fullTimeseries = response.first
+            val units = response.second
+            if (fullTimeseries != null) {
+                val timeseries = fullTimeseries.get(dayNr).second
+                return Pair(timeseries, units)
             } else {
                 Log.d("WeatherRepository", "No forecast found")
                 throw Error("No forecast found")
@@ -182,7 +187,7 @@ class WeatherRepositoryDefault @Inject constructor(
 
     override suspend fun getForecastByDay(location: Location): List<ForecastForDay> {
         try {
-            val response = locationForecastRepository.getForecastByDay(location.lat, location.lon) // liste med TimeSeries for datoen
+            val response = locationForecastRepository.getForecastByDay(location.lat, location.lon).first?.drop(1)?.dropLast(1) // liste med TimeSeries for datoen
             if (response != null) {
                 val forecast = response.map { (date, timeSeriesList) ->
                     val timeSeriesAt12PM = timeSeriesList.find { it.time.substring(11, 16) == "12:00" }
@@ -222,151 +227,84 @@ class WeatherRepositoryDefault @Inject constructor(
         return locationForecastRepository.getForecast(location.lat, location.lon)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun getActivities(location: Location): JsonResponse {
-        // Simulerer alle aktiviteter for 7 dager
-        val activities = (0..6).flatMap { days ->
-            val date = LocalDate.now().plusDays(days.toLong())
-            getActivitiesForDate(location, date).activities
-        }
-        return JsonResponse(activities = activities)
-    }
-//    override suspend fun getActivities(location: Location): JsonResponse? {
-//        val weatherForecast = getWeatherForecast(location)
-//        if (weatherForecast == null) {
+    override suspend fun getSuggestedActivitiesForOneDay(location: Location, dayNr: Int): SuggestedActivities? {
+//        val response = getTimeSeriesForDay(location, dayNr)
+//        val timeseries = response.first
+//        val units = response.second
+//        val places = getNearbyPlaces(location)
+//        val routes = stravaRepository.getRouteSuggestions(location)
+//        if (timeseries == null) {
 //            throw Exception("Weather forecast is null")
-//        } else {
-//            return aiRepository.getResponse(Prompt(weatherForecast.properties, location.addressName))
 //        }
-//    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun getActivitiesForDate(location: Location, date: LocalDate): JsonResponse {
-        // Simulerer dummydata for aktiviteter
-        val activities = when (date) {
-            LocalDate.now() -> listOf(
-                Interval(
-                    dayOfMonth = date.dayOfMonth,
-                    month = date.monthValue,
-                    timeStart = "10:00",
-                    timeEnd = "11:30",
-                    activity = "Morgenyoga",
-                    activityDesc = "En rolig yogaøkt i parken for å starte dagen."
-                ),
-                Interval(
-                    dayOfMonth = date.dayOfMonth,
-                    month = date.monthValue,
-                    timeStart = "14:00",
-                    timeEnd = "15:30",
-                    activity = "Sykkeltur",
-                    activityDesc = "En avslappende sykkeltur langs elven."
-                )
-            )
-            LocalDate.now().plusDays(1) -> listOf(
-                Interval(
-                    dayOfMonth = date.dayOfMonth,
-                    month = date.monthValue,
+//        if (units == null) {
+//            throw Exception("Units are null")
+//        }
+//        if (places == null) {
+//            throw Exception("Places are null")
+//        }
+        return SuggestedActivities(
+            activities = listOf(
+                CustomActivitySuggestion(
+                    month = 6,
+                    dayOfMonth = 10,
                     timeStart = "09:00",
-                    timeEnd = "10:30",
-                    activity = "Joggetur",
-                    activityDesc = "En energisk joggetur i nærområdet."
+                    timeEnd = "10:00",
+                    activityName = "Morning Run",
+                    activityDesc = "A quick run to start the day."
                 ),
-                Interval(
-                    dayOfMonth = date.dayOfMonth,
-                    month = date.monthValue,
-                    timeStart = "16:00",
-                    timeEnd = "17:00",
-                    activity = "Fotball med venner på Ak", // 22
-                    activityDesc = "Denne dagen er været veldig fint. Det er mange gode løyper i storgata. Start ved tbanen som er gansle Kul og Hei og Håp" // 63
+                CustomActivitySuggestion(
+                    month = 6,
+                    dayOfMonth = 10,
+                    timeStart = "12:00",
+                    timeEnd = "13:00",
+                    activityName = "Lunch Walk",
+                    activityDesc = "A relaxing walk after lunch."
+                ),
+                CustomActivitySuggestion(
+                    month = 6,
+                    dayOfMonth = 10,
+                    timeStart = "18:00",
+                    timeEnd = "19:00",
+                    activityName = "Evening Yoga",
+                    activityDesc = "Yoga session to unwind."
                 )
             )
-            LocalDate.now().plusDays(2) -> listOf(
-                Interval(
-                    dayOfMonth = date.dayOfMonth,
-                    month = date.monthValue,
-                    timeStart = "11:00",
-                    timeEnd = "12:30",
-                    activity = "Vandring",
-                    activityDesc = "En kort vandretur i skogen."
-                )
-            )
-            LocalDate.now().plusDays(3) -> listOf(
-                Interval(
-                    dayOfMonth = date.dayOfMonth,
-                    month = date.monthValue,
-                    timeStart = "13:00",
-                    timeEnd = "14:30",
-                    activity = "Svømming",
-                    activityDesc = "En forfriskende svømmetur i bassenget."
-                )
-            )
-            LocalDate.now().plusDays(4) -> listOf(
-                Interval(
-                    dayOfMonth = date.dayOfMonth,
-                    month = date.monthValue,
-                    timeStart = "15:00",
-                    timeEnd = "16:30",
-                    activity = "Fotball",
-                    activityDesc = "Spill fotball med venner på banen."
-                )
-            )
-            LocalDate.now().plusDays(5) -> listOf(
-                Interval(
-                    dayOfMonth = date.dayOfMonth,
-                    month = date.monthValue,
-                    timeStart = "10:00",
-                    timeEnd = "11:00",
-                    activity = "Stretching",
-                    activityDesc = "En lett stretching-økt hjemme."
-                )
-            )
-            LocalDate.now().plusDays(6) -> listOf(
-                Interval(
-                    dayOfMonth = date.dayOfMonth,
-                    month = date.monthValue,
-                    timeStart = "14:00",
-                    timeEnd = "15:30",
-                    activity = "Piknik",
-                    activityDesc = "Nyt en piknik i parken med familie."
-                )
-            )
-            else -> emptyList()
-        }
-        return JsonResponse(activities = activities)
+        )
+        //return aiRepository.getSuggestionsForOneDay(FormattedForecastDataForPrompt(timeseries, units, location.addressName), places, routes)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun getNewActivityForDate(location: Location, date: LocalDate): Interval {
-        if (date == LocalDate.now()) {
-            val alternativeActivities = listOf(
-                Interval(
-                    dayOfMonth = date.dayOfMonth,
-                    month = date.monthValue,
-                    timeStart = "08:00",
-                    timeEnd = "09:30",
-                    activity = "Soloppgangsvandring",
-                    activityDesc = "En tidlig morgentur for å se soloppgangen."
-                ),
-                Interval(
-                    dayOfMonth = date.dayOfMonth,
-                    month = date.monthValue,
-                    timeStart = "12:00",
-                    timeEnd = "13:30",
-                    activity = "Piknik i parken",
-                    activityDesc = "Nyt lunsj utendørs med venner."
-                ),
-                Interval(
-                    dayOfMonth = date.dayOfMonth,
-                    month = date.monthValue,
-                    timeStart = "16:00",
-                    timeEnd = "17:30",
-                    activity = "Klatring",
-                    activityDesc = "Prøv klatring i et nærliggende klatresenter."
-                )
-            )
-            return alternativeActivities.random()
+    override suspend fun getSuggestedActivity(location: Location, dayNr: Int, index: Int): ActivitySuggestion? {
+        val dummyNewActivity = CustomActivitySuggestion(
+            month = 3,
+            dayOfMonth = 6,
+            timeStart = "12:00",
+            timeEnd = "13:00",
+            activityName = "Replaced",
+            activityDesc = "Replaced",
+        )
+        return dummyNewActivity
+    }
+
+    override fun replaceActivitiesForDay(dayNr: Int, newActivities: SuggestedActivities) {
+        val current = _activities.value ?: return
+        val updated = current.toMutableList().apply {
+            this[dayNr] = newActivities
         }
-        throw IllegalArgumentException("Invalid date for getNewActivityForDate")
+        _activities.value = updated
+    }
+
+    override fun replaceActivityInDay(dayNr: Int, index: Int, newActivity: ActivitySuggestion) {
+        val current = _activities.value ?: return
+        val activitiesAtDay = current[dayNr] ?: return
+        val newList = activitiesAtDay.activities.toMutableList().apply {
+            this[index] = newActivity
+        }
+        val updatedDay = activitiesAtDay.copy(activities = newList)
+
+        val updated = current.toMutableList().apply {
+            this[dayNr] = updatedDay
+        }
+        _activities.value = updated
     }
 
     @SuppressLint("DefaultLocale")
@@ -395,5 +333,20 @@ class WeatherRepositoryDefault @Inject constructor(
 
     override suspend fun getAutocompletePredictions(query: String, sessionToken: AutocompleteSessionToken): List<AutocompletePrediction> {
         return placesRepository.getAutocompletePredictions(query, sessionToken)
+    }
+
+    override suspend fun getNearbyPlaces(location: Location): NearbyPlacesSuggestions {
+        val response = placesRepository.getNearbyPlaces(LatLng(location.lat.toDouble(), location.lon.toDouble()))
+        return NearbyPlacesSuggestions(response.map { place ->
+            NearbyPlaceSuggestion(
+                id = place.id,
+                placeName = place.displayName,
+                formattedAddress = place.formattedAddress,
+                coordinates = place.location?.let { Pair(it.latitude, it.longitude) },
+                primaryType = place.primaryType,
+                primaryTypeDisplayName = place.primaryTypeDisplayName,
+                types = place.placeTypes
+            )
+        })
     }
 }

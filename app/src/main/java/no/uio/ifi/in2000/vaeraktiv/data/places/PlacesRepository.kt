@@ -48,14 +48,17 @@ class placesRepository @Inject constructor(private val placesClient: PlacesClien
         val includedTypes: List<String> = listOf(
         "adventure_sports_center", "skateboard_park", "hiking_area",
         "water_park", "botanical_garden", "cycling_park",
-        "beach", "arena", "athletic_field", "fitness_center",
+        "beach", "athletic_field", "fitness_center",
         "gym", "ice_skating_rink", "ski_resort", "sports_activity_location",
-        "sports_club", "sports_complex", "swimming_pool"
+        "sports_club", "sports_complex", "swimming_pool", "frisbee_park",
+        )
+
+        val excludedTypes: List<String> = listOf(
+            "stadium"
         )
         val placeFields: List<Place.Field> = listOf(
-            Place.Field.ID, Place.Field.DISPLAY_NAME, Place.Field.PRIMARY_TYPE,
-            Place.Field.PRIMARY_TYPE_DISPLAY_NAME, Place.Field.TYPES,
-            Place.Field.FORMATTED_ADDRESS, Place.Field.LOCATION,
+            Place.Field.ID, Place.Field.DISPLAY_NAME, Place.Field.FORMATTED_ADDRESS, Place.Field.LOCATION,
+            Place.Field.PRIMARY_TYPE, Place.Field.PRIMARY_TYPE_DISPLAY_NAME, Place.Field.TYPES,
         )
 
         var currentRadius = initialRadius
