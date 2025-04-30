@@ -25,7 +25,8 @@ fun MapScreen(viewModel: MapScreenViewModel) {
         OsmMapView(
             context = LocalContext.current,
             places = uiState.places,
-            routes = uiState.routes
+            routes = uiState.routes,
+            decodePolyline = {polyline -> viewModel.decodePolyline(polyline)}
         )
     }
 }

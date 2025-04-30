@@ -50,7 +50,7 @@ class placesRepository @Inject constructor(private val placesClient: PlacesClien
         "water_park", "botanical_garden", "cycling_park",
         "beach", "athletic_field", "fitness_center",
         "gym", "ice_skating_rink", "ski_resort", "sports_activity_location",
-        "sports_club", "sports_complex", "swimming_pool", "frisbee_park",
+        "sports_club", "sports_complex", "swimming_pool"
         )
 
         val excludedTypes: List<String> = listOf(

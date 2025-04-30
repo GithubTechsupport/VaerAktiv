@@ -90,6 +90,8 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
 
     override suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions): String? = withContext(Dispatchers.IO) {
         Log.d("OpenAiClientWrapper", "getSuggestionsForOneDay: $forecastData")
+        Log.d("OpenAiClientWrapper", "getSuggestionsForOneDay: $nearbyPlaces")
+        Log.d("OpenAiClientWrapper", "getSuggestionsForOneDay: $routes")
         val messages = listOf(
             ChatMessage(role = ChatRole.System, content = prompt.systemPrompt),
             ChatMessage(role = ChatRole.User, content = "${prompt.fullPrompt}\n\nWEATHERFORECAST START:\n\n<<<\n$forecastData\n>>>\n\nWEATHERFORECAST END\n\nNEARBY PLACES START:\n\n<<<\n$nearbyPlaces\n>>>\n\nNEARBY PLACES END\n\nNEARBY ROUTES START:\n\n<<<\n$routes\n>>>\n\nNEARBY ROUTES END")
@@ -128,7 +130,7 @@ object AiClientModule {
         val apiKey = BuildConfig.OPENAI_API_KEY
         val azureHost = OpenAIHost.azure(
             resourceName = "UIO-MN-IFI-IN2000-SWE1",
-            deploymentId = "gpt-4o-t31",
+            deploymentId = "gpt-4.1-T31",
             apiVersion = "2024-12-01-preview"
         )
         val client = OpenAI(

@@ -19,6 +19,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlaceSuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
+import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,6 +35,48 @@ class MapScreenViewModel @Inject constructor(
     val activities: LiveData<List<SuggestedActivities?>?> = weatherRepository.activities
 
     init {
+    }
+
+    fun decodePolyline(encoded: String): List<GeoPoint> {
+        try {
+            val points = mutableListOf<GeoPoint>()
+            var index = 0
+            var lat = 0
+            var lng = 0
+
+            while (index < encoded.length) {
+                var result = 0
+                var shift = 0
+                var b: Int
+
+                do {
+                    b = encoded[index++].code - 63
+                    result = result or ((b and 0x1f) shl shift)
+                    shift += 5
+                } while (b >= 0x20)
+
+                val dlat = if (result and 1 != 0) (result.inv() shr 1) else (result shr 1)
+                lat += dlat
+
+                result = 0
+                shift = 0
+
+                do {
+                    b = encoded[index++].code - 63
+                    result = result or ((b and 0x1f) shl shift)
+                    shift += 5
+                } while (b >= 0x20)
+
+                val dlng = if (result and 1 != 0) (result.inv() shr 1) else (result shr 1)
+                lng += dlng
+
+                points.add(GeoPoint(lat / 1e5, lng / 1e5))
+            }
+
+            return points
+        } catch (e: Exception) {
+            throw e
+        }
     }
 
     fun updatePlacesAndRoutes(suggestedActivities: SuggestedActivities) {
