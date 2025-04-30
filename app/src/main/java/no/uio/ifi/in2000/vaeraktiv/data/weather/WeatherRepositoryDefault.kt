@@ -33,6 +33,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlaceSuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
+import no.uio.ifi.in2000.vaeraktiv.model.ui.DetailedForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import javax.inject.Inject
@@ -152,7 +153,9 @@ class WeatherRepositoryDefault @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getForecastToday(location: Location): ForecastToday {
-        getForecastForHour(location)
+        // Log forecast intervals for testing
+        val intervals = getForecastByDayIntervals(location)
+        Log.d("WeatherRepo", "Forecast intervals in getForecastToday: $intervals")
         val forecast = locationForecastRepository.getForecast(location.lat, location.lon)
         val locationData = forecast?.properties?.timeseries?.get(0)?.data
         val nowcast = nowcastRepository.getForecast(location.lat, location.lon)
@@ -210,6 +213,36 @@ class WeatherRepositoryDefault @Inject constructor(
             throw e
         }
     }
+
+    // TODO: Fix timezone bug
+    override suspend fun getForecastByDayIntervals(location: Location): List<List<DetailedForecastForDay>> {
+        try {
+            val response = locationForecastRepository.getForecastByDay(location.lat, location.lon).first?.drop(1)?.dropLast(1) // liste med TimeSeries for datoen
+            val intervals = listOf("00", "06", "12", "18")
+
+            if (response != null) {
+                val forecastByDay = response.map { (date, timeSeriesList) ->
+                    intervals.map { interval ->
+                        val timeSeries = timeSeriesList.find { it.time.substring(11, 13) == interval }
+                        DetailedForecastForDay(
+                            date = date,
+                            interval = "$interval - ${interval.toInt() + 6}",
+                            icon = timeSeries?.data?.next6Hours?.summary?.symbolCode ?: "N/A"
+                        )
+                    }
+                }
+
+                return forecastByDay
+            } else {
+                Log.d("WeatherRepository", "No forecast found")
+                throw Error("No forecast found")
+            }
+        } catch (e: Exception) {
+            Log.e("WeatherRepository", "Error at getForecastByDayIntervals: ", e)
+            throw e
+        }
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O) // krever API versjon 26
     override suspend fun getForecastForHour(location: Location): List<ForecastForHour> {

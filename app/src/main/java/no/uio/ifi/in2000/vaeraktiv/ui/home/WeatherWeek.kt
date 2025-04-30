@@ -159,6 +159,9 @@ fun WeatherWeek(
                         .fillMaxWidth()
                         .padding(top = 4.dp)
                 ){
+                    uiState.dayIntervals[dayNr]?.let { intervalsForDay ->
+                        DisplayIntervalSymbols(intervalsForDay)
+                    }
                     if (isLoading) {
                         LoadingScreen()
                     } else if (uiState.isErrorFutureActivities) {
