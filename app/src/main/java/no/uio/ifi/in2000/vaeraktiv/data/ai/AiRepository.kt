@@ -26,16 +26,15 @@ class AiRepository @Inject constructor(@Named("OpenAi-Client") private val clien
                 throw IllegalArgumentException("Response is null")
             }
             return@withContext Json {
-                    serializersModule = SerializersModule {
-                        polymorphic(ActivitySuggestion::class) {
-                            subclass(PlacesActivitySuggestion::class)
-                            subclass(StravaActivitySuggestion::class)
-                            subclass(CustomActivitySuggestion::class)
-                        }
+                ignoreUnknownKeys = true
+                serializersModule = SerializersModule {
+                    polymorphic(ActivitySuggestion::class) {
+                        subclass(CustomActivitySuggestion::class)
+                        subclass(PlacesActivitySuggestion::class)
+                        subclass(StravaActivitySuggestion::class)
                     }
-                    classDiscriminator = "type"
-                    ignoreUnknownKeys = true
-                }.decodeFromString<SuggestedActivities>(response)
+                }
+            }.decodeFromString<SuggestedActivities>(response)
         } catch (e: Exception) {
             throw e
         }

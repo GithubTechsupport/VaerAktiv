@@ -1,10 +1,17 @@
 package no.uio.ifi.in2000.vaeraktiv.model.ai
 
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
+
 data class Prompt(
     val systemPrompt: String = """
 The user will provide a weather forecast, data about nearby places, and data about nearby running routes and trails from Strava and Overpass.
-Your job is to pick 5 different time intervals for each day to suggest activities for based on the weather at that time, the location, as well as API data from Google Places, Strava, and Overpass. 
-There are different types of activities that you can suggest. Activities that use locations provided by Googles Places API. Activities that use routes provided by Strava and Overpass. And custom activities that you define yourself. The distribution of activities will be up to you to decide. 
+Your job is to pick 3 different time intervals for each day to suggest activities for based on the weather at that time, the location, as well as API data from Google Places, Strava, and Overpass. 
+There are different types of activities that you can suggest. Activities that use locations provided by Googles Places API. Activities that use routes provided by Strava and Overpass. And custom activities that you define yourself. The distribution of activity subtypes will be equal. 
     """.trimIndent(),
 
     val basePrompt: String = """
@@ -24,81 +31,154 @@ The "activityDesc" field should not exceed 65 characters.
 
         """.trimIndent(),
     val examples: String = """
-NOTE THAT EXAMPLE INPUTS AND OUTPUTS ARE SHORTENED VERSIONS OF THE ACTUAL INPUTS AND OUTPUT YOU WILL PRODUCE.
-        
-BEGINNING OF EXAMPLES
+NOTE: EXAMPLES BELOW SHOW THE EXPECTED INPUT AND OUTPUT FORMATS.
 
 EXAMPLE INPUT:
 
-WEATHERFORECAST START
+WEATHERFORECAST START:
 
-datetime: 2025-06-24T12:00:00Z
-temperature: 13.0
+<<<
+datetime: 2025-07-01T09:00:00Z
+airTemperature: 18.0
 precipitation: 0.0
+windSpeed: 2.0
+cloudAreaFraction: 10.0
+fogAreaFraction: 0.0
+ultravioletIndexClearSky: 5.0
 
-datetime: 2025-06-24T13:00:00Z
-temperature: 17.0
+datetime: 2025-07-01T12:00:00Z
+airTemperature: 22.0
 precipitation: 0.0
+windSpeed: 3.0
+cloudAreaFraction: 5.0
+fogAreaFraction: 0.0
+ultravioletIndexClearSky: 7.0
 
-datetime: 2025-06-24T14:00:00Z
-temperature: 22.0
-precipitation: 0.0
-
-datetime: 2025-06-24T15:00:00Z
-temperature: 20.0
-precipitation: 0.0
-
-datetime: 2025-06-24T16:00:00Z
-temperature: 19.0
-precipitation: 0.0
-
-USER'S LOCATION: Storgata
+User's location is: Storgata 1, Oslo
+>>>
 
 WEATHERFORECAST END
 
-NEARBY PLACES START
+NEARBY PLACES START:
+
+<<<
+Place name: Botanical Garden 
+Place address: Tøyen, Oslo 
+Place primary address: park
+Place types: park, tourist_attraction
+
+Place name: Oslo Public Library
+Place address: Bjørvika, Oslo 
+Place primary type: library 
+Place types: library, point_of_interest
+>>>
+
 NEARBY PLACES END
 
-NEARBY RUNNING ROUTES START
-NEARBY RUNNING ROUTES END
+NEARBY ROUTES START:
+
+<<<
+Route name: River Walk
+Route distance: 3200 meters
+Route polyline: encoded_polyline_1 
+
+Route name: Hill Loop
+Route distance: 5000 meters
+Route polyline: encoded_polyline_2
+>>>
+
+NEARBY ROUTES END
 
 EXAMPLE JSON OUTPUT:
 {
-    "activities": [
-        {
-            "month": 6,
-            "dayOfMonth": 24,
-            "timeStart": "12:00",
-            "timeEnd": "13:00",
-            "activityName": "Løping",
-            "activityDesc": "Løp i Storgata.",
-            "source": "STRAVA"
-            "id": 1,
-            "routeName": Blindernveien-Biskop Heuchs vei,
-            "distance": Double,
-            "polyline": String,
-        },
-        {
-            "month": 6,
-            "dayOfMonth": 24,
-            "timeStart": "13:00",
-            "timeEnd": "14:00",
-            "activityName": "Sykkeltur",
-            "activityDesc": "Sykkeltur i Storgata.",
-            "source": "PLACES"
-        }
-    ]
+  "activities": [
+    {
+      "type": "CustomActivitySuggestion",
+      "month": 7,
+      "dayOfMonth": 1,
+      "timeStart": "09:00",
+      "timeEnd": "10:00",
+      "activityName": "Morgentur",
+      "activityDesc": "Rolig spasertur i nærområdet."
+    },
+    {
+      "type": "PlaceActivitySuggestion",
+      "month": 7,
+      "dayOfMonth": 1,
+      "timeStart": "10:30",
+      "timeEnd": "11:30",
+      "activityName": "Bibliotekbesøk",
+      "activityDesc": "Les en bok på Oslo Public Library.",
+      "id": "lib-001",
+      "placeName": "Oslo Public Library",
+      "formattedAddress": "Bjørvika, Oslo",
+      "coordinates": {"first":59.9077,"second":10.7535}
+    },
+    {
+      "type": "StravaActivitySuggestion",
+      "month": 7,
+      "dayOfMonth": 1,
+      "timeStart": "12:00",
+      "timeEnd": "13:00",
+      "activityName": "Elveløp",
+      "activityDesc": "Løp langs elven på River Walk.",
+      "id": "route-001",
+      "routeName": "River Walk",
+      "distance": 3200.0,
+      "polyline": "encoded_polyline_1"
+    }
+  ]
 }
 END OF EXAMPLES
-        """.trimIndent(),
+""".trimIndent(),
     val fullPrompt: String = """
 ${basePrompt}
 ${examples}
     """.trimIndent(),
-    val temperature: Double = 0.5
+    val temperature: Double = 0.2
 )
 
+@OptIn(kotlinx.serialization.InternalSerializationApi::class)
 fun main() {
-    val prompt = Prompt()
-    println(prompt.fullPrompt)
+    val p: ActivitySuggestion = PlacesActivitySuggestion(
+        month = 7,
+        dayOfMonth = 1,
+        timeStart = "10:30",
+        timeEnd = "11:30",
+        activityName = "Bibliotekbesøk",
+        activityDesc = "Les en bok på Oslo Public Library.",
+        id = "lib-001",
+        placeName = "Oslo Public Library",
+        formattedAddress = "Bjørvika, Oslo",
+        coordinates = Pair(59.9077, 10.7535)
+    )
+
+    val s: ActivitySuggestion = StravaActivitySuggestion(
+        month = 7,
+        dayOfMonth = 1,
+        timeStart = "12:00",
+        timeEnd = "13:00",
+        activityName = "Elveløp",
+        activityDesc = "Løp langs elven på River Walk.",
+        id = "route-001",
+        routeName = "River Walk",
+        distance = 3200.0,
+        polyline = "encoded_polyline_1"
+    )
+
+    val module = SerializersModule {
+        polymorphic(ActivitySuggestion::class) {
+            subclass(CustomActivitySuggestion::class)
+            subclass(PlacesActivitySuggestion::class)
+            subclass(StravaActivitySuggestion::class)
+        }
+    }
+
+    val json = Json {
+        serializersModule = module
+        classDiscriminator = "type"
+    }
+
+    println(json.encodeToString(ActivitySuggestion::class.serializer(), p))
+    println(json.encodeToString(ActivitySuggestion::class.serializer(), s))
 }

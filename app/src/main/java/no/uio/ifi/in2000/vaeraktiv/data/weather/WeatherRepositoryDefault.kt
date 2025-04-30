@@ -37,6 +37,8 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import javax.inject.Inject
 import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class WeatherRepositoryDefault @Inject constructor(
     private val metAlertsRepository: IMetAlertsRepository,
@@ -148,6 +150,7 @@ class WeatherRepositoryDefault @Inject constructor(
         return alertDataList
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getForecastToday(location: Location): ForecastToday {
         getForecastForHour(location)
         val forecast = locationForecastRepository.getForecast(location.lat, location.lon)
@@ -208,11 +211,13 @@ class WeatherRepositoryDefault @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O) // krever API versjon 26
     override suspend fun getForecastForHour(location: Location): List<ForecastForHour> {
         val response = locationForecastRepository.getNext24Hours(location.lat, location.lon)
         Log.d("WeatherRepository", "getWeatherForHour response: $response")
         val hourDataList:List<ForecastForHour> = response?.map { timeSeries ->
             val forecastForHour = ForecastForHour(
+                time = ZonedDateTime.parse(timeSeries.time).withZoneSameInstant(ZoneId.of("Europe/Oslo")).toString().substring(11, 13),
                 temp = timeSeries.data.instant.details.airTemperature.toString(),
                 windSpeed = timeSeries.data.instant.details.windSpeed.toString(),
                 precipitationAmount = timeSeries.data.next1Hours?.details?.precipitationAmount.toString(),
@@ -231,50 +236,51 @@ class WeatherRepositoryDefault @Inject constructor(
     }
 
     override suspend fun getSuggestedActivitiesForOneDay(location: Location, dayNr: Int): SuggestedActivities? {
-//        val response = getTimeSeriesForDay(location, dayNr)
-//        val timeseries = response.first
-//        val units = response.second
-//        val places = getNearbyPlaces(location)
-//        val routes = stravaRepository.getRouteSuggestions(location)
-//        if (timeseries == null) {
-//            throw Exception("Weather forecast is null")
-//        }
-//        if (units == null) {
-//            throw Exception("Units are null")
-//        }
-//        if (places == null) {
-//            throw Exception("Places are null")
-//        }
-        return SuggestedActivities(
-            activities = listOf(
-                CustomActivitySuggestion(
-                    month = 6,
-                    dayOfMonth = 10,
-                    timeStart = "09:00",
-                    timeEnd = "10:00",
-                    activityName = "Morning Run",
-                    activityDesc = "A quick run to start the day."
-                ),
-                CustomActivitySuggestion(
-                    month = 6,
-                    dayOfMonth = 10,
-                    timeStart = "12:00",
-                    timeEnd = "13:00",
-                    activityName = "Lunch Walk",
-                    activityDesc = "A relaxing walk after lunch."
-                ),
-                CustomActivitySuggestion(
-                    month = 6,
-                    dayOfMonth = 10,
-                    timeStart = "18:00",
-                    timeEnd = "19:00",
-                    activityName = "Evening Yoga",
-                    activityDesc = "Yoga session to unwind."
-                )
-            )
-        )
-        //return aiRepository.getSuggestionsForOneDay(FormattedForecastDataForPrompt(timeseries, units, location.addressName), places, routes)
+        val response = getTimeSeriesForDay(location, dayNr)
+        val timeseries = response.first
+        val units = response.second
+        val places = getNearbyPlaces(location)
+        val routes = stravaRepository.getRouteSuggestions(location)
+        if (timeseries == null) {
+            throw Exception("Weather forecast is null")
+        }
+        if (units == null) {
+            throw Exception("Units are null")
+        }
+        if (places == null) {
+            throw Exception("Places are null")
+        }
+        return aiRepository.getSuggestionsForOneDay(FormattedForecastDataForPrompt(timeseries, units, location.addressName), places, routes)
     }
+
+//        return SuggestedActivities(
+//            activities = listOf(
+//                CustomActivitySuggestion(
+//                    month = 6,
+//                    dayOfMonth = 10,
+//                    timeStart = "09:00",
+//                    timeEnd = "10:00",
+//                    activityName = "Morning Run",
+//                    activityDesc = "A quick run to start the day."
+//                ),
+//                CustomActivitySuggestion(
+//                    month = 6,
+//                    dayOfMonth = 10,
+//                    timeStart = "12:00",
+//                    timeEnd = "13:00",
+//                    activityName = "Lunch Walk",
+//                    activityDesc = "A relaxing walk after lunch."
+//                ),
+//                CustomActivitySuggestion(
+//                    month = 6,
+//                    dayOfMonth = 10,
+//                    timeStart = "18:00",
+//                    timeEnd = "19:00",
+//                    activityName = "Evening Yoga",
+//                    activityDesc = "Yoga session to unwind."
+//                )
+//            )
+//        )
 
     override suspend fun getSuggestedActivity(location: Location, dayNr: Int, index: Int): ActivitySuggestion? {
         val dummyNewActivity = CustomActivitySuggestion(
