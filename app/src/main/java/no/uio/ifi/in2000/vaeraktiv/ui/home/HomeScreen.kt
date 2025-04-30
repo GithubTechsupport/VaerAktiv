@@ -113,25 +113,19 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                                 ErrorMessage(
                                     message = "Error fetching today's activities: ${uiState.errorMessageActivitiesToday}"
                                 )
-                            } else if (uiState.activitiesToday != null) {
-                                val activities =
-                                    uiState.activitiesToday!!.activities.mapIndexed { index, response ->
+                            } else if (activities?.get(0) != null) {
+                                val activities = activities?.get(0)!!.activities.mapIndexed { index, response ->
                                         Activity(
                                             timeOfDay = "${response.timeStart} - ${response.timeEnd}",
-                                            name = response.activity,
+                                            name = response.activityName,
                                             desc = response.activityDesc
                                         ) to index
                                     }
                                 AddActivitiesForDay(
-                                    activityDate = ActivityDate(
-                                        "I dag",
-                                        activities.map { it.first }),
-                                    onRefresh = { index -> viewModel.refreshSingleActivity(index) },
-                                    isRefreshing = { index ->
-                                        uiState.isRefreshingActivity.contains(
-                                            index
-                                        )
-                                    },
+                                    dayNr = 0,
+                                    activityDate = ActivityDate("I dag", activities.map { it.first }),
+                                    isLoading = {uiState.loadingActivities},
+                                    onRefresh = { dayNr, indexParam, activityName -> viewModel.replaceActivityInDay(dayNr, indexParam, activityName) },
                                     weatherData = listOf(
                                         ForecastForDay(
                                             date = "00-06",
@@ -162,31 +156,6 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                                     modifier = Modifier.padding(start = 8.dp)
                                 )
                             }
-
-                    //    if (uiState.isErrorActivitiesToday) {
-                  //          ErrorMessage(
-                //                message = "Error fetching today's activities: ${uiState.errorMessageActivitiesToday}"
-              //              )
-            //            } else if (activities?.get(0) != null) {
-          //                  val activitiesToday = activities?.get(0)!!.activities.mapIndexed { index, response ->
-                      //          Activity(
-                    //                timeOfDay = "${response.timeStart} - ${response.timeEnd}",
-                  //                  name = response.activityName,
-                //                    desc = response.activityDesc,
-              //                  ) to index
-            //                }
-                           // AddActivitiesForDay(
-                         //       dayNr = 0,
-                       //         activityDate = ActivityDate("I dag", activitiesToday.map { it.first }),
-                         //       isLoading = { uiState.loadingActivities },
-                       //         onRefresh = { dayNr, indexParam, activityName -> viewModel.replaceActivityInDay(dayNr, indexParam, activityName) }
-                      //      )
-                      //  } else {
-                          //  Text (
-                             //   text = "Finner ingen aktiviteter",
-                               // style = MaterialTheme.typography.bodyMedium,
-                               // modifier = Modifier.padding(start = 8.dp)
-                            //)
                         }
                     }
                 }

@@ -177,7 +177,6 @@ fun WeatherWeek(
                                 date = getDayOfWeek(day.date),
                                 activities = activitiesList,
                             ),
-                            isToday = day.date == LocalDate.now().toString()
                             isLoading = { uiState.loadingActivities },
                             onRefresh = { dayNr, indexParam, activityName -> viewModel.replaceActivityInDay(dayNr, indexParam, activityName) }
                         )

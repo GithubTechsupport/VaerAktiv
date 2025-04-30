@@ -19,11 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
-import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
@@ -32,12 +30,9 @@ fun AddActivitiesForDay(
     dayNr: Int,
     activityDate: ActivityDate,
     modifier: Modifier = Modifier,
-    onRefresh: ((Int) -> Unit)? = null,
-    //isRefreshing: ((Int) -> Boolean)? = null,
-    isToday: Boolean? = null, // en eller annen form for sjekk om vi skal vise dagens kort eller fremtidig dato
-    weatherData: List<ForecastForDay>? = null
     isLoading: () -> Set<Pair<Int, Int>>,
-    onRefresh: (Int, Int, String) -> Unit
+    onRefresh: (Int, Int, String) -> Unit,
+    weatherData: List<ForecastForDay>? = null,
     ) {
     val context = LocalContext.current
     Column(
