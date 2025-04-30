@@ -37,6 +37,8 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import javax.inject.Inject
 import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class WeatherRepositoryDefault @Inject constructor(
     private val metAlertsRepository: IMetAlertsRepository,
@@ -148,6 +150,7 @@ class WeatherRepositoryDefault @Inject constructor(
         return alertDataList
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getForecastToday(location: Location): ForecastToday {
         getForecastForHour(location)
         val forecast = locationForecastRepository.getForecast(location.lat, location.lon)
@@ -208,11 +211,13 @@ class WeatherRepositoryDefault @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O) // krever API versjon 26
     override suspend fun getForecastForHour(location: Location): List<ForecastForHour> {
         val response = locationForecastRepository.getNext24Hours(location.lat, location.lon)
         Log.d("WeatherRepository", "getWeatherForHour response: $response")
         val hourDataList:List<ForecastForHour> = response?.map { timeSeries ->
             val forecastForHour = ForecastForHour(
+                time = ZonedDateTime.parse(timeSeries.time).withZoneSameInstant(ZoneId.of("Europe/Oslo")).toString().substring(11, 13),
                 temp = timeSeries.data.instant.details.airTemperature.toString(),
                 windSpeed = timeSeries.data.instant.details.windSpeed.toString(),
                 precipitationAmount = timeSeries.data.next1Hours?.details?.precipitationAmount.toString(),
