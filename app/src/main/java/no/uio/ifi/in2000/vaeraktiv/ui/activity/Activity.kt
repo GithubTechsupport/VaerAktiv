@@ -14,6 +14,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.preferences.Preference
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
 fun Activity(
@@ -26,10 +29,10 @@ fun Activity(
             isActive = !isActive
         },
         colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = if (isActive) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onBackground,
-            containerColor = if (isActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background,
-            disabledContentColor = MaterialTheme.colorScheme.onBackground,
-            disabledContainerColor = MaterialTheme.colorScheme.background
+            contentColor = if (isActive) Container else BackGroundColor,
+            containerColor = if (isActive) OnContainer else BackGroundColor,
+            disabledContentColor = BackGroundColor,
+            disabledContainerColor = BackGroundColor
         ),
         modifier = Modifier
             .fillMaxSize()
@@ -40,7 +43,8 @@ fun Activity(
     ) {
         Text(
             text = activity.desc,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            color = if (isActive) BackGroundColor else OnContainer
         )
     }
 }

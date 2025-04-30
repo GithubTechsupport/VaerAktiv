@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
@@ -27,7 +28,7 @@ fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background)
+                .background(BackGroundColor)
                 .padding(horizontal = 0.dp, vertical = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
@@ -38,7 +39,7 @@ fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
                     .fillMaxWidth()
                     .padding(defaultPadding)
                     .height(1.dp)
-                    .background(color = MaterialTheme.colorScheme.onBackground)
+                    .background(BackGroundColor)
                 )
             }
             /* TODO: Legge til en liste man sender inn i AddPlace som man fyller opp

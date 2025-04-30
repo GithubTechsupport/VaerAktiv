@@ -30,6 +30,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @SuppressLint("DiscouragedApi")
 @Composable
@@ -50,7 +53,7 @@ fun PlaceCard(
             .padding(defaultPadding)
             .clip(RoundedCornerShape(10.dp))
             .background(
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = Container
             )
             .clickable (
                 onClick = {
@@ -72,7 +75,7 @@ fun PlaceCard(
             Text(
                 text = location.name,
                 style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = OnContainer,
                 modifier = Modifier
                     .padding(defaultPadding)
             )
@@ -91,7 +94,8 @@ fun PlaceCard(
                     contentDescription = "Delete Icon",
                     modifier = Modifier
                         .padding(defaultPadding)
-                        .size(30.dp)
+                        .size(30.dp),
+                    tint = OnContainer
                 )
             }
 
@@ -100,7 +104,7 @@ fun PlaceCard(
             .fillMaxWidth()
             .padding(horizontal = defaultPadding)
             .height(1.dp)
-            .background(color = MaterialTheme.colorScheme.onBackground)
+            .background(OnContainer)
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -127,21 +131,21 @@ fun PlaceCard(
                     Text(
                         text = location.shortDesc,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = OnContainer,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
                     Text(
                         text = "${location.uv} UV",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = OnContainer,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
                     Text(
                         text = "${location.highestTemp}°/${location.lowestTemp}°",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = OnContainer,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
@@ -153,14 +157,14 @@ fun PlaceCard(
                     Text(
                         text = "${location.wind} m/s",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = OnContainer,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
                     Text(
                         text = "nedbør: ${location.downPour} ml",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = OnContainer,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
