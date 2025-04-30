@@ -2,10 +2,11 @@ package no.uio.ifi.in2000.vaeraktiv.model.ai
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
+import kotlinx.serialization.ExperimentalSerializationApi
 
 @Serializable
 sealed interface ActivitySuggestion {
-    val type: String
     val month: Int
     val dayOfMonth: Int
     val timeStart: String
@@ -17,7 +18,6 @@ sealed interface ActivitySuggestion {
 @Serializable
 @SerialName("PlaceActivitySuggestion")
 data class PlacesActivitySuggestion (
-    override val type: String = "PlaceActivitySuggestion",
     override val month: Int,
     override val dayOfMonth: Int,
     override val timeStart: String,
@@ -34,7 +34,6 @@ data class PlacesActivitySuggestion (
 @Serializable
 @SerialName("StravaActivitySuggestion")
 data class StravaActivitySuggestion (
-    override val type: String = "StravaActivitySuggestion",
     override val month: Int,
     override val dayOfMonth: Int,
     override val timeStart: String,
@@ -51,7 +50,6 @@ data class StravaActivitySuggestion (
 @Serializable
 @SerialName("CustomActivitySuggestion")
 data class CustomActivitySuggestion (
-    override val type: String = "CustomActivitySuggestion",
     override val month: Int,
     override val dayOfMonth: Int,
     override val timeStart: String,
