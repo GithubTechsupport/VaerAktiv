@@ -23,7 +23,7 @@ interface WeatherRepository {
     // LiveData properties exposed for observing current values
     val currentLocation: LiveData<Location?>
     val deviceLocation: LiveData<Location?>
-    val activities: LiveData<List<SuggestedActivities?>>
+    val activities: LiveData<List<SuggestedActivities?>?>
 
     // Updates the current location value.
     fun setCurrentLocation(location: Location)
@@ -53,6 +53,12 @@ interface WeatherRepository {
 
     // Uses AI to get activities based on the weather forecast.
     suspend fun getSuggestedActivitiesForOneDay(location: Location, dayNr: Int): SuggestedActivities?
+
+    suspend fun getSuggestedActivity(
+        location: Location,
+        dayNr: Int,
+        index: Int
+    ): ActivitySuggestion?
 
     // Starts tracking the device location, providing updates to observers.
     fun trackDeviceLocation(lifecycleOwner: LifecycleOwner)

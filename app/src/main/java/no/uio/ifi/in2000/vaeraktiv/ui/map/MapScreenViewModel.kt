@@ -31,7 +31,7 @@ class MapScreenViewModel @Inject constructor(
 
     val deviceLocation: LiveData<Location?> = weatherRepository.deviceLocation
 
-    val activities: LiveData<List<SuggestedActivities?>> = weatherRepository.activities
+    val activities: LiveData<List<SuggestedActivities?>?> = weatherRepository.activities
 
     init {
     }

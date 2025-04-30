@@ -1,7 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -29,6 +28,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
     val uiState by viewModel.homeScreenUiState.collectAsState()
     val currentLocation by viewModel.currentLocation.observeAsState()
+    val activities by viewModel.activities.observeAsState()
 
     LaunchedEffect(Unit) {
         viewModel.initialize()
@@ -36,9 +36,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
 
     LaunchedEffect(key1 = currentLocation) {
         currentLocation?.let {
-            Log.d("HomeScreen", "Current location changed: $it")
             viewModel.getHomeScreenData()
-            viewModel.getActivities()
         }
     }
 
@@ -109,18 +107,19 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                             ErrorMessage(
                                 message = "Error fetching today's activities: ${uiState.errorMessageActivitiesToday}"
                             )
-                        } else if (uiState.activitiesToday != null) {
-                            val activities = uiState.activitiesToday!!.activities.mapIndexed { index, response ->
+                        } else if (activities?.get(0) != null) {
+                            val activitiesToday = activities?.get(0)!!.activities.mapIndexed { index, response ->
                                 Activity(
                                     timeOfDay = "${response.timeStart} - ${response.timeEnd}",
-                                    name = response.activity,
-                                    desc = response.activityDesc
+                                    name = response.activityName,
+                                    desc = response.activityDesc,
                                 ) to index
                             }
                             AddActivitiesForDay(
-                                activityDate = ActivityDate("I dag", activities.map { it.first }),
-                                onRefresh = { index -> viewModel.refreshSingleActivity(index) },
-                                isRefreshing = { index -> uiState.isRefreshingActivity.contains(index) }
+                                dayNr = 0,
+                                activityDate = ActivityDate("I dag", activitiesToday.map { it.first }),
+                                isLoading = { uiState.loadingActivities },
+                                onRefresh = { dayNr, indexParam, activityName -> viewModel.replaceActivityInDay(dayNr, indexParam, activityName) }
                             )
                         } else {
                             Text (
@@ -140,7 +139,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                         )
                     } else {
                         WeatherWeek(
-                            data = uiState.thisWeeksWeather,
+                            activities = activities,
                             viewModel = viewModel,
                             uiState = uiState
                         )
