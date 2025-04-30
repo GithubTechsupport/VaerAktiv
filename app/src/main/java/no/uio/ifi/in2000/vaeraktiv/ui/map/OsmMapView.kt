@@ -70,9 +70,9 @@ fun OsmMapView(
                         }
                         setPoints(points)
                     }.also { mapView.overlays.add(it) }
-                } catch(e: Exception) (
+                } catch(e: Exception) {
                     Log.e("OsmMapView", "Error decoding polyline: ${e}")
-                )
+                }
             }
 
 //            if (allPoints.isNotEmpty()) {
