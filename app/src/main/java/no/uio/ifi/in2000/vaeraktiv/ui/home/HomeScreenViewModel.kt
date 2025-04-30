@@ -17,8 +17,7 @@ import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
-import no.uio.ifi.in2000.vaeraktiv.model.ai.Interval
-import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
+import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
@@ -37,6 +36,8 @@ class HomeScreenViewModel @Inject constructor(
 
     val currentLocation: LiveData<Location?> = weatherRepository.currentLocation
 
+    val activities: LiveData<List<SuggestedActivities?>?> = weatherRepository.activities
+
     private val _homeScreenUiState = MutableStateFlow(HomeScreenUiState())
     val homeScreenUiState: StateFlow<HomeScreenUiState> = _homeScreenUiState.asStateFlow()
 
@@ -53,7 +54,7 @@ class HomeScreenViewModel @Inject constructor(
             Location("Oslo Sentralstasjon", "59.9111", "10.7533")
         )
         initialized = true
-        getActivities() // fra ActivityScreenViewModel
+        getActivitiesForToday()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -145,21 +146,20 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getActivities() { // fra ActivityScreenViewModel
+    fun getActivitiesForToday() {
         viewModelScope.launch {
-            _homeScreenUiState.update {
-                it.copy(isLoadingActivitiesToday = true)
-            }
+            _homeScreenUiState.update { it.copy(isLoadingActivitiesToday = true, isErrorActivitiesToday = false) }
             try {
-                val today = LocalDate.now()
-                val activities = weatherRepository.getActivitiesForDate(
-                    currentLocation.value ?: throw Exception("No location"),
-                    today
+                val activities = weatherRepository.getSuggestedActivitiesForOneDay(
+                    currentLocation.value!!,
+                    0
                 )
+                if (activities == null) {
+                    throw Exception("Activities are null")
+                }
+                weatherRepository.replaceActivitiesForDay(0, activities)
                 _homeScreenUiState.update {
                     it.copy(
-                        activitiesToday = activities,
                         isErrorActivitiesToday = false,
                         errorMessageActivitiesToday = "",
                     )
@@ -167,33 +167,30 @@ class HomeScreenViewModel @Inject constructor(
             } catch (e: Exception) {
                 _homeScreenUiState.update {
                     it.copy(
-                        isErrorFutureActivities = true,
-                        errorMessageFutureActivities = e.toString() ?: "Unknown error"
+                        isErrorActivitiesToday = true,
+                        errorMessageActivitiesToday = e.toString() ?: "Unknown error"
                     )
-
                 }
-                Log.e("ActivityViewModel", "Error fetching todays activites: ", e)
+                Log.e("ActivityViewModel", "Error fetching today's activities: ", e)
             } finally {
-                _homeScreenUiState.update {
-                    it.copy()
-                }
+                _homeScreenUiState.update { it.copy(isLoadingActivitiesToday = false) }
             }
         }
     }
 
-    fun getActivitiesForDate(date: LocalDate) {
+    fun getActivitiesForAFutureDay(dayNr: Int) {
         viewModelScope.launch {
-            _homeScreenUiState.update {
-                it.copy(loadingFutureActivities = it.loadingFutureActivities + date)
-            }
+            _homeScreenUiState.update { it.copy(loadingFutureActivities = it.loadingFutureActivities + dayNr, isErrorFutureActivities = false) }
             try {
-                val activities = weatherRepository.getActivitiesForDate(
+                weatherRepository.getSuggestedActivitiesForOneDay(
                     currentLocation.value!!,
-                    date
-                )
+                    dayNr
+                )?.let {
+                    weatherRepository.replaceActivitiesForDay(dayNr, it)
+                }
+                    ?: throw Exception("Activities are null")
                 _homeScreenUiState.update {
                     it.copy(
-                        futureActivities = it.futureActivities + (date to activities),
                         isErrorFutureActivities = false,
                         errorMessageFutureActivities = "",
                     )
@@ -205,105 +202,32 @@ class HomeScreenViewModel @Inject constructor(
                         errorMessageFutureActivities = e.toString() ?: "Unknown error"
                     )
                 }
-                Log.e("ActivityViewModel", "Error fetching activites for $date: ", e)
+                Log.e("ActivityViewModel", "Error fetching a future days activities ", e)
             } finally {
-                _homeScreenUiState.update {
-                    it.copy(loadingFutureActivities = it.loadingFutureActivities - date)
-                }
+                _homeScreenUiState.update { it.copy(loadingFutureActivities = it.loadingFutureActivities - dayNr) }
             }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun refreshSingleActivity(index: Int) {
+    fun replaceActivityInDay(dayNr: Int, index: Int, oldActivity: String) {
         viewModelScope.launch {
-            Log.d("HomeScreenViewModel", "Starting refresh for index $index")
-            val startTime = System.currentTimeMillis()
+            Log.d("HomeScreenViewModel", "Replacing activity in day $dayNr at index $index")
             _homeScreenUiState.update {
-                it.copy(isRefreshingActivity = it.isRefreshingActivity + index)
+                it.copy(loadingActivities = it.loadingActivities + (dayNr to index))
             }
-            Log.d(
-                "HomeScreenViewModel",
-                "isRefreshingActivity after adding index: ${_homeScreenUiState.value.isRefreshingActivity}"
-            )
-
-            var newInterval: Interval? = null
-            var errorString: String = ""
             try {
-                val today = LocalDate.now()
-                val location = currentLocation.value ?: throw Exception("No location")
-                Log.d("HomeScreenViewModel", "Location: $location")
-                Log.d(
-                    "HomeScreenViewModel",
-                    "todaysActivities before refresh: ${_homeScreenUiState.value.activitiesToday}"
-                )
-                newInterval = weatherRepository.getNewActivityForDate(location, today)
+                delay(1000)
+                weatherRepository.getSuggestedActivity(currentLocation.value!!, dayNr, index)
+                    ?.let {
+                        weatherRepository.replaceActivityInDay(dayNr, index, it)
+                    } ?: throw Exception("New activity is null")
+                Log.d("HomeScreenViewModel", "Successfully replaced activity")
             } catch (e: Exception) {
-                Log.d("HomeScreenViewModel", "Error refreshing activity at index: $index")
-                _homeScreenUiState.update {
-                    it.copy(
-                        isErrorActivitiesToday = true,
-                        errorMessageActivitiesToday = e.toString(),
-                        isRefreshingActivity = it.isRefreshingActivity - index
-                    )
-                }
-                Log.e("Melding fra HomeScreenViewModel", "Error fetching todays activites: ", e)
+                Log.e("HomeScreenViewModel", "Error replacing activity: ", e)
             }
-
-            val elapsedTime = System.currentTimeMillis() - startTime
-            val minDuration = 1000L
-            if (elapsedTime < minDuration) {
-                delay(minDuration - elapsedTime)
-                Log.d("HomeScreenViewModel", "Delaying for $minDuration ms")
-            } else {
-                Log.d("HomeScreenViewModel", "No delay needed")
+            finally {
+                _homeScreenUiState.update { it.copy(loadingActivities = it.loadingActivities - (dayNr to index)) }
             }
-
-            _homeScreenUiState.update { currentState ->
-                if (currentState.errorMessage != null) {
-                    currentState.copy(
-                        isErrorActivitiesToday = true,
-                        errorMessageActivitiesToday = errorString,
-                        isRefreshingActivity = currentState.isRefreshingActivity - index
-                    )
-                } else if (newInterval != null) {
-                    val currentActivities =
-                        currentState.activitiesToday?.activities?.toMutableList() ?: mutableListOf()
-                    if (index in currentActivities.indices) {
-                        currentActivities[index] = newInterval
-
-                        Log.d(
-                            "HomeScreenViewModel",
-                            "Successfully updated activity at index $index"
-                        )
-                        currentState.copy(
-                            activitiesToday = JsonResponse(activities = currentActivities),
-                            isErrorActivitiesToday = false,
-                            errorMessageActivitiesToday = "",
-                            isRefreshingActivity = currentState.isRefreshingActivity - index
-                        )
-                    } else {
-                        Log.w(
-                            "HomeScreenViewModel",
-                            "Index $index out of bounds for activitiesToday: ${currentActivities.size}"
-                        )
-                        currentState.copy(
-                            isErrorActivitiesToday = true,
-                            errorMessageActivitiesToday = "Index $index out of bounds",
-                            isRefreshingActivity = currentState.isRefreshingActivity - index
-                        )
-                    }
-                } else {
-                    Log.w("HomeScreenViewModel", "Index $index out of bounds for activitiesToday:")
-                    currentState.copy(
-                        isRefreshingActivity = currentState.isRefreshingActivity - index
-                    )
-                }
-            }
-            Log.d(
-                "HomeScreenViewModel",
-                "After refresh, isRefreshingActivity: ${_homeScreenUiState.value.isRefreshingActivity}"
-            )
         }
     }
 }
@@ -319,15 +243,13 @@ data class HomeScreenUiState(
 
     // errors
     val todaysWeatherError: String? = null,
-    val isRefreshingActivity: Set<Int> = emptySet(),
+    val loadingActivities: Set<Pair<Int, Int>> = emptySet(),
     // todays activities
-    val activitiesToday: JsonResponse? = null, // fra ActivityScreenViewModel
     val isLoadingActivitiesToday: Boolean = false,
     val isErrorActivitiesToday: Boolean = false,
     val errorMessageActivitiesToday: String = "",
     // rest of the week
-    val futureActivities: Map<LocalDate, JsonResponse> = emptyMap(), // fra ActivityScreenViewModel
-    val loadingFutureActivities: Set<LocalDate> = emptySet(),
+    val loadingFutureActivities: Set<Int> = emptySet(),
     val isErrorFutureActivities: Boolean = false,
     val errorMessageFutureActivities: String = "",
     // errors for other data

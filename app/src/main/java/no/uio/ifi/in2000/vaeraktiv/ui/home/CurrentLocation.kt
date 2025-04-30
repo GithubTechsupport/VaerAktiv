@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,10 +27,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import no.uio.ifi.in2000.vaeraktiv.R
+import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
-fun CurrentLocation(locationName : String) {
-    var isExpanded by remember { mutableStateOf(false) }
+fun CurrentLocation(locationName : String, deviceLocation: Location?) { // navn på sted, devicelocation
+    var expanded by remember { mutableStateOf(false) }
+    var placeName by remember { mutableStateOf(locationName) }
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -39,27 +44,32 @@ fun CurrentLocation(locationName : String) {
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.clickable { isExpanded = !isExpanded }
+            modifier = Modifier.clickable { if (placeName != deviceLocation?.addressName) expanded = !expanded }
         ) {
+            Log.d("CurrentLocation", "locationName: $locationName, currentLocation: $deviceLocation")
             Text(
-                text = locationName,
+                text = placeName,
                 style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = OnContainer,
                 textAlign = TextAlign.Center,
                 fontSize = 35.sp
             )
-            if (isExpanded) {
-                Row (modifier = Modifier) {
+            if (expanded) {
+                Row (
+                    modifier = Modifier.clickable { placeName = deviceLocation?.addressName ?: locationName }
+                ) {
                     Text(
                         text = "Din posisjon",
-                        fontSize = 20.sp
+                        fontSize = 20.sp,
+                        color = OnContainer
                     )
-                    Image(
+                    Icon(
                         painter = painterResource(id = R.drawable.location),
                         contentDescription = "Location",
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp),
+                        tint = OnContainer
                     )
-                } // skal være clickable
+                }
             }
         }
         Box(modifier = Modifier
@@ -68,7 +78,7 @@ fun CurrentLocation(locationName : String) {
             .padding(horizontal = 50.dp)
             .height(1.dp)
             .background(
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = OnContainer
             )
         )
     }

@@ -19,6 +19,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.vaeraktiv.R
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.PrimaryNavbar
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryNavbar
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
 
 /*
 * This is a navigation bar for the application, this function is called in the MainActivity.kt.
@@ -37,8 +42,8 @@ fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> St
 
     BottomAppBar(
         modifier = Modifier.height(80.dp),
-        containerColor = MaterialTheme.colorScheme.surfaceTint,
-        contentColor = Color.Black
+        containerColor = SecondaryNavbar,
+        contentColor = PrimaryNavbar
     ) {
         navItems.forEach { (route, iconId) ->
             val selected = getSelectedRoute() == route
@@ -47,10 +52,10 @@ fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> St
                     .weight(1f)
                     .fillMaxHeight()
                     .padding(4.dp)
-                    .background(
-                        color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.surfaceTint,
-                        shape = RoundedCornerShape(12.dp)
-                    )
+//                    .background(
+//                        color = if (selected) SecondaryNavbar else PrimaryNavbar,
+//                        shape = RoundedCornerShape(12.dp)
+//                    )
                     .clickable {
                         if (selected) return@clickable
                         navController.navigate(route) {
@@ -65,7 +70,7 @@ fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> St
                     Icon(
                         painter = painterResource(id = iconId),
                         contentDescription = route,
-                        tint = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface
+                        tint = if (selected) SecondaryOnContainer else Container
                     )
                 }
             }

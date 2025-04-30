@@ -12,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.preferences.Preference
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 
 @Composable
@@ -20,7 +22,7 @@ fun SettingsScreen(isOnline: Boolean) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background),
+                .background(BackGroundColor),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
@@ -30,7 +32,7 @@ fun SettingsScreen(isOnline: Boolean) {
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier
                         .padding(10.dp),
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = OnContainer
                 )
             }
             item {
@@ -39,6 +41,7 @@ fun SettingsScreen(isOnline: Boolean) {
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
                         .padding(10.dp),
+                    color = OnContainer
                 )
                 Activity(Preference("Ballsport", false))
                 Activity(Preference("Håndtverk", false))
@@ -52,6 +55,7 @@ fun SettingsScreen(isOnline: Boolean) {
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
                         .padding(10.dp),
+                    color = OnContainer
                 )
                 Activity(Preference("Sammen med andre", false))
                 Activity(Preference("Alene", false))
@@ -63,6 +67,7 @@ fun SettingsScreen(isOnline: Boolean) {
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
                         .padding(10.dp),
+                    color = OnContainer
                 )
                 Activity(Preference("Ja", false))
             }

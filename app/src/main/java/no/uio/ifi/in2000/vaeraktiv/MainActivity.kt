@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
         }
         enableEdgeToEdge()
         setContent {
-            VaerAktivTheme{
+            VaerAktivTheme {
                 Navbar(favoriteLocationViewModel, homeScreenViewModel, mapScreenViewModel)
             }
         }

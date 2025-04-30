@@ -52,5 +52,5 @@ suspend fun main() {
     })
     val source = StravaDatasource(networkClient)
     val repo = StravaRepository(source)
-    //println(repo.getRouteSuggestions(Pair(59.9111, 10.7533)))
+    println(repo.getRouteSuggestions(Location("Oslo Sentralstasjon", "59.9111", "10.7533")))
 }

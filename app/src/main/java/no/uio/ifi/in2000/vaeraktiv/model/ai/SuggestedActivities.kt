@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SuggestedActivities (
-    val activities: List<CustomActivitySuggestion>
+    val activities: List<ActivitySuggestion>
 ) {
     override fun toString(): String {
         val response = activities.joinToString("\n") {

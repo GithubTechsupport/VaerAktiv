@@ -19,6 +19,6 @@ fogAreaFraction: ${it.data.instant.details.fogAreaFraction}
 ultravioletIndexClearSky: ${it.data.instant.details.ultravioletIndexClearSky}
             """.trimIndent()
         }
-        return "The units are: $units\n\nWEATHERFORECAST START:\n\n$userPrompt\n\nWEATHERFORECAST END\n\nUser's location is: $location"
+        return "The units are: $units\n\n$userPrompt\n\nUser's location is: $location"
     }
 }

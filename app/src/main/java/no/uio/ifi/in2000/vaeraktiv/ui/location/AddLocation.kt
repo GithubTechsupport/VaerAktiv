@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
 
 @Composable
 fun AddPlace(defaultPadding: Dp, viewModel: FavoriteLocationViewModel) {
@@ -27,9 +28,7 @@ fun AddPlace(defaultPadding: Dp, viewModel: FavoriteLocationViewModel) {
             .wrapContentHeight()
             .clickable{expanded = !expanded}
             .clip(RoundedCornerShape(10))
-            .background(
-                color = MaterialTheme.colorScheme.primaryContainer
-            )
+            .background(Container)
     ) {
         if (expanded) AddLocationExpanded(defaultPadding, viewModel) else AddLocationDefault(defaultPadding)
 

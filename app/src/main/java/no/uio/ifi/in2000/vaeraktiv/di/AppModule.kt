@@ -150,7 +150,7 @@ object AppModule {
         locationRepository: LocationRepository,
         nowcastRepository: NowcastRepository,
         placesRepository: placesRepository,
-        stravaRepository: StravaRepository
+        stravaRepository: StravaRepository,
     ): WeatherRepository {
         return WeatherRepositoryDefault(
             metAlertsRepository, locationForecastRepository, sunriseRepository,

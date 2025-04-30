@@ -7,9 +7,7 @@ import com.google.android.libraries.places.api.model.AutocompleteSessionToken
 import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
-import no.uio.ifi.in2000.vaeraktiv.model.ai.Interval
-import no.uio.ifi.in2000.vaeraktiv.model.ai.JsonResponse
-import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
+import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
@@ -25,6 +23,7 @@ interface WeatherRepository {
     // LiveData properties exposed for observing current values
     val currentLocation: LiveData<Location?>
     val deviceLocation: LiveData<Location?>
+    val activities: LiveData<List<SuggestedActivities?>?>
 
     // Updates the current location value.
     fun setCurrentLocation(location: Location)
@@ -55,9 +54,11 @@ interface WeatherRepository {
     // Uses AI to get activities based on the weather forecast.
     suspend fun getSuggestedActivitiesForOneDay(location: Location, dayNr: Int): SuggestedActivities?
 
-    suspend fun getActivitiesForDate(location: Location, date: LocalDate): JsonResponse
-
-    suspend fun getNewActivityForDate(location: Location, date: LocalDate): Interval
+    suspend fun getSuggestedActivity(
+        location: Location,
+        dayNr: Int,
+        index: Int
+    ): ActivitySuggestion?
 
     // Starts tracking the device location, providing updates to observers.
     fun trackDeviceLocation(lifecycleOwner: LifecycleOwner)
@@ -69,4 +70,15 @@ interface WeatherRepository {
     ): List<AutocompletePrediction>
 
     suspend fun getNearbyPlaces(location: Location): NearbyPlacesSuggestions
+
+    fun replaceActivitiesForDay(
+        dayNr: Int,
+        newActivities: SuggestedActivities
+    )
+
+    fun replaceActivityInDay(
+        dayNr: Int,
+        index: Int,
+        newActivity: ActivitySuggestion
+    )
 }

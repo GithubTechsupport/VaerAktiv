@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +28,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
@@ -33,12 +38,12 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 fun DisplayHourlyForecast(data: List<ForecastForHour>) {
     val context = LocalContext.current
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text(
-            text = "Hourly Forecast",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
+    Column {
+//        Text(
+//            text = "Hourly Forecast",
+//            style = MaterialTheme.typography.titleMedium,
+//            modifier = Modifier.padding(bottom = 8.dp)
+//        )
 
         LazyRow(
             modifier = Modifier.fillMaxWidth()
@@ -53,8 +58,10 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                         .width(80.dp)
                         .height(160.dp)
                         .background(
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                        ),
+                            BackGroundColor,
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                        .border(1.dp, OnContainer, shape = RoundedCornerShape(10.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(
@@ -65,7 +72,8 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                         Text(
                             text = "HH", // "HH:mm"
                             style = MaterialTheme.typography.labelMedium,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            color = OnContainer
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Image(
@@ -75,21 +83,24 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
+                            text = "${hour.temp}°C", // Assumes you have `temperature` in ForecastForHour
+                            style = MaterialTheme.typography.labelSmall,
+                            textAlign = TextAlign.Center,
+                            color = OnContainer
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
                             text = "${hour.precipitationAmount}mm", // Assumes you have `temperature` in ForecastForHour
                             style = MaterialTheme.typography.labelSmall,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            color = OnContainer
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "${hour.windSpeed}m/s", // Assumes you have `temperature` in ForecastForHour
                             style = MaterialTheme.typography.labelSmall,
-                            textAlign = TextAlign.Center
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "${hour.temp}°C", // Assumes you have `temperature` in ForecastForHour
-                            style = MaterialTheme.typography.labelSmall,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            color = OnContainer
                         )
                     }
                 }
