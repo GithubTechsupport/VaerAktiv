@@ -5,4 +5,6 @@ data class ForecastForHour(
     val windSpeed : String? = null,
     val precipitationAmount : String? = null,
     val icon : String? = null,
+    val time : String? = null,
+    val uv : String? = null
 )

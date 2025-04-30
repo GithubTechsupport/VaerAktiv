@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
+import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SunEvent
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
@@ -35,78 +36,134 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
 @Composable
-fun DisplayHourlyForecast(data: List<ForecastForHour>) {
+fun DisplayHourlyForecast(data: List<ForecastForHour>, sunData: List<String>) {
+    val sunRise = sunData.getOrNull(0) ?: "N/A"
+    val sunDown = sunData.getOrNull(1) ?: "N/A"
+    val cornerDp = 10.dp
     val context = LocalContext.current
-
+    val sunRiseHour = if (sunRise != "N/A") sunRise.split(":").first().padStart(2, '0') else null
+    val sunDownHour = if (sunDown != "N/A") sunDown.split(":").first().padStart(2, '0') else null
+    val items = mutableListOf<Any>().apply {
+        addAll(data)
+        if (sunRiseHour != null) add(SunDisplayData(sunRiseHour, sunRise, "Sol opp"))
+        if (sunDownHour != null) add(SunDisplayData(sunDownHour, sunDown, "Sol ned"))
+    }.sortedBy {
+        when (it) {
+            is ForecastForHour -> it.time
+            is SunDisplayData -> it.hour
+            else -> ""
+        }
+    }
     Column {
-//        Text(
-//            text = "Hourly Forecast",
-//            style = MaterialTheme.typography.titleMedium,
-//            modifier = Modifier.padding(bottom = 8.dp)
-//        )
-
         LazyRow(
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(data.size) { index ->
-                val hour = data[index]
-                val iconResId = context.resources.getIdentifier(hour.icon, "drawable", context.packageName)
-
-                Box(
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .width(80.dp)
-                        .height(160.dp)
-                        .background(
-                            BackGroundColor,
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                        .border(1.dp, OnContainer, shape = RoundedCornerShape(10.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        Text(
-                            text = "HH", // "HH:mm"
-                            style = MaterialTheme.typography.labelMedium,
-                            textAlign = TextAlign.Center,
-                            color = OnContainer
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Image(
-                            painter = painterResource(id = if (iconResId != 0) iconResId else R.drawable.sun),
-                            contentDescription = "Weather icon",
-                            modifier = Modifier.size(40.dp)
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "${hour.temp}°C", // Assumes you have `temperature` in ForecastForHour
-                            style = MaterialTheme.typography.labelSmall,
-                            textAlign = TextAlign.Center,
-                            color = OnContainer
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "${hour.precipitationAmount}mm", // Assumes you have `temperature` in ForecastForHour
-                            style = MaterialTheme.typography.labelSmall,
-                            textAlign = TextAlign.Center,
-                            color = OnContainer
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "${hour.windSpeed}m/s", // Assumes you have `temperature` in ForecastForHour
-                            style = MaterialTheme.typography.labelSmall,
-                            textAlign = TextAlign.Center,
-                            color = OnContainer
-                        )
+            items(items.size) { index ->
+                val item = items[index]
+                when (item) {
+                    is ForecastForHour -> {
+                        val iconResId = context.resources.getIdentifier(item.icon, "drawable", context.packageName)
+                        Box(
+                            modifier = Modifier
+                                .padding(end = 8.dp)
+                                .width(80.dp)
+                                .height(160.dp)
+                                .background(
+                                    BackGroundColor,
+                                    shape = RoundedCornerShape(10.dp)
+                                )
+                                .border(1.dp, OnContainer, shape = RoundedCornerShape(10.dp)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
+                                modifier = Modifier.padding(8.dp)
+                            ) {
+                                Text(
+                                    text = if (item.time != null) (item.time.toInt() + 2).toString() else "N/A", // "HH:mm"
+                                    style = MaterialTheme.typography.labelMedium,
+                                    textAlign = TextAlign.Center,
+                                    color = OnContainer
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Image(
+                                    painter = painterResource(id = if (iconResId != 0) iconResId else R.drawable.sun),
+                                    contentDescription = "Weather icon",
+                                    modifier = Modifier.size(40.dp)
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "${item.temp}°C", // Assumes you have `temperature` in ForecastForHour
+                                    style = MaterialTheme.typography.labelSmall,
+                                    textAlign = TextAlign.Center,
+                                    color = OnContainer
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "${item.precipitationAmount}mm", // Assumes you have `temperature` in ForecastForHour
+                                    style = MaterialTheme.typography.labelSmall,
+                                    textAlign = TextAlign.Center,
+                                    color = OnContainer
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "${item.windSpeed}m/s", // Assumes you have `temperature` in ForecastForHour
+                                    style = MaterialTheme.typography.labelSmall,
+                                    textAlign = TextAlign.Center,
+                                    color = OnContainer
+                                )
+                            }
+                        }
+                    }
+                    is SunDisplayData -> {
+                        Box(
+                            modifier = Modifier
+                                .padding(end = 8.dp)
+                                .width(80.dp)
+                                .height(160.dp)
+                                .background(
+                                    color = BackGroundColor,
+                                    shape = RoundedCornerShape(10.dp),
+                                )
+                                .border(1.dp, OnContainer, RoundedCornerShape(10.dp)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
+                                modifier = Modifier.padding(8.dp)
+                            ) {
+                                Text(
+                                    text = item.fullTime,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    textAlign = TextAlign.Center
+                                )
+                                Spacer(modifier = Modifier.height(20.dp))
+                                Image(
+                                    painter = painterResource(id = R.drawable.sunrise_color3),
+                                    contentDescription = "Sunrise icon",
+                                    modifier = Modifier.size(50.dp)
+                                )
+                                Spacer(modifier = Modifier.height(25.dp))
+                                Text(
+                                    text = item.type,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    textAlign = TextAlign.Center
+                                )
+                                Spacer(modifier = Modifier.height(25.dp))
+                            }
+                        }
                     }
                 }
             }
         }
     }
 }
+data class SunDisplayData(
+    val hour: String,
+    val fullTime: String,
+    val type: String
+)
 
 
