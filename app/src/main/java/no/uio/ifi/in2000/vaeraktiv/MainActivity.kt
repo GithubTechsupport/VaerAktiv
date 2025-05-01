@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import dagger.hilt.android.AndroidEntryPoint
+import no.uio.ifi.in2000.vaeraktiv.ui.activity.PreferencesViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.map.MapScreenViewModel
@@ -26,12 +27,13 @@ class MainActivity : ComponentActivity() {
     private val homeScreenViewModel: HomeScreenViewModel by viewModels()
     private val favoriteLocationViewModel: FavoriteLocationViewModel by viewModels()
     private val mapScreenViewModel: MapScreenViewModel by viewModels()
+    private val preferencesViewModel: PreferencesViewModel by viewModels()
 
     @Inject
     lateinit var locationTracker: LocationTracker
 
     @RequiresApi(Build.VERSION_CODES.O)
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         KeepAliveManager().apply {
             start()
@@ -46,7 +48,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             VaerAktivTheme {
-                Navbar(favoriteLocationViewModel, homeScreenViewModel, mapScreenViewModel)
+                Navbar(favoriteLocationViewModel, homeScreenViewModel, mapScreenViewModel, preferencesViewModel)
             }
         }
     }
