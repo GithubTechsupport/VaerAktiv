@@ -17,15 +17,21 @@ import no.uio.ifi.in2000.vaeraktiv.ui.map.MapScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.Navbar
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.VaerAktivTheme
 import no.uio.ifi.in2000.vaeraktiv.utils.KeepAliveManager
+import no.uio.ifi.in2000.vaeraktiv.utils.LocationTracker
 import no.uio.ifi.in2000.vaeraktiv.utils.PermissionManager
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val homeScreenViewModel: HomeScreenViewModel by viewModels()
     private val favoriteLocationViewModel: FavoriteLocationViewModel by viewModels()
     private val mapScreenViewModel: MapScreenViewModel by viewModels()
+
+    @Inject
+    lateinit var locationTracker: LocationTracker
+
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreate(savedInstanceState: Bundle?) {
+    public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         KeepAliveManager().apply {
             start()
@@ -36,17 +42,21 @@ class MainActivity : ComponentActivity() {
             })
         }
         Log.d("MainActivity", "onCreate called")
-        if (!PermissionManager.isLocationPermissionGranted(this)) {
-            PermissionManager.requestLocationPermissions(this)
-        } else {
-            Log.d("MainActivity", "Location permission already granted")
-            homeScreenViewModel.startTracking(this)
-        }
+        checkPermissions(locationTracker)
         enableEdgeToEdge()
         setContent {
             VaerAktivTheme {
                 Navbar(favoriteLocationViewModel, homeScreenViewModel, mapScreenViewModel)
             }
+        }
+    }
+
+    public fun checkPermissions(locationTracker: LocationTracker) {
+        if (!PermissionManager.isLocationPermissionGranted(this)) {
+            PermissionManager.requestLocationPermissions(this)
+        } else {
+            Log.d("MainActivity", "Location permission already granted")
+            locationTracker.start(this)
         }
     }
 
@@ -59,7 +69,7 @@ class MainActivity : ComponentActivity() {
         if (requestCode == PermissionManager.LOCATION_PERMISSION_REQUEST_CODE) {
             if (PermissionManager.isLocationPermissionGranted(this)) {
                 Log.d("MainActivity", "Location permission granted")
-                homeScreenViewModel.startTracking(this)
+                locationTracker.start(this)
             } else {
                 Log.d("MainActivity", "Location permission denied")
             }

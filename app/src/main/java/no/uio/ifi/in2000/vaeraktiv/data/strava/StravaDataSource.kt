@@ -39,7 +39,7 @@ class StravaDatasource @Inject constructor(
     @Named("prettyPrint-isLenient-ignoreUnknownKeys-Client") private val networkClient: NetworkClient,
 ) {
 
-    private val accessToken = "1064bc2a4e530ba9e4bafff71d8da0b3c872d7ab"
+    private val accessToken = "d2455b3e4894c1e175221302aa63acd8e9053366"
 
     /**
      * Fetches the top 10 popular running segments within the given bounding box.

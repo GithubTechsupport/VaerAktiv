@@ -23,7 +23,9 @@ fun OsmMapView(
     context: Context,
     places: List<PlacesActivitySuggestion>,
     routes: List<StravaActivitySuggestion>,
-    decodePolyline: (String) -> List<GeoPoint>
+    decodePolyline: (String) -> List<GeoPoint>,
+    selectedActivityPoints: List<GeoPoint>?,
+    onZoomHandled: () -> Unit // <-- add this callback
 ) {
     AndroidView(
         factory = { ctx ->
@@ -61,8 +63,7 @@ fun OsmMapView(
                 try {
                     val points = decodePolyline(route.polyline)
                     allPoints += points
-                    Log.d("OsmMapView", "Points: $points")
-                    val lineOverlay = Polyline().apply {
+                    Polyline().apply {
                         title = route.routeName
                         outlinePaint.apply {
                             strokeWidth = 10f
@@ -74,11 +75,17 @@ fun OsmMapView(
                     Log.e("OsmMapView", "Error decoding polyline: ${e}")
                 }
             }
-
-//            if (allPoints.isNotEmpty()) {
-//                val bbox = BoundingBox.fromGeoPoints(allPoints)
-//                mapView.zoomToBoundingBox(bbox, false, 50)
-//            }
+            selectedActivityPoints?.let { pts ->
+                mapView.post {
+                    if (pts.size == 1) {
+                        mapView.controller.animateTo(pts.first())
+                    } else if (pts.isNotEmpty()) {
+                        val bbox = BoundingBox.fromGeoPoints(pts)
+                        mapView.zoomToBoundingBox(bbox, true, 50)
+                    }
+                    onZoomHandled()
+                }
+            }
 
             mapView.invalidate()
         }
