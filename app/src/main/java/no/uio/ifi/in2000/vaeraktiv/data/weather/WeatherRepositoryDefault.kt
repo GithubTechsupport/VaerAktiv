@@ -266,15 +266,12 @@ class WeatherRepositoryDefault @Inject constructor(
         val routesEnd = System.currentTimeMillis()
         Log.d("Timing", "getRouteSuggestions: ${routesEnd - routesStart} ms")
 
-        val excludedActivities = activities.value?.joinToString("\n") { activities ->
-            activities?.activities?.joinToString("\n") {
-                """
-            ${it.activityName} (${it.timeStart} - ${it.timeEnd}): ${it.activityDesc}
-            """.trimIndent()
-            } ?: ""
-        }
         val previousInterval = activities.value?.get(dayNr)?.activities?.getOrNull(index - 1)?.timeEnd
         val previousIntervalString = previousInterval?.let { "\n\nSUGGESTED ACTIVITY NEEDS TO BE AFTER $it" } ?: ""
+        val excludedActivities = activities.value
+            ?.flatMap { day -> day?.activities.orEmpty() }
+            ?.joinToString("\n") { "${it.activityName} (${it.timeStart} - ${it.timeEnd}): ${it.activityDesc}" }
+            .orEmpty()
         val exclusionString = "\n\nEXCLUDE THE FOLLOWING ACTIVITIES:\n\n$excludedActivities$previousIntervalString"
 
         if (timeseries == null) throw Exception("Weather forecast is null")
@@ -283,7 +280,7 @@ class WeatherRepositoryDefault @Inject constructor(
 
         val suggestions = aiRepository.getSingleSuggestionForDay(
             FormattedForecastDataForPrompt(timeseries, units, location.addressName),
-            places, routes, exclusion = ""
+            places, routes, exclusion = exclusionString
         )
 
         val endTime = System.currentTimeMillis()
