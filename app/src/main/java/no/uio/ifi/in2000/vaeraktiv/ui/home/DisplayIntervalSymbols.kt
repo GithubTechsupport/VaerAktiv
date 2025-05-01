@@ -28,10 +28,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 @Composable
 fun DisplayIntervalSymbols(data: List<DetailedForecastForDay>) {
     val context = LocalContext.current
-    val boxCount = data.size
     val spacing = 8.dp
-    val totalSpacing = spacing * (boxCount - 1)
-    val boxWidthFraction = 1f / boxCount
 
     Row(
         modifier = Modifier

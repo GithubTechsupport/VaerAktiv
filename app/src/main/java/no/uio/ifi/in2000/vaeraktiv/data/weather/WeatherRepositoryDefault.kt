@@ -153,9 +153,6 @@ class WeatherRepositoryDefault @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getForecastToday(location: Location): ForecastToday {
-        // Log forecast intervals for testing
-        val intervals = getForecastByDayIntervals(location)
-        Log.d("WeatherRepo", "Forecast intervals in getForecastToday: $intervals")
         val forecast = locationForecastRepository.getForecast(location.lat, location.lon)
         val locationData = forecast?.properties?.timeseries?.get(0)?.data
         val nowcast = nowcastRepository.getForecast(location.lat, location.lon)
@@ -222,11 +219,12 @@ class WeatherRepositoryDefault @Inject constructor(
 
             if (response != null) {
                 val forecastByDay = response.map { (date, timeSeriesList) ->
-                    intervals.map { interval ->
-                        val timeSeries = timeSeriesList.find { it.time.substring(11, 13) == interval }
+                    intervals.map { intervalStart ->
+                        val timeSeries = timeSeriesList.find { it.time.substring(11, 13) == intervalStart }
+                        val end = (intervalStart.toInt() + 6).toString().padStart(2, '0')
                         DetailedForecastForDay(
                             date = date,
-                            interval = "$interval - ${interval.toInt() + 6}",
+                            interval = "$intervalStart - $end",
                             icon = timeSeries?.data?.next6Hours?.summary?.symbolCode ?: "N/A"
                         )
                     }
