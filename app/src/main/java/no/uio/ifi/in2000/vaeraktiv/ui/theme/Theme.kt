@@ -239,6 +239,37 @@ private val highContrastDarkColorScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDarkHighContrast,
 )
 
+private val DarkColorScheme = darkColorScheme(
+    primary = Color(0xFF9DE1C8),
+    secondary = Color(0xFF5EC5A3),
+    background = Color(0xFF121212),
+    onPrimary = Color.Black
+)
+
+private val LightColorScheme = lightColorScheme(
+    primary = Color(0xFF2F8166),
+    secondary = Color(0xFF5EC5A3),
+    background = Color(0xFFE0F7FA),
+    onPrimary = Color.White
+
+)
+
+@Composable
+fun VaerAktivTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    // Dynamic color is available on Android 12+
+    content: @Composable () -> Unit
+) {
+    val colors = if (darkTheme) DarkColorScheme else LightColorScheme
+
+    MaterialTheme(
+        colorScheme = colors,
+        typography = AppTypography,
+        content = content
+    )
+}
+
+/*
 @Immutable
 data class ColorFamily(
     val color: Color,
@@ -273,5 +304,4 @@ fun VaerAktivTheme (
     typography = AppTypography,
     content = content
   )
-}
-
+}*/
