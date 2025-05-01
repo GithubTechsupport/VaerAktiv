@@ -8,6 +8,7 @@ import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.places.placesRepository
+import no.uio.ifi.in2000.vaeraktiv.data.strava.StravaRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepositoryDefault
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
@@ -36,7 +37,8 @@ class WeatherRepositoryDefaultTest {
         deviceLocationRepository = mock(LocationRepository::class.java),
         geocoderClass = mock(GeocoderClass::class.java),
         nowcastRepository = mock(NowcastRepository::class.java),
-        placesRepository = mock(placesRepository::class.java)
+        placesRepository = mock(placesRepository::class.java),
+        stravaRepository = mock(StravaRepository::class.java)
     )
 
     @Test
