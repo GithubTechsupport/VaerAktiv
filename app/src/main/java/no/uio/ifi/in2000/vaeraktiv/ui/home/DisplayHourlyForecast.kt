@@ -32,26 +32,31 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
 @Composable
 fun DisplayHourlyForecast(data: List<ForecastForHour>, sunData: List<String>) {
     val sunRise = sunData.getOrNull(0) ?: "N/A"
-    val sunDown = sunData.getOrNull(1) ?: "N/A"
+    val sunSet = sunData.getOrNull(1) ?: "N/A"
     val cornerDp = 10.dp
     val context = LocalContext.current
     val sunRiseHour = if (sunRise != "N/A") sunRise.split(":").first().padStart(2, '0') else null
-    val sunDownHour = if (sunDown != "N/A") sunDown.split(":").first().padStart(2, '0') else null
+    val sunSetHour = if (sunSet != "N/A") sunSet.split(":").first().padStart(2, '0') else null
+
+
     val items = mutableListOf<Any>().apply {
         addAll(data)
-        if (sunRiseHour != null) add(SunDisplayData(sunRiseHour, sunRise, "Sol opp"))
-        if (sunDownHour != null) add(SunDisplayData(sunDownHour, sunDown, "Sol ned"))
-    }.sortedBy {
-        when (it) {
-            is ForecastForHour -> it.time
-            is SunDisplayData -> it.hour
-            else -> ""
+
+        if (sunRiseHour != null && sunRiseHour > data[0].time.toString()) {
+            val insertIndex = data.indexOfFirst { it.time == sunRiseHour } + 1
+            add(insertIndex, SunDisplayData(sunRiseHour, sunRise, "Sol opp", "sunrise_color3"))
+        }
+        if (sunSetHour != null && sunSetHour > data[0].time.toString()) {
+            val insertIndex = data.indexOfFirst { it.time == sunSetHour } + 1
+            add(insertIndex, SunDisplayData(sunSetHour, sunSet, "Sol ned", "sunset_color"))
         }
     }
     Column {
@@ -81,7 +86,7 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>, sunData: List<String>) {
                                 modifier = Modifier.padding(8.dp)
                             ) {
                                 Text(
-                                    text = if (item.time != null) (item.time.toInt() + 2).toString() else "N/A", // "HH:mm"
+                                    text = item.time ?: "N/A",
                                     style = MaterialTheme.typography.labelMedium,
                                     textAlign = TextAlign.Center,
                                     color = OnContainer
@@ -124,9 +129,9 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>, sunData: List<String>) {
                                 .height(160.dp)
                                 .background(
                                     color = BackGroundColor,
-                                    shape = RoundedCornerShape(10.dp),
+                                    shape = RoundedCornerShape(cornerDp),
                                 )
-                                .border(1.dp, OnContainer, RoundedCornerShape(10.dp)),
+                                .border(1.dp, OnContainer, RoundedCornerShape(cornerDp)),
                             contentAlignment = Alignment.Center
                         ) {
                             Column(
@@ -134,6 +139,7 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>, sunData: List<String>) {
                                 verticalArrangement = Arrangement.Center,
                                 modifier = Modifier.padding(8.dp)
                             ) {
+                                Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = item.fullTime,
                                     style = MaterialTheme.typography.labelMedium,
@@ -141,7 +147,7 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>, sunData: List<String>) {
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                                 Image(
-                                    painter = painterResource(id = R.drawable.sunrise_color3),
+                                    painter = painterResource(id = context.resources.getIdentifier(item.icon, "drawable", context.packageName)),
                                     contentDescription = "Sunrise icon",
                                     modifier = Modifier.size(50.dp)
                                 )
@@ -163,7 +169,8 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>, sunData: List<String>) {
 data class SunDisplayData(
     val hour: String,
     val fullTime: String,
-    val type: String
+    val type: String,
+    val icon: String
 )
 
 

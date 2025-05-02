@@ -222,7 +222,6 @@ class WeatherRepositoryDefault @Inject constructor(
                 windSpeed = timeSeries.data.instant.details.windSpeed.toString(),
                 precipitationAmount = timeSeries.data.next1Hours?.details?.precipitationAmount.toString(),
                 icon = timeSeries.data.next1Hours?.summary?.symbolCode.toString(),
-                time = timeSeries.time.substring(11, 13),
                 uv = timeSeries.data.instant.details.ultravioletIndexClearSky.toString()
             )
             forecastForHour
