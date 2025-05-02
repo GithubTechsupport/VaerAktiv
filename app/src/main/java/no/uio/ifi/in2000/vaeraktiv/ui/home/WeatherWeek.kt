@@ -43,6 +43,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
@@ -72,7 +73,7 @@ fun WeatherWeek(
     ) {
         Text(
             text = "Kommende uke",
-            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+            style = MaterialTheme.typography.headlineSmall,
             color = OnContainer,
             textAlign = TextAlign.Start,
             modifier = Modifier
@@ -83,8 +84,8 @@ fun WeatherWeek(
                 .fillMaxWidth()
                 .padding(top = 2.dp)
                 .padding(horizontal = 8.dp)
-                .height(0.2.dp)
-                .background(color = OnContainer)
+                .height(1.dp)
+                .background(OnContainer)
         )
 
         data.take(7).forEachIndexed { index, day ->
@@ -194,8 +195,8 @@ fun WeatherWeek(
                     .fillMaxWidth()
                     .padding(top = 2.dp)
                     .padding(horizontal = 8.dp)
-                    .height(0.2.dp)
-                    .background(color = OnContainer)
+                    .height(1.dp)
+                    .background(OnContainer)
             )
         }
     }

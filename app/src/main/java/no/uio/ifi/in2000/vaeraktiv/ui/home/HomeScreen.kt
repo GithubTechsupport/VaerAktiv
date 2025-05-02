@@ -64,7 +64,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
             ) {
                 // Always show the current location.
                 item {
-                    CurrentLocation(uiState.locationName, currentLocation) // ikke riktig data for currentLocation (skal være lokasjon til device)
+                    CurrentLocation(uiState.locationName, deviceLocation = ) // ikke riktig data for currentLocation (skal være lokasjon til device)
                 }
 
                 // Alerts Section
