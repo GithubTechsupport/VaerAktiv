@@ -78,7 +78,19 @@ fun Navbar(
         }
     }
 
-    // Network observer
+    LaunchedEffect(homeScreenViewModel.navigateToMap) {
+        homeScreenViewModel.navigateToMap.collect { activity ->
+            // navigate to map
+            navController.navigate("map") {
+                popUpTo(navController.graph.startDestinationId); launchSingleTop = true
+            }
+            selectedRoute = "map"
+            mapScreenViewModel.zoomInOnActivity(activity)
+        }
+    }
+
+     //this network observer will update the isOnline variable when the network status changes
+
     NetworkObserver { newStatus ->
         isOnline = newStatus
         showNoNetworkDialog = !newStatus

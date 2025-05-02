@@ -125,6 +125,9 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.inline)
 
+    // roboelectric testing
+    testImplementation("org.robolectric:robolectric:4.12.1")
+
     // Needed for testing of final classes
     testImplementation(libs.byte.buddy)
     testImplementation(libs.byte.buddy.agent)
