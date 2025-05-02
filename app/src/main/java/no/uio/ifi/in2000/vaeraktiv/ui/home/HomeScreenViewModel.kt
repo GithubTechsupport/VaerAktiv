@@ -39,6 +39,7 @@ class HomeScreenViewModel @Inject constructor(
     private var initialized = false
 
     val currentLocation: LiveData<Location?> = weatherRepository.currentLocation
+    val deviceLocation: LiveData<Location?> = weatherRepository.deviceLocation
 
     val activities: LiveData<List<SuggestedActivities?>?> = weatherRepository.activities
 
@@ -59,6 +60,8 @@ class HomeScreenViewModel @Inject constructor(
         initialized = true
         getActivitiesForToday()
     }
+
+    fun setCurrentLocation(location: Location) = weatherRepository.setCurrentLocation(location)
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getHomeScreenData() {

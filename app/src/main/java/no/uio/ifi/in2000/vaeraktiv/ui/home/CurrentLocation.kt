@@ -31,9 +31,8 @@ import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
-fun CurrentLocation(locationName : String, deviceLocation: Location?) { // navn på sted, devicelocation
+fun CurrentLocation(locationName : String, deviceLocation: Location?, setCurrentLocation: (Location) -> Unit) { // navn på sted, devicelocation
     var expanded by remember { mutableStateOf(false) }
-    var placeName by remember { mutableStateOf(locationName) }
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -44,11 +43,11 @@ fun CurrentLocation(locationName : String, deviceLocation: Location?) { // navn 
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.clickable { if (placeName != deviceLocation?.addressName) expanded = !expanded }
+            modifier = Modifier.clickable { if (locationName != deviceLocation?.addressName) expanded = !expanded }
         ) {
             Log.d("CurrentLocation", "locationName: $locationName, currentLocation: $deviceLocation")
             Text(
-                text = placeName,
+                text = locationName,
                 style = MaterialTheme.typography.headlineLarge,
                 color = OnContainer,
                 textAlign = TextAlign.Center,
@@ -56,7 +55,11 @@ fun CurrentLocation(locationName : String, deviceLocation: Location?) { // navn 
             )
             if (expanded) {
                 Row (
-                    modifier = Modifier.clickable { placeName = deviceLocation?.addressName ?: locationName }
+                    modifier = Modifier.clickable {
+                        if (deviceLocation != null) {
+                            setCurrentLocation.invoke(deviceLocation)
+                        }
+                    }
                 ) {
                     Text(
                         text = "Din posisjon",

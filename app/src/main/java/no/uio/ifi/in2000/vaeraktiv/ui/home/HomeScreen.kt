@@ -34,6 +34,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
     val uiState by viewModel.homeScreenUiState.collectAsState()
     val currentLocation by viewModel.currentLocation.observeAsState()
+    val deviceLocation by viewModel.deviceLocation.observeAsState()
     val activities by viewModel.activities.observeAsState()
 
     LaunchedEffect(Unit) {
@@ -64,7 +65,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
             ) {
                 // Always show the current location.
                 item {
-                    CurrentLocation(uiState.locationName, deviceLocation = ) // ikke riktig data for currentLocation (skal være lokasjon til device)
+                    CurrentLocation(uiState.locationName, deviceLocation, setCurrentLocation = { location -> viewModel.setCurrentLocation(location)}) // ikke riktig data for currentLocation (skal være lokasjon til device)
                 }
 
                 // Alerts Section
