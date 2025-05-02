@@ -20,9 +20,9 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class AiRepository @Inject constructor(@Named("OpenAi-Client") private val client: AiClient) {
-    suspend fun getSuggestionsForOneDay(prompt: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, exclusion: String = ""): SuggestedActivities = withContext(Dispatchers.IO) {
+    suspend fun getSuggestionsForOneDay(prompt: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, preferences: String, exclusion: String = ""): SuggestedActivities = withContext(Dispatchers.IO) {
         try {
-            val response = client.getSuggestionsForOneDay(prompt, nearbyPlaces, routes, exclusion)
+            val response = client.getSuggestionsForOneDay(prompt, nearbyPlaces, routes, preferences, exclusion)
             if (response == null) {
                 throw IllegalArgumentException("Response is null")
             }
@@ -41,9 +41,9 @@ class AiRepository @Inject constructor(@Named("OpenAi-Client") private val clien
         }
     }
 
-    suspend fun getSingleSuggestionForDay(prompt: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, exclusion: String = ""): ActivitySuggestion = withContext(Dispatchers.IO) {
+    suspend fun getSingleSuggestionForDay(prompt: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, preferences: String, exclusion: String = ""): ActivitySuggestion = withContext(Dispatchers.IO) {
         try {
-            val response = client.getSingleSuggestionForDay(prompt, nearbyPlaces, routes, exclusion)
+            val response = client.getSingleSuggestionForDay(prompt, nearbyPlaces, routes, preferences, exclusion)
 
             if (response == null) {
                 throw IllegalArgumentException("Response is null")

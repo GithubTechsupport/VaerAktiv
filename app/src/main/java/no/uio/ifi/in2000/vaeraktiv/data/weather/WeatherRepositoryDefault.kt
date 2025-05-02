@@ -22,6 +22,7 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.IMetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
+import no.uio.ifi.in2000.vaeraktiv.data.welcome.PreferenceRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
@@ -50,7 +51,8 @@ class WeatherRepositoryDefault @Inject constructor(
     private val geocoderClass: GeocoderClass,
     private val nowcastRepository: NowcastRepository,
     private val placesRepository: placesRepository,
-    private val stravaRepository: StravaRepository
+    private val stravaRepository: StravaRepository,
+    private val preferenceRepository: PreferenceRepository
 ) : WeatherRepository {
 
     private var locations: MutableMap<String, Pair<String, String>> = mutableMapOf()
@@ -238,6 +240,7 @@ class WeatherRepositoryDefault @Inject constructor(
         val units = response.second
         val places = getNearbyPlaces(location)
         val routes = stravaRepository.getRouteSuggestions(location)
+        val preferences = preferenceRepository.getEnabledPreferences()
         if (timeseries == null) {
             throw Exception("Weather forecast is null")
         }
@@ -247,7 +250,9 @@ class WeatherRepositoryDefault @Inject constructor(
         if (places == null) {
             throw Exception("Places are null")
         }
-        return aiRepository.getSuggestionsForOneDay(FormattedForecastDataForPrompt(timeseries, units, location.addressName), places, routes)
+        return aiRepository.getSuggestionsForOneDay(
+            FormattedForecastDataForPrompt(timeseries, units, location.addressName),
+            places, routes, preferences)
     }
 
     override suspend fun getSuggestedActivity(location: Location, dayNr: Int, index: Int): ActivitySuggestion {
@@ -271,16 +276,15 @@ class WeatherRepositoryDefault @Inject constructor(
         val routesEnd = System.currentTimeMillis()
         Log.d("Timing", "getRouteSuggestions: ${routesEnd - routesStart} ms")
 
-        val excludedActivities = activities.value?.joinToString("\n") { activities ->
-            activities?.activities?.joinToString("\n") {
-                """
-            ${it.activityName} (${it.timeStart} - ${it.timeEnd}): ${it.activityDesc}
-            """.trimIndent()
-            } ?: ""
-        }
+        val preferences = preferenceRepository.getEnabledPreferences()
+
         val previousInterval = activities.value?.get(dayNr)?.activities?.getOrNull(index - 1)?.timeEnd
         val previousIntervalString = previousInterval?.let { "\n\nSUGGESTED ACTIVITY NEEDS TO BE AFTER $it" } ?: ""
-        val exclusionString = "\n\nEXCLUDE THE FOLLOWING ACTIVITIES:\n\n$excludedActivities$previousIntervalString"
+        val excludedActivities = activities.value
+            ?.flatMap { day -> day?.activities.orEmpty() }
+            ?.joinToString("\n") { "${it.activityName} (${it.timeStart} - ${it.timeEnd}): ${it.activityDesc}" }
+            .orEmpty()
+        val exclusionString = "EXCLUDE THE FOLLOWING ACTIVITIES:\n\n$excludedActivities$previousIntervalString\n\n"
 
         if (timeseries == null) throw Exception("Weather forecast is null")
         if (units == null) throw Exception("Units are null")
@@ -288,7 +292,7 @@ class WeatherRepositoryDefault @Inject constructor(
 
         val suggestions = aiRepository.getSingleSuggestionForDay(
             FormattedForecastDataForPrompt(timeseries, units, location.addressName),
-            places, routes, exclusion = ""
+            places, routes, preferences, exclusionString
         )
 
         val endTime = System.currentTimeMillis()

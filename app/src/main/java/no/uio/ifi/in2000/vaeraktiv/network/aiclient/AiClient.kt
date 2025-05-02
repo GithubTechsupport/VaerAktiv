@@ -46,8 +46,8 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 abstract class AiClient {
     val prompt = Prompt()
     abstract suspend fun getSuggestionsForEveryDay(forecastData: FormattedForecastDataForPrompt): SuggestedActivities?
-    abstract suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, exclusion: String): String?
-    abstract suspend fun getSingleSuggestionForDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, exclusion: String): String?
+    abstract suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, preferences: String, exclusion: String): String?
+    abstract suspend fun getSingleSuggestionForDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, preferences: String, exclusion: String): String?
 }
 
 //class DeepseekClientWrapper @Inject constructor(private val client: DeepSeekClient) : AiClient() {
@@ -89,14 +89,17 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
         return@withContext parsedResponse
     }
 
-    override suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, exclusion: String): String? = withContext(Dispatchers.IO) {
-        Log.d("OpenAiClientWrapper", "getSuggestionsForOneDay: $forecastData")
-        Log.d("OpenAiClientWrapper", "getSuggestionsForOneDay: $nearbyPlaces")
-        Log.d("OpenAiClientWrapper", "getSuggestionsForOneDay: $routes")
-        Log.d("OpenAiClientWrapper", "getSuggestionsForOneDay: $exclusion")
+    override suspend fun getSuggestionsForOneDay(
+        forecastData: FormattedForecastDataForPrompt,
+        nearbyPlaces: NearbyPlacesSuggestions,
+        routes: RoutesSuggestions,
+        preferences: String,
+        exclusion: String): String? = withContext(Dispatchers.IO) {
+        val absolutePrompt = "${prompt.fullPrompt}${exclusion}${preferences}WEATHERFORECAST START:\n\n<<<\n$forecastData\n>>>\n\nWEATHERFORECAST END\n\nNEARBY PLACES START:\n\n<<<\n$nearbyPlaces\n>>>\n\nNEARBY PLACES END\n\nNEARBY ROUTES START:\n\n<<<\n$routes\n>>>\n\nNEARBY ROUTES END"
+        Log.d("Prompt", absolutePrompt)
         val messages = listOf(
             ChatMessage(role = ChatRole.System, content = prompt.systemPrompt),
-            ChatMessage(role = ChatRole.User, content = "${prompt.fullPrompt}${exclusion}\n\nWEATHERFORECAST START:\n\n<<<\n$forecastData\n>>>\n\nWEATHERFORECAST END\n\nNEARBY PLACES START:\n\n<<<\n$nearbyPlaces\n>>>\n\nNEARBY PLACES END\n\nNEARBY ROUTES START:\n\n<<<\n$routes\n>>>\n\nNEARBY ROUTES END")
+            ChatMessage(role = ChatRole.User, content = absolutePrompt)
         )
         val request = ChatCompletionRequest (
             model = ModelId("gpt-4.1"),
@@ -112,14 +115,13 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
         forecastData: FormattedForecastDataForPrompt,
         nearbyPlaces: NearbyPlacesSuggestions,
         routes: RoutesSuggestions,
+        preferences: String,
         exclusion: String): String? = withContext(Dispatchers.IO) {
-        Log.d("OpenAiClientWrapper", "Forecast: $forecastData")
-        Log.d("OpenAiClientWrapper", "Places: $nearbyPlaces")
-        Log.d("OpenAiClientWrapper", "Routes: $routes")
-        Log.d("OpenAiClientWrapper", "Exclusions: $exclusion")
+        val absolutePrompt = "${prompt.fullPromptSingular}$exclusion${preferences}WEATHERFORECAST START:\n\n<<<\n$forecastData\n>>>\n\nWEATHERFORECAST END\n\nNEARBY PLACES START:\n\n<<<\n$nearbyPlaces\n>>>\n\nNEARBY PLACES END\n\nNEARBY ROUTES START:\n\n<<<\n$routes\n>>>\n\nNEARBY ROUTES END"
+        Log.d("Prompt", absolutePrompt)
         val messages = listOf(
             ChatMessage(role = ChatRole.System, content = prompt.systemPromptSingular),
-            ChatMessage(role = ChatRole.User, content = "${prompt.fullPromptSingular}\n\n$exclusion\n\nWEATHERFORECAST START:\n\n<<<\n$forecastData\n>>>\n\nWEATHERFORECAST END\n\nNEARBY PLACES START:\n\n<<<\n$nearbyPlaces\n>>>\n\nNEARBY PLACES END\n\nNEARBY ROUTES START:\n\n<<<\n$routes\n>>>\n\nNEARBY ROUTES END")
+            ChatMessage(role = ChatRole.User, content = absolutePrompt)
         )
         val request = ChatCompletionRequest (
             model = ModelId("gpt-4.1"),

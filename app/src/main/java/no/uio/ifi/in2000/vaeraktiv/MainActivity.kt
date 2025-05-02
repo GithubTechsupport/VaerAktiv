@@ -28,13 +28,12 @@ class MainActivity : ComponentActivity() {
     private val favoriteLocationViewModel: FavoriteLocationViewModel by viewModels()
     private val mapScreenViewModel: MapScreenViewModel by viewModels()
     private val preferencesViewModel: PreferencesViewModel by viewModels()
-    
+
     @Inject
     lateinit var locationTracker: LocationTracker
-    
 
     @RequiresApi(Build.VERSION_CODES.O)
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         KeepAliveManager().apply {
             start()

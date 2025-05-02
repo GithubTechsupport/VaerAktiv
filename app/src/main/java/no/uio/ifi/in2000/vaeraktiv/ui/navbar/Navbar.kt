@@ -89,8 +89,7 @@ fun Navbar(
         }
     }
 
-     //this network observer will update the isOnline variable when the network status changes
-
+    // Network observer
     NetworkObserver { newStatus ->
         isOnline = newStatus
         showNoNetworkDialog = !newStatus
