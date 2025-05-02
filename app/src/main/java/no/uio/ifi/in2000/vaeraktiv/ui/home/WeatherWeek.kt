@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
@@ -71,7 +72,7 @@ fun WeatherWeek(
     ) {
         Text(
             text = "Kommende uke",
-            style = MaterialTheme.typography.labelLarge,
+            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
             color = OnContainer,
             textAlign = TextAlign.Start,
             modifier = Modifier
@@ -161,6 +162,7 @@ fun WeatherWeek(
                 ){
                     // Viser værvarsel for dagen
                     DisplayIntervalSymbols(uiState.dayIntervals[index])
+                    Spacer(modifier = Modifier.height(8.dp))
                     if (isLoading) {
                         LoadAllActivities()
                     } else if (uiState.isErrorFutureActivities) {
