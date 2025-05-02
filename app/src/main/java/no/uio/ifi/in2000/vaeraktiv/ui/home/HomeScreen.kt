@@ -114,19 +114,16 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                                 ErrorMessage(
                                     message = "Error fetching today's activities: ${uiState.errorMessageActivitiesToday}"
                                 )
+                            } else if (uiState.isLoadingActivitiesToday) {
+                                LoadAllActivities()
                             } else if (activities?.get(0) != null) {
-                                val activities = activities?.get(0)!!.activities.mapIndexed { index, response ->
-                                        Activity(
-                                            timeOfDay = "${response.timeStart} - ${response.timeEnd}",
-                                            name = response.activityName,
-                                            desc = response.activityDesc
-                                        ) to index
-                                    }
+                                val todaysActivities = activities?.get(0)!!.activities
                                 AddActivitiesForDay(
                                     dayNr = 0,
-                                    activityDate = ActivityDate("I dag", activities.map { it.first }),
+                                    activityDate = ActivityDate("I dag", todaysActivities),
                                     isLoading = {uiState.loadingActivities},
-                                    onRefresh = { dayNr, indexParam, activityName -> viewModel.replaceActivityInDay(dayNr, indexParam, activityName) },
+                                    onRefresh = { dayNr, indexParam -> viewModel.replaceActivityInDay(dayNr, indexParam ) },
+                                    onViewInMap = {activity -> viewModel.viewActivityInMap(activity)},
                                     weatherData = listOf(
                                         ForecastForDay(
                                             date = "00-06",
@@ -149,12 +146,6 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                                             icon = "cloudy"
                                         )
                                     )
-                                )
-                            } else {
-                                Text(
-                                    text = "Finner ingen aktiviteter",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    modifier = Modifier.padding(start = 8.dp)
                                 )
                             }
                         }

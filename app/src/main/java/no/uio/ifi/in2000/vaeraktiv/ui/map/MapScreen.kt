@@ -26,7 +26,9 @@ fun MapScreen(viewModel: MapScreenViewModel) {
             context = LocalContext.current,
             places = uiState.places,
             routes = uiState.routes,
-            decodePolyline = {polyline -> viewModel.decodePolyline(polyline)}
+            decodePolyline = {polyline -> viewModel.decodePolyline(polyline)},
+            selectedActivityPoints = uiState.selectedActivityPoints,
+            onZoomHandled = {viewModel.clearSelectedActivityPoints()},
         )
     }
 }

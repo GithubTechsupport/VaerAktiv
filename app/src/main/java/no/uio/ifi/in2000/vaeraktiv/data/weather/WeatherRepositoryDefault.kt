@@ -22,6 +22,7 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.IMetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
+import no.uio.ifi.in2000.vaeraktiv.data.welcome.PreferenceRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
@@ -50,7 +51,8 @@ class WeatherRepositoryDefault @Inject constructor(
     private val geocoderClass: GeocoderClass,
     private val nowcastRepository: NowcastRepository,
     private val placesRepository: placesRepository,
-    private val stravaRepository: StravaRepository
+    private val stravaRepository: StravaRepository,
+    private val preferenceRepository: PreferenceRepository
 ) : WeatherRepository {
 
     private var locations: MutableMap<String, Pair<String, String>> = mutableMapOf()
@@ -234,12 +236,13 @@ class WeatherRepositoryDefault @Inject constructor(
         return locationForecastRepository.getForecast(location.lat, location.lon)
     }
 
-    override suspend fun getSuggestedActivitiesForOneDay(location: Location, dayNr: Int): SuggestedActivities? {
+    override suspend fun getSuggestedActivitiesForOneDay(location: Location, dayNr: Int): SuggestedActivities {
         val response = getTimeSeriesForDay(location, dayNr)
         val timeseries = response.first
         val units = response.second
         val places = getNearbyPlaces(location)
         val routes = stravaRepository.getRouteSuggestions(location)
+        val preferences = preferenceRepository.getEnabledPreferences()
         if (timeseries == null) {
             throw Exception("Weather forecast is null")
         }
@@ -249,48 +252,55 @@ class WeatherRepositoryDefault @Inject constructor(
         if (places == null) {
             throw Exception("Places are null")
         }
-        return aiRepository.getSuggestionsForOneDay(FormattedForecastDataForPrompt(timeseries, units, location.addressName), places, routes)
+        return aiRepository.getSuggestionsForOneDay(
+            FormattedForecastDataForPrompt(timeseries, units, location.addressName),
+            places, routes, preferences)
     }
 
-//        return SuggestedActivities(
-//            activities = listOf(
-//                CustomActivitySuggestion(
-//                    month = 6,
-//                    dayOfMonth = 10,
-//                    timeStart = "09:00",
-//                    timeEnd = "10:00",
-//                    activityName = "Morning Run",
-//                    activityDesc = "A quick run to start the day."
-//                ),
-//                CustomActivitySuggestion(
-//                    month = 6,
-//                    dayOfMonth = 10,
-//                    timeStart = "12:00",
-//                    timeEnd = "13:00",
-//                    activityName = "Lunch Walk",
-//                    activityDesc = "A relaxing walk after lunch."
-//                ),
-//                CustomActivitySuggestion(
-//                    month = 6,
-//                    dayOfMonth = 10,
-//                    timeStart = "18:00",
-//                    timeEnd = "19:00",
-//                    activityName = "Evening Yoga",
-//                    activityDesc = "Yoga session to unwind."
-//                )
-//            )
-//        )
+    override suspend fun getSuggestedActivity(location: Location, dayNr: Int, index: Int): ActivitySuggestion {
+        val startTime = System.currentTimeMillis()
 
-    override suspend fun getSuggestedActivity(location: Location, dayNr: Int, index: Int): ActivitySuggestion? {
-        val dummyNewActivity = CustomActivitySuggestion(
-            month = 3,
-            dayOfMonth = 6,
-            timeStart = "12:00",
-            timeEnd = "13:00",
-            activityName = "Replaced",
-            activityDesc = "Replaced",
+        val responseStart = System.currentTimeMillis()
+        val response = getTimeSeriesForDay(location, dayNr)
+        val responseEnd = System.currentTimeMillis()
+        Log.d("Timing", "getTimeSeriesForDay: ${responseEnd - responseStart} ms")
+
+        val timeseries = response.first
+        val units = response.second
+
+        val placesStart = System.currentTimeMillis()
+        val places = getNearbyPlaces(location)
+        val placesEnd = System.currentTimeMillis()
+        Log.d("Timing", "getNearbyPlaces: ${placesEnd - placesStart} ms")
+
+        val routesStart = System.currentTimeMillis()
+        val routes = stravaRepository.getRouteSuggestions(location)
+        val routesEnd = System.currentTimeMillis()
+        Log.d("Timing", "getRouteSuggestions: ${routesEnd - routesStart} ms")
+
+        val preferences = preferenceRepository.getEnabledPreferences()
+
+        val previousInterval = activities.value?.get(dayNr)?.activities?.getOrNull(index - 1)?.timeEnd
+        val previousIntervalString = previousInterval?.let { "\n\nSUGGESTED ACTIVITY NEEDS TO BE AFTER $it" } ?: ""
+        val excludedActivities = activities.value
+            ?.flatMap { day -> day?.activities.orEmpty() }
+            ?.joinToString("\n") { "${it.activityName} (${it.timeStart} - ${it.timeEnd}): ${it.activityDesc}" }
+            .orEmpty()
+        val exclusionString = "EXCLUDE THE FOLLOWING ACTIVITIES:\n\n$excludedActivities$previousIntervalString\n\n"
+
+        if (timeseries == null) throw Exception("Weather forecast is null")
+        if (units == null) throw Exception("Units are null")
+        if (places == null) throw Exception("Places are null")
+
+        val suggestions = aiRepository.getSingleSuggestionForDay(
+            FormattedForecastDataForPrompt(timeseries, units, location.addressName),
+            places, routes, preferences, exclusionString
         )
-        return dummyNewActivity
+
+        val endTime = System.currentTimeMillis()
+        Log.d("Timing", "Total duration: ${endTime - startTime} ms")
+
+        return suggestions
     }
 
     override fun replaceActivitiesForDay(dayNr: Int, newActivities: SuggestedActivities) {

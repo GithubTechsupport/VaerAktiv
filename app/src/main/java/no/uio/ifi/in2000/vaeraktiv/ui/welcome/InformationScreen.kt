@@ -1,0 +1,131 @@
+package no.uio.ifi.in2000.vaeraktiv.ui.welcome
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
+import no.uio.ifi.in2000.vaeraktiv.R
+
+@Composable
+fun InformationScreen(onStartApplication: () -> Unit) {
+
+    var showContent by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(500)
+        showContent = true
+    }
+
+    val darkGreen = Color(0xFF2F8166)
+    val mediumGreen = Color(0xFF5EC5A3)
+    val lightCyan = Color(0xFFE0F7FA)
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(lightCyan, mediumGreen)
+                )
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        AnimatedVisibility(visible = showContent, enter = fadeIn()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                MascotWithEndingSpeech()
+                Spacer(modifier = Modifier.height(32.dp))
+                StartButton(onClick = onStartApplication)
+            }
+
+        }
+    }
+}
+
+
+@Composable
+fun MascotWithEndingSpeech() {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = "Supert! Du er klar til å sette i gang eventyret. Takk for at du delte interessene dine – nå skal jeg finne aktiviteter som passer perfekt for deg!",
+            color = Color(0xFF2F8166), // darkGreen
+            fontSize = 18.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+        Image(
+            painter = painterResource(id = R.drawable.simon_mascot),
+            contentDescription = "Maskot",
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .size(100.dp)
+        )
+        Text(
+            text = "Vil du endre preferansene dine senere? Det er enkelt – bare gå til innstillingene via navigasjonsbaren nederst.",
+            color = Color(0xFF2F8166), // darkGreen
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+    }
+}
+
+@Composable
+fun StartAppButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2F8166)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .padding(vertical = 8.dp)
+    ) {
+        Text(
+            text = "Start VærAktiv!",
+            fontSize = 16.sp,
+            color = Color.White
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Icon(
+            imageVector = Icons.Default.ArrowForward,
+            contentDescription = null,
+            tint = Color.White
+        )
+    }
+}
