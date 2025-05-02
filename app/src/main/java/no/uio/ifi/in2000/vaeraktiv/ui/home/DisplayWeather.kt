@@ -1,7 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Icon
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -9,7 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,17 +31,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.PrimaryNavbar
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
@@ -55,6 +50,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
     Spacer(modifier = Modifier.height(12.dp))
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
             .clickable (
@@ -67,14 +63,15 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
             )
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(top = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround
         ) {
             // Icon cell
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 8.dp),
+                modifier = Modifier,
+                    //.weight(1f)
+                    //.padding(),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -85,20 +82,20 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
             }
             // Temperature cell and uv
             Column (
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 8.dp),
+                modifier = Modifier,
+                    //.weight(1f),
+                    //.padding(end = 30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = "${data?.tempNow}°",
-                    style = MaterialTheme.typography.displaySmall,
+                    style = MaterialTheme.typography.displayMedium,
                     color = OnContainer,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "${data?.uv} UV",
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.headlineMedium,
                     color = OnContainer,
                     textAlign = TextAlign.Center
                 )
@@ -110,7 +107,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp) // Use the same overall padding as above
+                    .padding(horizontal = 16.dp, vertical = 8.dp) // Use the same overall padding as above
             ) {
                 Row {
                     // UV details
@@ -170,35 +167,43 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                if (uiState.next24HoursError != null) {
+                uiState.next24HoursError?.let {
                     ErrorMessage(
                         message = "Error fetching today's weather: ${uiState.next24HoursError}"
                     )
+                } ?: run {
+                    Log.d("DisplayHourlyForecast", "Forecast: ${uiState.next24Hours}")
+                    DisplayHourlyForecast(uiState.next24Hours)
                 }
-                else if (uiState.sunRiseSetError != null) {
+
+                uiState.sunRiseSetError?.let {
                     ErrorMessage(
-                        message = "Error fetching sunrise/sunset data: ${uiState.sunRiseSetError}"
+                        message = "Error fetching today's weather: ${uiState.sunRiseSetError}"
                     )
+                } ?: run {
+                    Log.d("DisplayHourlyForecast", "Forecast: ${uiState.sunRiseSet}")
+                    SunRiseSet(uiState.sunRiseSet)
                 }
-                else {
-                    Row {
-                        Log.d("DisplayHourlyForecast", "sunData: ${uiState.next24Hours}")
-                        Log.d("DisplayHourlyForecast", "Forecast: ${uiState.sunRiseSet}")
-                        DisplayHourlyForecast(uiState.next24Hours, uiState.sunRiseSet)
-                    }
-                }
-                Spacer(modifier = Modifier.height(16.dp))
             }
         }
-        Row {
-            Text("Detaljert værdata")
+        Row (
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+        ){
+            Text(
+                text = "Detaljer",
+                style = MaterialTheme.typography.labelLarge,
+                color = OnContainer,
+                textAlign = TextAlign.Center
+            )
             Icon(
                 imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = "Expand/Collapse",
                 tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
-                    .size(12.dp)
+                    .size(20.dp)
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }

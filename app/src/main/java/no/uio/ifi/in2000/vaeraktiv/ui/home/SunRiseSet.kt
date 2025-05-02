@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,8 +30,8 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
 fun SunRiseSet(sunData : List<String>) {
-    val solOpp = sunData.getOrNull(0) ?: "N/A"
-    val solNed = sunData.getOrNull(1) ?: "N/A"
+    val sunRise = sunData.getOrNull(0) ?: "N/A"
+    val sunSet = sunData.getOrNull(1) ?: "N/A"
     val cornerDp = 10.dp
     Spacer(modifier = Modifier.height(12.dp))
     Column(
@@ -40,85 +41,92 @@ fun SunRiseSet(sunData : List<String>) {
                 Container,
                 shape = RoundedCornerShape(cornerDp))
             .fillMaxWidth()
-            .padding(10.dp)
     ) {
         Row (
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = BackGroundColor, shape = RoundedCornerShape(cornerDp))
+                .border(1.dp, OnContainer, RoundedCornerShape(cornerDp)),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Box(
-                modifier = Modifier
-                    .padding(end = 8.dp)
-                    .width(80.dp)
-                    .height(160.dp)
-                    .background(
-                        color = BackGroundColor,
-                        shape = RoundedCornerShape(10.dp),
-                    )
-                    .border(1.dp, OnContainer, RoundedCornerShape(10.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.padding(8.dp)
+                Row (
+                    modifier = Modifier.padding(vertical = 12.dp).padding(start = 12.dp)
                 ) {
-                    Text(
-                        text = solOpp,
-                        style = MaterialTheme.typography.labelMedium,
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Image(
-                        painter = painterResource(id = R.drawable.sunrise_color3),
-                        contentDescription = "Sunrise icon",
-                        modifier = Modifier.size(50.dp)
-                    )
-                    Spacer(modifier = Modifier.height(25.dp))
-                    Text(
-                        text = "Sol opp",
-                        style = MaterialTheme.typography.labelSmall,
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.height(25.dp))
+                    Column (
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.sunrise_color3),
+                            contentDescription = "Sunrise icon",
+                            modifier = Modifier.size(50.dp)
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Sol opp",
+                            style = MaterialTheme.typography.labelSmall,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column (
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.padding(top = 20.dp)
+                    ){
+                        Text(
+                            text = sunRise,
+                            style = MaterialTheme.typography.headlineMedium,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
 
             Box(
                 modifier = Modifier
-                    .padding(end = 8.dp)
-                    .width(80.dp)
-                    .height(160.dp)
-                    .background(
-                        color = BackGroundColor,
-                        shape = RoundedCornerShape(10.dp),
-                    )
-                    .border(1.dp, OnContainer, RoundedCornerShape(10.dp)
-                    ),
+                    .height(60.dp)
+                    .width(2.dp)
+                    .background(OnContainer)
+                    .align(Alignment.CenterVertically)
+                    .padding(horizontal = 2.dp)
+            )
+
+            Box(
                 contentAlignment = Alignment.Center
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.padding(8.dp)
+                Row (
+                    modifier = Modifier.padding(vertical = 12.dp).padding(end = 12.dp)
                 ) {
-                    Text(
-                        text = solNed,
-                        style = MaterialTheme.typography.labelMedium,
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Image(
-                        painter = painterResource(id = R.drawable.sunset_color),
-                        contentDescription = "Sunset icon",
-                        modifier = Modifier.size(50.dp)
-                    )
-                    Spacer(modifier = Modifier.height(25.dp))
-                    Text(
-                        text = "Sol ned",
-                        style = MaterialTheme.typography.labelSmall,
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.height(25.dp))
+                    Column (
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.sunset_color),
+                            contentDescription = "Sunset icon",
+                            modifier = Modifier.size(50.dp)
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Sol ned",
+                            style = MaterialTheme.typography.labelSmall,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column (
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.padding(top = 20.dp)
+                    ){
+                        Text(
+                            text = sunSet,
+                            style = MaterialTheme.typography.headlineMedium,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
         }
