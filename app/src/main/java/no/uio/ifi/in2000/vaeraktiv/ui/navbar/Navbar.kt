@@ -1,7 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.navbar
+
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -14,12 +14,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.MainActivity
+import no.uio.ifi.in2000.vaeraktiv.model.navbar.NavbarUiState
 import no.uio.ifi.in2000.vaeraktiv.network.connection.NetworkObserver
 import no.uio.ifi.in2000.vaeraktiv.ui.activity.PreferencesViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.activity.SettingsScreen
@@ -32,14 +34,9 @@ import no.uio.ifi.in2000.vaeraktiv.ui.map.MapScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.InfoPeferencesScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.InformationScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.WelcomeScreen
+import androidx.core.content.edit
 
 
-/*
-*
-* This function is the navbar. This function is called in MainActivity.kt. When this function is called a display in the button wil be called, this display will
-*  have tre buttons called from the ButtonNavigationBar function.
-*The function also observe and update if the network status changes on the device. If the internet connection is lost a dialog will be displayed. if not the navbar is shown
-* */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navbar(
@@ -49,129 +46,123 @@ fun Navbar(
     preferencesViewModel: PreferencesViewModel
 ) {
     val navController = rememberNavController()
-    var isOnline by remember { mutableStateOf(true) }
-    var showNoNetworkDialog by remember { mutableStateOf(false) }
-    var isLoading by remember { mutableStateOf(false) }
+    var uiState by remember { mutableStateOf(NavbarUiState()) }
     val context = LocalContext.current
-    var selectedRoute by remember { mutableStateOf("home") }
-
-    // Check if onboarding is completed
     val sharedPreferences = context.getSharedPreferences("VaerAktivPrefs", Context.MODE_PRIVATE)
-    val isOnboardingCompleted = sharedPreferences.getBoolean("isOnboardingCompleted", false)
+    val startDestination = if (sharedPreferences.getBoolean("isOnboardingCompleted", false)) "home" else "welcome"
 
-    // Log onboarding status for debugging
-    LaunchedEffect(isOnboardingCompleted) {
-        Log.d("Navbar", "isOnboardingCompleted: $isOnboardingCompleted")
+    // Observe network status
+    NetworkObserver { isOnline ->
+        uiState = uiState.copy(
+            isOnline = isOnline,
+            showNoNetworkDialog = !isOnline && !uiState.isOnboardingRoute
+        )
     }
 
-    // Observe navigation from FavoriteLocationViewModel
+    // Handle navigation from ViewModels
     LaunchedEffect(favoriteLocationViewModel.navigateToHome) {
         favoriteLocationViewModel.navigateToHome.observeForever { shouldNavigate ->
             if (shouldNavigate) {
-                navController.navigate("home") {
-                    popUpTo(navController.graph.startDestinationId)
-                    launchSingleTop = true
-                }
+                navController.navigateToHome()
                 favoriteLocationViewModel.onNavigationHandled()
-                selectedRoute = "home"
+                uiState = uiState.copy(selectedRoute = "home")
             }
         }
     }
 
     LaunchedEffect(homeScreenViewModel.navigateToMap) {
         homeScreenViewModel.navigateToMap.collect { activity ->
-            // navigate to map
-            navController.navigate("map") {
-                popUpTo(navController.graph.startDestinationId); launchSingleTop = true
-            }
-            selectedRoute = "map"
+            navController.navigateToMap()
+            uiState = uiState.copy(selectedRoute = "map")
             mapScreenViewModel.zoomInOnActivity(activity)
         }
     }
 
-    // Network observer
-    NetworkObserver { newStatus ->
-        isOnline = newStatus
-        showNoNetworkDialog = !newStatus
-        Log.d("NetworkObserver", "Network status changed to $newStatus")
-    }
-
-    // Determine if bottom bar should be shown (hide for welcome, onboarding, final_onboarding)
+    // Determine if bottom bar should be shown
     val currentRoute by navController.currentBackStackEntryAsState()
-    val showBottomBar = currentRoute?.destination?.route !in listOf("welcome", "onboarding", "final_onboarding")
-    val isOnboardingRoute = currentRoute?.destination?.route in listOf("welcome", "onboarding", "final_onboarding")
+    val showBottomBar = currentRoute?.destination?.route?.let { route ->
+        route !in listOf("welcome", "onboarding", "final_onboarding")
+    } == true
+    uiState = uiState.copy(isOnboardingRoute = currentRoute?.destination?.route in listOf("welcome", "onboarding", "final_onboarding"))
 
     Scaffold(
         bottomBar = {
-            if (!isLoading && showBottomBar) {
+            if (!uiState.isLoading && showBottomBar) {
                 BottomNavigationBar(
                     navController = navController,
-                    getSelectedRoute = { selectedRoute },
-                    setSelectedRoute = { newValue -> selectedRoute = newValue }
+                    getSelectedRoute = { uiState.selectedRoute },
+                    setSelectedRoute = { uiState = uiState.copy(selectedRoute = it) }
                 )
             }
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            if (isLoading) {
-                LoadingScreen()
-                LaunchedEffect(Unit) {
-                    delay(1000L)
-                    isLoading = false
-                    if (!isOnline && !isOnboardingRoute) {
-                        showNoNetworkDialog = true
+            when {
+                uiState.isLoading -> {
+                    LoadingScreen()
+                    LaunchedEffect(Unit) {
+                        delay(1000L)
+                        uiState = uiState.copy(
+                            isLoading = false,
+                            showNoNetworkDialog = !uiState.isOnline && !uiState.isOnboardingRoute
+                        )
                     }
                 }
-            } else {
-                NavHost(
-                    navController = navController,
-                    startDestination = if (isOnboardingCompleted) "home" else "welcome"
-                ) {
-                    composable("welcome") {
-                        WelcomeScreen(
-                            onStartClick = { navController.navigate("onboarding") }
-                        )
-                    }
-                    composable("onboarding") {
-                        InfoPeferencesScreen(
-                            viewModel = preferencesViewModel,
-                            onContinueClick = { navController.navigate("final_onboarding") }
-                        )
-                    }
-                    composable("final_onboarding") {
-                        InformationScreen(
-                            onStartApplication = {
-                                // Mark onboarding as completed
-                                sharedPreferences.edit()
-                                    .putBoolean("isOnboardingCompleted", true)
-                                    .apply()
-                                Log.d("Navbar", "Onboarding completed, set isOnboardingCompleted to true")
-
-                                // Navigate to home
-                                navController.navigate("home") {
-                                    popUpTo("welcome") { inclusive = true }
-                                    launchSingleTop = true
-                                }
-                            }
-                        )
-                    }
-                    composable("home") { HomeScreen(isOnline, homeScreenViewModel) }
-                    composable("settings") { SettingsScreen(preferencesViewModel) }
-                    composable("location") { LocationScreen(isOnline, favoriteLocationViewModel) }
-                    composable("map") { MapScreen(mapScreenViewModel) }
-                }
-                if (showNoNetworkDialog && !isOnboardingRoute) {
-                    NoNetworkDialog(
-                        onRetry = {
-                            isLoading = true
-                            showNoNetworkDialog = false
-                        },
-                        onClose = {
-                            (context as? MainActivity)?.finishAffinity()
+                else -> {
+                    NavHost(
+                        navController = navController,
+                        startDestination = startDestination
+                    ) {
+                        composable("welcome") {
+                            WelcomeScreen(onStartClick = { navController.navigate("onboarding") })
                         }
-                    )
+                        composable("onboarding") {
+                            InfoPeferencesScreen(
+                                viewModel = preferencesViewModel,
+                                onContinueClick = { navController.navigate("final_onboarding") }
+                            )
+                        }
+                        composable("final_onboarding") {
+                            InformationScreen(
+                                onStartApplication = {
+                                    sharedPreferences.edit {
+                                        putBoolean("isOnboardingCompleted", true)
+                                    }
+                                    navController.navigateToHome(popUpTo = "welcome")
+                                }
+                            )
+                        }
+                        composable("home") { HomeScreen(uiState.isOnline, homeScreenViewModel) }
+                        composable("settings") { SettingsScreen(preferencesViewModel) }
+                        composable("location") { LocationScreen(uiState.isOnline, favoriteLocationViewModel) }
+                        composable("map") { MapScreen(mapScreenViewModel) }
+                    }
+                    if (uiState.showNoNetworkDialog && !uiState.isOnboardingRoute) {
+                        NoNetworkDialog(
+                            onRetry = {
+                                uiState = uiState.copy(isLoading = true, showNoNetworkDialog = false)
+                            },
+                            onClose = { (context as? MainActivity)?.finishAffinity() }
+                        )
+                    }
                 }
             }
         }
+    }
+}
+
+// Extension functions for navigation
+private fun NavController.navigateToHome(popUpTo: String? = null) {
+    navigate("home") {
+        popUpTo?.let { popUpTo(it) { inclusive = true } }
+        popUpTo(graph.startDestinationId)
+        launchSingleTop = true
+    }
+}
+
+private fun NavController.navigateToMap() {
+    navigate("map") {
+        popUpTo(graph.startDestinationId)
+        launchSingleTop = true
     }
 }
