@@ -100,7 +100,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                     ){
                         Text(
                             text = "I dag",
-                            style = MaterialTheme.typography.headlineSmall,
+                            style = MaterialTheme.typography.headlineMedium,
                             color = OnContainer,
                             modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 4.dp)
                         )

@@ -22,7 +22,9 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.PrimaryNavbar
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
 import android.util.Log
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.ui.text.style.TextDecoration
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 
@@ -53,7 +55,7 @@ fun ActivityCard(
             ) {
                 Text(
                     text = activity.activityName,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     color = OnContainer,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -63,7 +65,7 @@ fun ActivityCard(
                         onRefresh.invoke()
                               },
                     isLoading = false,
-                    enabled = onRefresh != null
+                    enabled = true
                 )
             }
             Row {
@@ -95,9 +97,9 @@ fun ActivityCard(
                         color = OnContainer,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.clickable {
-                            onViewInMap.invoke()
-                        }
+                        textDecoration = TextDecoration.Underline,
+                        modifier = Modifier
+                            .clickable { onViewInMap.invoke() }
                     )
                 }
             }

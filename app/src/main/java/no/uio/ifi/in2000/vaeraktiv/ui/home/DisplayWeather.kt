@@ -199,7 +199,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
             Icon(
                 imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = "Expand/Collapse",
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                tint = OnContainer,
                 modifier = Modifier
                     .size(20.dp)
             )
