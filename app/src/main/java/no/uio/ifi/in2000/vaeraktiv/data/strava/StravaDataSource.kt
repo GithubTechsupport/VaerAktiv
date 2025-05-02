@@ -41,6 +41,7 @@ class StravaDatasource @Inject constructor(
 
     private val accessToken = "33ef79259e39b394676d82d59330e2877f382525"
 
+
     /**
      * Fetches the top 10 popular running segments within the given bounding box.
      * @param swLat southwest latitude
