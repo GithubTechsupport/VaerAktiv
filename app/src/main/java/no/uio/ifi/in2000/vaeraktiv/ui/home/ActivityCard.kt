@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,19 +13,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.PrimaryNavbar
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
-import android.util.Log
-import androidx.compose.foundation.clickable
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
 
 
 @Composable

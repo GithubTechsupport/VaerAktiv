@@ -1,7 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -21,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
@@ -174,10 +172,10 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
 
 
 @Composable
-fun ErrorMessage(message: String, modifier: Modifier = Modifier.padding(8.dp)) {
+fun ErrorMessage(message: String, modifier: Modifier = Modifier) {
     Text(
         text = message,
         color = Color.Red,
-        modifier = modifier
+        modifier = modifier.padding(8.dp)
     )
 }

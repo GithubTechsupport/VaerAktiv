@@ -16,31 +16,17 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.vaeraktiv.BuildConfig
 import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
-//import org.oremif.deepseek.api.chat
-//import org.oremif.deepseek.client.DeepSeekClient
-//import org.oremif.deepseek.models.ChatCompletionParams
-//import org.oremif.deepseek.models.ChatModel
-//import org.oremif.deepseek.models.ResponseFormat
-//import org.oremif.deepseek.models.chatCompletionParams
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.seconds
-
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
-import kotlinx.serialization.modules.subclass
-import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.PlacesActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 
 
 abstract class AiClient {
@@ -49,26 +35,6 @@ abstract class AiClient {
     abstract suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, preferences: String, exclusion: String): String?
     abstract suspend fun getSingleSuggestionForDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, preferences: String, exclusion: String): String?
 }
-
-//class DeepseekClientWrapper @Inject constructor(private val client: DeepSeekClient) : AiClient() {
-//    private val params : ChatCompletionParams = chatCompletionParams {
-//        model = ChatModel.DEEPSEEK_CHAT
-//        temperature = 0.5
-//        responseFormat = ResponseFormat.jsonObject
-//    }
-//
-//    override suspend fun getResponse(prompt: Prompt): JsonResponse? = withContext(Dispatchers.IO) {
-//        val response: org.oremif.deepseek.models.ChatCompletion = client.chat(params) {
-//            system(systemPrompt)
-//            user("$examplesPrompt\n\nFollowing is the user prompt:\n\n<<<\n$prompt\n>>>")
-//        }
-//        val parsedResponse = response.choices.firstOrNull()?.message?.content?.let {
-//            Json.decodeFromString<JsonResponse>(it)
-//        }
-//        return@withContext parsedResponse
-//    }
-//
-//}
 
 class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiClient() {
     override suspend fun getSuggestionsForEveryDay(forecastData: FormattedForecastDataForPrompt): SuggestedActivities? = withContext(Dispatchers.IO) {
@@ -141,17 +107,6 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
 @Module
 @InstallIn(SingletonComponent::class)
 object AiClientModule {
-
-//    @Provides
-//    @Singleton
-//    @Named("Deepseek-Client")
-//    fun provideDeepseekClient(): AiClient {
-//        val apiKey = ""
-//        val client = DeepSeekClient(apiKey) {
-//            chatCompletionTimeout(120_000)
-//        }
-//        return DeepseekClientWrapper(client)
-//    }
 
     @Provides
     @Singleton
