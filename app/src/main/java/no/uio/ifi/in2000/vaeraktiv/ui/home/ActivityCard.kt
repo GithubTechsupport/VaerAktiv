@@ -30,7 +30,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 @Composable
 fun ActivityCard(
     activity: ActivitySuggestion,
-    isToday: Boolean,
     onRefresh: (() -> Unit),
     onViewInMap: (() -> Unit)
 ) {
@@ -66,6 +65,29 @@ fun ActivityCard(
                     isLoading = false,
                     enabled = onRefresh != null
                 )
+            }
+            Row {
+                Text(
+                    text = "Beste tidspunkt: ${activity.timeStart} - ${activity.timeEnd}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = OnContainer,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Row {
+                // Beskrivelse under
+                Text(
+                    text = activity.activityDesc,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = SecondaryOnContainer,
+                    modifier = Modifier.padding(top = 8.dp),
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Row (
+                modifier = Modifier.align(Alignment.End)
+            ){
                 if (activity !is CustomActivitySuggestion) {
                     Text(
                         text = "Vis i kart",
@@ -79,23 +101,6 @@ fun ActivityCard(
                     )
                 }
             }
-            Row {
-                Text(
-                    text = "Beste tidspunkt: ${activity.timeStart} - ${activity.timeEnd}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = OnContainer,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-            // Beskrivelse under
-            Text(
-                text = activity.activityDesc,
-                style = MaterialTheme.typography.bodyLarge,
-                color = SecondaryOnContainer,
-                modifier = Modifier.padding(top = 8.dp),
-                overflow = TextOverflow.Ellipsis
-            )
         }
     }
 }

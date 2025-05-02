@@ -123,29 +123,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
                                     activityDate = ActivityDate("I dag", todaysActivities),
                                     isLoading = {uiState.loadingActivities},
                                     onRefresh = { dayNr, indexParam -> viewModel.replaceActivityInDay(dayNr, indexParam ) },
-                                    onViewInMap = {activity -> viewModel.viewActivityInMap(activity)},
-                                    weatherData = listOf(
-                                        ForecastForDay(
-                                            date = "00-06",
-                                            maxTemp = "15°C",
-                                            icon = "rain"
-                                        ),
-                                        ForecastForDay(
-                                            date = "06-12",
-                                            maxTemp = "18°C",
-                                            icon = "fog"
-                                        ),
-                                        ForecastForDay(
-                                            date = "12-18",
-                                            maxTemp = "20°C",
-                                            icon = "snow"
-                                        ),
-                                        ForecastForDay(
-                                            date = "18-24",
-                                            maxTemp = "16°C",
-                                            icon = "cloudy"
-                                        )
-                                    )
+                                    onViewInMap = {activity -> viewModel.viewActivityInMap(activity)}
                                 )
                             }
                         }

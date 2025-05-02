@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Icon
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -18,6 +19,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -184,6 +189,16 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 }
                 Spacer(modifier = Modifier.height(16.dp))
             }
+        }
+        Row {
+            Text("Detaljert værdata")
+            Icon(
+                imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                contentDescription = "Expand/Collapse",
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier
+                    .size(12.dp)
+            )
         }
     }
 }
