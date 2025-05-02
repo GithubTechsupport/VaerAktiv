@@ -159,6 +159,7 @@ fun WeatherWeek(
                 ){
                     // Viser værvarsel for dagen
                     DisplayIntervalSymbols(uiState.dayIntervals[index])
+                    Spacer(modifier = Modifier.padding(4.dp))
                     if (isLoading) {
                         LoadAllActivities()
                     } else if (uiState.isErrorFutureActivities) {
