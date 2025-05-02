@@ -83,7 +83,7 @@ fun HomeContent(
 
             item {
                 DataSection(
-                    data = Unit, // dummy value
+                    data = Unit,
                     error = uiState.thisWeeksWeatherError,
                     errorMessagePrefix = "Error fetching weekly forecast"
                 ) {

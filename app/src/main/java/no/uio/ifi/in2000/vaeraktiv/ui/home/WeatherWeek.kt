@@ -160,28 +160,22 @@ fun WeatherWeek(
                     // Viser værvarsel for dagen
                     DisplayIntervalSymbols(uiState.dayIntervals[index])
                     Spacer(modifier = Modifier.padding(4.dp))
-                    if (isLoading) {
-                        LoadAllActivities()
-                    } else if (uiState.isErrorFutureActivities) {
-                        ErrorMessage("Faen")
-                    } else if (activitiesForThisDay != null && activitiesForThisDay.activities.isNotEmpty()){
-                        val activitiesList = activitiesForThisDay.activities
+                    DataSection(
+                        data = activitiesForThisDay?.takeIf { it.activities.isNotEmpty() },
+                        error = if (uiState.isErrorFutureActivities) "Kunne ikke hente aktiviteter" else null,
+                        loading = isLoading,
+                        errorMessagePrefix = "Feil:",
+                        loadingContent = { LoadAllActivities() }
+                    ) { activityDate ->
                         AddActivitiesForDay(
                             dayNr = dayNr,
-                            activityDate = ActivityDate (
+                            activityDate = ActivityDate(
                                 date = getDayOfWeek(day.date),
-                                activities = activitiesList,
+                                activities = activityDate.activities
                             ),
                             isLoading = { uiState.loadingActivities },
                             onRefresh = { dayNr, indexParam -> viewModel.replaceActivityInDay(dayNr, indexParam) },
                             onViewInMap = { activity -> viewModel.viewActivityInMap(activity) },
-                        )
-                    } else {
-                        Text(
-                            text = "Finner ingen aktiviteter",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = OnContainer,
-                            modifier = Modifier.padding(start = 8.dp)
                         )
                     }
                 }
