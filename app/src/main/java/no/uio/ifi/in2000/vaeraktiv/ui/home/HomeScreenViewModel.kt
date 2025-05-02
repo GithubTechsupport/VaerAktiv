@@ -21,6 +21,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
+import no.uio.ifi.in2000.vaeraktiv.model.ui.DetailedForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
@@ -81,6 +82,9 @@ class HomeScreenViewModel @Inject constructor(
             var next24Hours: List<ForecastForHour> = emptyList()
             var next24HoursError: String? = null
 
+            var dayIntervals: List<List<DetailedForecastForDay>> = emptyList()
+            var dayIntervalsError: String? = null
+
             try {
                 todaysWeather = weatherRepository.getForecastToday(location)
                 todaysWeatherError = null
@@ -124,6 +128,13 @@ class HomeScreenViewModel @Inject constructor(
                 next24HoursError = e.toString()
             }
 
+            try {
+                dayIntervals = weatherRepository.getForecastByDayIntervals(location)
+                dayIntervalsError = null
+            } catch (e: Exception) {
+                dayIntervalsError = e.toString()
+            }
+
 
             // Update the UI state after collecting all data/errors.
             _homeScreenUiState.update { currentState ->
@@ -134,12 +145,14 @@ class HomeScreenViewModel @Inject constructor(
                     alerts = alerts,
                     sunRiseSet = sunRiseSet,
                     next24Hours = next24Hours,
+                    dayIntervals = dayIntervals,
                     todaysWeatherError = todaysWeatherError,
                     weatherTodayError = todaysWeatherError,
                     thisWeeksWeatherError = thisWeeksWeatherError,
                     alertsError = alertsError,
                     sunRiseSetError = sunRiseSetError,
-                    next24HoursError = next24HoursError
+                    next24HoursError = next24HoursError,
+                    dayIntervalsError = dayIntervalsError
                 )
             }
 
@@ -247,6 +260,7 @@ data class HomeScreenUiState(
     val thisWeeksWeather: List<ForecastForDay> = emptyList(),
     val sunRiseSet: List<String> = emptyList(),
     val next24Hours: List<ForecastForHour> = emptyList(),
+    val dayIntervals: List<List<DetailedForecastForDay>> = emptyList(),
 
     // errors
     val todaysWeatherError: String? = null,
@@ -264,5 +278,6 @@ data class HomeScreenUiState(
     val thisWeeksWeatherError: String? = null,
     val alertsError: String? = null,
     val sunRiseSetError: String? = null,
-    val next24HoursError: String? = null
+    val next24HoursError: String? = null,
+    val dayIntervalsError: String? = null
 )
