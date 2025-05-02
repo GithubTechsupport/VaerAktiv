@@ -5,7 +5,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
 
 data class FormattedForecastDataForPrompt (
     val timeseries: List<TimeSeries>,
-    val units: Units,
+    val units: Units?,
     val location: String
 ) {
     override fun toString(): String {

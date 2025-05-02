@@ -162,17 +162,11 @@ fun WeatherWeek(
                     // Viser værvarsel for dagen
                     DisplayIntervalSymbols(uiState.dayIntervals[index])
                     if (isLoading) {
-                        LoadingScreen()
+                        LoadAllActivities()
                     } else if (uiState.isErrorFutureActivities) {
                         ErrorMessage("Faen")
                     } else if (activitiesForThisDay != null && activitiesForThisDay.activities.isNotEmpty()){
-                        val activitiesList = activitiesForThisDay.activities.map {
-                            Activity(
-                                timeOfDay = "${it.timeStart} - ${it.timeEnd}",
-                                name = it.activityName,
-                                desc = it.activityDesc,
-                            )
-                        }
+                        val activitiesList = activitiesForThisDay.activities
                         AddActivitiesForDay(
                             dayNr = dayNr,
                             activityDate = ActivityDate (
@@ -180,7 +174,8 @@ fun WeatherWeek(
                                 activities = activitiesList,
                             ),
                             isLoading = { uiState.loadingActivities },
-                            onRefresh = { dayNr, indexParam, activityName -> viewModel.replaceActivityInDay(dayNr, indexParam, activityName) }
+                            onRefresh = { dayNr, indexParam -> viewModel.replaceActivityInDay(dayNr, indexParam) },
+                            onViewInMap = { activity -> viewModel.viewActivityInMap(activity) },
                         )
                     } else {
                         Text(

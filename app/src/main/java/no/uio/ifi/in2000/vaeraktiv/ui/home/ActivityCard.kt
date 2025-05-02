@@ -22,13 +22,17 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.PrimaryNavbar
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
 import android.util.Log
+import androidx.compose.foundation.clickable
+import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 
 
 @Composable
 fun ActivityCard(
-    activity: Activity,
+    activity: ActivitySuggestion,
     isToday: Boolean,
     onRefresh: (() -> Unit),
+    onViewInMap: (() -> Unit)
 ) {
 
     Card(
@@ -49,7 +53,7 @@ fun ActivityCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = activity.name,
+                    text = activity.activityName,
                     style = MaterialTheme.typography.titleMedium,
                     color = OnContainer,
                     maxLines = 1,
@@ -62,10 +66,22 @@ fun ActivityCard(
                     isLoading = false,
                     enabled = onRefresh != null
                 )
+                if (activity !is CustomActivitySuggestion) {
+                    Text(
+                        text = "Vis i kart",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = OnContainer,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.clickable {
+                            onViewInMap.invoke()
+                        }
+                    )
+                }
             }
             Row {
                 Text(
-                    text = "Beste tidspunkt: ${activity.timeOfDay}",
+                    text = "Beste tidspunkt: ${activity.timeStart} - ${activity.timeEnd}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = OnContainer,
                     maxLines = 1,
@@ -74,7 +90,7 @@ fun ActivityCard(
             }
             // Beskrivelse under
             Text(
-                text = activity.desc,
+                text = activity.activityDesc,
                 style = MaterialTheme.typography.bodyLarge,
                 color = SecondaryOnContainer,
                 modifier = Modifier.padding(top = 8.dp),

@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
+import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
@@ -26,6 +27,8 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import java.time.LocalDate
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
@@ -42,9 +45,8 @@ class HomeScreenViewModel @Inject constructor(
     private val _homeScreenUiState = MutableStateFlow(HomeScreenUiState())
     val homeScreenUiState: StateFlow<HomeScreenUiState> = _homeScreenUiState.asStateFlow()
 
-    fun startTracking(lifecycleOwner: LifecycleOwner) {
-        weatherRepository.trackDeviceLocation(lifecycleOwner)
-    }
+    private val _navigateToMap = MutableSharedFlow<ActivitySuggestion>()
+    val navigateToMap = _navigateToMap.asSharedFlow()
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun initialize() {
@@ -222,14 +224,13 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    fun replaceActivityInDay(dayNr: Int, index: Int, oldActivity: String) {
+    fun replaceActivityInDay(dayNr: Int, index: Int) {
         viewModelScope.launch {
             Log.d("HomeScreenViewModel", "Replacing activity in day $dayNr at index $index")
             _homeScreenUiState.update {
                 it.copy(loadingActivities = it.loadingActivities + (dayNr to index))
             }
             try {
-                delay(1000)
                 weatherRepository.getSuggestedActivity(currentLocation.value!!, dayNr, index)
                     ?.let {
                         weatherRepository.replaceActivityInDay(dayNr, index, it)
@@ -241,6 +242,12 @@ class HomeScreenViewModel @Inject constructor(
             finally {
                 _homeScreenUiState.update { it.copy(loadingActivities = it.loadingActivities - (dayNr to index)) }
             }
+        }
+    }
+
+    fun viewActivityInMap(activity: ActivitySuggestion) {
+        viewModelScope.launch {
+            _navigateToMap.emit(activity)
         }
     }
 }

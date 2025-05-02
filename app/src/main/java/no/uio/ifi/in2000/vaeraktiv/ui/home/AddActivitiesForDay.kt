@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
@@ -31,8 +32,9 @@ fun AddActivitiesForDay(
     activityDate: ActivityDate,
     modifier: Modifier = Modifier,
     isLoading: () -> Set<Pair<Int, Int>>,
-    onRefresh: (Int, Int, String) -> Unit,
+    onRefresh: (Int, Int) -> Unit,
     weatherData: List<ForecastForDay>? = null,
+    onViewInMap: (ActivitySuggestion) -> Unit
     ) {
     val context = LocalContext.current
     Column(
@@ -75,7 +77,8 @@ fun AddActivitiesForDay(
                 ActivityCard(
                     activity = activity,
                     isToday = activityDate.date == "I dag",
-                    onRefresh = { onRefresh(dayNr, index, activity.name) },
+                    onRefresh = { onRefresh(dayNr, index) },
+                    onViewInMap = { onViewInMap(activity) }
                 )
             }
         }

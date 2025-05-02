@@ -54,7 +54,7 @@ class placesRepository @Inject constructor(private val placesClient: PlacesClien
         )
 
         val excludedTypes: List<String> = listOf(
-            "stadium"
+            "stadium", "hotel",
         )
         val placeFields: List<Place.Field> = listOf(
             Place.Field.ID, Place.Field.DISPLAY_NAME, Place.Field.FORMATTED_ADDRESS, Place.Field.LOCATION,

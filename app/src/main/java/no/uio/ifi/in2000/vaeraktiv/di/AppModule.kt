@@ -30,6 +30,7 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
+import no.uio.ifi.in2000.vaeraktiv.data.welcome.PreferenceRepository
 import javax.inject.Singleton
 
 @Module
@@ -151,11 +152,12 @@ object AppModule {
         nowcastRepository: NowcastRepository,
         placesRepository: placesRepository,
         stravaRepository: StravaRepository,
+        preferenceRepository: PreferenceRepository
     ): WeatherRepository {
         return WeatherRepositoryDefault(
             metAlertsRepository, locationForecastRepository, sunriseRepository,
             favoriteLocationRepo, aiRepository, locationRepository, geocoder,
-            nowcastRepository, placesRepository, stravaRepository
+            nowcastRepository, placesRepository, stravaRepository, preferenceRepository
         )
     }
 
