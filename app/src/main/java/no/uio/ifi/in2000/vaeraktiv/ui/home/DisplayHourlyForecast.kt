@@ -70,7 +70,7 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                         modifier = Modifier.padding(8.dp)
                     ) {
                         Text(
-                            text = "HH", // "HH:mm"
+                            text = "${hour.time}", // "HH:mm"
                             style = MaterialTheme.typography.labelMedium,
                             textAlign = TextAlign.Center,
                             color = OnContainer
