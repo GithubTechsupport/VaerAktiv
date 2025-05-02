@@ -131,10 +131,13 @@ EXAMPLE JSON OUTPUT:
 }
 END OF EXAMPLES
 """.trimIndent(),
-    val fullPrompt: String = """
+    val fullPrompt: String =
+"""
 ${basePrompt}
 ${examples}
-    """.trimIndent(),
+
+
+""".trimIndent(),
 
     val systemPromptSingular: String = """
 The user will provide a weather forecast, data about nearby places, and data about nearby running routes and trails from Strava and Overpass.
@@ -260,10 +263,13 @@ EXAMPLE JSON OUTPUT ALTERNATIVE 3
 END OF EXAMPLES
 """.trimIndent(),
 
-    val fullPromptSingular: String = """
+    val fullPromptSingular: String =
+"""
 ${basePromptSingular}
 ${examplesSingular}
-    """.trimIndent(),
+
+
+""".trimIndent(),
 
     val temperature: Double = 0.75
 )
