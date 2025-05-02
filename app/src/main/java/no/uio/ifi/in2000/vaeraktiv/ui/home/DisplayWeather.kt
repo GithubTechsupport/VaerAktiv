@@ -2,6 +2,7 @@ package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -168,17 +169,18 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                     ErrorMessage(
                         message = "Error fetching today's weather: ${uiState.next24HoursError}"
                     )
-                } else {
-                    Row {
-                        DisplayHourlyForecast(uiState.next24Hours)
-                    }
                 }
-                if (uiState.sunRiseSetError != null) {
+                else if (uiState.sunRiseSetError != null) {
                     ErrorMessage(
                         message = "Error fetching sunrise/sunset data: ${uiState.sunRiseSetError}"
                     )
-                } else {
-                    SunRiseSet(uiState.sunRiseSet)
+                }
+                else {
+                    Row {
+                        Log.d("DisplayHourlyForecast", "sunData: ${uiState.next24Hours}")
+                        Log.d("DisplayHourlyForecast", "Forecast: ${uiState.sunRiseSet}")
+                        DisplayHourlyForecast(uiState.next24Hours, uiState.sunRiseSet)
+                    }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
             }

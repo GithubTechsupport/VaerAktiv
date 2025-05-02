@@ -254,7 +254,9 @@ class WeatherRepositoryDefault @Inject constructor(
                 temp = timeSeries.data.instant.details.airTemperature.toString(),
                 windSpeed = timeSeries.data.instant.details.windSpeed.toString(),
                 precipitationAmount = timeSeries.data.next1Hours?.details?.precipitationAmount.toString(),
-                icon = timeSeries.data.next1Hours?.summary?.symbolCode.toString())
+                icon = timeSeries.data.next1Hours?.summary?.symbolCode.toString(),
+                uv = timeSeries.data.instant.details.ultravioletIndexClearSky.toString()
+            )
             forecastForHour
         } ?: emptyList()
         Log.d("WeatherRepository", "getWeatherForHour response: $hourDataList")
