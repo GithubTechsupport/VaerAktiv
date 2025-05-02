@@ -159,6 +159,8 @@ fun WeatherWeek(
                         .fillMaxWidth()
                         .padding(top = 4.dp)
                 ){
+                    // Viser værvarsel for dagen
+                    DisplayIntervalSymbols(uiState.dayIntervals[index])
                     if (isLoading) {
                         LoadAllActivities()
                     } else if (uiState.isErrorFutureActivities) {

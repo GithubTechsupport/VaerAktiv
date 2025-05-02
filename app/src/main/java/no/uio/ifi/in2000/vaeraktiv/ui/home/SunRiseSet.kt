@@ -69,13 +69,13 @@ fun SunRiseSet(sunData : List<String>) {
                     )
                     Spacer(modifier = Modifier.height(20.dp))
                     Image(
-                        painter = painterResource(id = R.drawable.sunset_color),
-                        contentDescription = "Sunset icon",
+                        painter = painterResource(id = R.drawable.sunrise_color3),
+                        contentDescription = "Sunrise icon",
                         modifier = Modifier.size(50.dp)
                     )
                     Spacer(modifier = Modifier.height(25.dp))
                     Text(
-                        text = "Sol ned",
+                        text = "Sol opp",
                         style = MaterialTheme.typography.labelSmall,
                         textAlign = TextAlign.Center
                     )
@@ -108,13 +108,13 @@ fun SunRiseSet(sunData : List<String>) {
                     )
                     Spacer(modifier = Modifier.height(20.dp))
                     Image(
-                        painter = painterResource(id = R.drawable.sunrise1_color),
-                        contentDescription = "Sunrise icon",
+                        painter = painterResource(id = R.drawable.sunset_color),
+                        contentDescription = "Sunset icon",
                         modifier = Modifier.size(50.dp)
                     )
                     Spacer(modifier = Modifier.height(25.dp))
                     Text(
-                        text = "Sol opp",
+                        text = "Sol ned",
                         style = MaterialTheme.typography.labelSmall,
                         textAlign = TextAlign.Center
                     )

@@ -14,6 +14,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
+import no.uio.ifi.in2000.vaeraktiv.model.ui.DetailedForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import java.time.LocalDate
@@ -44,6 +45,8 @@ interface WeatherRepository {
 
     // Retrieves a forecast segmented by day.
     suspend fun getForecastByDay(location: Location): List<ForecastForDay>
+
+    suspend fun getForecastByDayIntervals(location: Location): List<List<DetailedForecastForDay>>
 
     // Retrieves a forecast segmented by hour.
     suspend fun getForecastForHour(location: Location): List<ForecastForHour>

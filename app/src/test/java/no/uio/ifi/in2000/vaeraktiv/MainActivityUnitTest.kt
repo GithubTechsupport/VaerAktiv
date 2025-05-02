@@ -38,6 +38,5 @@ class MainActivityUnitTest {
 
     @Test
     fun `locationTracker start is called when permission is granted`() {
-
     }
 }
