@@ -1,13 +1,13 @@
 package no.uio.ifi.in2000.vaeraktiv.data.places
 
 import android.util.Log
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
+import com.google.android.libraries.places.api.model.CircularBounds
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.libraries.places.api.model.CircularBounds
 import com.google.android.libraries.places.api.net.SearchNearbyRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await

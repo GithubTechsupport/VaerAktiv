@@ -1,10 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.network.placesclient
 
 import android.content.Context
-import com.aallam.openai.api.http.Timeout
-import com.aallam.openai.client.OpenAI
-import com.aallam.openai.client.OpenAIConfig
-import com.aallam.openai.client.OpenAIHost
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import dagger.Module

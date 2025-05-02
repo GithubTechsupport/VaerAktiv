@@ -3,14 +3,14 @@ package no.uio.ifi.in2000.vaeraktiv.ui.home
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -19,16 +19,12 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
-import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.ui.DetailedForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
-import java.time.LocalDate
 import javax.inject.Inject
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
@@ -183,7 +179,7 @@ class HomeScreenViewModel @Inject constructor(
                 _homeScreenUiState.update {
                     it.copy(
                         isErrorActivitiesToday = true,
-                        errorMessageActivitiesToday = e.toString() ?: "Unknown error"
+                        errorMessageActivitiesToday = e.toString()
                     )
                 }
                 Log.e("ActivityViewModel", "Error fetching today's activities: ", e)
@@ -214,7 +210,7 @@ class HomeScreenViewModel @Inject constructor(
                 _homeScreenUiState.update {
                     it.copy(
                         isErrorFutureActivities = true,
-                        errorMessageFutureActivities = e.toString() ?: "Unknown error"
+                        errorMessageFutureActivities = e.toString()
                     )
                 }
                 Log.e("ActivityViewModel", "Error fetching a future days activities ", e)
