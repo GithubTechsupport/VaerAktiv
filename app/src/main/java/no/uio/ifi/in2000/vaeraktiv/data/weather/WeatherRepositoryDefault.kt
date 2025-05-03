@@ -46,7 +46,6 @@ class WeatherRepositoryDefault @Inject constructor(
     private val metAlertsRepository: IMetAlertsRepository,
     private val locationForecastRepository: LocationForecastRepository,
     private val sunriseRepository: SunriseRepository,
-    private val favoriteLocationRepository: FavoriteLocationRepository,
     private val aiRepository: AiRepository,
     private val deviceLocationRepository: LocationRepository,
     private val geocoderClass: GeocoderClass,
@@ -70,22 +69,6 @@ class WeatherRepositoryDefault @Inject constructor(
     override fun setCurrentLocation(location: Location) {
         _currentLocation.value = location
     }
-
-//    suspend fun getUpdates(locationsList: List<String>) {
-//        val locationsList = favoriteLocationRepo.getAllLocations()
-//
-//        locationsList.forEach { line ->
-//            val parts = line.split(",")
-//            if (parts.size >= 3) {
-//                val name = parts[0]
-//                val lat = parts[1]
-//                val lon = parts[2]
-//                locations[name] = Pair(lat, lon)
-//
-//                locationForecastRepository.getUpdate(lat, lon)
-//            }
-//        }
-//    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getSunRiseData(location: Location, date : String): List<String> {

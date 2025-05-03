@@ -30,7 +30,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
-fun CurrentLocation(locationName : String, deviceLocation: Location?, setCurrentLocation: (Location) -> Unit) { // navn på sted, devicelocation
+fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentLocation: (Location) -> Unit) { // navn på sted, devicelocation
     var expanded by remember { mutableStateOf(false) }
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,

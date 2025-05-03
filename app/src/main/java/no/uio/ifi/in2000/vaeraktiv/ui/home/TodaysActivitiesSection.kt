@@ -57,19 +57,11 @@ fun TodaysActivitiesSection(
                         activityDate = ActivityDate("I dag", todaysActivities),
                         isLoading = { uiState.loadingActivities },
                         onRefresh = { dayNr, index -> viewModel.replaceActivityInDay(dayNr, index) },
-                        onViewInMap = { activity -> viewModel.viewActivityInMap(activity) },
-                        weatherData = mockWeatherData()
+                        onViewInMap = { activity -> viewModel.viewActivityInMap(activity) }
                     )
                 }
             }
         }
     }
 }
-
-private fun mockWeatherData(): List<ForecastForDay> = listOf(
-    ForecastForDay("00-06", "15°C", "rain"),
-    ForecastForDay("06-12", "18°C", "fog"),
-    ForecastForDay("12-18", "20°C", "snow"),
-    ForecastForDay("18-24", "16°C", "cloudy")
-)
 
