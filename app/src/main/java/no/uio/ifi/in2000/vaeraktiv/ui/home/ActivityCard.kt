@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
+import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
@@ -32,6 +34,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 @Composable
 fun ActivityCard(
     activity: ActivitySuggestion,
+    isToday: Boolean,
     onRefresh: (() -> Unit),
     onViewInMap: (() -> Unit)
 ) {

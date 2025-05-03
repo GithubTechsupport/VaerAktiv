@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.data.ai
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json

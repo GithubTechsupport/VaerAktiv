@@ -1,27 +1,27 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.map
 
 import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.PorterDuff
+import android.graphics.drawable.BitmapDrawable
 import android.preference.PreferenceManager
 import android.util.Log
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.drawable.toDrawable
 import no.uio.ifi.in2000.vaeraktiv.model.ai.PlacesActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.RouteSuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlaceSuggestion
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
-import org.osmdroid.util.BoundingBox
-import android.graphics.PorterDuff
-import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
-import androidx.core.graphics.drawable.toDrawable
-import androidx.core.graphics.createBitmap
 
 
 // Helper: red circle + white inner circle

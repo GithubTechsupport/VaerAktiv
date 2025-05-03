@@ -1,10 +1,9 @@
 package no.uio.ifi.in2000.vaeraktiv.model.ai
 
-import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 
 data class Prompt(

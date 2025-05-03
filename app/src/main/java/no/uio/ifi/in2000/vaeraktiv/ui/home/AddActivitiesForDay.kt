@@ -2,7 +2,6 @@ package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

@@ -40,7 +40,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
-import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
@@ -163,29 +162,23 @@ fun WeatherWeek(
                 ){
                     // Viser værvarsel for dagen
                     DisplayIntervalSymbols(uiState.dayIntervals[index])
-                    Spacer(modifier = Modifier.height(8.dp))
-                    if (isLoading) {
-                        LoadAllActivities()
-                    } else if (uiState.isErrorFutureActivities) {
-                        ErrorMessage("Faen")
-                    } else if (activitiesForThisDay != null && activitiesForThisDay.activities.isNotEmpty()){
-                        val activitiesList = activitiesForThisDay.activities
+                    Spacer(modifier = Modifier.padding(4.dp))
+                    DataSection(
+                        data = activitiesForThisDay?.takeIf { it.activities.isNotEmpty() },
+                        error = if (uiState.isErrorFutureActivities) "Kunne ikke hente aktiviteter" else null,
+                        loading = isLoading,
+                        errorMessagePrefix = "Feil:",
+                        loadingContent = { LoadAllActivities() }
+                    ) { activityDate ->
                         AddActivitiesForDay(
                             dayNr = dayNr,
-                            activityDate = ActivityDate (
+                            activityDate = ActivityDate(
                                 date = getDayOfWeek(day.date),
-                                activities = activitiesList,
+                                activities = activityDate.activities
                             ),
                             isLoading = { uiState.loadingActivities },
                             onRefresh = { dayNr, indexParam -> viewModel.replaceActivityInDay(dayNr, indexParam) },
                             onViewInMap = { activity -> viewModel.viewActivityInMap(activity) },
-                        )
-                    } else {
-                        Text(
-                            text = "Finner ingen aktiviteter",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = OnContainer,
-                            modifier = Modifier.padding(start = 8.dp)
                         )
                     }
                 }

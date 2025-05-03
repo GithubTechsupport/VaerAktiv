@@ -1,7 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.model.ai.places
 
-import kotlinx.serialization.Serializable
-
 data class NearbyPlacesSuggestions(
     val suggestions: List<NearbyPlaceSuggestion>
 ) {
