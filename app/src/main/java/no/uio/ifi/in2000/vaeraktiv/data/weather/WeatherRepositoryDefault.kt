@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
+import no.uio.ifi.in2000.vaeraktiv.data.ErrorMessages
 import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
@@ -164,8 +165,8 @@ class WeatherRepositoryDefault @Inject constructor(
                 val timeseries = fullTimeseries.get(dayNr).second
                 return Pair(timeseries, units)
             } else {
-                Log.d("WeatherRepository", "No forecast found")
-                throw Error("No forecast found")
+                Log.d("WeatherRepository", ErrorMessages.NO_FORECAST_FOUND.message)
+                throw Error(ErrorMessages.NO_FORECAST_FOUND.message)
             }
         } catch (e: Exception) {
             Log.e("WeatherRepository", "Error at getTimeSeriesForDay: ", e)
@@ -187,8 +188,7 @@ class WeatherRepositoryDefault @Inject constructor(
                 }
                 return forecast
             } else {
-                Log.d("WeatherRepository", "No forecast found")
-                throw Error("No forecast found")
+                throw Error(ErrorMessages.NO_FORECAST_FOUND.message)
             }
         } catch (e: Exception) {
             Log.e("WeatherRepository", "Error at getForecastByDay: ", e)
@@ -217,8 +217,7 @@ class WeatherRepositoryDefault @Inject constructor(
 
                 return forecastByDay
             } else {
-                Log.d("WeatherRepository", "No forecast found")
-                throw Error("No forecast found")
+                throw Error(ErrorMessages.NO_FORECAST_FOUND.message)
             }
         } catch (e: Exception) {
             Log.e("WeatherRepository", "Error at getForecastByDayIntervals: ", e)
