@@ -24,7 +24,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
+fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) { // Manifest.xml. Ternger kanskje ikke resizable linjen
     val uiState by viewModel.homeScreenUiState.collectAsState()
     val currentLocation by viewModel.currentLocation.observeAsState()
     val deviceLocation: (Location) -> Unit = { viewModel.setCurrentLocation(it) }

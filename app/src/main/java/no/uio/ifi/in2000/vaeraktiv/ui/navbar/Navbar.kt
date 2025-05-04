@@ -2,6 +2,7 @@ package no.uio.ifi.in2000.vaeraktiv.ui.navbar
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -49,6 +50,8 @@ fun Navbar(
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("VaerAktivPrefs", Context.MODE_PRIVATE)
     val startDestination = if (sharedPreferences.getBoolean("isOnboardingCompleted", false)) "home" else "welcome"
+
+    Log.d("Navbar", "Recomposition triggered, current route: ${navController.currentDestination?.route}")
 
     // Observe network status
     NetworkObserver { isOnline ->
