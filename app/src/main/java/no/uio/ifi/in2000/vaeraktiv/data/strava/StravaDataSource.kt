@@ -39,7 +39,7 @@ class StravaDatasource @Inject constructor(
     @Named("prettyPrint-isLenient-ignoreUnknownKeys-Client") private val networkClient: NetworkClient,
 ) {
 
-    private val accessToken = "33ef79259e39b394676d82d59330e2877f382525"
+    private val accessToken = "9fef716ae327fe0a34bbf53c8ace8794827242ac"
 
 
     /**
