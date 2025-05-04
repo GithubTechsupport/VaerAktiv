@@ -145,7 +145,7 @@ object AppModule {
         metAlertsRepository: MetAlertsRepository,
         locationForecastRepository: LocationForecastRepository,
         sunriseRepository: SunriseRepository,
-        favoriteLocationRepo: FavoriteLocationRepository,
+        //favoriteLocationRepo: FavoriteLocationRepository,
         aiRepository: AiRepository,
         geocoder: GeocoderClass,
         locationRepository: LocationRepository,
@@ -156,7 +156,7 @@ object AppModule {
     ): WeatherRepository {
         return WeatherRepositoryDefault(
             metAlertsRepository, locationForecastRepository, sunriseRepository,
-            favoriteLocationRepo, aiRepository, locationRepository, geocoder,
+            aiRepository, locationRepository, geocoder,
             nowcastRepository, placesRepository, stravaRepository, preferenceRepository
         )
     }

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +28,6 @@ import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
 import androidx.compose.material3.HorizontalDivider
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     viewModel: PreferencesViewModel
@@ -74,10 +72,6 @@ fun SettingsScreen(
                     activity = preference,
                     viewModel = viewModel
                 )
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = mediumGreen
-                )
             }
             item {
                 SectionHeader("Sosial eller alene?", SecondaryOnContainer)
@@ -87,10 +81,6 @@ fun SettingsScreen(
                     activity = preference,
                     viewModel = viewModel
                 )
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = mediumGreen.copy(alpha = 0.2f)
-                )
             }
             item {
                 SectionHeader("Vil du bli tilbudt aktiviteter som koster penger?", SecondaryOnContainer)
@@ -99,10 +89,6 @@ fun SettingsScreen(
                 Activity(
                     activity = preferences[7],
                     viewModel = viewModel
-                )
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = mediumGreen
                 )
             }
         }

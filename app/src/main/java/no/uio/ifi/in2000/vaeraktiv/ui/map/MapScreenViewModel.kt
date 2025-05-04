@@ -14,13 +14,8 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.PlacesActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.RouteSource
-import no.uio.ifi.in2000.vaeraktiv.model.ai.RouteSuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
-import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlaceSuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
 

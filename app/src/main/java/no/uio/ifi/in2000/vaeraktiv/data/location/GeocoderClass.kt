@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GeocoderClass @Inject constructor(private val context: Context) {
+class GeocoderClass @Inject constructor(val context: Context) {
 
     private val geocoder = Geocoder(context, Locale.forLanguageTag("nb-NO"))
     /**
@@ -25,7 +25,6 @@ class GeocoderClass @Inject constructor(private val context: Context) {
             if (!addressList.isNullOrEmpty()) {
                 val address: Address = addressList[0]
 
-                val returnedName = address.locality ?: address.featureName ?: ""
                 Log.d("GeocoderClass", "Returned name: $address")
 
                 val latitude: Double = address.latitude

@@ -2,7 +2,6 @@ package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -42,7 +41,7 @@ fun AddActivitiesForDay(
             .fillMaxWidth(),
         horizontalAlignment = Alignment.Start
     ){
-        if (weatherData != null /*&& !isToday*/) { // legger til værikoner for alle dager utenom dagen i dag
+        if (weatherData != null) {
             Row (
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -76,7 +75,6 @@ fun AddActivitiesForDay(
             } else {
                 ActivityCard(
                     activity = activity,
-                    isToday = activityDate.date == "I dag",
                     onRefresh = { onRefresh(dayNr, index) },
                     onViewInMap = { onViewInMap(activity) }
                 )
