@@ -20,12 +20,12 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
+import androidx.compose.ui.text.style.TextDecoration
 
 
 @Composable
 fun ActivityCard(
     activity: ActivitySuggestion,
-    isToday: Boolean,
     onRefresh: (() -> Unit),
     onViewInMap: (() -> Unit)
 ) {
@@ -49,7 +49,7 @@ fun ActivityCard(
             ) {
                 Text(
                     text = activity.activityName,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     color = OnContainer,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -59,20 +59,8 @@ fun ActivityCard(
                         onRefresh.invoke()
                               },
                     isLoading = false,
-                    enabled = onRefresh != null
+                    enabled = true
                 )
-                if (activity !is CustomActivitySuggestion) {
-                    Text(
-                        text = "Vis i kart",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = OnContainer,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.clickable {
-                            onViewInMap.invoke()
-                        }
-                    )
-                }
             }
             Row {
                 Text(
@@ -83,14 +71,32 @@ fun ActivityCard(
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            // Beskrivelse under
-            Text(
-                text = activity.activityDesc,
-                style = MaterialTheme.typography.bodyLarge,
-                color = SecondaryOnContainer,
-                modifier = Modifier.padding(top = 8.dp),
-                overflow = TextOverflow.Ellipsis
-            )
+            Row {
+                // Beskrivelse under
+                Text(
+                    text = activity.activityDesc,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = SecondaryOnContainer,
+                    modifier = Modifier.padding(top = 8.dp),
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Row (
+                modifier = Modifier.align(Alignment.End)
+            ){
+                if (activity !is CustomActivitySuggestion) {
+                    Text(
+                        text = "Vis i kart",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = OnContainer,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        textDecoration = TextDecoration.Underline,
+                        modifier = Modifier
+                            .clickable { onViewInMap.invoke() }
+                    )
+                }
+            }
         }
     }
 }

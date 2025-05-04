@@ -24,9 +24,10 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
+fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) { // Manifest.xml. Ternger kanskje ikke resizable linjen
     val uiState by viewModel.homeScreenUiState.collectAsState()
     val currentLocation by viewModel.currentLocation.observeAsState()
+    val deviceLocation: (Location) -> Unit = { viewModel.setCurrentLocation(it) }
     val activities by viewModel.activities.observeAsState()
 
     LaunchedEffect(Unit) { viewModel.initialize() }
@@ -36,7 +37,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
 
     when {
         uiState.isLoading -> LoadingScreen()
-        isOnline -> HomeContent(uiState, currentLocation, activities, viewModel)
+        isOnline -> HomeContent(uiState, currentLocation, deviceLocation, activities, viewModel)
         else -> ErrorMessage("You're offline.")
     }
 }
@@ -46,6 +47,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
 fun HomeContent(
     uiState: HomeScreenUiState,
     currentLocation: Location?,
+    deviceLocation: (Location)->Unit,
     activities: List<SuggestedActivities?>?,
     viewModel: HomeScreenViewModel
 ) {
@@ -59,7 +61,7 @@ fun HomeContent(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { CurrentLocation(uiState.locationName, currentLocation) }
+            item { CurrentLocation(uiState.locationName, currentLocation, deviceLocation) }
 
             item {
                 DataSection(
@@ -104,4 +106,3 @@ fun ErrorMessage(message: String, modifier: Modifier = Modifier.padding(8.dp)) {
         modifier = modifier
     )
 }
-

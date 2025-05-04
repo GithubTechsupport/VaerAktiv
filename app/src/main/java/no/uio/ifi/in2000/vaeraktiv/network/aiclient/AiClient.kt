@@ -16,12 +16,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.vaeraktiv.BuildConfig
 import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
 import no.uio.ifi.in2000.vaeraktiv.model.ai.Prompt
 import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
-import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import javax.inject.Inject
 import javax.inject.Named
@@ -31,29 +29,12 @@ import kotlin.time.Duration.Companion.seconds
 
 abstract class AiClient {
     val prompt = Prompt()
-    abstract suspend fun getSuggestionsForEveryDay(forecastData: FormattedForecastDataForPrompt): SuggestedActivities?
     abstract suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, preferences: String, exclusion: String): String?
     abstract suspend fun getSingleSuggestionForDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, preferences: String, exclusion: String): String?
 }
 
 class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiClient() {
-    override suspend fun getSuggestionsForEveryDay(forecastData: FormattedForecastDataForPrompt): SuggestedActivities? = withContext(Dispatchers.IO) {
-        val messages = listOf(
-            ChatMessage(role = ChatRole.System, content = prompt.systemPrompt),
-            ChatMessage(role = ChatRole.User, content = "${prompt.fullPrompt}\n\nFollowing is the user prompt:\n\n<<<\n$forecastData\n>>>")
-        )
-        val request = ChatCompletionRequest (
-            model = ModelId("gpt-4.1"),
-            messages = messages,
-            temperature = 0.5,
-            responseFormat = ChatResponseFormat.JsonObject
-        )
-        val response: com.aallam.openai.api.chat.ChatCompletion = client.chatCompletion(request)
-        val parsedResponse = response.choices.firstOrNull()?.message?.content?.let {
-            Json.decodeFromString<SuggestedActivities>(it)
-        }
-        return@withContext parsedResponse
-    }
+    private val model = ModelId("gpt-4.1")
 
     override suspend fun getSuggestionsForOneDay(
         forecastData: FormattedForecastDataForPrompt,
@@ -68,7 +49,7 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
             ChatMessage(role = ChatRole.User, content = absolutePrompt)
         )
         val request = ChatCompletionRequest (
-            model = ModelId("gpt-4.1"),
+            model = model,
             messages = messages,
             temperature = prompt.temperature,
             responseFormat = ChatResponseFormat.JsonObject
@@ -90,7 +71,7 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
             ChatMessage(role = ChatRole.User, content = absolutePrompt)
         )
         val request = ChatCompletionRequest (
-            model = ModelId("gpt-4.1"),
+            model = model,
             messages = messages,
             temperature = prompt.temperature,
             responseFormat = ChatResponseFormat.JsonObject

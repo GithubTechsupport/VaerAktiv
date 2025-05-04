@@ -36,7 +36,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 @Composable
 fun DisplayIntervalSymbols(data: List<DetailedForecastForDay>) {
     val context = LocalContext.current
-    val spacing = 8.dp
+    val spacing = 4.dp
 
     Row(
         modifier = Modifier
@@ -49,7 +49,7 @@ fun DisplayIntervalSymbols(data: List<DetailedForecastForDay>) {
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .aspectRatio(2f / 2f)
+                    .aspectRatio(1f)
                     .background(BackGroundColor, shape = RoundedCornerShape(10.dp))
                     .border(1.dp, OnContainer, shape = RoundedCornerShape(10.dp)),
                 contentAlignment = Alignment.Center

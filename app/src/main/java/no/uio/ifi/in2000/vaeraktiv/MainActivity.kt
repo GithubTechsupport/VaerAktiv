@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    public fun checkPermissions(locationTracker: LocationTracker) {
+    fun checkPermissions(locationTracker: LocationTracker) {
         if (!PermissionManager.isLocationPermissionGranted(this)) {
             PermissionManager.requestLocationPermissions(this)
         } else {
