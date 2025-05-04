@@ -36,7 +36,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 @Composable
 fun DisplayIntervalSymbols(data: List<DetailedForecastForDay>) {
     val context = LocalContext.current
-    val spacing = 8.dp
+    val spacing = 4.dp
 
     Row(
         modifier = Modifier

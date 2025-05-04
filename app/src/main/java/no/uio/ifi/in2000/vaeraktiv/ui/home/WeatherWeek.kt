@@ -23,10 +23,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
+import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 import no.uio.ifi.in2000.vaeraktiv.model.ui.getDayOfWeek
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
@@ -55,7 +59,7 @@ fun WeatherWeek(
     ) {
         Text(
             text = "Kommende uke",
-            style = MaterialTheme.typography.labelLarge,
+            style = MaterialTheme.typography.headlineSmall,
             color = OnContainer,
             textAlign = TextAlign.Start,
             modifier = Modifier
@@ -66,8 +70,8 @@ fun WeatherWeek(
                 .fillMaxWidth()
                 .padding(top = 2.dp)
                 .padding(horizontal = 8.dp)
-                .height(0.2.dp)
-                .background(color = OnContainer)
+                .height(1.dp)
+                .background(OnContainer)
         )
 
         data.take(7).forEachIndexed { index, day ->
@@ -117,8 +121,8 @@ fun WeatherWeek(
                     .fillMaxWidth()
                     .padding(top = 2.dp)
                     .padding(horizontal = 8.dp)
-                    .height(0.2.dp)
-                    .background(color = OnContainer)
+                    .height(1.dp)
+                    .background(OnContainer)
             )
         }
     }

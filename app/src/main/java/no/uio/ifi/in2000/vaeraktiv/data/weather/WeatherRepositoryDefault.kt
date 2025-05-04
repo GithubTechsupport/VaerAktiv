@@ -47,7 +47,6 @@ class WeatherRepositoryDefault @Inject constructor(
     private val metAlertsRepository: IMetAlertsRepository,
     private val locationForecastRepository: LocationForecastRepository,
     private val sunriseRepository: SunriseRepository,
-    private val favoriteLocationRepository: FavoriteLocationRepository,
     private val aiRepository: AiRepository,
     private val deviceLocationRepository: LocationRepository,
     private val geocoderClass: GeocoderClass,

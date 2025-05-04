@@ -68,7 +68,7 @@ fun PlaceCard(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .padding(
-                    horizontal = 20.dp,
+                    horizontal = 8.dp,
                     vertical = defaultPadding)
         ) {
             Text(

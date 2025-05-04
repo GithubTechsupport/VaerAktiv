@@ -41,7 +41,7 @@ fun AddActivitiesForDay(
             .fillMaxWidth(),
         horizontalAlignment = Alignment.Start
     ){
-        if (weatherData != null /*&& !isToday*/) { // legger til værikoner for alle dager utenom dagen i dag
+        if (weatherData != null) {
             Row (
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -75,7 +75,6 @@ fun AddActivitiesForDay(
             } else {
                 ActivityCard(
                     activity = activity,
-                    isToday = activityDate.date == "I dag",
                     onRefresh = { onRefresh(dayNr, index) },
                     onViewInMap = { onViewInMap(activity) }
                 )
