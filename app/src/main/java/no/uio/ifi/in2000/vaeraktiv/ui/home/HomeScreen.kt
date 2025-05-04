@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -27,9 +28,9 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) { // Manifest.xml. Ternger kanskje ikke resizable linjen
     val uiState by viewModel.homeScreenUiState.collectAsState()
     val currentLocation by viewModel.currentLocation.observeAsState()
-    val deviceLocation: (Location) -> Unit = { viewModel.setCurrentLocation(it) }
+    val deviceLocation by viewModel.deviceLocation.observeAsState()
     val activities by viewModel.activities.observeAsState()
-
+    Log.d("HomeScreen", "Devicelocation: $deviceLocation")
     LaunchedEffect(Unit) { viewModel.initialize() }
     LaunchedEffect(currentLocation) {
         currentLocation?.let { viewModel.getHomeScreenData() }
@@ -37,7 +38,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) { // Manifest.
 
     when {
         uiState.isLoading -> LoadingScreen()
-        isOnline -> HomeContent(uiState, currentLocation, deviceLocation, activities, viewModel)
+        isOnline -> HomeContent(uiState, deviceLocation, activities, viewModel)
         else -> ErrorMessage("You're offline.")
     }
 }
@@ -46,8 +47,7 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) { // Manifest.
 @Composable
 fun HomeContent(
     uiState: HomeScreenUiState,
-    currentLocation: Location?,
-    deviceLocation: (Location)->Unit,
+    deviceLocation: Location?,
     activities: List<SuggestedActivities?>?,
     viewModel: HomeScreenViewModel
 ) {
@@ -61,7 +61,7 @@ fun HomeContent(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { CurrentLocation(uiState.locationName, currentLocation, deviceLocation) }
+            item { CurrentLocation(uiState.locationName, deviceLocation, setCurrentLocation = { location -> viewModel.setCurrentLocation(location)  }) }
 
             item {
                 DataSection(
