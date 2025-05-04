@@ -1,8 +1,11 @@
 [versions]
 
 agp = "8.9.2"
+androidxDatastorePreferences = "1.1.0"
 byteBuddy = "1.14.14"
 coreTesting = "2.2.0"
+datastorePreferences = "1.1.5"
+datastorePreferencesVersion = "1.0.0"
 deepseekKotlin = "0.2.0"
 gson = "2.10.1"
 hiltAndroid = "2.51.1"
@@ -40,14 +43,19 @@ osmdroidAndroid = "6.1.16"
 places = "4.2.0"
 playServicesLocation = "21.3.0"
 media3CommonKtx = "1.6.0"
+robolectric = "4.12.1"
 runtimeLivedata = "1.7.8"
 turbine = "1.0.0"
 uiTextGoogleFonts = "1.8.0"
+datastorePreferencesCoreAndroid = "1.1.5"
 
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+androidx-datastore-preferences-v100 = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferencesVersion" }
+androidx-datastore-preferences-v110 = { module = "androidx.datastore:datastore-preferences", version.ref = "androidxDatastorePreferences" }
 androidx-material = { module = "androidx.compose.material:material", version.ref = "material" }
 androidx-navigation-compose-v280 = { module = "androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
 byte-buddy = { module = "net.bytebuddy:byte-buddy", version.ref = "byteBuddy" }
@@ -98,8 +106,10 @@ places = { module = "com.google.android.libraries.places:places", version.ref = 
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtx" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
+androidx-datastore-preferences-core-android = { group = "androidx.datastore", name = "datastore-preferences-core-android", version.ref = "datastorePreferencesCoreAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

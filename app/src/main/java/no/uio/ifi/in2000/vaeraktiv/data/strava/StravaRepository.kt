@@ -43,14 +43,3 @@ class StravaRepository @Inject constructor(
         return RoutesSuggestions(suggestions)
     }
 }
-
-suspend fun main() {
-    val networkClient = NetworkClient(Json {
-        prettyPrint = true
-        isLenient = true
-        ignoreUnknownKeys = true
-    })
-    val source = StravaDatasource(networkClient)
-    val repo = StravaRepository(source)
-    println(repo.getRouteSuggestions(Location("Oslo Sentralstasjon", "59.9111", "10.7533")))
-}
