@@ -11,7 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import dagger.hilt.android.AndroidEntryPoint
-import no.uio.ifi.in2000.vaeraktiv.ui.activity.PreferencesViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.settings.PreferencesViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.map.MapScreenViewModel
