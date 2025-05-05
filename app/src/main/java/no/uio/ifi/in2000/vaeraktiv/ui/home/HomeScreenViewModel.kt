@@ -3,11 +3,11 @@ package no.uio.ifi.in2000.vaeraktiv.ui.home
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -37,8 +37,6 @@ class HomeScreenViewModel @Inject constructor(
 
     private var initialized = false
 
-    val deviceLocation: LiveData<Location?> = weatherRepository.deviceLocation
-
     val currentLocation: LiveData<Location?> = weatherRepository.currentLocation
     val deviceLocation: LiveData<Location?> = weatherRepository.deviceLocation
 
@@ -47,8 +45,7 @@ class HomeScreenViewModel @Inject constructor(
     private val _homeScreenUiState = MutableStateFlow(HomeScreenUiState())
     val homeScreenUiState: StateFlow<HomeScreenUiState> = _homeScreenUiState.asStateFlow()
 
-    private val _navigateToMap = Mutable
-  <ActivitySuggestion>()
+    private val _navigateToMap = MutableSharedFlow<ActivitySuggestion>()
     val navigateToMap = _navigateToMap.asSharedFlow()
 
     private fun <T> LiveData<T>.observeOnce(

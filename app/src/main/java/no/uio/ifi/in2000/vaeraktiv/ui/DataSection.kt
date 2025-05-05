@@ -1,6 +1,7 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.home
+package no.uio.ifi.in2000.vaeraktiv.ui
 
 import androidx.compose.runtime.Composable
+import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 
 // Klassen er en gjenbrukbar komponent som kan brukes der man laster data i UI'en.
 @Composable

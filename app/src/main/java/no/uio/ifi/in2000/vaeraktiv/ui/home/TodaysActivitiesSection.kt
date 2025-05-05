@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
+import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
