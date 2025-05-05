@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.activity
+package no.uio.ifi.in2000.vaeraktiv.ui.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,8 +25,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
-import androidx.compose.material3.HorizontalDivider
 
 @Composable
 fun SettingsScreen(
@@ -39,9 +39,6 @@ fun SettingsScreen(
         delay(500)
         showContent = true
     }
-
-    val darkGreen = Color(0xFF2F8166)
-    val mediumGreen = Color(0xFF5EC5A3)
 
     Box(
         modifier = Modifier
@@ -57,11 +54,8 @@ fun SettingsScreen(
             item {
                 Text(
                     "Innstillinger",
-                    style = TextStyle(
-                        fontSize = 40.sp,
-                        //fontWeight = FontWeight.Bold,
-                        color = darkGreen // White for contrast
-                    )
+                    style = MaterialTheme.typography.displaySmall,
+                    color = OnContainer
                 )
             }
             item {
@@ -102,7 +96,7 @@ fun SectionHeader(text: String, color: Color) {
         style = TextStyle(
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            color = color, // Medium green for subheadings
+            color = color,
             textAlign = TextAlign.Start
         ),
         modifier = Modifier

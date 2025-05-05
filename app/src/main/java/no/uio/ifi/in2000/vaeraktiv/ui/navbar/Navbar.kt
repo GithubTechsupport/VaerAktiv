@@ -24,8 +24,8 @@ import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.MainActivity
 import no.uio.ifi.in2000.vaeraktiv.model.navbar.NavbarUiState
 import no.uio.ifi.in2000.vaeraktiv.network.connection.NetworkObserver
-import no.uio.ifi.in2000.vaeraktiv.ui.activity.PreferencesViewModel
-import no.uio.ifi.in2000.vaeraktiv.ui.activity.SettingsScreen
+import no.uio.ifi.in2000.vaeraktiv.ui.settings.PreferencesViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.settings.SettingsScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel

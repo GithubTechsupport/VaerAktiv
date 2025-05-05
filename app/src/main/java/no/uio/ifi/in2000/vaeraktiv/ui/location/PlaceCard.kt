@@ -93,7 +93,7 @@ fun PlaceCard(
                     contentDescription = "Delete Icon",
                     modifier = Modifier
                         .padding(defaultPadding)
-                        .size(30.dp),
+                        .size(48.dp),
                     tint = OnContainer
                 )
             }
