@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -34,6 +36,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
@@ -58,37 +63,31 @@ fun SettingsScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(BackGroundColor)
     ) {
+        IconButton(
+            onClick = { navController.popBackStack("home", false) },
+            modifier = Modifier.size(48.dp).align(Alignment.TopStart)
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = OnContainer,
+                modifier = Modifier
+                    .padding(top = 8.dp).padding(start = 8.dp)
+                    .size(35.dp)
+            )
+        }
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                .background(BackGroundColor),
+                .padding(top = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
-                TopAppBar(
-                    title = { Text(
-                        text = "Tilbake",
-                        color = OnContainer,
-                        style = MaterialTheme.typography.titleSmall,
-
-                    ) },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = { navController.popBackStack("home", false) }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Tilbake",
-                                tint = darkGreen
-                            )
-                        }
-                    },
-                    colors = androidx.compose.material3.TopAppBarDefaults.smallTopAppBarColors(
-                        containerColor = Container
-                    )
-                )
             }
             item {
                 Text(
