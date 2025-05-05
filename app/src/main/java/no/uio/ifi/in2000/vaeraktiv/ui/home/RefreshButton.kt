@@ -5,7 +5,6 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,11 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
@@ -48,8 +43,7 @@ fun RefreshButton(
         contentDescription = "Refresh button/Get new activity",
         tint = OnContainer,
         modifier = Modifier
-            .size(32.dp)
-            .rotate(if (enabled) rotation.value else 0f)
+            .size(48.dp)
             .clickable(enabled = enabled) { onClick() }
             .padding(4.dp)
     )

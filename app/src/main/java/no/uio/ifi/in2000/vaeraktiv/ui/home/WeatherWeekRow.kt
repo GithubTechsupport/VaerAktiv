@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -43,6 +44,7 @@ fun WeatherWeekRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
+            .height(50.dp)
             .padding(horizontal = 8.dp, vertical = 4.dp)
             .clickable { onClick() }
     ) {
@@ -67,7 +69,7 @@ fun WeatherWeekRow(
         ) {
             Image(
                 painter = painterResource(id = context.resources.getIdentifier(iconResId, "drawable", context.packageName)),
-                contentDescription = "Dagens vær",
+                contentDescription = "Todays weather",
                 modifier = Modifier.size(40.dp)
             )
             Icon(
