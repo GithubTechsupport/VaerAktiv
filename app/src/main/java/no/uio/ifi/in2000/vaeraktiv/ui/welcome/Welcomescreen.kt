@@ -56,11 +56,7 @@ fun WelcomeScreen(onStartClick: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(colors.background, colors.secondary)
-                )
-            ),
+            .background(color = colors.background),
         contentAlignment = Alignment.Center
     ) {
         AnimatedVisibility(visible = showContent, enter = fadeIn()) {
@@ -90,7 +86,7 @@ fun WelcomeText() {
         style = TextStyle(
             fontSize = 42.sp,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
         ),
         modifier = Modifier.padding(bottom = 8.dp)
@@ -103,7 +99,7 @@ fun SlogeText() {
         text = "Aktivitetstips generert spesifikt for deg og dine interesser",
         fontSize = 20.sp,
         fontWeight = FontWeight.Medium,
-        color = MaterialTheme.colorScheme.primary,
+        color = MaterialTheme.colorScheme.onBackground,
         textAlign = TextAlign.Center,
         modifier = Modifier.padding(horizontal = 16.dp)
     )
@@ -114,7 +110,7 @@ fun MascotWithSpeech() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "Hei mitt navn er Simon! Klar for å komme i gang?",
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onBackground,
             fontStyle = FontStyle.Italic,
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
@@ -138,7 +134,7 @@ fun MascotSaysHi() {
 fun StartButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onBackground),
         modifier = Modifier
             .padding(top = 8.dp)
             .height(56.dp)
@@ -146,13 +142,13 @@ fun StartButton(onClick: () -> Unit) {
         Icon(
             imageVector = Icons.Default.ArrowForward,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onPrimary
+            tint = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = "Kom i gang",
             fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onPrimary
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
