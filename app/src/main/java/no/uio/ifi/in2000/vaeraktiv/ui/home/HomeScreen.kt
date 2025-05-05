@@ -17,6 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
+import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
@@ -29,8 +33,12 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) { // Manifest.
     val currentLocation by viewModel.currentLocation.observeAsState()
     val deviceLocation: (Location) -> Unit = { viewModel.setCurrentLocation(it) }
     val activities by viewModel.activities.observeAsState()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(Unit) { viewModel.initialize() }
+    LaunchedEffect(Unit) {
+        viewModel.initialize(lifecycleOwner)
+    }
+   
     LaunchedEffect(currentLocation) {
         currentLocation?.let { viewModel.getHomeScreenData() }
     }
