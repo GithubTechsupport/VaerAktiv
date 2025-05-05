@@ -26,7 +26,6 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
 import no.uio.ifi.in2000.vaeraktiv.data.welcome.PreferenceRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
@@ -45,7 +44,7 @@ import java.time.ZonedDateTime
 
 class WeatherRepositoryDefault @Inject constructor(
     private val metAlertsRepository: IMetAlertsRepository,
-    private val locationForecastRepository: LocationForecastRepository,
+    private val LocationForecastRepository: LocationForecastRepository,
     private val sunriseRepository: SunriseRepository,
     private val aiRepository: AiRepository,
     private val deviceLocationRepository: LocationRepository,
@@ -84,37 +83,55 @@ class WeatherRepositoryDefault @Inject constructor(
     }
 
 
-    override suspend fun getFavoriteLocationsData(locationsList: List<String>): MutableList<FavoriteLocation> {
-        val locationsData:MutableList<FavoriteLocation> = mutableListOf()
-        locationsList.forEach { line ->
-            val parts = line.split(",")
-            val placeName = parts[0]
-            val lat = parts[1]
-            val lon = parts[2]
-            val forecast = locationForecastRepository.getForecast(lat, lon)
-            val data = forecast?.properties?.timeseries?.get(0)?.data
-            val icon = data?.next6Hours?.summary?.symbolCode.toString() //bruk nowcast
-            val key = icon.substringBefore("_")
-            val desc = weatherDescriptions[key] ?: "Ukjent vær"
-            val weatherData = FavoriteLocation(
-                name = placeName,
-                iconDesc = icon,
-                shortDesc = desc,
-                highestTemp = data?.next6Hours?.details?.airTemperatureMax.toString(),
-                lowestTemp = data?.next6Hours?.details?.airTemperatureMin.toString(),
-                wind = data?.instant?.details?.windSpeed.toString(),
-                downPour = data?.next6Hours?.details?.precipitationAmount.toString(),
-                uv = data?.instant?.details?.ultravioletIndexClearSky.toString(),
-                lat = lat,
-                lon = lon,
-            )
-            locationsData.add(weatherData)
-            Log.d("WeatherRepo","locationsData: $weatherData")
-
+    override suspend fun getFavoriteLocationsData(locationsList: List<String>): List<FavoriteLocation> {
+        return locationsList.mapNotNull { line ->
+            parseLocationLine(line)?.let { (placeName, latitude, longitude) ->
+                fetchAndProcessForecast(placeName, latitude, longitude)
+            }
+        }.also {
+            Log.d("WeatherRepository", "All favorite locations data processed")
         }
-        Log.d("WeatherRepo","locationsData: $locationsData")
-        return locationsData
+    }
 
+    private fun parseLocationLine(line: String): Triple<String, String, String>? {
+        val parts = line.split(",")
+        if (parts.size != 3) {
+            Log.e("WeatherRepository", "Invalid location format: $line")
+            return null
+        }
+        return Triple(parts[0], parts[1], parts[2])
+    }
+
+    private suspend fun fetchAndProcessForecast(placeName: String, latitude: String, longitude: String): FavoriteLocation? {
+        return try {
+            val forecast = LocationForecastRepository.getForecast(latitude, longitude)
+            val data = forecast?.properties?.timeseries?.get(0)?.data
+
+            data?.let { forecastData ->
+                val iconCode = forecastData.next6Hours?.summary?.symbolCode ?: "unknown"
+                val iconKey = iconCode.substringBefore("_")
+                val description = weatherDescriptions[iconKey] ?: "Ukjent vær"
+
+                FavoriteLocation(
+                    name = placeName,
+                    iconDesc = iconCode,
+                    shortDesc = description,
+                    highestTemp = forecastData.next6Hours?.details?.airTemperatureMax?.toString() ?: "N/A",
+                    lowestTemp = forecastData.next6Hours?.details?.airTemperatureMin?.toString() ?: "N/A",
+                    wind = forecastData.instant?.details?.windSpeed?.toString() ?: "N/A",
+                    downPour = forecastData.next6Hours?.details?.precipitationAmount?.toString() ?: "N/A",
+                    uv = forecastData.instant?.details?.ultravioletIndexClearSky?.toString() ?: "N/A",
+                    lat = latitude,
+                    lon = longitude
+                ).also { Log.d("WeatherRepository", "Favorite location data: $it") }
+            } ?: run {
+                Log.w("WeatherRepository", "No forecast data available for $placeName")
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("WeatherRepository", "Error fetching forecast for $placeName", e)
+            null
+        }
     }
 
     override suspend fun getAlertsForLocation(location: Location): MutableList<AlertData> {
@@ -139,7 +156,7 @@ class WeatherRepositoryDefault @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getForecastToday(location: Location): ForecastToday {
-        val forecast = locationForecastRepository.getForecast(location.lat, location.lon)
+        val forecast = LocationForecastRepository.getForecast(location.lat, location.lon)
         val locationData = forecast?.properties?.timeseries?.get(0)?.data
         val nowcast = nowcastRepository.getForecast(location.lat, location.lon)
         val nowcastData = nowcast?.properties?.timeseries?.get(0)?.data
@@ -158,7 +175,7 @@ class WeatherRepositoryDefault @Inject constructor(
 
     override suspend fun getTimeSeriesForDay(location: Location, dayNr: Int) : Pair<List<TimeSeries>, Units?> {
         try {
-            val response = locationForecastRepository.getForecastByDay(location.lat, location.lon)
+            val response = LocationForecastRepository.getForecastByDay(location.lat, location.lon)
             val fullTimeseries = response.first
             val units = response.second
             if (fullTimeseries != null) {
@@ -176,7 +193,7 @@ class WeatherRepositoryDefault @Inject constructor(
 
     override suspend fun getForecastByDay(location: Location): List<ForecastForDay> {
         try {
-            val response = locationForecastRepository.getForecastByDay(location.lat, location.lon).first?.drop(1)?.dropLast(1) // liste med TimeSeries for datoen
+            val response = LocationForecastRepository.getForecastByDay(location.lat, location.lon).first?.drop(1)?.dropLast(1) // liste med TimeSeries for datoen
             if (response != null) {
                 val forecast = response.map { (date, timeSeriesList) ->
                     val timeSeriesAt12PM = timeSeriesList.find { it.time.substring(11, 16) == "12:00" }
@@ -199,7 +216,7 @@ class WeatherRepositoryDefault @Inject constructor(
     // TODO: Fix timezone bug
     override suspend fun getForecastByDayIntervals(location: Location): List<List<DetailedForecastForDay>> {
         try {
-            val response = locationForecastRepository.getForecastByDay(location.lat, location.lon).first?.drop(1)?.dropLast(1) // liste med TimeSeries for datoen
+            val response = LocationForecastRepository.getForecastByDay(location.lat, location.lon).first?.drop(1)?.dropLast(1) // liste med TimeSeries for datoen
             val intervals = listOf("00", "06", "12", "18")
 
             if (response != null) {
@@ -228,7 +245,7 @@ class WeatherRepositoryDefault @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O) // krever API versjon 26
     override suspend fun getForecastForHour(location: Location): List<ForecastForHour> {
-        val response = locationForecastRepository.getNext24Hours(location.lat, location.lon)
+        val response = LocationForecastRepository.getNext24Hours(location.lat, location.lon)
         Log.d("WeatherRepository", "getWeatherForHour response: $response")
         val hourDataList:List<ForecastForHour> = response?.map { timeSeries ->
             val forecastForHour = ForecastForHour(
@@ -246,7 +263,7 @@ class WeatherRepositoryDefault @Inject constructor(
     }
 
     override suspend fun getWeatherForecast(location: Location): LocationForecastResponse? {
-        return locationForecastRepository.getForecast(location.lat, location.lon)
+        return LocationForecastRepository.getForecast(location.lat, location.lon)
     }
 
     override suspend fun getSuggestedActivitiesForOneDay(location: Location, dayNr: Int): SuggestedActivities {

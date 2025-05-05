@@ -33,7 +33,7 @@ interface WeatherRepository {
     suspend fun getSunRiseData(location: Location, date: String): List<String>
 
     // Fetches weather data for a list of favorite locations.
-    suspend fun getFavoriteLocationsData(locationsList: List<String>): MutableList<FavoriteLocation>
+    suspend fun getFavoriteLocationsData(locationsList: List<String>): List<FavoriteLocation>
 
     // Fetches weather alerts for a specific location.
     suspend fun getAlertsForLocation(location: Location): MutableList<AlertData>
