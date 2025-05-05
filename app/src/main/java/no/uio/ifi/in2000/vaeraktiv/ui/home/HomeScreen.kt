@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import no.uio.ifi.in2000.vaeraktiv.model.ui.Activity
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
@@ -36,8 +37,10 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) {
     val currentLocation by viewModel.currentLocation.observeAsState()
     val activities by viewModel.activities.observeAsState()
 
+    val lifecycleOwner = LocalLifecycleOwner.current
+
     LaunchedEffect(Unit) {
-        viewModel.initialize()
+        viewModel.initialize(lifecycleOwner)
     }
 
     LaunchedEffect(key1 = currentLocation) {

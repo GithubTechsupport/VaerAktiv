@@ -29,6 +29,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import androidx.lifecycle.Observer
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
@@ -37,6 +38,8 @@ class HomeScreenViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var initialized = false
+
+    val deviceLocation: LiveData<Location?> = weatherRepository.deviceLocation
 
     val currentLocation: LiveData<Location?> = weatherRepository.currentLocation
 
@@ -48,16 +51,42 @@ class HomeScreenViewModel @Inject constructor(
     private val _navigateToMap = MutableSharedFlow<ActivitySuggestion>()
     val navigateToMap = _navigateToMap.asSharedFlow()
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun initialize() {
-        if (initialized) return
+    private fun <T> LiveData<T>.observeOnce(
+        lifecycleOwner: LifecycleOwner,
+        onChange: (T) -> Unit
+    ) {
+        observe(lifecycleOwner, object : Observer<T> {
+            override fun onChanged(value: T) {
+                onChange(value)
+                removeObserver(this)
+            }
+        })
+    }
 
-        // For demonstration, setting a default location if none exists.
-        weatherRepository.setCurrentLocation(
-            Location("Oslo Sentralstasjon", "59.9111", "10.7533")
-        )
-        initialized = true
-        getActivitiesForToday()
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun initialize(lifecycleOwner: LifecycleOwner) {
+        initialized.takeIf { !it }?.also {
+            // start loading
+            _homeScreenUiState.update { it.copy(isLoading = true) }
+
+            weatherRepository.setCurrentLocation((Location("Oslo", "59.914", "10.752")))
+            getActivitiesForToday()
+            _homeScreenUiState.update { it.copy(isLoading = false) }
+            initialized = true
+        // wait for first device location
+//            deviceLocation.observeOnce(lifecycleOwner) { loc ->
+//                val startLoc = loc
+//                    .takeUnless { it?.addressName == "Unknown location" }
+//                    ?: Location("Oslo", "59.914", "10.752")
+//
+//                weatherRepository.setCurrentLocation(startLoc)
+//                getActivitiesForToday()
+//
+//                // stop loading and mark initialized
+//                _homeScreenUiState.update { it.copy(isLoading = false) }
+//                initialized = true
+//            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

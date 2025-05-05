@@ -359,25 +359,24 @@ class WeatherRepositoryDefault @Inject constructor(
 
     @SuppressLint("DefaultLocale")
     override fun trackDeviceLocation(lifecycleOwner: LifecycleOwner) {
-        deviceLocationRepository.startTracking(lifecycleOwner) {
-            deviceLocation.value?.let { devLoc ->
-                if (devLoc.lat == it.latitude.toString() && devLoc.lon == it.longitude.toString()) {
-                    Log.d("WeatherRepository", "Device location is already up to date")
-                    return@startTracking
-                }
-            }
-            try {
-                val lat = String.format("%.3f", it.latitude)
-                val lon = String.format("%.3f", it.longitude)
-                val location = geocoderClass.getLocationFromCoordinates(Pair(lat, lon))?.let { address ->
-                    Location(address.getAddressLine(0), lat, lon)
-                } ?: Location("Unknown location", lat, lon)
-                _deviceLocation.value = location
-                //Log.d("WeatherRepository", "Device location updated: $location")
+        deviceLocationRepository.startTracking(lifecycleOwner) { location ->
+            val lat = String.format("%.3f", location.latitude)
+            val lon = String.format("%.3f", location.longitude)
+
+            val newLocation = try {
+                val addressLine = geocoderClass
+                    .getLocationFromCoordinates(Pair(lat, lon))
+                    ?.getAddressLine(0)
+                Location(addressLine ?: "Unknown location", lat, lon)
             } catch (e: Exception) {
                 Log.e("WeatherRepository", "Error getting device location: ", e)
-                throw e
+                return@startTracking
             }
+
+            newLocation
+                .takeUnless { it == deviceLocation.value }
+                ?.also { _deviceLocation.value = it }
+            Log.d("DeviceLocation", "New device location: $newLocation")
         }
     }
 
