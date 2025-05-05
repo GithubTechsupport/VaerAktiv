@@ -32,15 +32,7 @@ import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.seconds
-
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
-import kotlinx.serialization.modules.subclass
-import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.PlacesActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 
 
 abstract class AiClient {

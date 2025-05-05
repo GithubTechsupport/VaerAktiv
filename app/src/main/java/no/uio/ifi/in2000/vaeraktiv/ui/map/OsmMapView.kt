@@ -107,7 +107,7 @@ fun OsmMapView(
                 place.coordinates.let { (lat, lon) ->
                     Marker(mapView).apply {
                         position = GeoPoint(lat, lon)
-                        title = place.placeName
+                        title = place.activityName
                         // tint the default marker icon red
                         icon = icon?.mutate()
                         icon?.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN)
@@ -120,7 +120,7 @@ fun OsmMapView(
                     val polylinePoints = decodePolyline(route.polyline)
 
                     Polyline().apply {
-                        title = route.routeName
+                        title = route.activityName
                         outlinePaint.apply {
                             strokeWidth = 10f
                             color = Color.RED

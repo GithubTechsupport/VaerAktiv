@@ -57,7 +57,8 @@ The app uses several libraries and frameworks:
 
 ## Permissions
 
-- The app requires location permissions (`ACCESS_FINE_LOCATION` and `ACCESS_COARSE_LOCATION`) to provide weather data and map features based on the user's location.
+- The app requires location permissions (`ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`, and `ACCESS_BACKGROUND_LOCATION`) to provide weather data and map features based on the user's location.
+- Additionally the app requires internet permissions (`INTERNET` and `ACCESS_NETWORK_STATE`) to access external APIs and services.
 
 ## Notes
 
