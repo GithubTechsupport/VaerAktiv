@@ -1,16 +1,21 @@
 package no.uio.ifi.in2000.vaeraktiv.model.metalerts
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Properties(
-    val altitude_above_sea_level: Int? = null,
+    @SerialName("altitude_above_sea_level")
+    val altitudeAboveSeaLevel: Int? = null,
     val area: String? = null, // må ha med
     val awarenessResponse: String? = null,
     val awarenessSeriousness: String? = null,
-    val awareness_level: String? = null, // burde ha med (gir alvorlighetsgraden det varsles om)
-    val awareness_type: String? = null, // kan ha med (gir hva det varsles om)
-    val ceiling_above_sea_level: Int? = null,
+    @SerialName("awareness_level")
+    val awarenessLevel: String? = null, // burde ha med (gir alvorlighetsgraden det varsles om)
+    @SerialName("awareness_type")
+    val awarenessType: String? = null, // kan ha med (gir hva det varsles om)
+    @SerialName("ceiling_above_sea_level")
+    val ceilingAboveSeaLevel: Int? = null,
     val certainty: String? = null, // kanskje (gir sannynligheten for hendelsen)
     val consequences: String? = null, // mulig å ha med (gir konsekvenser av situasjonen / beskrivelse)
     val contact: String? = null,

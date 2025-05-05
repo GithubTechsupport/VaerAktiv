@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
@@ -20,7 +21,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
-import androidx.compose.ui.text.style.TextDecoration
 
 
 @Composable

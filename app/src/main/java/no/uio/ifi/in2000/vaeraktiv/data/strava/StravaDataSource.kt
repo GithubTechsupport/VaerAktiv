@@ -29,12 +29,6 @@ data class ExplorerSegment(
     @SerialName("end_latlng") val endPosition: List<Double>
 )
 
-/**
- * StravaDatasource handles HTTP calls to Strava's API.
- * @param client Preconfigured Ktor HttpClient with JSON support
- * @param accessToken OAuth2 bearer token for Strava API
- */
-
 class StravaDatasource @Inject constructor(
     @Named("prettyPrint-isLenient-ignoreUnknownKeys-Client")
     private val networkClient: NetworkClient,

@@ -88,7 +88,7 @@ fun DisplayWarning(data: List<AlertData>) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     data.forEach { warning ->
-                        val iconType = warning.awareness_type?.split("; ")?.getOrNull(1) ?: "generic"
+                        val iconType = warning.awarenessType?.split("; ")?.getOrNull(1) ?: "generic"
                         if (warning.description != null || warning.riskMatrixColor != null || iconType != "generic") {
                             val dangerColor = warning.riskMatrixColor.orEmpty()
                             val instruct = warning.instruction ?: "N/A"

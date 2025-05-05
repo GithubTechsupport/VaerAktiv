@@ -12,7 +12,7 @@ class LocationForecastRepository @Inject constructor(
     private val forecasts: MutableMap<Pair<String, String>, LocationForecastResponse?> = mutableMapOf()
     private val baseUrl = "https://api.met.no/weatherapi/locationforecast/2.0/complete"
 
-    suspend fun getUpdate(lat: String, lon: String): LocationForecastResponse? {
+    suspend fun getUpdate(lat: String, lon: String): LocationForecastResponse {
         val url = "$baseUrl?lat=$lat&lon=$lon"
         val response = dataSource.getResponse(url)
         forecasts[Pair(lat, lon)] = response

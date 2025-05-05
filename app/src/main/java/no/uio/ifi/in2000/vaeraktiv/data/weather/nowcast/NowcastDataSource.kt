@@ -1,14 +1,10 @@
 package no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast
 
 import android.util.Log
+import io.ktor.client.call.body
+import io.ktor.client.request.get
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.get
-import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.vaeraktiv.model.nowcast.NowcastResponse
 import no.uio.ifi.in2000.vaeraktiv.network.httpclient.NetworkClient

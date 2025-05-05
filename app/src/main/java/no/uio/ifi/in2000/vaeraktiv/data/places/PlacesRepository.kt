@@ -14,13 +14,13 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class placesRepository @Inject constructor(private val placesClient: PlacesClient) {
+class PlacesRepository @Inject constructor(private val placesClient: PlacesClient) {
 
     suspend fun getAutocompletePredictions(query: String, sessionToken: AutocompleteSessionToken?): List<AutocompletePrediction> = withContext(Dispatchers.IO) {
-        if (query.isBlank()) {
+        require(query.isNotBlank()) {
             throw IllegalArgumentException("Query cannot be blank")
         }
-        if (sessionToken == null) {
+        requireNotNull(sessionToken) {
             throw IllegalArgumentException("Session token cannot be null")
         }
         try {
@@ -40,9 +40,9 @@ class placesRepository @Inject constructor(private val placesClient: PlacesClien
     }
 
     suspend fun getNearbyPlaces(center: LatLng): List<Place> = withContext(Dispatchers.IO) {
-        val initialRadius: Double = 10000.0 // 10 km
-        val maxRadius: Double = 50000.0 // 50 km
-        val radiusIncrement: Double = 5000.0 // 5 km
+        val initialRadius = 10000.0 // 10 km
+        val maxRadius = 50000.0 // 50 km
+        val radiusIncrement = 5000.0 // 5 km
         var places: List<Place> = emptyList()
 
         val includedTypes: List<String> = listOf(
@@ -53,9 +53,7 @@ class placesRepository @Inject constructor(private val placesClient: PlacesClien
         "sports_club", "sports_complex", "swimming_pool"
         )
 
-        val excludedTypes: List<String> = listOf(
-            "stadium", "hotel",
-        )
+
         val placeFields: List<Place.Field> = listOf(
             Place.Field.ID, Place.Field.DISPLAY_NAME, Place.Field.FORMATTED_ADDRESS, Place.Field.LOCATION,
             Place.Field.PRIMARY_TYPE, Place.Field.PRIMARY_TYPE_DISPLAY_NAME, Place.Field.TYPES,

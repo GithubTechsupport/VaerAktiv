@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -33,7 +32,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddLocationExpanded(defaultPadding: Dp, viewModel: FavoriteLocationViewModel) {
     var searchText by remember { mutableStateOf("") }

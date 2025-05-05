@@ -45,8 +45,7 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
             modifier = Modifier.fillMaxWidth()
         ) {
             items(items.size) { index ->
-                val item = items[index]
-                when (item) {
+                when (val item = items[index]) {
                     is ForecastForHour -> {
                         val iconResId = context.resources.getIdentifier(item.icon, "drawable", context.packageName)
                         Box(

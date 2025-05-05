@@ -18,7 +18,7 @@ import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
-import no.uio.ifi.in2000.vaeraktiv.data.places.placesRepository
+import no.uio.ifi.in2000.vaeraktiv.data.places.PlacesRepository
 import no.uio.ifi.in2000.vaeraktiv.data.strava.StravaRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepositoryDefault
@@ -56,10 +56,9 @@ object AppModule {
     @Singleton
     @Provides
     fun provideLocationDataSource(
-        @ApplicationContext context: Context,
         fusedLocationProviderClient: FusedLocationProviderClient
     ): LocationDataSource {
-        return LocationDataSource(context, fusedLocationProviderClient)
+        return LocationDataSource(fusedLocationProviderClient)
     }
 
     @Singleton
@@ -135,8 +134,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providePlacesRepository(placesClient: PlacesClient): placesRepository {
-        return placesRepository(placesClient)
+    fun providePlacesRepository(placesClient: PlacesClient): PlacesRepository {
+        return PlacesRepository(placesClient)
     }
 
     @Provides
@@ -150,7 +149,7 @@ object AppModule {
         geocoder: GeocoderClass,
         locationRepository: LocationRepository,
         nowcastRepository: NowcastRepository,
-        placesRepository: placesRepository,
+        placesRepository: PlacesRepository,
         stravaRepository: StravaRepository,
         preferenceRepository: PreferenceRepository
     ): WeatherRepository {

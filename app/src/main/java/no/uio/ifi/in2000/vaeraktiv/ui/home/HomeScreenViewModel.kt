@@ -5,9 +5,11 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -25,9 +27,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import javax.inject.Inject
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import androidx.lifecycle.Observer
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
@@ -96,22 +95,22 @@ class HomeScreenViewModel @Inject constructor(
             _homeScreenUiState.update { it.copy(isLoading = true) }
 
             var todaysWeather: ForecastToday? = null
-            var todaysWeatherError: String? = null
+            var todaysWeatherError: String?
 
             var thisWeeksWeather: List<ForecastForDay> = emptyList()
-            var thisWeeksWeatherError: String? = null
+            var thisWeeksWeatherError: String?
 
             var alerts: List<AlertData> = emptyList()
-            var alertsError: String? = null
+            var alertsError: String?
 
             var sunRiseSet: List<String> = emptyList()
-            var sunRiseSetError: String? = null
+            var sunRiseSetError: String?
 
             var next24Hours: List<ForecastForHour> = emptyList()
-            var next24HoursError: String? = null
+            var next24HoursError: String?
 
             var dayIntervals: List<List<DetailedForecastForDay>> = emptyList()
-            var dayIntervalsError: String? = null
+            var dayIntervalsError: String?
 
             try {
                 todaysWeather = weatherRepository.getForecastToday(location)
@@ -189,7 +188,7 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    fun getActivitiesForToday() {
+    private fun getActivitiesForToday() {
         viewModelScope.launch {
             _homeScreenUiState.update { it.copy(isLoadingActivitiesToday = true, isErrorActivitiesToday = false) }
             try {

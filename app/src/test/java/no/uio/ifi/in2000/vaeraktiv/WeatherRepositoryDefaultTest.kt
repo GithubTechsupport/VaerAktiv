@@ -7,7 +7,7 @@ import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
-import no.uio.ifi.in2000.vaeraktiv.data.places.placesRepository
+import no.uio.ifi.in2000.vaeraktiv.data.places.PlacesRepository
 import no.uio.ifi.in2000.vaeraktiv.data.strava.StravaRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepositoryDefault
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
@@ -38,7 +38,7 @@ class WeatherRepositoryDefaultTest {
         deviceLocationRepository = mock(LocationRepository::class.java),
         geocoderClass = mock(GeocoderClass::class.java),
         nowcastRepository = mock(NowcastRepository::class.java),
-        placesRepository = mock(placesRepository::class.java),
+        placesRepository = mock(PlacesRepository::class.java),
         stravaRepository = mock(StravaRepository::class.java),
         preferenceRepository = mock(PreferenceRepository::class.java),
     )
@@ -50,7 +50,7 @@ class WeatherRepositoryDefaultTest {
 
         val fakeProperties = mock(Properties::class.java).apply {
             `when`(area).thenReturn("Test Area")
-            `when`(awareness_type).thenReturn("Type A")
+            `when`(awarenessType).thenReturn("Type A")
             `when`(description).thenReturn("Heavy Rainfall")
             `when`(eventAwarenessName).thenReturn("Rain Warning")
             `when`(instruction).thenReturn("Stay indoors")
@@ -71,7 +71,7 @@ class WeatherRepositoryDefaultTest {
         assertEquals(1, result.size)
         val alert = result.first()
         assertEquals("Test Area", alert.area)
-        assertEquals("Type A", alert.awareness_type)
+        assertEquals("Type A", alert.awarenessType)
         assertEquals("Heavy Rainfall", alert.description)
         assertEquals("Rain Warning", alert.eventAwarenessName)
         assertEquals("Stay indoors", alert.instruction)
