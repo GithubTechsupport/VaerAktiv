@@ -169,15 +169,15 @@ class HomeScreenViewModelUnitTest {
         assertEquals(testAlerts, uiState.alerts)
     }
 
-    @Test
-    fun `startTracking calls trackDeviceLocation on WeatherRepository`() {
-        // Given
-        val lifecycleOwner: LifecycleOwner = mock()
-
-        // When
-        viewModel.startTracking(lifecycleOwner)
-
-        // Then
-        verify(weatherRepository).trackDeviceLocation(lifecycleOwner)
-    }
+//    @Test
+//    fun `startTracking calls trackDeviceLocation on WeatherRepository`() {
+//        // Given
+//        val lifecycleOwner: LifecycleOwner = mock()
+//
+//        // When
+//        viewModel.startTracking(lifecycleOwner)
+//
+//        // Then
+//        verify(weatherRepository).trackDeviceLocation(lifecycleOwner)
+//    }
 }

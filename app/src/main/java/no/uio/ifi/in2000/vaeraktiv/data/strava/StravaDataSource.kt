@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.data.strava
 
-import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -35,33 +34,26 @@ data class ExplorerSegment(
  * @param client Preconfigured Ktor HttpClient with JSON support
  * @param accessToken OAuth2 bearer token for Strava API
  */
+
 class StravaDatasource @Inject constructor(
-    @Named("prettyPrint-isLenient-ignoreUnknownKeys-Client") private val networkClient: NetworkClient,
+    @Named("prettyPrint-isLenient-ignoreUnknownKeys-Client")
+    private val networkClient: NetworkClient,
+    private val authManager: StravaAuthManager
 ) {
-
-    private val accessToken = "9fef716ae327fe0a34bbf53c8ace8794827242ac"
-
-
-    /**
-     * Fetches the top 10 popular running segments within the given bounding box.
-     * @param swLat southwest latitude
-     * @param swLng southwest longitude
-     * @param neLat northeast latitude
-     * @param neLng northeast longitude
-     */
     suspend fun fetchPopularRunSegments(
-        swLat: Double,
-        swLng: Double,
-        neLat: Double,
-        neLng: Double
+        swLat: Double, swLng: Double,
+        neLat: Double, neLng: Double
     ): List<ExplorerSegment> {
+        val token = authManager.getAccessToken()
+        val bounds = listOf(swLat, swLng, neLat, neLng).joinToString(",")
         val url = "https://www.strava.com/api/v3/segments/explore"
-        val boundsParam = listOf(swLat, swLng, neLat, neLng).joinToString(",")
-        val response: ExplorerResponse = networkClient.ktorHttpClient.get(url) {
-            header(HttpHeaders.Authorization, "Bearer $accessToken")
-            parameter("bounds", boundsParam)
+
+        val resp = networkClient.ktorHttpClient.get(url) {
+            header(HttpHeaders.Authorization, "Bearer $token")
+            parameter("bounds", bounds)
             parameter("activity_type", "running")
-        }.body()
-        return response.segments
+        }.body<ExplorerResponse>()
+
+        return resp.segments
     }
 }
