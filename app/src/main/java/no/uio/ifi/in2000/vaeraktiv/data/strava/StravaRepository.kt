@@ -1,11 +1,9 @@
 package no.uio.ifi.in2000.vaeraktiv.data.strava
 
-import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.RouteSource
 import no.uio.ifi.in2000.vaeraktiv.model.ai.RouteSuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
-import no.uio.ifi.in2000.vaeraktiv.network.httpclient.NetworkClient
 import javax.inject.Inject
 
 class StravaRepository @Inject constructor(

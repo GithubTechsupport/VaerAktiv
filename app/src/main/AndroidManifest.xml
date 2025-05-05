@@ -22,6 +22,8 @@
         tools:targetApi="33">
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:resizeableActivity="false"
             android:exported="true"
             android:theme="@style/Theme.VaerAktiv">
             <intent-filter>

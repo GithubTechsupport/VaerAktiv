@@ -64,3 +64,10 @@ The app uses several libraries and frameworks:
 
 - Make sure to add your own API keys for Google Places and other services in the `secrets.properties` file as described in the project documentation.
 - The app is intended for educational purposes and may require additional setup for production use.
+
+## Warnings
+
+- Function "observeOnce" is never used in `HomeScreenViewModel.kt` - Used for physical emulator. 
+- Parameter 'lifecycleOwner' is never used in `HomeScreenViewModel.kt` - Used for physical emulator. 
+- Property "deviceLocation" is never used in `HomeScreenViewModel.kt` - Used in `HomeScreen.kt`
+- 

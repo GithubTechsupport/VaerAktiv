@@ -27,45 +27,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.model.sunrise.SunEvent
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
 @Composable
-fun DisplayHourlyForecast(data: List<ForecastForHour>, sunData: List<String>) {
-    val sunRise = sunData.getOrNull(0) ?: "N/A"
-    val sunSet = sunData.getOrNull(1) ?: "N/A"
-    val cornerDp = 10.dp
+fun DisplayHourlyForecast(data: List<ForecastForHour>) {
     val context = LocalContext.current
-    val sunRiseHour = if (sunRise != "N/A") sunRise.split(":").first().padStart(2, '0') else null
-    val sunSetHour = if (sunSet != "N/A") sunSet.split(":").first().padStart(2, '0') else null
-
 
     val items = mutableListOf<Any>().apply {
         addAll(data)
-
-        if (sunRiseHour != null && sunRiseHour > data[0].time.toString()) {
-            val insertIndex = data.indexOfFirst { it.time == sunRiseHour } + 1
-            add(insertIndex, SunDisplayData(sunRiseHour, sunRise, "Sol opp", "sunrise_color3"))
-        }
-        if (sunSetHour != null && sunSetHour > data[0].time.toString()) {
-            val insertIndex = data.indexOfFirst { it.time == sunSetHour } + 1
-            add(insertIndex, SunDisplayData(sunSetHour, sunSet, "Sol ned", "sunset_color"))
-        }
     }
     Column {
         LazyRow(
             modifier = Modifier.fillMaxWidth()
         ) {
             items(items.size) { index ->
-                val item = items[index]
-                when (item) {
+                when (val item = items[index]) {
                     is ForecastForHour -> {
                         val iconResId = context.resources.getIdentifier(item.icon, "drawable", context.packageName)
                         Box(
@@ -121,56 +101,10 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>, sunData: List<String>) {
                             }
                         }
                     }
-                    is SunDisplayData -> {
-                        Box(
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .width(80.dp)
-                                .height(160.dp)
-                                .background(
-                                    color = BackGroundColor,
-                                    shape = RoundedCornerShape(cornerDp),
-                                )
-                                .border(1.dp, OnContainer, RoundedCornerShape(cornerDp)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center,
-                                modifier = Modifier.padding(8.dp)
-                            ) {
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = item.fullTime,
-                                    style = MaterialTheme.typography.labelMedium,
-                                    textAlign = TextAlign.Center
-                                )
-                                Spacer(modifier = Modifier.height(20.dp))
-                                Image(
-                                    painter = painterResource(id = context.resources.getIdentifier(item.icon, "drawable", context.packageName)),
-                                    contentDescription = "Sunrise icon",
-                                    modifier = Modifier.size(50.dp)
-                                )
-                                Spacer(modifier = Modifier.height(25.dp))
-                                Text(
-                                    text = item.type,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    textAlign = TextAlign.Center
-                                )
-                                Spacer(modifier = Modifier.height(25.dp))
-                            }
-                        }
-                    }
                 }
             }
         }
     }
 }
-data class SunDisplayData(
-    val hour: String,
-    val fullTime: String,
-    val type: String,
-    val icon: String
-)
 
 

@@ -6,8 +6,16 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,7 +36,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 @Composable
 fun DisplayIntervalSymbols(data: List<DetailedForecastForDay>) {
     val context = LocalContext.current
-    val spacing = 8.dp
+    val spacing = 4.dp
 
     Row(
         modifier = Modifier
@@ -41,7 +49,7 @@ fun DisplayIntervalSymbols(data: List<DetailedForecastForDay>) {
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .aspectRatio(2f / 2f)
+                    .aspectRatio(1f)
                     .background(BackGroundColor, shape = RoundedCornerShape(10.dp))
                     .border(1.dp, OnContainer, shape = RoundedCornerShape(10.dp)),
                 contentAlignment = Alignment.Center

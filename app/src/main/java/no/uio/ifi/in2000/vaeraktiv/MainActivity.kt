@@ -11,11 +11,11 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import dagger.hilt.android.AndroidEntryPoint
-import no.uio.ifi.in2000.vaeraktiv.ui.activity.PreferencesViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.map.MapScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.Navbar
+import no.uio.ifi.in2000.vaeraktiv.ui.settings.PreferencesViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.VaerAktivTheme
 import no.uio.ifi.in2000.vaeraktiv.utils.KeepAliveManager
 import no.uio.ifi.in2000.vaeraktiv.utils.LocationTracker
@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    public fun checkPermissions(locationTracker: LocationTracker) {
+    fun checkPermissions(locationTracker: LocationTracker) {
         if (!PermissionManager.isLocationPermissionGranted(this)) {
             PermissionManager.requestLocationPermissions(this)
         } else {

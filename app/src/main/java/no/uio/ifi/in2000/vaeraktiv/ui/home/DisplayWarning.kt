@@ -28,12 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.fonts.tungstenfontfamily
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 
 // Her kan vi bygge iconId på en bedre måte etter mvp
@@ -53,7 +51,7 @@ fun DisplayWarning(data: List<AlertData>) {
                 .clickable { isExpanded = !isExpanded }
                 .fillMaxWidth()
                 .padding(start = 12.dp, top = 8.dp, bottom = 8.dp, end = 12.dp)
-                .animateContentSize(), // Animasjon for størrelse
+                .animateContentSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
@@ -63,7 +61,7 @@ fun DisplayWarning(data: List<AlertData>) {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.icon_warning_generic_yellow),
-                    contentDescription = "Advarsel ikon",
+                    contentDescription = "Warning icon",
                     modifier = Modifier.size(40.dp)
                 )
                 Text(
@@ -90,7 +88,7 @@ fun DisplayWarning(data: List<AlertData>) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     data.forEach { warning ->
-                        val iconType = warning.awareness_type?.split("; ")?.getOrNull(1) ?: "generic"
+                        val iconType = warning.awarenessType?.split("; ")?.getOrNull(1) ?: "generic"
                         if (warning.description != null || warning.riskMatrixColor != null || iconType != "generic") {
                             val dangerColor = warning.riskMatrixColor.orEmpty()
                             val instruct = warning.instruction ?: "N/A"
@@ -104,7 +102,7 @@ fun DisplayWarning(data: List<AlertData>) {
                             ) {
                                 Image(
                                     painter = painterResource(id = iconResId),
-                                    contentDescription = "Advarsel ikon: $type, $dangerColor",
+                                    contentDescription = "Warning icon: $type, $dangerColor",
                                     modifier = Modifier.size(60.dp)
                                 )
                                 Spacer(modifier = Modifier.width(30.dp))

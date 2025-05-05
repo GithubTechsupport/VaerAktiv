@@ -9,4 +9,3 @@ data class LocationForecastResponse(
     val geometry: LGeometry,
     val properties: Properties
 )
-

@@ -5,14 +5,14 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dagger.Binds
+import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton
-import dagger.Module
-import dagger.Binds
-import dagger.hilt.components.SingletonComponent
 
 private val Context.stravaDataStore by preferencesDataStore(name = "strava_auth")
 
@@ -45,12 +45,11 @@ class DataStoreTokenStorage @Inject constructor(
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class StravaModule {
+fun interface StravaModule {
 
     @Binds
     @Singleton
-    abstract fun bindTokenStorage(
+    fun bindTokenStorage(
         dataStoreTokenStorage: DataStoreTokenStorage
     ): TokenStorage
-
 }
