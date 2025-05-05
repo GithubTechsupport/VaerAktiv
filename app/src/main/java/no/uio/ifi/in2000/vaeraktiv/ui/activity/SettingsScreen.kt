@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.activity
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,10 +30,19 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBar
+import androidx.navigation.NavController
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    viewModel: PreferencesViewModel
+    viewModel: PreferencesViewModel, navController: NavController
 ) {
     val preferences by viewModel.userPreferences.collectAsState()
     var showContent by remember { mutableStateOf(false) }
@@ -50,10 +62,34 @@ fun SettingsScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .background(BackGroundColor),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            item {
+                TopAppBar(
+                    title = { Text(
+                        text = "Tilbake",
+                        color = OnContainer,
+                        style = MaterialTheme.typography.titleSmall,
+
+                    ) },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = { navController.popBackStack("home", false) }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Tilbake",
+                                tint = darkGreen
+                            )
+                        }
+                    },
+                    colors = androidx.compose.material3.TopAppBarDefaults.smallTopAppBarColors(
+                        containerColor = Container
+                    )
+                )
+            }
             item {
                 Text(
                     "Innstillinger",

@@ -19,7 +19,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.MainActivity
 import no.uio.ifi.in2000.vaeraktiv.model.navbar.NavbarUiState
@@ -36,6 +35,8 @@ import no.uio.ifi.in2000.vaeraktiv.ui.welcome.InfoPeferencesScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.InformationScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.WelcomeScreen
 import androidx.core.content.edit
+import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -43,9 +44,9 @@ fun Navbar(
     favoriteLocationViewModel: FavoriteLocationViewModel,
     homeScreenViewModel: HomeScreenViewModel,
     mapScreenViewModel: MapScreenViewModel,
-    preferencesViewModel: PreferencesViewModel
+    preferencesViewModel: PreferencesViewModel,
+    navController: NavHostController
 ) {
-    val navController = rememberNavController()
     var uiState by remember { mutableStateOf(NavbarUiState()) }
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("VaerAktivPrefs", Context.MODE_PRIVATE)
@@ -67,6 +68,7 @@ fun Navbar(
             if (shouldNavigate) {
                 handleNavigation(navController, uiState, "home") { navController.navigateToHome() }
                 favoriteLocationViewModel.onNavigationHandled()
+                uiState = uiState.copy(selectedRoute = "home")
             }
         }
     }
@@ -117,8 +119,16 @@ fun Navbar(
                         }
                     )
                 }
-                composable("home") { HomeScreen(uiState.isOnline, homeScreenViewModel) }
-                composable("settings") { SettingsScreen(preferencesViewModel) }
+                composable("home") { HomeScreen(
+                    isOnline = uiState.isOnline,
+                    viewModel = homeScreenViewModel,
+                    preferencesViewModel = preferencesViewModel,
+                    navController = navController
+                ) }
+                composable("settings") {
+                    Log.d("Navbar", "Navigating to SettingsScreen")
+                    SettingsScreen(preferencesViewModel, navController)
+                }
                 composable("location") { LocationScreen(uiState.isOnline, favoriteLocationViewModel) }
                 composable("map") { MapScreen(mapScreenViewModel) }
             }

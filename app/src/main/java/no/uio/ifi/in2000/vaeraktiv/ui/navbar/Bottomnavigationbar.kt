@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -29,9 +31,8 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
 @Composable
 fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> String, setSelectedRoute: (String) -> Unit) {
     val navItems = listOf(
-        "settings" to R.drawable.walk,
-        "home" to R.drawable.sun,
         "location" to R.drawable.location,
+        "home" to R.drawable.sun,
         "map" to R.drawable.map
     )
 
@@ -47,10 +48,6 @@ fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> St
                     .weight(1f)
                     .fillMaxHeight()
                     .padding(4.dp)
-//                    .background(
-//                        color = if (selected) SecondaryNavbar else PrimaryNavbar,
-//                        shape = RoundedCornerShape(12.dp)
-//                    )
                     .clickable {
                         if (selected) return@clickable
                         navController.navigate(route) {
