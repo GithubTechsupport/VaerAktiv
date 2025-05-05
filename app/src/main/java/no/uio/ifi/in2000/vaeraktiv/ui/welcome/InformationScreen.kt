@@ -47,7 +47,6 @@ fun InformationScreen(onStartApplication: () -> Unit) {
         showContent = true
     }
 
-    val darkGreen = Color(0xFF2F8166)
     val mediumGreen = Color(0xFF5EC5A3)
     val lightCyan = Color(0xFFE0F7FA)
 

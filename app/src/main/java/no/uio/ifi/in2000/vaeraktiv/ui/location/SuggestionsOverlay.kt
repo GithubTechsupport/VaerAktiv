@@ -1,4 +1,5 @@
-import android.util.Log
+package no.uio.ifi.in2000.vaeraktiv.ui.location
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 
@@ -21,7 +23,7 @@ fun SuggestionsOverlay(
     androidx.compose.foundation.lazy.LazyColumn(
         modifier = modifier
             .height(200.dp) // or any desired size
-            .background(MaterialTheme.colorScheme.surface)
+            .background(Color.White)
     ) {
         items(predictions) { prediction ->
             androidx.compose.material3.Card(

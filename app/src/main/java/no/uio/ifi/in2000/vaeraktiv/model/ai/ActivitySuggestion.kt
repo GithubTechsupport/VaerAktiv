@@ -2,8 +2,6 @@ package no.uio.ifi.in2000.vaeraktiv.model.ai
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonClassDiscriminator
-import kotlinx.serialization.ExperimentalSerializationApi
 
 @Serializable
 sealed interface ActivitySuggestion {
