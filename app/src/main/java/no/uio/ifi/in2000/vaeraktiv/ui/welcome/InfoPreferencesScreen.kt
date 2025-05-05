@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.welcome
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
@@ -22,6 +23,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,12 +41,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.ui.activity.Activity
 import no.uio.ifi.in2000.vaeraktiv.ui.activity.PreferencesViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.VaerAktivTheme
 
 
 @Composable
@@ -68,11 +72,7 @@ fun InfoPeferencesScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(lightCyan, mediumGreen)
-                )
-            )
+            .background(color = MaterialTheme.colorScheme.background),
     ) {
         AnimatedVisibility(visible = showContent, enter = fadeIn()) {
             Column(
@@ -93,42 +93,30 @@ fun InfoPeferencesScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                     item {
-                        SectionHeader("Hvilke aktiviteter liker du?", red)
+                        SectionHeader("Hvilke aktiviteter liker du?", MaterialTheme.colorScheme.secondary)
                     }
                     items(preferences.take(5)) { preference ->
                         Activity(
                             activity = preference,
                             viewModel = viewModel
                         )
-                        Divider(
-                            color = mediumGreen.copy(alpha = 0.2f),
-                            thickness = 1.dp
-                        )
                     }
                     item {
-                        SectionHeader("Sosial eller alene?", red)
+                        SectionHeader("Sosial eller alene?", MaterialTheme.colorScheme.secondary)
                     }
                     items(preferences.slice(5..6)) { preference ->
                         Activity(
                             activity = preference,
                             viewModel = viewModel
                         )
-                        Divider(
-                            color = mediumGreen.copy(alpha = 0.2f),
-                            thickness = 1.dp
-                        )
                     }
                     item {
-                        SectionHeader("Vil du bli tilbudt aktiviteter som koster penger?", red)
+                        SectionHeader("Vil du bli tilbudt aktiviteter som koster penger?", MaterialTheme.colorScheme.secondary)
                     }
                     item {
                         Activity(
                             activity = preferences[7],
                             viewModel = viewModel
-                        )
-                        Divider(
-                            color = mediumGreen.copy(alpha = 0.2f),
-                            thickness = 1.dp
                         )
                     }
                 }
@@ -143,7 +131,7 @@ fun MascotIntroSpeech() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "Før vi setter i gang, vil jeg gjerne vite hva du foretrekker og hva du liker å gjøre når du er fysisk aktiv.",
-            color = Color(0xFF2F8166), // darkGreen
+            color = MaterialTheme.colorScheme.onBackground,
             fontStyle = FontStyle.Italic,
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
@@ -179,7 +167,7 @@ fun SectionHeader(text: String, color: Color) {
 fun ContinueButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2F8166)),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onBackground),
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
@@ -188,13 +176,13 @@ fun ContinueButton(onClick: () -> Unit) {
         Text(
             text = "Fortsett",
             fontSize = 16.sp,
-            color = Color.White
+            color = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.width(8.dp))
         Icon(
             imageVector = Icons.Default.ArrowForward,
             contentDescription = null,
-            tint = Color.White
+            tint = MaterialTheme.colorScheme.primary
         )
     }
 }

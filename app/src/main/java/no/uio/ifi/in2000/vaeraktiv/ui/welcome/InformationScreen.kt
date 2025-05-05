@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -53,11 +54,7 @@ fun InformationScreen(onStartApplication: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(lightCyan, mediumGreen)
-                )
-            ),
+            .background(color = MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         AnimatedVisibility(visible = showContent, enter = fadeIn()) {
@@ -83,7 +80,7 @@ fun MascotWithEndingSpeech() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "Supert! Du er klar til å sette i gang eventyret. Takk for at du delte interessene dine – nå skal jeg finne aktiviteter som passer perfekt for deg!",
-            color = Color(0xFF2F8166), // darkGreen
+            color = MaterialTheme.colorScheme.onBackground,
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -97,7 +94,7 @@ fun MascotWithEndingSpeech() {
         )
         Text(
             text = "Vil du endre preferansene dine senere? Det er enkelt – bare gå til innstillingene via navigasjonsbaren nederst.",
-            color = Color(0xFF2F8166), // darkGreen
+            color = MaterialTheme.colorScheme.onBackground, // darkGreen
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -109,7 +106,7 @@ fun MascotWithEndingSpeech() {
 fun StartAppButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2F8166)),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
@@ -118,13 +115,13 @@ fun StartAppButton(onClick: () -> Unit) {
         Text(
             text = "Start VærAktiv!",
             fontSize = 16.sp,
-            color = Color.White
+            color = MaterialTheme.colorScheme.onPrimary
         )
         Spacer(modifier = Modifier.width(8.dp))
         Icon(
             imageVector = Icons.Default.ArrowForward,
             contentDescription = null,
-            tint = Color.White
+            tint = MaterialTheme.colorScheme.onPrimary
         )
     }
 }
