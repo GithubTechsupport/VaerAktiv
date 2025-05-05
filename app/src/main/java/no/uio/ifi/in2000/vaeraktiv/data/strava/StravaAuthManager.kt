@@ -1,7 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.data.strava
 
 import android.util.Log
-import io.ktor.client.*
 import io.ktor.client.call.body
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post

@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
-import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.PlacesActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
@@ -21,18 +20,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MapScreenViewModel @Inject constructor(
-    private val weatherRepository: WeatherRepository
+    weatherRepository: WeatherRepository
 ) : ViewModel() {
 
     private val _mapScreenUiState = MutableStateFlow(MapScreenUiState())
     val mapScreenUiState: StateFlow<MapScreenUiState> = _mapScreenUiState.asStateFlow()
 
-    val deviceLocation: LiveData<Location?> = weatherRepository.deviceLocation
+    //val deviceLocation: LiveData<Location?> = weatherRepository.deviceLocation
 
     val activities: LiveData<List<SuggestedActivities?>?> = weatherRepository.activities
-
-    init {
-    }
 
     fun decodePolyline(encoded: String): List<GeoPoint> {
         try {

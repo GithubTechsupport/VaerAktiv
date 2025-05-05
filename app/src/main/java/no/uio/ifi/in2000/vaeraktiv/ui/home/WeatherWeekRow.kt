@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -30,6 +31,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.getDayOfWeek
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
 
+@SuppressLint("DiscouragedApi")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WeatherWeekRow(
@@ -69,7 +71,7 @@ fun WeatherWeekRow(
         ) {
             Image(
                 painter = painterResource(id = context.resources.getIdentifier(iconResId, "drawable", context.packageName)),
-                contentDescription = "Todays weather",
+                contentDescription = "Today's weather",
                 modifier = Modifier.size(40.dp)
             )
             Icon(

@@ -17,13 +17,11 @@ class FavoriteLocationRepository @Inject constructor(
         val addresses = response?.second
         Log.d("FavoriteLocationRepository", "addLocationByName: $name")
         if (addresses != null) {
-            if (name != null) {
-                dataSource.addLocation(
-                    name,
-                    String.format("%.3f", addresses.first).toDouble(),
-                    String.format("%.3f", addresses.second).toDouble()
-                )
-            }
+            dataSource.addLocation(
+                name,
+                String.format("%.3f", addresses.first).toDouble(),
+                String.format("%.3f", addresses.second).toDouble()
+            )
         }
     }
 
