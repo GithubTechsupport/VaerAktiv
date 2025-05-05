@@ -73,29 +73,36 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                                     textAlign = TextAlign.Center,
                                     color = OnContainer
                                 )
-                                Spacer(modifier = Modifier.height(8.dp))
+                                Spacer(modifier = Modifier.height(4.dp))
                                 Image(
                                     painter = painterResource(id = if (iconResId != 0) iconResId else R.drawable.sun),
                                     contentDescription = "Weather icon",
                                     modifier = Modifier.size(40.dp)
                                 )
-                                Spacer(modifier = Modifier.height(8.dp))
+                                Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = "${item.temp}°C", // Assumes you have `temperature` in ForecastForHour
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
                                     color = OnContainer
                                 )
-                                Spacer(modifier = Modifier.height(8.dp))
+                                Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = "${item.precipitationAmount}mm", // Assumes you have `temperature` in ForecastForHour
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
                                     color = OnContainer
                                 )
-                                Spacer(modifier = Modifier.height(8.dp))
+                                Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = "${item.windSpeed}m/s", // Assumes you have `temperature` in ForecastForHour
+                                    style = MaterialTheme.typography.labelSmall,
+                                    textAlign = TextAlign.Center,
+                                    color = OnContainer
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = "${item.uv} UV", // Assumes you have `temperature` in ForecastForHour
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
                                     color = OnContainer
