@@ -35,7 +35,6 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 @SuppressLint("DiscouragedApi")
 @Composable
 fun DisplayHourlyForecast(data: List<ForecastForHour>) {
-    val cornerDp = 10.dp
     val context = LocalContext.current
 
     val items = mutableListOf<Any>().apply {

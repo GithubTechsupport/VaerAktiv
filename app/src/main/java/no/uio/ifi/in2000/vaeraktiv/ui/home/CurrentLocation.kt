@@ -67,7 +67,7 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                     )
                     Icon(
                         painter = painterResource(id = R.drawable.location),
-                        contentDescription = "Location",
+                        contentDescription = "Location icon",
                         modifier = Modifier.size(20.dp),
                         tint = OnContainer
                     )

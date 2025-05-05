@@ -35,7 +35,7 @@ fun AddLocationDefault(defaultPadding: Dp) {
         Spacer(modifier = Modifier.weight(1f))
         Icon(
             imageVector = Icons.Filled.AddCircle,
-            contentDescription = "Add Circle Icon",
+            contentDescription = "Add Place Icon",
             modifier = Modifier
                 .padding(defaultPadding)
                 .size(50.dp),

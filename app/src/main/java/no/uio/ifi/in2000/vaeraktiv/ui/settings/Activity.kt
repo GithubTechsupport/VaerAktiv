@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.activity
+package no.uio.ifi.in2000.vaeraktiv.ui.settings
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,11 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import no.uio.ifi.in2000.vaeraktiv.model.preferences.Preference
 
 @Composable
@@ -53,12 +49,7 @@ fun Activity(
         }
         Text(
             text = activity.desc,
-            style = TextStyle(
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.Start,
-                color = if (activity.isEnabled) Color.White else darkGreen
-            ),
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.weight(1f)
         )
     }

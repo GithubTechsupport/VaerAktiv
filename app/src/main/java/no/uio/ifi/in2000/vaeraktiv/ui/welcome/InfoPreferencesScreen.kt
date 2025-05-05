@@ -46,9 +46,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.ui.activity.Activity
-import no.uio.ifi.in2000.vaeraktiv.ui.activity.PreferencesViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.settings.Activity
+import no.uio.ifi.in2000.vaeraktiv.ui.settings.PreferencesViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.VaerAktivTheme
+
 
 
 @Composable
