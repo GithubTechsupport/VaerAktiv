@@ -16,8 +16,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.unit.dp
 
-
+@OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
@@ -25,27 +38,43 @@ fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
         val defaultPadding = 8.dp
 
         val list by viewModel.data.collectAsState(initial = emptyList())
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(BackGroundColor)
-                .padding(horizontal = 0.dp, vertical = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            item {
-                Text(
-                    "Steder",
-                    style = MaterialTheme.typography.displaySmall,
-                    color = OnContainer
-                )
+
+        var isRefreshing by remember { mutableStateOf(false) }
+        val refreshState = rememberPullRefreshState(
+            refreshing = isRefreshing,
+            onRefresh = {
+                isRefreshing = true
+                viewModel.getData()
+                isRefreshing = false
             }
-            item { AddPlace(defaultPadding, viewModel) }
-            list.forEach {
+        )
+
+        Box(Modifier
+            .fillMaxSize()
+            .pullRefresh(refreshState)
+            .background(BackGroundColor)
+            .padding(vertical = 8.dp)
+        ) {
+            LazyColumn(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 item {
-                    PlaceCard(it, defaultPadding, viewModel)
+                    Text(
+                        "Steder",
+                        style = MaterialTheme.typography.displaySmall,
+                        color = OnContainer
+                    )
+                }
+                item { AddPlace(8.dp, viewModel) }
+                items(list) {
+                    PlaceCard(it, 8.dp, viewModel)
                 }
             }
+            PullRefreshIndicator(
+                refreshing = isRefreshing,
+                state = refreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
         }
     }
 }

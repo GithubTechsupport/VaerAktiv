@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -62,11 +63,12 @@ class HomeScreenViewModel @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     fun initialize(lifecycleOwner: LifecycleOwner) {
         initialized.takeIf { !it }?.also {
+            Log.d("HomeScreen", "Initializing")
             // start loading
             _homeScreenUiState.update { it.copy(isLoading = true) }
 
             weatherRepository.setCurrentLocation((Location("Oslo", "59.914", "10.752")))
-            getActivitiesForToday()
+            resetScreenState()
             _homeScreenUiState.update { it.copy(isLoading = false) }
             initialized = true
         // wait for first device location
@@ -86,6 +88,20 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun setCurrentLocation(location: Location) = weatherRepository.setCurrentLocation(location)
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun resetScreenState() {
+        getHomeScreenData()
+        resetActivities()
+        getActivitiesForToday()
+
+    }
+
+    private fun resetActivities() {
+        viewModelScope.launch {
+            weatherRepository.resetActivities()
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getHomeScreenData() {
