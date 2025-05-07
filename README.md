@@ -67,7 +67,7 @@ The app uses several libraries and frameworks:
 
 ## Warnings
 
-- Function "observeOnce" is never used in `HomeScreenViewModel.kt` - Used for physical emulator. 
-- Parameter 'lifecycleOwner' is never used in `HomeScreenViewModel.kt` - Used for physical emulator. 
+- Function "observeOnce" is never used in `HomeScreenViewModel.kt` - The code this function belongs to is temporarily commented out to work with virtual emulators. 
+- Parameter 'lifecycleOwner' is never used in `HomeScreenViewModel.kt` - The code this parameter belongs to is temporarily commented out to work with virtual emulators. 
 - Property "deviceLocation" is never used in `HomeScreenViewModel.kt` - Used in `HomeScreen.kt`
 - 
