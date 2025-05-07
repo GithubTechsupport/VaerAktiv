@@ -52,7 +52,7 @@ fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
         Box(Modifier
             .fillMaxSize()
             .pullRefresh(refreshState)
-            .background(BackGroundColor)
+            .background(MaterialTheme.colorScheme.background)
             .padding(vertical = 8.dp)
         ) {
             LazyColumn(
@@ -62,7 +62,7 @@ fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
                     Text(
                         "Steder",
                         style = MaterialTheme.typography.displaySmall,
-                        color = OnContainer
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
                 item { AddPlace(8.dp, viewModel) }

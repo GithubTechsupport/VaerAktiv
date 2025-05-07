@@ -13,14 +13,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
 
 
 @Composable
@@ -34,14 +32,13 @@ fun ActivityCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 8.dp),
-        colors = CardDefaults.cardColors(BackGroundColor),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
             modifier = Modifier
                 .padding(12.dp)
         ) {
-            // Tidsrom og navn på samme linje
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -50,7 +47,7 @@ fun ActivityCard(
                 Text(
                     text = activity.activityName,
                     style = MaterialTheme.typography.titleLarge,
-                    color = OnContainer,
+                    color = MaterialTheme.colorScheme.primary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -66,7 +63,7 @@ fun ActivityCard(
                 Text(
                     text = "Beste tidspunkt: ${activity.timeStart} - ${activity.timeEnd}",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = OnContainer,
+                    color = MaterialTheme.colorScheme.primary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -76,7 +73,7 @@ fun ActivityCard(
                 Text(
                     text = activity.activityDesc,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = SecondaryOnContainer,
+                    color = MaterialTheme.colorScheme.onSecondary,
                     modifier = Modifier.padding(top = 8.dp),
                     overflow = TextOverflow.Ellipsis
                 )
@@ -88,7 +85,7 @@ fun ActivityCard(
                     Text(
                         text = "Vis i kart",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = OnContainer,
+                        color = MaterialTheme.colorScheme.primary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         textDecoration = TextDecoration.Underline,

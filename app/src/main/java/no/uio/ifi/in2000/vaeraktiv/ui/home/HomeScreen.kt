@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,17 +20,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
+import androidx.navigation.NavHostController
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 
 @OptIn(ExperimentalMaterialApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) { // Manifest.xml. Ternger kanskje ikke resizable linjen
+fun HomeScreen(
+    isOnline: Boolean,
+    viewModel: HomeScreenViewModel,
+    navController: NavHostController
+) { // Manifest.xml. Ternger kanskje ikke resizable linjen
     val uiState by viewModel.homeScreenUiState.collectAsState()
     val currentLocation by viewModel.currentLocation.observeAsState()
-    val deviceLocation: (Location) -> Unit = { viewModel.setCurrentLocation(it) }
+    val deviceLocation by viewModel.deviceLocation.observeAsState()
     val activities by viewModel.activities.observeAsState()
     val lifecycleOwner = LocalLifecycleOwner.current
     var isRefreshing by remember { mutableStateOf(false) }
@@ -58,8 +63,8 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) { // Manifest.
     ) {
         when {
             uiState.isLoading -> LoadingScreen()
-            isOnline    -> HomeContent(uiState, viewModel.currentLocation.value, { viewModel.setCurrentLocation(it) }, viewModel.activities.value, viewModel)
-            else        -> ErrorMessage("You're offline.")
+            isOnline -> HomeContent(uiState, deviceLocation, activities, viewModel, navController)
+            else -> ErrorMessage("You're offline.")
         }
         PullRefreshIndicator(
             refreshing = isRefreshing,
@@ -68,7 +73,3 @@ fun HomeScreen(isOnline: Boolean, viewModel: HomeScreenViewModel) { // Manifest.
         )
     }
 }
-
-
-
-

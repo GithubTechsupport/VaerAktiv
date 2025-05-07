@@ -67,7 +67,7 @@ fun DisplayWarning(data: List<AlertData>) {
                 Text(
                     text = "Advarsel",
                     style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
                 )
             }
@@ -79,7 +79,7 @@ fun DisplayWarning(data: List<AlertData>) {
                     .padding(top = 4.dp)
                     .padding(horizontal = 16.dp)
                     .height(1.dp)
-                    .background(color = MaterialTheme.colorScheme.onBackground)
+                    .background(color = MaterialTheme.colorScheme.primary)
                 )
                 Column (
                     modifier = Modifier
@@ -110,14 +110,14 @@ fun DisplayWarning(data: List<AlertData>) {
                                     Text(
                                         text = type,
                                         style = MaterialTheme.typography.bodyLarge,
-                                        color = MaterialTheme.colorScheme.onSurface,
+                                        color = MaterialTheme.colorScheme.primary,
                                         textAlign = TextAlign.Center,
                                         fontSize = 18.sp
                                     )
                                     Text(
                                         text = "Instruksjoner: $instruct",
                                         style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.onSurface,
+                                        color = MaterialTheme.colorScheme.primary,
                                         textAlign = TextAlign.Start
                                     )
                                 }
@@ -129,7 +129,7 @@ fun DisplayWarning(data: List<AlertData>) {
                     Text(
                         text = "Kontaktinformasjon: $contactInfo",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.primary,
                         textAlign = TextAlign.Center
                     )
                 }

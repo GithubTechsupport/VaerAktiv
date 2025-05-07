@@ -16,8 +16,6 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -30,13 +28,13 @@ fun TodaysActivitiesSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp)
-            .background(Container, shape = RoundedCornerShape(10.dp)),
+            .background(MaterialTheme.colorScheme.onBackground, shape = RoundedCornerShape(10.dp)),
         horizontalAlignment = Alignment.Start
     ) {
         Text(
             text = "I dag",
             style = MaterialTheme.typography.headlineSmall,
-            color = OnContainer,
+            color = MaterialTheme.colorScheme.background,
             modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 4.dp)
         )
 
