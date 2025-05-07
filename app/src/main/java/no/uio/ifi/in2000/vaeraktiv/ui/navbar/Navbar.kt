@@ -15,27 +15,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.edit
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.MainActivity
 import no.uio.ifi.in2000.vaeraktiv.model.navbar.NavbarUiState
 import no.uio.ifi.in2000.vaeraktiv.network.connection.NetworkObserver
+import no.uio.ifi.in2000.vaeraktiv.ui.settings.PreferencesViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.settings.SettingsScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.LocationScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.map.MapScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.map.MapScreenViewModel
-import no.uio.ifi.in2000.vaeraktiv.ui.settings.PreferencesViewModel
-import no.uio.ifi.in2000.vaeraktiv.ui.settings.SettingsScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.InfoPeferencesScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.InformationScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.WelcomeScreen
+import androidx.core.content.edit
+import androidx.navigation.NavHostController
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -43,9 +43,9 @@ fun Navbar(
     favoriteLocationViewModel: FavoriteLocationViewModel,
     homeScreenViewModel: HomeScreenViewModel,
     mapScreenViewModel: MapScreenViewModel,
-    preferencesViewModel: PreferencesViewModel
+    preferencesViewModel: PreferencesViewModel,
+    navController: NavHostController
 ) {
-    val navController = rememberNavController()
     var uiState by remember { mutableStateOf(NavbarUiState()) }
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("VaerAktivPrefs", Context.MODE_PRIVATE)
@@ -65,7 +65,7 @@ fun Navbar(
     LaunchedEffect(favoriteLocationViewModel.navigateToHome) {
         favoriteLocationViewModel.navigateToHome.observeForever { shouldNavigate ->
             if (shouldNavigate) {
-                handleNavigation(uiState, "home") { navController.navigateToHome() }
+                handleNavigation(navController, uiState, "home") { navController.navigateToHome() }
                 favoriteLocationViewModel.onNavigationHandled()
                 uiState = uiState.copy(selectedRoute = "home")
             }
@@ -74,9 +74,8 @@ fun Navbar(
 
     LaunchedEffect(homeScreenViewModel.navigateToMap) {
         homeScreenViewModel.navigateToMap.collect { activity ->
-            handleNavigation(uiState, "map") { navController.navigateToMap() }
+            handleNavigation(navController, uiState, "map") { navController.navigateToMap() }
             mapScreenViewModel.zoomInOnActivity(activity)
-            uiState = uiState.copy(selectedRoute = "map")
         }
     }
 
@@ -119,8 +118,15 @@ fun Navbar(
                         }
                     )
                 }
-                composable("home") { HomeScreen(uiState.isOnline, homeScreenViewModel) }
-                composable("settings") { SettingsScreen(preferencesViewModel) }
+                composable("home") { HomeScreen(
+                    isOnline = uiState.isOnline,
+                    viewModel = homeScreenViewModel,
+                    navController = navController
+                ) }
+                composable("settings") {
+                    Log.d("Navbar", "Navigating to SettingsScreen")
+                    SettingsScreen(preferencesViewModel, navController)
+                }
                 composable("location") { LocationScreen(uiState.isOnline, favoriteLocationViewModel) }
                 composable("map") { MapScreen(mapScreenViewModel) }
             }
@@ -160,6 +166,7 @@ private fun getRouteInfo(route: String?): RouteInfo {
 
 // Helper function to handle navigation and state update
 private fun handleNavigation(
+    navController: NavController,
     uiState: NavbarUiState,
     route: String,
     navigateAction: () -> Unit
