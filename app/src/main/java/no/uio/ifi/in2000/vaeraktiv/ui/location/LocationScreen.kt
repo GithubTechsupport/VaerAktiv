@@ -14,8 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 
 @SuppressLint("ViewModelConstructorInComposable")
@@ -28,7 +26,7 @@ fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BackGroundColor)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 0.dp, vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
@@ -37,7 +35,7 @@ fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
                 Text(
                     "Steder",
                     style = MaterialTheme.typography.displaySmall,
-                    color = OnContainer
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
             item { AddPlace(defaultPadding, viewModel) }

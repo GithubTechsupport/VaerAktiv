@@ -22,17 +22,16 @@ fun Activity(
     activity: Preference,
     viewModel: PreferencesViewModel
 ) {
-    val darkGreen = Color(0xFF2F8166)
 
     Button(
         onClick = {
             viewModel.onPreferenceToggled(activity, !activity.isEnabled)
         },
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (activity.isEnabled) darkGreen else Color.White,
-            contentColor = if (activity.isEnabled) Color.White else darkGreen
+            containerColor = if (activity.isEnabled) MaterialTheme.colorScheme.onBackground else Color.White,
+            contentColor = if (activity.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
         ),
-        border = if(!activity.isEnabled) BorderStroke(2.dp, darkGreen) else null,
+        border = if(!activity.isEnabled) BorderStroke(2.dp, MaterialTheme.colorScheme.onBackground) else null,
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier
             .fillMaxWidth()
@@ -43,7 +42,7 @@ fun Activity(
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = null,
-                tint = Color.White, // White icon when enabled
+                tint = MaterialTheme.colorScheme.primary, // White icon when enabled
                 modifier = Modifier.padding(end = 8.dp)
             )
         }

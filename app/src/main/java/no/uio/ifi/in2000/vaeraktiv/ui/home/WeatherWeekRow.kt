@@ -28,8 +28,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.getDayOfWeek
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
 
 @SuppressLint("DiscouragedApi")
 @RequiresApi(Build.VERSION_CODES.O)
@@ -53,14 +51,14 @@ fun WeatherWeekRow(
         Text(
             text = getDayOfWeek(day.date),
             style = MaterialTheme.typography.bodyLarge,
-            color = OnContainer,
+            color = MaterialTheme.colorScheme.background,
             modifier = Modifier.width(80.dp)
         )
         Spacer(modifier = Modifier.weight(0.8f))
         Text(
             text = "${day.maxTemp}°",
             style = MaterialTheme.typography.bodyLarge,
-            color = SecondaryOnContainer,
+            color = MaterialTheme.colorScheme.background,
             modifier = Modifier.wrapContentWidth()
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -77,7 +75,7 @@ fun WeatherWeekRow(
             Icon(
                 imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = "Expand/Collapse",
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                tint = MaterialTheme.colorScheme.background,
                 modifier = Modifier.size(12.dp)
             )
         }
