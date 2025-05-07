@@ -17,10 +17,8 @@ val OnSecondaryBackgroundDark = Color(0xFFF1BBC0)
 
 
 
-//Fargene vi faktisk bruker i applikasjonen.
+
+
+
 val BackGroundColor = Color(0xFFF0FbF6) //BackGroundColor
-val Container = Color(0xFFB1EAE5) // Container
 val OnContainer = Color(0xFF1C4740) //OnContainer
-val SecondaryOnContainer = Color(0xFFA1283C) //SecondaryOnContainer
-val PrimaryNavbar = Color(0xFFD8F2EA) // PrimaryNavbar
-val SecondaryNavbar = Color(0xFF1C4740) //SecondaryNavbar

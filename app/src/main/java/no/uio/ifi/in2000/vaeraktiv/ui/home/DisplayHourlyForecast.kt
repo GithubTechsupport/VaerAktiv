@@ -22,14 +22,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
@@ -54,10 +53,10 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                                 .width(80.dp)
                                 .height(160.dp)
                                 .background(
-                                    BackGroundColor,
+                                    Color.White,
                                     shape = RoundedCornerShape(10.dp)
                                 )
-                                .border(1.dp, OnContainer, shape = RoundedCornerShape(10.dp)),
+                                .border(1.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(10.dp)),
                             contentAlignment = Alignment.Center
                         ) {
                             Column(
@@ -69,7 +68,7 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                                     text = item.time ?: "N/A",
                                     style = MaterialTheme.typography.labelMedium,
                                     textAlign = TextAlign.Center,
-                                    color = OnContainer
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Image(
@@ -82,21 +81,21 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                                     text = "${item.temp}°C", // Assumes you have `temperature` in ForecastForHour
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
-                                    color = OnContainer
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
                                     text = "${item.precipitationAmount}mm", // Assumes you have `temperature` in ForecastForHour
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
-                                    color = OnContainer
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
                                     text = "${item.windSpeed}m/s", // Assumes you have `temperature` in ForecastForHour
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
-                                    color = OnContainer
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             }
                         }

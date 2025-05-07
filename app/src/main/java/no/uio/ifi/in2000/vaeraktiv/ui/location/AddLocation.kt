@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,7 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
 
 @Composable
 fun AddPlace(defaultPadding: Dp, viewModel: FavoriteLocationViewModel) {
@@ -27,7 +27,7 @@ fun AddPlace(defaultPadding: Dp, viewModel: FavoriteLocationViewModel) {
             .wrapContentHeight()
             .clickable{expanded = !expanded}
             .clip(RoundedCornerShape(10))
-            .background(Container)
+            .background(MaterialTheme.colorScheme.onBackground)
     ) {
         if (expanded) AddLocationExpanded(defaultPadding, viewModel) else AddLocationDefault(defaultPadding)
 

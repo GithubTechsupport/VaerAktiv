@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -28,7 +28,7 @@ fun HomeContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackGroundColor),
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyColumn(

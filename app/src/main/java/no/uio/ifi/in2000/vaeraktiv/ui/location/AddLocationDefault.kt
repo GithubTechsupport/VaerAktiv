@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
 fun AddLocationDefault(defaultPadding: Dp) {
@@ -27,7 +26,7 @@ fun AddLocationDefault(defaultPadding: Dp) {
         Text(
             text = "Legg til sted",
             style = MaterialTheme.typography.titleLarge ,
-            color = OnContainer,
+            color = MaterialTheme.colorScheme.background,
             textAlign = TextAlign.Left,
             modifier = Modifier
                 .padding(defaultPadding)
@@ -39,7 +38,7 @@ fun AddLocationDefault(defaultPadding: Dp) {
             modifier = Modifier
                 .padding(defaultPadding)
                 .size(50.dp),
-            tint = OnContainer
+            tint = MaterialTheme.colorScheme.background
         )
     }
 }
