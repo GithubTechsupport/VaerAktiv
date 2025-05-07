@@ -83,4 +83,6 @@ interface WeatherRepository {
         index: Int,
         newActivity: ActivitySuggestion
     )
+
+    fun resetActivities()
 }
