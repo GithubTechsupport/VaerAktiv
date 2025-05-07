@@ -14,11 +14,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import no.uio.ifi.in2000.vaeraktiv.ui.activity.PreferencesViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.map.MapScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.Navbar
+import no.uio.ifi.in2000.vaeraktiv.ui.settings.PreferencesViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.VaerAktivTheme
 import no.uio.ifi.in2000.vaeraktiv.utils.KeepAliveManager
 import no.uio.ifi.in2000.vaeraktiv.utils.LocationTracker

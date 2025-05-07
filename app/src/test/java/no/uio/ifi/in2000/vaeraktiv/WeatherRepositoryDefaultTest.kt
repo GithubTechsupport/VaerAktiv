@@ -7,13 +7,14 @@ import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
-import no.uio.ifi.in2000.vaeraktiv.data.places.placesRepository
+import no.uio.ifi.in2000.vaeraktiv.data.places.PlacesRepository
 import no.uio.ifi.in2000.vaeraktiv.data.strava.StravaRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepositoryDefault
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
+import no.uio.ifi.in2000.vaeraktiv.data.welcome.PreferenceRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Features
 import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Properties
@@ -32,13 +33,13 @@ class WeatherRepositoryDefaultTest {
         metAlertsRepository = metAlertsRepository,
         locationForecastRepository = mock(LocationForecastRepository::class.java),
         sunriseRepository = mock(SunriseRepository::class.java),
-        favoriteLocationRepository = mock(FavoriteLocationRepository::class.java),
         aiRepository = mock(AiRepository::class.java),
         deviceLocationRepository = mock(LocationRepository::class.java),
         geocoderClass = mock(GeocoderClass::class.java),
         nowcastRepository = mock(NowcastRepository::class.java),
-        placesRepository = mock(placesRepository::class.java),
-        stravaRepository = mock(StravaRepository::class.java)
+        placesRepository = mock(PlacesRepository::class.java),
+        stravaRepository = mock(StravaRepository::class.java),
+        preferenceRepository = mock(PreferenceRepository::class.java)
     )
 
     @Test
@@ -48,7 +49,7 @@ class WeatherRepositoryDefaultTest {
 
         val fakeProperties = mock(Properties::class.java).apply {
             `when`(area).thenReturn("Test Area")
-            `when`(awareness_type).thenReturn("Type A")
+            `when`(awarenessType).thenReturn("Type A")
             `when`(description).thenReturn("Heavy Rainfall")
             `when`(eventAwarenessName).thenReturn("Rain Warning")
             `when`(instruction).thenReturn("Stay indoors")
@@ -69,7 +70,7 @@ class WeatherRepositoryDefaultTest {
         assertEquals(1, result.size)
         val alert = result.first()
         assertEquals("Test Area", alert.area)
-        assertEquals("Type A", alert.awareness_type)
+        assertEquals("Type A", alert.awarenessType)
         assertEquals("Heavy Rainfall", alert.description)
         assertEquals("Rain Warning", alert.eventAwarenessName)
         assertEquals("Stay indoors", alert.instruction)

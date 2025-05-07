@@ -63,6 +63,12 @@ dependencies {
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.ui.text.google.fonts)
+
+    // datastore
+    implementation(libs.androidx.datastore.preferences.v110)
+    implementation(libs.androidx.runner)
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -126,7 +132,7 @@ dependencies {
     testImplementation(libs.mockito.inline)
 
     // roboelectric testing
-    testImplementation("org.robolectric:robolectric:4.12.1")
+    testImplementation(libs.robolectric)
 
     // Needed for testing of final classes
     testImplementation(libs.byte.buddy)

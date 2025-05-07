@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -29,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -56,11 +55,7 @@ fun WelcomeScreen(onStartClick: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(colors.background, colors.secondary)
-                )
-            ),
+            .background(color = colors.background),
         contentAlignment = Alignment.Center
     ) {
         AnimatedVisibility(visible = showContent, enter = fadeIn()) {
@@ -90,7 +85,7 @@ fun WelcomeText() {
         style = TextStyle(
             fontSize = 42.sp,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
         ),
         modifier = Modifier.padding(bottom = 8.dp)
@@ -103,7 +98,7 @@ fun SlogeText() {
         text = "Aktivitetstips generert spesifikt for deg og dine interesser",
         fontSize = 20.sp,
         fontWeight = FontWeight.Medium,
-        color = MaterialTheme.colorScheme.primary,
+        color = MaterialTheme.colorScheme.onBackground,
         textAlign = TextAlign.Center,
         modifier = Modifier.padding(horizontal = 16.dp)
     )
@@ -114,7 +109,7 @@ fun MascotWithSpeech() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "Hei mitt navn er Simon! Klar for å komme i gang?",
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onBackground,
             fontStyle = FontStyle.Italic,
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
@@ -138,21 +133,21 @@ fun MascotSaysHi() {
 fun StartButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onBackground),
         modifier = Modifier
             .padding(top = 8.dp)
             .height(56.dp)
     ) {
         Icon(
-            imageVector = Icons.Default.ArrowForward,
+            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onPrimary
+            tint = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = "Kom i gang",
             fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onPrimary
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }

@@ -9,7 +9,7 @@ class MetAlertsRepository @Inject constructor(private val metAlertsDataSource: M
 
     private suspend fun fetchAlerts() {
         val response = metAlertsDataSource.retriveAlertInfo()
-        alertsCache = response?.features ?: emptyList()
+        alertsCache = response.features
     }
     
     override suspend fun getAlertsForLocation(lat: String, lon: String): List<Features> {

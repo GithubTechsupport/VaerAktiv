@@ -49,7 +49,7 @@ fun DisplayIntervalSymbols(data: List<DetailedForecastForDay>) {
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .aspectRatio(2f / 2f)
+                    .aspectRatio(1f)
                     .background(BackGroundColor, shape = RoundedCornerShape(10.dp))
                     .border(1.dp, OnContainer, shape = RoundedCornerShape(10.dp)),
                 contentAlignment = Alignment.Center

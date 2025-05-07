@@ -8,7 +8,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import no.uio.ifi.in2000.vaeraktiv.BuildConfig
 import javax.inject.Singleton
 
 @Module
@@ -19,7 +18,7 @@ object PlacesClientModule {
     fun providePlacesClientModule(
         @ApplicationContext context: Context
     ): PlacesClient {
-        Places.initializeWithNewPlacesApiEnabled(context, BuildConfig.PLACES_API_KEY)
+        Places.initializeWithNewPlacesApiEnabled(context, "AIzaSyAd7O7mvzNTGqRaFYhWWsJdJvq-GyVbedA")
         return Places.createClient(context)
     }
 }

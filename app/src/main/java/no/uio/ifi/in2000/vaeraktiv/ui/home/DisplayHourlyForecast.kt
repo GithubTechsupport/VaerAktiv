@@ -35,7 +35,6 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 @SuppressLint("DiscouragedApi")
 @Composable
 fun DisplayHourlyForecast(data: List<ForecastForHour>) {
-    val cornerDp = 10.dp
     val context = LocalContext.current
 
     val items = mutableListOf<Any>().apply {
@@ -46,8 +45,7 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
             modifier = Modifier.fillMaxWidth()
         ) {
             items(items.size) { index ->
-                val item = items[index]
-                when (item) {
+                when (val item = items[index]) {
                     is ForecastForHour -> {
                         val iconResId = context.resources.getIdentifier(item.icon, "drawable", context.packageName)
                         Box(

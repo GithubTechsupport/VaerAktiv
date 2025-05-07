@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.home
+package no.uio.ifi.in2000.vaeraktiv.ui
 
 import androidx.compose.runtime.Composable
 

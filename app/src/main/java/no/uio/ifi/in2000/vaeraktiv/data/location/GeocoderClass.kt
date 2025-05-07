@@ -22,17 +22,17 @@ class GeocoderClass @Inject constructor(val context: Context) {
         try {
             val addressList: List<Address>? = geocoder.getFromLocationName(locationName, 1)
 
-            if (!addressList.isNullOrEmpty()) {
+            return if (!addressList.isNullOrEmpty()) {
                 val address: Address = addressList[0]
 
                 Log.d("GeocoderClass", "Returned name: $address")
 
                 val latitude: Double = address.latitude
                 val longitude: Double = address.longitude
-                return Pair(locationName, Pair(latitude, longitude))
+                Pair(locationName, Pair(latitude, longitude))
             } else {
                 // Location not found
-                return null
+                null
             }
         } catch (e: IOException) {
             // Handle network or other I/O errors
@@ -49,12 +49,12 @@ class GeocoderClass @Inject constructor(val context: Context) {
 
         try {
             val addressList: List<Address>? = geocoder.getFromLocation(coordinates.first.toDouble(), coordinates.second.toDouble(), 3)
-            if (!addressList.isNullOrEmpty()) {
+            return if (!addressList.isNullOrEmpty()) {
                 val address: Address = addressList[0]
-                return address
+                address
             } else {
                 // Location not found
-                return null
+                null
             }
         } catch (e: IOException) {
             // Handle network or other I/O errors

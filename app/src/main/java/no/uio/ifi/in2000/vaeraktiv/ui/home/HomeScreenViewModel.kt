@@ -3,7 +3,9 @@ package no.uio.ifi.in2000.vaeraktiv.ui.home
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,16 +47,42 @@ class HomeScreenViewModel @Inject constructor(
     private val _navigateToMap = MutableSharedFlow<ActivitySuggestion>()
     val navigateToMap = _navigateToMap.asSharedFlow()
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun initialize() {
-        if (initialized) return
+    private fun <T> LiveData<T>.observeOnce(
+        lifecycleOwner: LifecycleOwner,
+        onChange: (T) -> Unit
+    ) {
+        observe(lifecycleOwner, object : Observer<T> {
+            override fun onChanged(value: T) {
+                onChange(value)
+                removeObserver(this)
+            }
+        })
+    }
 
-        // For demonstration, setting a default location if none exists.
-        weatherRepository.setCurrentLocation(
-            Location("Oslo Sentralstasjon", "59.9111", "10.7533")
-        )
-        initialized = true
-        getActivitiesForToday()
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun initialize(lifecycleOwner: LifecycleOwner) {
+        initialized.takeIf { !it }?.also {
+            // start loading
+            _homeScreenUiState.update { it.copy(isLoading = true) }
+
+            weatherRepository.setCurrentLocation((Location("Oslo", "59.914", "10.752")))
+            getActivitiesForToday()
+            _homeScreenUiState.update { it.copy(isLoading = false) }
+            initialized = true
+        // wait for first device location
+//            deviceLocation.observeOnce(lifecycleOwner) { loc ->
+//                val startLoc = loc
+//                    .takeUnless { it?.addressName == "Unknown location" }
+//                    ?: Location("Oslo", "59.914", "10.752")
+//
+//                weatherRepository.setCurrentLocation(startLoc)
+//                getActivitiesForToday()
+//
+//                // stop loading and mark initialized
+//                _homeScreenUiState.update { it.copy(isLoading = false) }
+//                initialized = true
+//            }
+        }
     }
 
     fun setCurrentLocation(location: Location) = weatherRepository.setCurrentLocation(location)
@@ -67,22 +95,22 @@ class HomeScreenViewModel @Inject constructor(
             _homeScreenUiState.update { it.copy(isLoading = true) }
 
             var todaysWeather: ForecastToday? = null
-            var todaysWeatherError: String? = null
+            var todaysWeatherError: String?
 
             var thisWeeksWeather: List<ForecastForDay> = emptyList()
-            var thisWeeksWeatherError: String? = null
+            var thisWeeksWeatherError: String?
 
             var alerts: List<AlertData> = emptyList()
-            var alertsError: String? = null
+            var alertsError: String?
 
             var sunRiseSet: List<String> = emptyList()
-            var sunRiseSetError: String? = null
+            var sunRiseSetError: String?
 
             var next24Hours: List<ForecastForHour> = emptyList()
-            var next24HoursError: String? = null
+            var next24HoursError: String?
 
             var dayIntervals: List<List<DetailedForecastForDay>> = emptyList()
-            var dayIntervalsError: String? = null
+            var dayIntervalsError: String?
 
             try {
                 todaysWeather = weatherRepository.getForecastToday(location)
@@ -160,7 +188,7 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    fun getActivitiesForToday() {
+    private fun getActivitiesForToday() {
         viewModelScope.launch {
             _homeScreenUiState.update { it.copy(isLoadingActivitiesToday = true, isErrorActivitiesToday = false) }
             try {

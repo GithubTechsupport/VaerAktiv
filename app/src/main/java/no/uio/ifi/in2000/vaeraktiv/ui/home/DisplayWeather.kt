@@ -36,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
+import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
@@ -70,21 +71,17 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
             // Icon cell
             Box(
                 modifier = Modifier,
-                    //.weight(1f)
-                    //.padding(),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
                     painter = painterResource(id = iconResId),
-                    contentDescription = "Ikon",
+                    contentDescription = "Weather icon",
                     modifier = Modifier.size(145.dp)
                 )
             }
             // Temperature cell and uv
             Column (
                 modifier = Modifier,
-                    //.weight(1f),
-                    //.padding(end = 30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -102,8 +99,6 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
             }
         }
         if (expanded) {
-            //Spacer(modifier = Modifier.height(4.dp))
-            // Second row: UV, precipitation, and wind speed details in a background box
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

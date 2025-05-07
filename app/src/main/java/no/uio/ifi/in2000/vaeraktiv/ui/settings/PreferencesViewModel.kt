@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.activity
+package no.uio.ifi.in2000.vaeraktiv.ui.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

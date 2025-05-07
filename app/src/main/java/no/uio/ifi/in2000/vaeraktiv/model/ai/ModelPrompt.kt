@@ -132,8 +132,8 @@ END OF EXAMPLES
 """.trimIndent(),
     val fullPrompt: String =
 """
-${basePrompt}
-${examples}
+$basePrompt
+$examples
 
 
 """.trimIndent(),
@@ -264,8 +264,8 @@ END OF EXAMPLES
 
     val fullPromptSingular: String =
 """
-${basePromptSingular}
-${examplesSingular}
+$basePromptSingular
+$examplesSingular
 
 
 """.trimIndent(),

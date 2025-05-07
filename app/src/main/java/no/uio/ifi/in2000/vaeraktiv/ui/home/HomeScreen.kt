@@ -26,9 +26,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.ui.activity.PreferencesViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
@@ -47,6 +49,12 @@ fun HomeScreen(
     val activities by viewModel.activities.observeAsState()
     Log.d("HomeScreen", "Devicelocation: $deviceLocation")
     LaunchedEffect(Unit) { viewModel.initialize() }
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(Unit) {
+        viewModel.initialize(lifecycleOwner)
+    }
+
     LaunchedEffect(currentLocation) {
         currentLocation?.let { viewModel.getHomeScreenData() }
     }
@@ -100,26 +108,5 @@ fun HomeContent(
                 TodaysActivitiesSection(uiState, activities, viewModel)
             }
 
-            item {
-                DataSection(
-                    data = Unit,
-                    error = uiState.thisWeeksWeatherError,
-                    errorMessagePrefix = "Error fetching weekly forecast"
-                ) {
-                    WeatherWeek(activities, viewModel, uiState)
-                }
-            }
-        }
-    }
-}
 
 
-
-@Composable
-fun ErrorMessage(message: String, modifier: Modifier = Modifier.padding(8.dp)) {
-    Text(
-        text = message,
-        color = Color.Red,
-        modifier = modifier
-    )
-}

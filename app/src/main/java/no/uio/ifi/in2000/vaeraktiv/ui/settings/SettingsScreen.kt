@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.activity
+package no.uio.ifi.in2000.vaeraktiv.ui.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
+import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.SecondaryOnContainer
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -50,15 +50,7 @@ fun SettingsScreen(
     viewModel: PreferencesViewModel, navController: NavController
 ) {
     val preferences by viewModel.userPreferences.collectAsState()
-    var showContent by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        delay(500)
-        showContent = true
-    }
-
-    val darkGreen = Color(0xFF2F8166)
-    val mediumGreen = Color(0xFF5EC5A3)
 
     Box(
         modifier = Modifier
@@ -92,11 +84,8 @@ fun SettingsScreen(
             item {
                 Text(
                     "Innstillinger",
-                    style = TextStyle(
-                        fontSize = 40.sp,
-                        //fontWeight = FontWeight.Bold,
-                        color = darkGreen // White for contrast
-                    )
+                    style = MaterialTheme.typography.displaySmall,
+                    color = OnContainer
                 )
             }
             item {
@@ -137,7 +126,7 @@ fun SectionHeader(text: String, color: Color) {
         style = TextStyle(
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            color = color, // Medium green for subheadings
+            color = color,
             textAlign = TextAlign.Start
         ),
         modifier = Modifier

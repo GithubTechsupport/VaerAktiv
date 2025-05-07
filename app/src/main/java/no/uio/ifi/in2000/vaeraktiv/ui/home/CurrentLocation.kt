@@ -44,7 +44,8 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
-            .padding(top = 4.dp)
+            .padding(8.dp)
+            .padding(top = 8.dp)
     ) {
         Row(
             modifier = Modifier

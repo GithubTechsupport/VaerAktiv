@@ -1,7 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.data.welcome
 
-import com.google.gson.Gson
 import android.content.Context
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
