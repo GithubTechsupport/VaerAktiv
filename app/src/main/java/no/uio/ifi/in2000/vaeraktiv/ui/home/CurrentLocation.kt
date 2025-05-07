@@ -48,7 +48,7 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
             Text(
                 text = locationName,
                 style = MaterialTheme.typography.headlineLarge,
-                color = OnContainer,
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center,
                 fontSize = 35.sp
             )

@@ -19,12 +19,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
 import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
@@ -37,15 +36,15 @@ fun SunRiseSet(sunData : List<String>) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .background(
-                Container,
+                MaterialTheme.colorScheme.primary,
                 shape = RoundedCornerShape(cornerDp))
             .fillMaxWidth()
     ) {
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = BackGroundColor, shape = RoundedCornerShape(cornerDp))
-                .border(1.dp, OnContainer, RoundedCornerShape(cornerDp)),
+                .background(color = Color.White, shape = RoundedCornerShape(cornerDp))
+                .border(1.dp, MaterialTheme.colorScheme.background, RoundedCornerShape(cornerDp)),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Box(
@@ -66,7 +65,8 @@ fun SunRiseSet(sunData : List<String>) {
                         Text(
                             text = "Sol opp",
                             style = MaterialTheme.typography.labelSmall,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                     Spacer(modifier = Modifier.width(12.dp))
@@ -78,7 +78,8 @@ fun SunRiseSet(sunData : List<String>) {
                         Text(
                             text = sunRise,
                             style = MaterialTheme.typography.headlineMedium,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
@@ -111,7 +112,8 @@ fun SunRiseSet(sunData : List<String>) {
                         Text(
                             text = "Sol ned",
                             style = MaterialTheme.typography.labelSmall,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                     Spacer(modifier = Modifier.width(12.dp))
@@ -123,7 +125,8 @@ fun SunRiseSet(sunData : List<String>) {
                         Text(
                             text = sunSet,
                             style = MaterialTheme.typography.headlineMedium,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
