@@ -31,16 +31,15 @@ class WeatherRepositoryDefaultTest {
     // Create other mocks if needed but we can use nulls or relaxed fakes for unused deps
     private val weatherRepository = WeatherRepositoryDefault(
         metAlertsRepository = metAlertsRepository,
-        LocationForecastRepository = mock(LocationForecastRepository::class.java),
+        locationForecastRepository = mock(LocationForecastRepository::class.java),
         sunriseRepository = mock(SunriseRepository::class.java),
-        favoriteLocationRepository = mock(FavoriteLocationRepository::class.java),
         aiRepository = mock(AiRepository::class.java),
         deviceLocationRepository = mock(LocationRepository::class.java),
         geocoderClass = mock(GeocoderClass::class.java),
         nowcastRepository = mock(NowcastRepository::class.java),
         placesRepository = mock(PlacesRepository::class.java),
         stravaRepository = mock(StravaRepository::class.java),
-        preferenceRepository = mock(PreferenceRepository::class.java),
+        preferenceRepository = mock(PreferenceRepository::class.java)
     )
 
     @Test
