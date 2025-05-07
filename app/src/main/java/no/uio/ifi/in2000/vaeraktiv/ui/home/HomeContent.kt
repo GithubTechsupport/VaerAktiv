@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
@@ -20,10 +21,10 @@ import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 @Composable
 fun HomeContent(
     uiState: HomeScreenUiState,
-    currentLocation: Location?,
-    deviceLocation: (Location)->Unit,
+    deviceLocation: Location?,
     activities: List<SuggestedActivities?>?,
-    viewModel: HomeScreenViewModel
+    viewModel: HomeScreenViewModel,
+    navController: NavHostController
 ) {
     Column(
         modifier = Modifier
@@ -35,7 +36,7 @@ fun HomeContent(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { CurrentLocation(uiState.locationName, currentLocation, deviceLocation) }
+            item { CurrentLocation(uiState.locationName, deviceLocation, setCurrentLocation = { location -> viewModel.setCurrentLocation(location) }, navController) }
 
             item {
                 DataSection(
