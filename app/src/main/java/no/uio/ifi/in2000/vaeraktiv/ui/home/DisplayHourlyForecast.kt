@@ -102,7 +102,7 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                                     text = "${item.uv} UV", // Assumes you have `temperature` in ForecastForHour
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
-                                    color = OnContainer
+                                    color = MaterialTheme.colorScheme.onBackground
                                 )
                             }
                         }
