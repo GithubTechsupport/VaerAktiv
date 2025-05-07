@@ -36,6 +36,8 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
+import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import javax.inject.Inject
@@ -200,29 +202,39 @@ class WeatherRepositoryDefault @Inject constructor(
         }
     }
 
-    // TODO: Fix timezone bug
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getForecastByDayIntervals(location: Location): List<List<DetailedForecastForDay>> {
         try {
-            val response = locationForecastRepository.getForecastByDay(location.lat, location.lon).first.drop(1)
-                .dropLast(1) // liste med TimeSeries for datoen
-            val intervals = listOf("00", "06", "12", "18")
+            val response = locationForecastRepository.getForecastByDay(location.lat, location.lon).first.drop(1).dropLast(1)
 
-            val forecastByDay = response.map { (date, timeSeriesList) ->
-                intervals.map { intervalStart ->
-                    val timeSeries = timeSeriesList.find { it.time.substring(11, 13) == intervalStart }
-                    val end = (intervalStart.toInt() + 6).toString().padStart(2, '0')
+            val intervals = listOf("02", "08", "14", "20") // tilsvarende tidspunkter i UTC vil ha varsel for de neste 6 timene 7 dager fremover.
+            val osloZone = ZoneId.of("Europe/Oslo")
+
+            val forecastByDay = response.map { (dateStr, timeSeriesList) ->
+                val localDate = LocalDate.parse(dateStr)
+
+                intervals.map { localHour ->
+                    val localDateTime = ZonedDateTime.of(localDate, LocalTime.of(localHour.toInt(), 0), osloZone)
+                    val utcHour = localDateTime.withZoneSameInstant(ZoneId.of("UTC")).hour.toString().padStart(2, '0')
+                    val utcDate = localDateTime.withZoneSameInstant(ZoneId.of("UTC")).toLocalDate().toString()
+
+                    val matchPrefix = "${utcDate}T${utcHour}" // Example: 2024-07-01T04
+                    val timeSeries = timeSeriesList.find { it.time.startsWith(matchPrefix) }
+
+                    val endHour = (localHour.toInt() + 6) % 24
+                    val end = endHour.toString().padStart(2, '0')
                     DetailedForecastForDay(
-                        date = date,
-                        interval = "$intervalStart - $end",
+                        date = dateStr,
+                        interval = "$localHour - $end",
                         icon = timeSeries?.data?.next6Hours?.summary?.symbolCode ?: "N/A"
                     )
                 }
             }
-
             return forecastByDay
+
         } catch (e: Exception) {
-            Log.e("WeatherRepository", "Error at getForecastByDayIntervals: ", e)
-            throw e
+            e.printStackTrace()
+            return emptyList()
         }
     }
 
