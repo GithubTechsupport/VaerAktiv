@@ -15,7 +15,7 @@ class FavoriteLocationRepository @Inject constructor(
         val response = geocoder.getCoordinatesFromLocation(placeName)
         val name = placeName.split(",")[0]
         val addresses = response?.second
-        Log.d("FavoriteLocationRepository", "addLocationByName: $name")
+
         if (addresses != null) {
             dataSource.addLocation(
                 name,

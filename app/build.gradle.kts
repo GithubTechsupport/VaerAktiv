@@ -66,6 +66,7 @@ dependencies {
 
     // datastore
     implementation(libs.androidx.datastore.preferences.v110)
+    implementation(libs.androidx.runner)
 
 
     testImplementation(libs.junit)
