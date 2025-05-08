@@ -48,6 +48,7 @@ runtimeLivedata = "1.7.8"
 turbine = "1.0.0"
 uiTextGoogleFonts = "1.8.0"
 datastorePreferencesCoreAndroid = "1.1.5"
+runner = "1.6.2"
 
 
 [libraries]
@@ -110,6 +111,7 @@ robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectr
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 androidx-datastore-preferences-core-android = { group = "androidx.datastore", name = "datastore-preferences-core-android", version.ref = "datastorePreferencesCoreAndroid" }
+androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

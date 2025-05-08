@@ -7,35 +7,36 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeContent(
     uiState: HomeScreenUiState,
-    currentLocation: Location?,
-    deviceLocation: (Location)->Unit,
+    deviceLocation: Location?,
     activities: List<SuggestedActivities?>?,
-    viewModel: HomeScreenViewModel
+    viewModel: HomeScreenViewModel,
+    navController: NavHostController
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackGroundColor),
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyColumn(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { CurrentLocation(uiState.locationName, currentLocation, deviceLocation) }
+            item { CurrentLocation(uiState.locationName, deviceLocation, setCurrentLocation = { location -> viewModel.setCurrentLocation(location) }, navController) }
 
             item {
                 DataSection(

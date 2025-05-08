@@ -37,8 +37,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
@@ -59,8 +57,8 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 indication = null
             ){ expanded = !expanded }
             .background(
-                Container,
-                shape = RoundedCornerShape(10.dp)
+                MaterialTheme.colorScheme.background,
+                shape = RoundedCornerShape(10.dp),
             )
     ) {
         Row(
@@ -87,13 +85,13 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 Text(
                     text = "${data?.tempNow}°",
                     style = MaterialTheme.typography.displayMedium,
-                    color = OnContainer,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "${data?.uv} UV",
                     style = MaterialTheme.typography.headlineMedium,
-                    color = OnContainer,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
             }
@@ -115,7 +113,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "L: ${data?.tempMin}°",
                             style = MaterialTheme.typography.titleMedium,
-                            color = OnContainer,
+                            color = MaterialTheme.colorScheme.onBackground,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -129,7 +127,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "H: ${data?.tempMax}°",
                             style = MaterialTheme.typography.titleMedium,
-                            color = OnContainer,
+                            color = MaterialTheme.colorScheme.onBackground,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -142,7 +140,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "${data?.precipitationAmount} mm",
                             style = MaterialTheme.typography.titleMedium,
-                            color = OnContainer,
+                            color = MaterialTheme.colorScheme.onBackground,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -156,7 +154,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "${data?.windSpeed} m/s",
                             style = MaterialTheme.typography.titleMedium,
-                            color = OnContainer,
+                            color = MaterialTheme.colorScheme.onBackground,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -188,13 +186,13 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
             Text(
                 text = "Detaljer",
                 style = MaterialTheme.typography.labelLarge,
-                color = OnContainer,
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
             Icon(
                 imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = "Expand/Collapse",
-                tint = OnContainer,
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .size(20.dp)
             )

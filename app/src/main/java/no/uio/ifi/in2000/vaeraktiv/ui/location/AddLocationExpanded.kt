@@ -25,12 +25,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
 fun AddLocationExpanded(defaultPadding: Dp, viewModel: FavoriteLocationViewModel) {
@@ -48,7 +46,7 @@ fun AddLocationExpanded(defaultPadding: Dp, viewModel: FavoriteLocationViewModel
             Text(
                 text = "Legg til sted",
                 style = MaterialTheme.typography.titleLarge ,
-                color = OnContainer,
+                color = MaterialTheme.colorScheme.background,
                 textAlign = TextAlign.Left,
                 modifier = Modifier
                     .padding(defaultPadding)
@@ -60,7 +58,7 @@ fun AddLocationExpanded(defaultPadding: Dp, viewModel: FavoriteLocationViewModel
                 modifier = Modifier
                     .padding(defaultPadding)
                     .size(50.dp),
-                tint = OnContainer
+                tint = MaterialTheme.colorScheme.background
             )
         }
 
@@ -76,18 +74,18 @@ fun AddLocationExpanded(defaultPadding: Dp, viewModel: FavoriteLocationViewModel
                 Icon(
                     imageVector = Icons.Filled.Search,
                     contentDescription = "Search Icon",
-                    tint = OnContainer
+                    tint = MaterialTheme.colorScheme.primary
                 )
             },
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = OnContainer,
-                unfocusedBorderColor = OnContainer,
-                cursorColor = OnContainer,
-                focusedLabelColor = OnContainer,
-                unfocusedLabelColor = OnContainer,
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White
+                focusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                cursorColor = MaterialTheme.colorScheme.primary,
+                focusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                focusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary
             ),
             modifier = Modifier
                 .padding(defaultPadding)

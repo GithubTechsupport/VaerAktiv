@@ -10,6 +10,9 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
@@ -48,7 +51,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             VaerAktivTheme {
-                Navbar(favoriteLocationViewModel, homeScreenViewModel, mapScreenViewModel, preferencesViewModel)
+                val navController: NavHostController = rememberNavController()
+                Navbar(
+                    favoriteLocationViewModel,
+                    homeScreenViewModel,
+                    mapScreenViewModel,
+                    preferencesViewModel,
+                    navController
+                )
             }
         }
     }

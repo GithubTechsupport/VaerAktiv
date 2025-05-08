@@ -25,7 +25,6 @@ import javax.inject.Named
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.seconds
 
-
 abstract class AiClient {
     val prompt = Prompt()
     abstract suspend fun getSuggestionsForOneDay(forecastData: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, preferences: String, exclusion: String): String?

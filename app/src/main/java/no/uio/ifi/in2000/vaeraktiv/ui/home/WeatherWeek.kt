@@ -29,8 +29,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.model.ui.getDayOfWeek
 import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.Container
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
@@ -48,7 +46,7 @@ fun WeatherWeek(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
             .background(
-                color = Container,
+                color = MaterialTheme.colorScheme.onBackground,
                 shape = RoundedCornerShape(cornerDp)
             )
             .fillMaxWidth()
@@ -57,7 +55,7 @@ fun WeatherWeek(
         Text(
             text = "Kommende uke",
             style = MaterialTheme.typography.headlineSmall,
-            color = OnContainer,
+            color = MaterialTheme.colorScheme.background,
             textAlign = TextAlign.Start,
             modifier = Modifier
                 .padding(start = 8.dp)
@@ -68,7 +66,7 @@ fun WeatherWeek(
                 .padding(top = 2.dp)
                 .padding(horizontal = 8.dp)
                 .height(1.dp)
-                .background(OnContainer)
+                .background(MaterialTheme.colorScheme.onBackground)
         )
 
         data.take(7).forEachIndexed { index, day ->
@@ -89,7 +87,7 @@ fun WeatherWeek(
                         .fillMaxWidth()
                         .padding(top = 4.dp)
                 ){
-                    // Viser værvarsel for dagen
+                    // Shows weather for day
                     DisplayIntervalSymbols(uiState.dayIntervals[index])
                     Spacer(modifier = Modifier.padding(4.dp))
                     DataSection(
@@ -118,7 +116,7 @@ fun WeatherWeek(
                     .padding(top = 2.dp)
                     .padding(horizontal = 8.dp)
                     .height(1.dp)
-                    .background(OnContainer)
+                    .background(MaterialTheme.colorScheme.background)
             )
         }
     }

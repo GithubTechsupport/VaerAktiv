@@ -64,6 +64,11 @@ class WeatherRepositoryDefault @Inject constructor(
     override val activities: LiveData<List<SuggestedActivities?>?> get() = _activities
 
     override fun setCurrentLocation(location: Location) {
+        Log.d("setCurrentLocation", "setCurrentLocation called with location: $location")
+        if (location == _currentLocation.value) {
+            Log.d("setCurrentLocation", "Location is the same as current location, not updating.")
+            return
+        }
         _currentLocation.value = location
     }
 
@@ -353,6 +358,10 @@ class WeatherRepositoryDefault @Inject constructor(
             this[dayNr] = updatedDay
         }
         _activities.value = updated
+    }
+
+    override fun resetActivities() {
+        _activities.value = List(8) { null }
     }
 
     @SuppressLint("DefaultLocale")
