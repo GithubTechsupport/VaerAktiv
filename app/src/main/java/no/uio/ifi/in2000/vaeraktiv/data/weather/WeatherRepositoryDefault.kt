@@ -215,7 +215,7 @@ class WeatherRepositoryDefault @Inject constructor(
                 .first
                 .drop(1)
                 .dropLast(1)
-
+            
             val utcIntervals = listOf("00", "06", "12", "18")
             val osloZone = ZoneId.of("Europe/Oslo") // Kan byttes med location?
             val utcZone = ZoneId.of("UTC")
