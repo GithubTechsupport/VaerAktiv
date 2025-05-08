@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
 fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentLocation: (Location) -> Unit, navController: NavController) { // navn på sted, devicelocation
@@ -56,7 +55,7 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
             Icon(
                 imageVector = Icons.Default.Build,
                 contentDescription = "Settings",
-                tint = OnContainer,
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .padding(vertical = 8.dp)
                     .clickable { navController.navigate("settings") }
@@ -79,7 +78,7 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                 Text(
                     text = locationName,
                     style = MaterialTheme.typography.headlineLarge,
-                    color = OnContainer,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
                     fontSize = 30.sp,
                     maxLines = 1,
@@ -96,7 +95,7 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                         Text(
                             text = "Din posisjon",
                             fontSize = 20.sp,
-                            color = OnContainer,
+                            color = MaterialTheme.colorScheme.onBackground,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -104,7 +103,7 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                             painter = painterResource(id = R.drawable.location),
                             contentDescription = "Location",
                             modifier = Modifier.size(20.dp).padding(end = 8.dp),
-                            tint = OnContainer
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
@@ -116,7 +115,7 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
             .padding(horizontal = 50.dp)
             .height(1.dp)
             .background(
-                color = OnContainer
+                color = MaterialTheme.colorScheme.onBackground
             )
         )
     }

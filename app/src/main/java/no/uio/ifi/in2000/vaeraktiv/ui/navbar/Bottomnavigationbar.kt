@@ -1,13 +1,14 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.navbar
 
+import androidx.compose.foundation.background
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -45,6 +46,10 @@ fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> St
                     .weight(1f)
                     .fillMaxHeight()
                     .padding(4.dp)
+                    .background(
+                        color = if (selected) MaterialTheme.colorScheme.background else Color.Transparent,
+                        shape = RoundedCornerShape(10.dp)
+                        )
                     .clickable {
                         if (selected) return@clickable
                         navController.navigate(route) {
@@ -55,11 +60,13 @@ fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> St
                     },
                 contentAlignment = Alignment.Center
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
                     Icon(
                         painter = painterResource(id = iconId),
                         contentDescription = route,
-                        tint = if (selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.background
+                        tint = if (selected) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.background
                     )
                 }
             }

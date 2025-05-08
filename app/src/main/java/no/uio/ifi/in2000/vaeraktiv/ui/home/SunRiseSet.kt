@@ -24,7 +24,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
 fun SunRiseSet(sunData : List<String>) {
@@ -89,7 +88,7 @@ fun SunRiseSet(sunData : List<String>) {
                 modifier = Modifier
                     .height(60.dp)
                     .width(2.dp)
-                    .background(OnContainer)
+                    .background(MaterialTheme.colorScheme.onBackground)
                     .align(Alignment.CenterVertically)
                     .padding(horizontal = 2.dp)
             )
