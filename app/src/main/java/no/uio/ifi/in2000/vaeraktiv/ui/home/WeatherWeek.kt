@@ -29,7 +29,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.model.ui.getDayOfWeek
 import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
@@ -67,7 +66,7 @@ fun WeatherWeek(
                 .padding(top = 2.dp)
                 .padding(horizontal = 8.dp)
                 .height(1.dp)
-                .background(OnContainer)
+                .background(MaterialTheme.colorScheme.onBackground)
         )
 
         data.take(7).forEachIndexed { index, day ->

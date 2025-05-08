@@ -29,7 +29,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
 fun AddLocationExpanded(defaultPadding: Dp, viewModel: FavoriteLocationViewModel) {
@@ -80,11 +79,11 @@ fun AddLocationExpanded(defaultPadding: Dp, viewModel: FavoriteLocationViewModel
             },
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = OnContainer,
-                unfocusedBorderColor = OnContainer,
+                focusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
                 cursorColor = MaterialTheme.colorScheme.primary,
-                focusedLabelColor = OnContainer,
-                unfocusedLabelColor = OnContainer,
+                focusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,
                 focusedContainerColor = MaterialTheme.colorScheme.primary,
                 unfocusedContainerColor = MaterialTheme.colorScheme.primary
             ),

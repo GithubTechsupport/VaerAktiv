@@ -28,8 +28,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +40,7 @@ fun SettingsScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackGroundColor)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         IconButton(
             onClick = { navController.popBackStack("home", false) },
@@ -51,7 +49,7 @@ fun SettingsScreen(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back",
-                tint = OnContainer,
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .padding(top = 8.dp).padding(start = 8.dp)
                     .size(35.dp)
