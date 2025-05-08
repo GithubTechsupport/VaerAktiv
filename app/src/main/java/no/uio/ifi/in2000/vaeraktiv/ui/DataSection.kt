@@ -2,7 +2,7 @@ package no.uio.ifi.in2000.vaeraktiv.ui
 
 import androidx.compose.runtime.Composable
 
-// Klassen er en gjenbrukbar komponent som kan brukes der man laster data i UI'en.
+// The class is a reusable component that can be used where data is loaded into the UI.
 @Composable
 fun <T> DataSection(
     data: T?,

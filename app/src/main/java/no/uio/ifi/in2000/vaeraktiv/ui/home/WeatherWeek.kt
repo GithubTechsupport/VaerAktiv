@@ -87,7 +87,7 @@ fun WeatherWeek(
                         .fillMaxWidth()
                         .padding(top = 4.dp)
                 ){
-                    // Viser værvarsel for dagen
+                    // Shows weather for day
                     DisplayIntervalSymbols(uiState.dayIntervals[index])
                     Spacer(modifier = Modifier.padding(4.dp))
                     DataSection(

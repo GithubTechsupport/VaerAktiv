@@ -11,11 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,21 +41,20 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
             .padding(8.dp)
-            .padding(top = 8.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clipToBounds()
-            //verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Default.Build,
+                imageVector = Icons.Default.Settings,
                 contentDescription = "Settings",
                 tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .padding(vertical = 8.dp)
                     .clickable { navController.navigate("settings") }
+                    .size(48.dp)
             )
 
             Column(
@@ -69,7 +65,6 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                     .clickable {
                         if (locationName != deviceLocation?.addressName) expanded = !expanded
                     }
-                    //.padding(horizontal = 16.dp)
             ) {
                 Log.d(
                     "CurrentLocation",
@@ -80,7 +75,7 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
-                    fontSize = 30.sp,
+                    fontSize = 48.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

@@ -38,6 +38,7 @@ fun SunRiseSet(sunData : List<String>) {
                 MaterialTheme.colorScheme.primary,
                 shape = RoundedCornerShape(cornerDp))
             .fillMaxWidth()
+            .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(10.dp))
     ) {
         Row (
             modifier = Modifier
@@ -65,7 +66,7 @@ fun SunRiseSet(sunData : List<String>) {
                             text = "Sol opp",
                             style = MaterialTheme.typography.labelSmall,
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                     Spacer(modifier = Modifier.width(12.dp))
@@ -78,7 +79,7 @@ fun SunRiseSet(sunData : List<String>) {
                             text = sunRise,
                             style = MaterialTheme.typography.headlineMedium,
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
@@ -112,7 +113,7 @@ fun SunRiseSet(sunData : List<String>) {
                             text = "Sol ned",
                             style = MaterialTheme.typography.labelSmall,
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                     Spacer(modifier = Modifier.width(12.dp))
@@ -125,7 +126,7 @@ fun SunRiseSet(sunData : List<String>) {
                             text = sunSet,
                             style = MaterialTheme.typography.headlineMedium,
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
