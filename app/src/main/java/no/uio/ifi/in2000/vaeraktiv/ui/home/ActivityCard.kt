@@ -69,7 +69,7 @@ fun ActivityCard(
                 )
             }
             Row {
-                // Beskrivelse under
+                // Description under
                 Text(
                     text = activity.activityDesc,
                     style = MaterialTheme.typography.bodyLarge,

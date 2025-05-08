@@ -56,7 +56,7 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                                     Color.White,
                                     shape = RoundedCornerShape(10.dp)
                                 )
-                                .border(1.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(10.dp)),
+                                .border(1.dp, MaterialTheme.colorScheme.onBackground, shape = RoundedCornerShape(10.dp)),
                             contentAlignment = Alignment.Center
                         ) {
                             Column(
@@ -81,21 +81,21 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                                     text = "${item.temp}°C", // Assumes you have `temperature` in ForecastForHour
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
-                                    color = MaterialTheme.colorScheme.primary
+                                    color = MaterialTheme.colorScheme.onBackground
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = "${item.precipitationAmount}mm", // Assumes you have `temperature` in ForecastForHour
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
-                                    color = MaterialTheme.colorScheme.primary
+                                    color = MaterialTheme.colorScheme.onBackground
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = "${item.windSpeed}m/s", // Assumes you have `temperature` in ForecastForHour
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
-                                    color = MaterialTheme.colorScheme.primary
+                                    color = MaterialTheme.colorScheme.onBackground
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(

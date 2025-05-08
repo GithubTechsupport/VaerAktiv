@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -34,7 +33,6 @@ import androidx.compose.ui.unit.sp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
 
-// Her kan vi bygge iconId på en bedre måte etter mvp
 @Composable
 fun DisplayWarning(data: List<AlertData>) {
     if (data.isNotEmpty()) {
@@ -45,7 +43,7 @@ fun DisplayWarning(data: List<AlertData>) {
         Column(
             modifier = Modifier
                 .background(
-                    Color(0xFFFFD600),
+                    MaterialTheme.colorScheme.onSecondary,
                     shape = RoundedCornerShape(cornerDp)
                 )
                 .clickable { isExpanded = !isExpanded }
@@ -67,7 +65,7 @@ fun DisplayWarning(data: List<AlertData>) {
                 Text(
                     text = "Advarsel",
                     style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     textAlign = TextAlign.Center,
                 )
             }

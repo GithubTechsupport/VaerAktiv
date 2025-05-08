@@ -1,7 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,7 +30,7 @@ fun HomeScreen(
     isOnline: Boolean,
     viewModel: HomeScreenViewModel,
     navController: NavHostController
-) { // Manifest.xml. Ternger kanskje ikke resizable linjen
+) {
     val uiState by viewModel.homeScreenUiState.collectAsState()
     val currentLocation by viewModel.currentLocation.observeAsState()
     val deviceLocation by viewModel.deviceLocation.observeAsState()
