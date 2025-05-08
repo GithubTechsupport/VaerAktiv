@@ -74,7 +74,7 @@ fun AddLocationExpanded(defaultPadding: Dp, viewModel: FavoriteLocationViewModel
                 Icon(
                     imageVector = Icons.Filled.Search,
                     contentDescription = "Search Icon",
-                    tint = MaterialTheme.colorScheme.primaryContainer
+                    tint = MaterialTheme.colorScheme.primary
                 )
             },
             singleLine = true,
@@ -84,8 +84,8 @@ fun AddLocationExpanded(defaultPadding: Dp, viewModel: FavoriteLocationViewModel
                 cursorColor = MaterialTheme.colorScheme.primary,
                 focusedLabelColor = MaterialTheme.colorScheme.onBackground,
                 unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,
-                focusedContainerColor = MaterialTheme.colorScheme.primary,
-                unfocusedContainerColor = MaterialTheme.colorScheme.primary
+                focusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary
             ),
             modifier = Modifier
                 .padding(defaultPadding)
