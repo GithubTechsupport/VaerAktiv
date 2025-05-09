@@ -81,28 +81,28 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                                     text = "${item.temp}°C", // Assumes you have `temperature` in ForecastForHour
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
-                                    color = MaterialTheme.colorScheme.onBackground
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = "${item.precipitationAmount}mm", // Assumes you have `temperature` in ForecastForHour
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
-                                    color = MaterialTheme.colorScheme.onBackground
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = "${item.windSpeed}m/s", // Assumes you have `temperature` in ForecastForHour
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
-                                    color = MaterialTheme.colorScheme.onBackground
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = "${item.uv} UV", // Assumes you have `temperature` in ForecastForHour
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
-                                    color = MaterialTheme.colorScheme.onBackground
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             }
                         }

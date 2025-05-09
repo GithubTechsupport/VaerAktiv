@@ -73,7 +73,7 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                 Text(
                     text = locationName,
                     style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
                     fontSize = 48.sp,
                     maxLines = 1,
@@ -90,7 +90,7 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                         Text(
                             text = "Din posisjon",
                             fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.onBackground,
+                            color = MaterialTheme.colorScheme.primary,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -98,7 +98,7 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                             painter = painterResource(id = R.drawable.location),
                             contentDescription = "Location",
                             modifier = Modifier.size(20.dp).padding(end = 8.dp),
-                            tint = MaterialTheme.colorScheme.onBackground
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 }

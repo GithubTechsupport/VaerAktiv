@@ -85,13 +85,13 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 Text(
                     text = "${data?.tempNow}°",
                     style = MaterialTheme.typography.displayMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "${data?.uv} UV",
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center
                 )
             }
@@ -113,7 +113,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "L: ${data?.tempMin}°",
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
+                            color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -127,7 +127,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "H: ${data?.tempMax}°",
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
+                            color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -140,7 +140,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "${data?.precipitationAmount} mm",
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
+                            color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -154,7 +154,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "${data?.windSpeed} m/s",
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
+                            color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -186,7 +186,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
             Text(
                 text = "Detaljer",
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center
             )
             Icon(

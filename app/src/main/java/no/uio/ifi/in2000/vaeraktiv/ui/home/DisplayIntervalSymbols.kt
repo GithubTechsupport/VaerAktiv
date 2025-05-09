@@ -49,8 +49,7 @@ fun DisplayIntervalSymbols(data: List<DetailedForecastForDay>) {
                 modifier = Modifier
                     .weight(1f)
                     .aspectRatio(1f)
-                    .background(Color.White, shape = RoundedCornerShape(10.dp))
-                    .border(1.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(10.dp)),
+                    .background(Color.White, shape = RoundedCornerShape(10.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Column(

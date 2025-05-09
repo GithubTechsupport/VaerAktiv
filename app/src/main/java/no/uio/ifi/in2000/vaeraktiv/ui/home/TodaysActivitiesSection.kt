@@ -34,7 +34,7 @@ fun TodaysActivitiesSection(
         Text(
             text = "I dag",
             style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.background,
+            color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 4.dp)
         )
 

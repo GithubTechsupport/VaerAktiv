@@ -43,7 +43,7 @@ fun DisplayWarning(data: List<AlertData>) {
         Column(
             modifier = Modifier
                 .background(
-                    MaterialTheme.colorScheme.onSecondary,
+                    MaterialTheme.colorScheme.secondary,
                     shape = RoundedCornerShape(cornerDp)
                 )
                 .clickable { isExpanded = !isExpanded }
@@ -77,7 +77,7 @@ fun DisplayWarning(data: List<AlertData>) {
                     .padding(top = 4.dp)
                     .padding(horizontal = 16.dp)
                     .height(1.dp)
-                    .background(color = MaterialTheme.colorScheme.primary)
+                    .background(color = MaterialTheme.colorScheme.onPrimary)
                 )
                 Column (
                     modifier = Modifier
@@ -108,14 +108,14 @@ fun DisplayWarning(data: List<AlertData>) {
                                     Text(
                                         text = type,
                                         style = MaterialTheme.typography.bodyLarge,
-                                        color = MaterialTheme.colorScheme.primary,
+                                        color = MaterialTheme.colorScheme.onPrimary,
                                         textAlign = TextAlign.Center,
                                         fontSize = 18.sp
                                     )
                                     Text(
                                         text = "Instruksjoner: $instruct",
                                         style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.primary,
+                                        color = MaterialTheme.colorScheme.onPrimary,
                                         textAlign = TextAlign.Start
                                     )
                                 }
@@ -127,7 +127,7 @@ fun DisplayWarning(data: List<AlertData>) {
                     Text(
                         text = "Kontaktinformasjon: $contactInfo",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         textAlign = TextAlign.Center
                     )
                 }

@@ -66,7 +66,7 @@ fun SunRiseSet(sunData : List<String>) {
                             text = "Sol opp",
                             style = MaterialTheme.typography.labelSmall,
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                     Spacer(modifier = Modifier.width(12.dp))
@@ -79,7 +79,7 @@ fun SunRiseSet(sunData : List<String>) {
                             text = sunRise,
                             style = MaterialTheme.typography.headlineMedium,
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
@@ -113,7 +113,7 @@ fun SunRiseSet(sunData : List<String>) {
                             text = "Sol ned",
                             style = MaterialTheme.typography.labelSmall,
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                     Spacer(modifier = Modifier.width(12.dp))
@@ -126,7 +126,7 @@ fun SunRiseSet(sunData : List<String>) {
                             text = sunSet,
                             style = MaterialTheme.typography.headlineMedium,
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }

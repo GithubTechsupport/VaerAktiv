@@ -73,7 +73,7 @@ fun ActivityCard(
                 Text(
                     text = activity.activityDesc,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSecondary,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(top = 8.dp),
                     overflow = TextOverflow.Ellipsis
                 )

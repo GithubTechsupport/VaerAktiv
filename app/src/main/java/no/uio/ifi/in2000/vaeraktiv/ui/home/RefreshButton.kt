@@ -41,7 +41,7 @@ fun RefreshButton(
     Icon(
         imageVector = Icons.Default.Refresh,
         contentDescription = "Refresh button/Get new activity",
-        tint = MaterialTheme.colorScheme.onBackground,
+        tint = MaterialTheme.colorScheme.primary,
         modifier = Modifier
             .size(48.dp)
             .clickable(enabled = enabled) { onClick() }
