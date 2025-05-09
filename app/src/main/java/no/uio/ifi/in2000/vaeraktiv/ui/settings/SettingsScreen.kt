@@ -68,11 +68,11 @@ fun SettingsScreen(
                 Text(
                     "Innstillinger",
                     style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.primary,
                 )
             }
             item {
-                SectionHeader("Hvilke aktiviteter liker du?", MaterialTheme.colorScheme.secondary)
+                SectionHeader("Hvilke aktiviteter liker du?", MaterialTheme.colorScheme.primary)
             }
             items(preferences.take(5)) { preference ->
                 Activity(
@@ -81,7 +81,7 @@ fun SettingsScreen(
                 )
             }
             item {
-                SectionHeader("Sosial eller alene?", MaterialTheme.colorScheme.secondary)
+                SectionHeader("Sosial eller alene?", MaterialTheme.colorScheme.primary)
             }
             items(preferences.slice(5..6)) { preference ->
                 Activity(
@@ -90,7 +90,7 @@ fun SettingsScreen(
                 )
             }
             item {
-                SectionHeader("Vil du bli tilbudt aktiviteter som koster penger?", MaterialTheme.colorScheme.secondary)
+                SectionHeader("Vil du bli tilbudt aktiviteter som koster penger?", MaterialTheme.colorScheme.primary)
             }
             item {
                 Activity(

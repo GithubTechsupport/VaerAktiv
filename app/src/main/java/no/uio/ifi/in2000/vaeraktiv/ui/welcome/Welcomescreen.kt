@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.welcome
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
@@ -34,12 +33,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.VaerAktivTheme
 
 @Composable
 fun WelcomeScreen(onStartClick: () -> Unit = {}) {
@@ -85,7 +82,7 @@ fun WelcomeText() {
         style = TextStyle(
             fontSize = 42.sp,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center
         ),
         modifier = Modifier.padding(bottom = 8.dp)
@@ -98,7 +95,7 @@ fun SlogeText() {
         text = "Aktivitetstips generert spesifikt for deg og dine interesser",
         fontSize = 20.sp,
         fontWeight = FontWeight.Medium,
-        color = MaterialTheme.colorScheme.onBackground,
+        color = MaterialTheme.colorScheme.primary,
         textAlign = TextAlign.Center,
         modifier = Modifier.padding(horizontal = 16.dp)
     )
@@ -109,7 +106,7 @@ fun MascotWithSpeech() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "Hei mitt navn er Simon! Klar for å komme i gang?",
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.primary,
             fontStyle = FontStyle.Italic,
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
@@ -123,7 +120,7 @@ fun MascotWithSpeech() {
 fun MascotSaysHi() {
     Image(
         painter = painterResource(id = R.drawable.simon_mascot),
-        contentDescription = "Maskot",
+        contentDescription = "Mascot",
         modifier = Modifier
             .padding(bottom = 16.dp)
     )
@@ -152,11 +149,3 @@ fun StartButton(onClick: () -> Unit) {
     }
 }
 
-@Preview(name = "Light Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun ShowWelcomeScreenPreview() {
-    VaerAktivTheme {
-        WelcomeScreen()
-    }
-}

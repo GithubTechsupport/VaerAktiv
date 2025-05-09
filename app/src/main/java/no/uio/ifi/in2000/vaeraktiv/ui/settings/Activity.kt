@@ -42,13 +42,14 @@ fun Activity(
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary, // White icon when enabled
+                tint = MaterialTheme.colorScheme.onPrimary, // White icon when enabled
                 modifier = Modifier.padding(end = 8.dp)
             )
         }
         Text(
             text = activity.desc,
             style = MaterialTheme.typography.bodyLarge,
+            color = if (activity.isEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary,
             modifier = Modifier.weight(1f)
         )
     }
