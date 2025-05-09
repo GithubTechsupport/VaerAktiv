@@ -7,23 +7,23 @@ import androidx.compose.runtime.Composable
 
 
 private val DarkColorScheme = darkColorScheme(
-    background = BackgroundDark,                   // Bakgrunn for velkomstskjerm
-    onBackground = OnBackgroundDark,               // Tekst på bakgrunn
-    primary = MonochromeDark,
-    onPrimary = MonochromeLight,
-    primaryContainer = MonochromeDark,// Rød farge inspirert av pannebånd
+    background = BackgroundDark,
+    onBackground = OnBackgroundDark,
+    primary = MonochromeLight,
+    onPrimary = MonochromeDark,
+    primaryContainer = MonochromeDark,
     secondary = OnSecondaryBackgroundDark,
-    onSecondary = OnSecondaryBackground,      // Farge rundt bokser
+    onSecondary = OnSecondaryBackground,
 )
 
 private val LightColorScheme = lightColorScheme(
-    background = BackgroundLight,                  // Bakgrunn for velkomstskjerm
-    onBackground = OnBackground,                   // Tekst på bakgrunn
+    background = BackgroundLight,
+    onBackground = OnBackground,
     primary = MonochromeDark,
     onPrimary = MonochromeLight,
-    primaryContainer = MonochromeLight,// Rød farge inspirert av pannebånd
+    primaryContainer = MonochromeLight,
     secondary = OnSecondaryBackground,
-    onSecondary = OnSecondaryBackground,          // Farge rundt bokser
+    onSecondary = OnSecondaryBackgroundDark,
 )
 
 
