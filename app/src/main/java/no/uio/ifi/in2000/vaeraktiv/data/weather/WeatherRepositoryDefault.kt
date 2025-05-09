@@ -64,6 +64,11 @@ class WeatherRepositoryDefault @Inject constructor(
     override val activities: LiveData<List<SuggestedActivities?>?> get() = _activities
 
     override fun setCurrentLocation(location: Location) {
+        Log.d("setCurrentLocation", "setCurrentLocation called with location: $location")
+        if (location == _currentLocation.value) {
+            Log.d("setCurrentLocation", "Location is the same as current location, not updating.")
+            return
+        }
         _currentLocation.value = location
     }
 
@@ -205,31 +210,42 @@ class WeatherRepositoryDefault @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getForecastByDayIntervals(location: Location): List<List<DetailedForecastForDay>> {
         try {
-            val response = locationForecastRepository.getForecastByDay(location.lat, location.lon).first.drop(1).dropLast(1)
-
-            val intervals = listOf("02", "08", "14", "20") // tilsvarende tidspunkter i UTC vil ha varsel for de neste 6 timene 7 dager fremover.
-            val osloZone = ZoneId.of("Europe/Oslo")
+            val response = locationForecastRepository
+                .getForecastByDay(location.lat, location.lon)
+                .first
+                .drop(1)
+                .dropLast(1)
+            
+            val utcIntervals = listOf("00", "06", "12", "18")
+            val osloZone = ZoneId.of("Europe/Oslo") // Kan byttes med location?
+            val utcZone = ZoneId.of("UTC")
 
             val forecastByDay = response.map { (dateStr, timeSeriesList) ->
-                val localDate = LocalDate.parse(dateStr)
+                val utcDate = LocalDate.parse(dateStr)
 
-                intervals.map { localHour ->
-                    val localDateTime = ZonedDateTime.of(localDate, LocalTime.of(localHour.toInt(), 0), osloZone)
-                    val utcHour = localDateTime.withZoneSameInstant(ZoneId.of("UTC")).hour.toString().padStart(2, '0')
-                    val utcDate = localDateTime.withZoneSameInstant(ZoneId.of("UTC")).toLocalDate().toString()
+                utcIntervals.map { utcHourStr ->
+                    val utcHour = utcHourStr.toInt()
 
-                    val matchPrefix = "${utcDate}T${utcHour}" // Example: 2024-07-01T04
+                    val matchPrefix = "${dateStr}T$utcHourStr"
                     val timeSeries = timeSeriesList.find { it.time.startsWith(matchPrefix) }
 
-                    val endHour = (localHour.toInt() + 6) % 24
-                    val end = endHour.toString().padStart(2, '0')
+                    val startUtcDateTime = ZonedDateTime.of(utcDate, LocalTime.of(utcHour, 0), utcZone)
+                    val endUtcDateTime = startUtcDateTime.plusHours(6)
+
+                    val localStart = startUtcDateTime.withZoneSameInstant(osloZone)
+                    val localEnd = endUtcDateTime.withZoneSameInstant(osloZone)
+
+                    val intervalDisplay = "${localStart.hour.toString().padStart(2, '0')} - ${localEnd.hour.toString().padStart(2, '0')}"
+
                     DetailedForecastForDay(
                         date = dateStr,
-                        interval = "$localHour - $end",
+                        interval = intervalDisplay,
                         icon = timeSeries?.data?.next6Hours?.summary?.symbolCode ?: "N/A"
                     )
                 }
             }
+
+            Log.d("WeatherRepository", "forecastByDay: $forecastByDay")
             return forecastByDay
 
         } catch (e: Exception) {
@@ -237,6 +253,7 @@ class WeatherRepositoryDefault @Inject constructor(
             return emptyList()
         }
     }
+
 
 
     @RequiresApi(Build.VERSION_CODES.O) // krever API versjon 26
@@ -341,6 +358,10 @@ class WeatherRepositoryDefault @Inject constructor(
             this[dayNr] = updatedDay
         }
         _activities.value = updated
+    }
+
+    override fun resetActivities() {
+        _activities.value = List(8) { null }
     }
 
     @SuppressLint("DefaultLocale")

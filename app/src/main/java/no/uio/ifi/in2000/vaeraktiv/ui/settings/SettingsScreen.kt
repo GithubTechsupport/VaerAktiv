@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.settings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,8 +28,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.BackGroundColor
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,21 +40,19 @@ fun SettingsScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackGroundColor)
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        IconButton(
-            onClick = { navController.popBackStack("home", false) },
-            modifier = Modifier.size(48.dp).align(Alignment.TopStart)
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back",
-                tint = OnContainer,
-                modifier = Modifier
-                    .padding(top = 8.dp).padding(start = 8.dp)
-                    .size(35.dp)
-            )
-        }
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = "Back",
+            tint = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier
+                .size(48.dp)
+                .clickable(
+                    enabled = true,
+                    onClick = { navController.popBackStack("home", false) }
+                )
+        )
 
         LazyColumn(
             modifier = Modifier
@@ -72,11 +68,11 @@ fun SettingsScreen(
                 Text(
                     "Innstillinger",
                     style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.primary,
                 )
             }
             item {
-                SectionHeader("Hvilke aktiviteter liker du?", MaterialTheme.colorScheme.secondary)
+                SectionHeader("Hvilke aktiviteter liker du?", MaterialTheme.colorScheme.primary)
             }
             items(preferences.take(5)) { preference ->
                 Activity(
@@ -85,7 +81,7 @@ fun SettingsScreen(
                 )
             }
             item {
-                SectionHeader("Sosial eller alene?", MaterialTheme.colorScheme.secondary)
+                SectionHeader("Sosial eller alene?", MaterialTheme.colorScheme.primary)
             }
             items(preferences.slice(5..6)) { preference ->
                 Activity(
@@ -94,7 +90,7 @@ fun SettingsScreen(
                 )
             }
             item {
-                SectionHeader("Vil du bli tilbudt aktiviteter som koster penger?", MaterialTheme.colorScheme.secondary)
+                SectionHeader("Vil du bli tilbudt aktiviteter som koster penger?", MaterialTheme.colorScheme.primary)
             }
             item {
                 Activity(

@@ -75,21 +75,21 @@ fun MascotWithEndingSpeech() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "Supert! Du er klar til å sette i gang eventyret. Takk for at du delte interessene dine – nå skal jeg finne aktiviteter som passer perfekt for deg!",
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.primary,
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
         Image(
             painter = painterResource(id = R.drawable.simon_mascot),
-            contentDescription = "Maskot",
+            contentDescription = "Mascot",
             modifier = Modifier
                 .padding(vertical = 16.dp)
                 .size(100.dp)
         )
         Text(
             text = "Vil du endre preferansene dine senere? Det er enkelt – bare gå til innstillingene via navigasjonsbaren nederst.",
-            color = MaterialTheme.colorScheme.onBackground, // darkGreen
+            color = MaterialTheme.colorScheme.primary,
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)

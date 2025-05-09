@@ -33,7 +33,7 @@ fun HomeContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyColumn(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item { CurrentLocation(uiState.locationName, deviceLocation, setCurrentLocation = { location -> viewModel.setCurrentLocation(location) }, navController) }

@@ -11,12 +11,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @Composable
 fun RefreshButton(
@@ -41,7 +41,7 @@ fun RefreshButton(
     Icon(
         imageVector = Icons.Default.Refresh,
         contentDescription = "Refresh button/Get new activity",
-        tint = OnContainer,
+        tint = MaterialTheme.colorScheme.primary,
         modifier = Modifier
             .size(48.dp)
             .clickable(enabled = enabled) { onClick() }

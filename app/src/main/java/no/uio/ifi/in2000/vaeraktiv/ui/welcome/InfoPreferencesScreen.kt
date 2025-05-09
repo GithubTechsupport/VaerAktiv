@@ -84,7 +84,7 @@ fun InfoPeferencesScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                     item {
-                        SectionHeader("Hvilke aktiviteter liker du?", MaterialTheme.colorScheme.secondary)
+                        SectionHeader("Hvilke aktiviteter liker du?", MaterialTheme.colorScheme.primary)
                     }
                     items(preferences.take(5)) { preference ->
                         Activity(
@@ -93,7 +93,7 @@ fun InfoPeferencesScreen(
                         )
                     }
                     item {
-                        SectionHeader("Sosial eller alene?", MaterialTheme.colorScheme.secondary)
+                        SectionHeader("Sosial eller alene?", MaterialTheme.colorScheme.primary)
                     }
                     items(preferences.slice(5..6)) { preference ->
                         Activity(
@@ -102,7 +102,7 @@ fun InfoPeferencesScreen(
                         )
                     }
                     item {
-                        SectionHeader("Vil du bli tilbudt aktiviteter som koster penger?", MaterialTheme.colorScheme.secondary)
+                        SectionHeader("Vil du bli tilbudt aktiviteter som koster penger?", MaterialTheme.colorScheme.primary)
                     }
                     item {
                         Activity(
@@ -122,7 +122,7 @@ fun MascotIntroSpeech() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "Før vi setter i gang, vil jeg gjerne vite hva du foretrekker og hva du liker å gjøre når du er fysisk aktiv.",
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.primary,
             fontStyle = FontStyle.Italic,
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
@@ -130,7 +130,7 @@ fun MascotIntroSpeech() {
         )
         Image(
             painter = painterResource(id = R.drawable.simon_mascot),
-            contentDescription = "Maskot",
+            contentDescription = "Mascot",
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .size(100.dp)
@@ -167,13 +167,13 @@ fun ContinueButton(onClick: () -> Unit) {
         Text(
             text = "Fortsett",
             fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.onPrimary
         )
         Spacer(modifier = Modifier.width(8.dp))
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.onPrimary
         )
     }
 }

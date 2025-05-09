@@ -57,8 +57,8 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 indication = null
             ){ expanded = !expanded }
             .background(
-                MaterialTheme.colorScheme.onBackground,
-                shape = RoundedCornerShape(10.dp)
+                MaterialTheme.colorScheme.background,
+                shape = RoundedCornerShape(10.dp),
             )
     ) {
         Row(
@@ -85,13 +85,13 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 Text(
                     text = "${data?.tempNow}°",
                     style = MaterialTheme.typography.displayMedium,
-                    color = MaterialTheme.colorScheme.background,
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "${data?.uv} UV",
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.primaryContainer,
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center
                 )
             }
@@ -113,7 +113,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "L: ${data?.tempMin}°",
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.primaryContainer,
+                            color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -127,7 +127,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "H: ${data?.tempMax}°",
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.primaryContainer,
+                            color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -140,7 +140,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "${data?.precipitationAmount} mm",
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.primaryContainer,
+                            color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -154,7 +154,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         Text(
                             text = "${data?.windSpeed} m/s",
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.primaryContainer,
+                            color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -186,13 +186,13 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
             Text(
                 text = "Detaljer",
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.background,
+                color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center
             )
             Icon(
                 imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = "Expand/Collapse",
-                tint = MaterialTheme.colorScheme.background,
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .size(20.dp)
             )

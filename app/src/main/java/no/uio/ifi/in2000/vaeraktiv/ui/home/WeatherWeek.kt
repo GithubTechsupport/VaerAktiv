@@ -29,7 +29,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ui.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.model.ui.getDayOfWeek
 import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
-import no.uio.ifi.in2000.vaeraktiv.ui.theme.OnContainer
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
@@ -55,8 +54,8 @@ fun WeatherWeek(
     ) {
         Text(
             text = "Kommende uke",
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.background,
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onPrimary,
             textAlign = TextAlign.Start,
             modifier = Modifier
                 .padding(start = 8.dp)
@@ -67,7 +66,7 @@ fun WeatherWeek(
                 .padding(top = 2.dp)
                 .padding(horizontal = 8.dp)
                 .height(1.dp)
-                .background(OnContainer)
+                .background(MaterialTheme.colorScheme.onBackground)
         )
 
         data.take(7).forEachIndexed { index, day ->
@@ -88,7 +87,7 @@ fun WeatherWeek(
                         .fillMaxWidth()
                         .padding(top = 4.dp)
                 ){
-                    // Viser værvarsel for dagen
+                    // Shows weather for day
                     DisplayIntervalSymbols(uiState.dayIntervals[index])
                     Spacer(modifier = Modifier.padding(4.dp))
                     DataSection(
