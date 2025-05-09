@@ -33,7 +33,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ui.getDayOfWeek
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WeatherWeekRow(
-    day: ForecastForDay, // Replace with the actual type
+    day: ForecastForDay,
     iconResId: String,
     context: Context,
     expanded: Boolean,
@@ -51,14 +51,14 @@ fun WeatherWeekRow(
         Text(
             text = getDayOfWeek(day.date),
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.background,
+            color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.width(80.dp)
         )
         Spacer(modifier = Modifier.weight(0.8f))
         Text(
             text = "${day.maxTemp}°",
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.background,
+            color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.wrapContentWidth()
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -75,7 +75,7 @@ fun WeatherWeekRow(
             Icon(
                 imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = "Expand/Collapse",
-                tint = MaterialTheme.colorScheme.background,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.size(12.dp)
             )
         }

@@ -13,7 +13,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.preferences.Preference
 
@@ -28,8 +27,8 @@ fun Activity(
             viewModel.onPreferenceToggled(activity, !activity.isEnabled)
         },
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (activity.isEnabled) MaterialTheme.colorScheme.onBackground else Color.White,
-            contentColor = if (activity.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+            containerColor = if (activity.isEnabled) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.background,
+            contentColor = if (activity.isEnabled) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground
         ),
         border = if(!activity.isEnabled) BorderStroke(2.dp, MaterialTheme.colorScheme.onBackground) else null,
         shape = MaterialTheme.shapes.medium,
@@ -42,13 +41,14 @@ fun Activity(
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary, // White icon when enabled
+                tint = MaterialTheme.colorScheme.onPrimary, // White icon when enabled
                 modifier = Modifier.padding(end = 8.dp)
             )
         }
         Text(
             text = activity.desc,
             style = MaterialTheme.typography.bodyLarge,
+            color = if (activity.isEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary,
             modifier = Modifier.weight(1f)
         )
     }

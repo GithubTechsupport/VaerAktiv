@@ -53,7 +53,7 @@ fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
                     Text(
                         "Steder",
                         style = MaterialTheme.typography.displaySmall,
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
                 item { AddPlace(8.dp, viewModel) }

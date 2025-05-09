@@ -54,8 +54,8 @@ fun WeatherWeek(
     ) {
         Text(
             text = "Kommende uke",
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.background,
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onPrimary,
             textAlign = TextAlign.Start,
             modifier = Modifier
                 .padding(start = 8.dp)
