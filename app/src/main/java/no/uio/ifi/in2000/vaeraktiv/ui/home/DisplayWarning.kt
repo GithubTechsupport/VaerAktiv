@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,9 +44,10 @@ fun DisplayWarning(data: List<AlertData>) {
         Column(
             modifier = Modifier
                 .background(
-                    MaterialTheme.colorScheme.secondary,
+                    MaterialTheme.colorScheme.onPrimary,
                     shape = RoundedCornerShape(cornerDp)
                 )
+                .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(cornerDp))
                 .clickable { isExpanded = !isExpanded }
                 .fillMaxWidth()
                 .padding(start = 12.dp, top = 8.dp, bottom = 8.dp, end = 12.dp)
@@ -64,8 +66,8 @@ fun DisplayWarning(data: List<AlertData>) {
                 )
                 Text(
                     text = "Advarsel",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
                 )
             }
@@ -108,14 +110,14 @@ fun DisplayWarning(data: List<AlertData>) {
                                     Text(
                                         text = type,
                                         style = MaterialTheme.typography.bodyLarge,
-                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        color = MaterialTheme.colorScheme.primary,
                                         textAlign = TextAlign.Center,
                                         fontSize = 18.sp
                                     )
                                     Text(
                                         text = "Instruksjoner: $instruct",
                                         style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        color = MaterialTheme.colorScheme.primary,
                                         textAlign = TextAlign.Start
                                     )
                                 }
@@ -127,7 +129,7 @@ fun DisplayWarning(data: List<AlertData>) {
                     Text(
                         text = "Kontaktinformasjon: $contactInfo",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                         textAlign = TextAlign.Center
                     )
                 }
