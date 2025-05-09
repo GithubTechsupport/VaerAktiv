@@ -76,6 +76,7 @@ fun Navbar(
         homeScreenViewModel.navigateToMap.collect { activity ->
             handleNavigation(navController, uiState, "map") { navController.navigateToMap() }
             mapScreenViewModel.zoomInOnActivity(activity)
+            uiState = uiState.copy(selectedRoute = "map")
         }
     }
 
