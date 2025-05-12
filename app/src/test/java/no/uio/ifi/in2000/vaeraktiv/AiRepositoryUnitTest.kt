@@ -1,5 +1,3 @@
-package no.uio.ifi.in2000.vaeraktiv
-
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -11,29 +9,30 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
 import no.uio.ifi.in2000.vaeraktiv.model.ai.PlacesActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
+import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.network.aiclient.AiClient
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 @ExperimentalCoroutinesApi
-class AiRepositoryTest {
+class AiRepositoryUnitTest {
 
     private lateinit var repository: AiRepository
     private lateinit var client: AiClient
-
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        client = mock(AiClient::class.java)
+        client = mock()
         repository = AiRepository(client)
     }
 
@@ -42,78 +41,184 @@ class AiRepositoryTest {
         Dispatchers.resetMain()
     }
 
+    // getSingleSuggestionForDay tests
+
     @Test
-    fun `getSuggestionsForOneDay returns decoded list`() = runTest(testDispatcher) {
-        // Arrange
-        val fakeResponse = """
-            {
-                  "activities": [
-                        {
-                          "type": "PlacesActivitySuggestion",
-                          "month": 5,
-                          "dayOfMonth": 3,
-                          "timeStart": "10:00",
-                          "timeEnd": "12:00",
-                          "activityName": "Park Walk",
-                          "activityDesc": "Walk in the park",
-                          "id": "1",
-                          "placeName": "Central Park",
-                          "formattedAddress": "123 Street",
-                          "coordinates": [37.0, -122.0]
-                        }
-                  ]
-            }
+    fun `getSingleSuggestionForDay deserializes PlacesActivitySuggestion`() = runTest(testDispatcher) {
+        val json = """
+        {
+          "type": "PlaceActivitySuggestion",
+          "month": 8,
+          "dayOfMonth": 20,
+          "timeStart": "09:00",
+          "timeEnd": "11:00",
+          "activityName": "City Tour",
+          "activityDesc": "Tour the city center",
+          "id": "p01",
+          "placeName": "Old Town",
+          "formattedAddress": "Main St",
+          "coordinates": {"first":50.0, "second":11.0}
+        }
         """.trimIndent()
-
-        `when`(client.getSuggestionsForOneDay(any(), any(), any(), any(), any()))
-            .thenReturn(fakeResponse)
-
-        // Act
-        val result = repository.getSuggestionsForOneDay(
-            mock(FormattedForecastDataForPrompt::class.java), mock(NearbyPlacesSuggestions::class.java), mock(
-                RoutesSuggestions::class.java), "pref"
+        whenever(client.getSingleSuggestionForDay(any(), any(), any(), any(), any())).thenReturn(json)
+        val result = repository.getSingleSuggestionForDay(
+            mock<FormattedForecastDataForPrompt>(),
+            mock<NearbyPlacesSuggestions>(),
+            mock<RoutesSuggestions>(),
+            "prefs"
         )
-
-        // Assert
-        assertEquals(1, result.activities.size)
-        val suggestion = result.activities[0] as PlacesActivitySuggestion
-        assertEquals("Park Walk", suggestion.activityName)
+        assertTrue(result is PlacesActivitySuggestion)
+        result as PlacesActivitySuggestion
+        assertEquals("City Tour", result.activityName)
+        assertEquals(50.0, result.coordinates.first, 0.0)
     }
 
     @Test
-    fun `getSingleSuggestionForDay returns decoded suggestion`() = runTest(testDispatcher) {
-        // Arrange
-        val fakeResponse = """
-            {
-                  "activities": [
-                        {
-                          "type": "PlacesActivitySuggestion",
-                          "month": 5,
-                          "dayOfMonth": 3,
-                          "timeStart": "10:00",
-                          "timeEnd": "12:00",
-                          "activityName": "Park Walk",
-                          "activityDesc": "Walk in the park",
-                          "id": "1",
-                          "placeName": "Central Park",
-                          "formattedAddress": "123 Street",
-                          "coordinates": [37.0, -122.0]
-                        }
-                  ]
-            }
+    fun `getSingleSuggestionForDay deserializes StravaActivitySuggestion`() = runTest(testDispatcher) {
+        val json = """
+        {
+          "type": "StravaActivitySuggestion",
+          "month": 9,
+          "dayOfMonth": 5,
+          "timeStart": "14:00",
+          "timeEnd": "16:00",
+          "activityName": "Trail Ride",
+          "activityDesc": "Mountain biking",
+          "id": "s01",
+          "routeName": "Summit Loop",
+          "distance": 20.0,
+          "polyline": "xyz"
+        }
         """.trimIndent()
-
-        `when`(client.getSingleSuggestionForDay(any(), any(), any(), any(), any()))
-            .thenReturn(fakeResponse)
-
-        // Act
+        whenever(client.getSingleSuggestionForDay(any(), any(), any(), any(), any())).thenReturn(json)
         val result = repository.getSingleSuggestionForDay(
-            mock(FormattedForecastDataForPrompt::class.java), mock(NearbyPlacesSuggestions::class.java), mock(
-                RoutesSuggestions::class.java), "pref"
+            mock<FormattedForecastDataForPrompt>(),
+            mock<NearbyPlacesSuggestions>(),
+            mock<RoutesSuggestions>(),
+            "prefs"
         )
+        assertTrue(result is StravaActivitySuggestion)
+        result as StravaActivitySuggestion
+        assertEquals("Trail Ride", result.activityName)
+        assertEquals(20.0, result.distance, 0.0)
+    }
 
-        // Assert
-        assert(result is CustomActivitySuggestion)
-        assertEquals("Custom Fun", result.activityName)
+    @Test
+    fun `getSingleSuggestionForDay deserializes CustomActivitySuggestion`() = runTest(testDispatcher) {
+        val json = """
+        {
+          "type": "CustomActivitySuggestion",
+          "month": 7,
+          "dayOfMonth": 15,
+          "timeStart": "12:00",
+          "timeEnd": "13:00",
+          "activityName": "Solo Hike",
+          "activityDesc": "Hike alone"
+        }
+        """.trimIndent()
+        whenever(client.getSingleSuggestionForDay(any(), any(), any(), any(), any())).thenReturn(json)
+        val result = repository.getSingleSuggestionForDay(
+            mock<FormattedForecastDataForPrompt>(),
+            mock<NearbyPlacesSuggestions>(),
+            mock<RoutesSuggestions>(),
+            "prefs"
+        )
+        assertTrue(result is CustomActivitySuggestion)
+        result as CustomActivitySuggestion
+        assertEquals("Solo Hike", result.activityName)
+    }
+
+    // getSuggestionsForOneDay tests
+
+    @Test
+    fun `getSuggestionsForOneDay deserializes PlacesActivitySuggestion`() = runTest(testDispatcher) {
+        val fake = """
+        {
+          "activities": [
+            {
+              "type": "PlaceActivitySuggestion",
+              "month": 8,
+              "dayOfMonth": 20,
+              "timeStart": "09:00",
+              "timeEnd": "11:00",
+              "activityName": "City Tour",
+              "activityDesc": "Tour the city center",
+              "id": "p01",
+              "placeName": "Old Town",
+              "formattedAddress": "Main St",
+              "coordinates": {"first":50.0, "second":11.0}
+            }
+          ]
+        }
+        """.trimIndent()
+        whenever(client.getSuggestionsForOneDay(any(), any(), any(), any(), any())).thenReturn(fake)
+        val result = repository.getSuggestionsForOneDay(
+            mock<FormattedForecastDataForPrompt>(),
+            mock<NearbyPlacesSuggestions>(),
+            mock<RoutesSuggestions>(),
+            "prefs"
+        )
+        val activity = result.activities.first()
+        assertTrue(activity is PlacesActivitySuggestion)
+    }
+
+    @Test
+    fun `getSuggestionsForOneDay deserializes StravaActivitySuggestion`() = runTest(testDispatcher) {
+        val fake = """
+        {
+          "activities": [
+            {
+              "type": "StravaActivitySuggestion",
+              "month": 9,
+              "dayOfMonth": 5,
+              "timeStart": "14:00",
+              "timeEnd": "16:00",
+              "activityName": "Trail Ride",
+              "activityDesc": "Mountain biking",
+              "id": "s01",
+              "routeName": "Summit Loop",
+              "distance": 20.0,
+              "polyline": "xyz"
+            }
+          ]
+        }
+        """.trimIndent()
+        whenever(client.getSuggestionsForOneDay(any(), any(), any(), any(), any())).thenReturn(fake)
+        val result = repository.getSuggestionsForOneDay(
+            mock<FormattedForecastDataForPrompt>(),
+            mock<NearbyPlacesSuggestions>(),
+            mock<RoutesSuggestions>(),
+            "prefs"
+        )
+        val activity = result.activities.first()
+        assertTrue(activity is StravaActivitySuggestion)
+    }
+
+    @Test
+    fun `getSuggestionsForOneDay deserializes CustomActivitySuggestion`() = runTest(testDispatcher) {
+        val fake = """
+        {
+          "activities": [
+            {
+              "type": "CustomActivitySuggestion",
+              "month": 7,
+              "dayOfMonth": 15,
+              "timeStart": "12:00",
+              "timeEnd": "13:00",
+              "activityName": "Solo Hike",
+              "activityDesc": "Hike alone"
+            }
+          ]
+        }
+        """.trimIndent()
+        whenever(client.getSuggestionsForOneDay(any(), any(), any(), any(), any())).thenReturn(fake)
+        val result = repository.getSuggestionsForOneDay(
+            mock<FormattedForecastDataForPrompt>(),
+            mock<NearbyPlacesSuggestions>(),
+            mock<RoutesSuggestions>(),
+            "prefs"
+        )
+        val activity = result.activities.first()
+        assertTrue(activity is CustomActivitySuggestion)
     }
 }

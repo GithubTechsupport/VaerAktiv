@@ -60,8 +60,8 @@ class WeatherRepositoryDefault @Inject constructor(
     private val _deviceLocation = MutableLiveData<Location?>()
     override val deviceLocation: LiveData<Location?> get() = _deviceLocation
 
-    private val _activities = MutableLiveData<List<SuggestedActivities?>?>(List(8) { null })
-    override val activities: LiveData<List<SuggestedActivities?>?> get() = _activities
+    private val _activities = MutableLiveData<List<SuggestedActivities?>>(List(8) { null })
+    override val activities: LiveData<List<SuggestedActivities?>> get() = _activities
 
     override fun setCurrentLocation(location: Location) {
         Log.d("setCurrentLocation", "setCurrentLocation called with location: $location")

@@ -40,7 +40,7 @@ class HomeScreenViewModel @Inject constructor(
     val currentLocation: LiveData<Location?> = weatherRepository.currentLocation
     val deviceLocation: LiveData<Location?> = weatherRepository.deviceLocation
 
-    val activities: LiveData<List<SuggestedActivities?>?> = weatherRepository.activities
+    val activities: LiveData<List<SuggestedActivities?>> = weatherRepository.activities
 
     private val _homeScreenUiState = MutableStateFlow(HomeScreenUiState())
     val homeScreenUiState: StateFlow<HomeScreenUiState> = _homeScreenUiState.asStateFlow()
