@@ -40,7 +40,8 @@ fun DisplayWarning(data: List<AlertData>) {
         var isExpanded by remember { mutableStateOf(false) }
         val cornerDp = 10.dp
         val context = LocalContext.current
-        val contactInfo = data[0].contact ?: "N/A"
+        val contactInfo = data.first().contact ?: "N/A"
+
         Column(
             modifier = Modifier
                 .background(
@@ -71,7 +72,6 @@ fun DisplayWarning(data: List<AlertData>) {
                     textAlign = TextAlign.Center,
                 )
             }
-
 
             if (isExpanded) {
                 Box(modifier = Modifier

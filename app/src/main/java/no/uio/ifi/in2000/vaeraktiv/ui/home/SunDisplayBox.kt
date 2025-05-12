@@ -20,24 +20,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SunDisplayBox(sunData: String, icon: Int) {
+fun SunDisplayBox(sunData: String, icon: Int, description: String) {
     Box(
         contentAlignment = Alignment.Center
     ) {
         Row(
-            modifier = Modifier.padding(vertical = 12.dp).padding(end = 12.dp)
+            modifier = Modifier.padding(12.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
                     painter = painterResource(id = icon),
-                    contentDescription = "Sunset icon",
+                    contentDescription = "Sun icon",
                     modifier = Modifier.size(50.dp)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Sol ned",
+                    text = description,
                     style = MaterialTheme.typography.labelSmall,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onBackground

@@ -1,7 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +15,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.home.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TodaysActivitiesSection(
     uiState: HomeScreenUiState,
