@@ -8,7 +8,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,11 +21,11 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
-import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
-import no.uio.ifi.in2000.vaeraktiv.model.ui.DetailedForecastForDay
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
+import no.uio.ifi.in2000.vaeraktiv.model.home.AlertData
+import no.uio.ifi.in2000.vaeraktiv.model.home.DetailedForecastForDay
+import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForDay
+import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForHour
+import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastToday
 import javax.inject.Inject
 
 @HiltViewModel

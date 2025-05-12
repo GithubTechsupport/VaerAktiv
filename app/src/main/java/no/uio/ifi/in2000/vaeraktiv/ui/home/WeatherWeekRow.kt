@@ -26,8 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
-import no.uio.ifi.in2000.vaeraktiv.model.ui.getDayOfWeek
+import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForDay
 
 @SuppressLint("DiscouragedApi")
 @RequiresApi(Build.VERSION_CODES.O)

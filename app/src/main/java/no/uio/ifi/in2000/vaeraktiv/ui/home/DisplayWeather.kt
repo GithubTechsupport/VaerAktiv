@@ -35,7 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
+import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 
 @RequiresApi(Build.VERSION_CODES.O)

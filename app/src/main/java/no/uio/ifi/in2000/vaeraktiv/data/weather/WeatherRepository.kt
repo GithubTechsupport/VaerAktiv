@@ -11,12 +11,12 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
-import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
-import no.uio.ifi.in2000.vaeraktiv.model.ui.DetailedForecastForDay
-import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForHour
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
+import no.uio.ifi.in2000.vaeraktiv.model.home.AlertData
+import no.uio.ifi.in2000.vaeraktiv.model.home.DetailedForecastForDay
+import no.uio.ifi.in2000.vaeraktiv.model.home.FavoriteLocation
+import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForDay
+import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForHour
+import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastToday
 
 interface WeatherRepository {
 

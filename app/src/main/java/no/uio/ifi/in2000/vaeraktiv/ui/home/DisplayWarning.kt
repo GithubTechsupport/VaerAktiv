@@ -32,7 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
+import no.uio.ifi.in2000.vaeraktiv.model.home.AlertData
 
 @Composable
 fun DisplayWarning(data: List<AlertData>) {
