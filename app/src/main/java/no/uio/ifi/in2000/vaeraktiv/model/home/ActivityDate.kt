@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.model.ui
+package no.uio.ifi.in2000.vaeraktiv.model.home
 
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 

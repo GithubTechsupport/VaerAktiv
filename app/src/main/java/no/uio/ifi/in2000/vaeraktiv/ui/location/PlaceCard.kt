@@ -29,7 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
-import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
+import no.uio.ifi.in2000.vaeraktiv.model.home.FavoriteLocation
 
 @SuppressLint("DiscouragedApi")
 @Composable
