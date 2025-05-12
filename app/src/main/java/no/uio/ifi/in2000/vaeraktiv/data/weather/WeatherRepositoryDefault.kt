@@ -300,22 +300,13 @@ class WeatherRepositoryDefault @Inject constructor(
     }
 
     override suspend fun getSuggestedActivity(location: Location, dayNr: Int, index: Int): ActivitySuggestion {
-        val startTime = System.currentTimeMillis()
-
-        val responseStart = System.currentTimeMillis()
         val response = getTimeSeriesForDay(location, dayNr)
-        val responseEnd = System.currentTimeMillis()
-
         val timeseries = response.first
         val units = response.second
 
-        val placesStart = System.currentTimeMillis()
         val places = getNearbyPlaces(location)
-        val placesEnd = System.currentTimeMillis()
 
-        val routesStart = System.currentTimeMillis()
         val routes = stravaRepository.getRouteSuggestions(location)
-        val routesEnd = System.currentTimeMillis()
 
         val preferences = preferenceRepository.getEnabledPreferences()
 

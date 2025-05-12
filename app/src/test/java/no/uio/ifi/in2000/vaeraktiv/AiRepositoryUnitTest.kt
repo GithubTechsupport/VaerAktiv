@@ -7,7 +7,7 @@ import kotlinx.coroutines.test.setMain
 import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
-import no.uio.ifi.in2000.vaeraktiv.model.ai.PlacesActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.PlaceActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
@@ -67,8 +67,8 @@ class AiRepositoryUnitTest {
             mock<RoutesSuggestions>(),
             "prefs"
         )
-        assertTrue(result is PlacesActivitySuggestion)
-        result as PlacesActivitySuggestion
+        assertTrue(result is PlaceActivitySuggestion)
+        result as PlaceActivitySuggestion
         assertEquals("City Tour", result.activityName)
         assertEquals(50.0, result.coordinates.first, 0.0)
     }
@@ -159,7 +159,7 @@ class AiRepositoryUnitTest {
             "prefs"
         )
         val activity = result.activities.first()
-        assertTrue(activity is PlacesActivitySuggestion)
+        assertTrue(activity is PlaceActivitySuggestion)
     }
 
     @Test
