@@ -23,7 +23,7 @@ interface WeatherRepository {
     // LiveData properties exposed for observing current values
     val currentLocation: LiveData<Location?>
     val deviceLocation: LiveData<Location?>
-    val activities: LiveData<List<SuggestedActivities?>?>
+    val activities: LiveData<List<SuggestedActivities?>>
 
     // Updates the current location value.
     fun setCurrentLocation(location: Location)

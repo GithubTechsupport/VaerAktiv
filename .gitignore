@@ -14,3 +14,6 @@
 .cxx
 local.properties
 secrets.properties
+/.idea/deviceManager.xml
+/.idea/studiobot.xml
+/app/src/main/java/no/uio/ifi/in2000/vaeraktiv/ui/theme/Theme.kt

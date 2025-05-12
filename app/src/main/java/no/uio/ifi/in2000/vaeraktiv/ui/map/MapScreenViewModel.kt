@@ -26,7 +26,9 @@ class MapScreenViewModel @Inject constructor(
     private val _mapScreenUiState = MutableStateFlow(MapScreenUiState())
     val mapScreenUiState: StateFlow<MapScreenUiState> = _mapScreenUiState.asStateFlow()
 
-    val activities: LiveData<List<SuggestedActivities?>?> = weatherRepository.activities
+    //val deviceLocation: LiveData<Location?> = weatherRepository.deviceLocation
+
+    val activities: LiveData<List<SuggestedActivities?>> = weatherRepository.activities
 
     fun decodePolyline(encoded: String): List<GeoPoint> {
         try {
@@ -70,12 +72,18 @@ class MapScreenViewModel @Inject constructor(
         }
     }
 
-    fun updatePlacesAndRoutes(suggestedActivities: SuggestedActivities) {
+    fun updatePlacesAndRoutes(suggestedActivitiesList: List<SuggestedActivities?>) {
         viewModelScope.launch {
             _mapScreenUiState.update { it.copy(isLoading = true, errorMessage = null) }
+
             try {
-                val places = suggestedActivities.activities.filterIsInstance<PlaceActivitySuggestion>()
-                val routes = suggestedActivities.activities.filterIsInstance<StravaActivitySuggestion>()
+                val allActivities = suggestedActivitiesList
+                    .filterNotNull()
+                    .flatMap { it.activities }
+
+                val places = allActivities.filterIsInstance<PlacesActivitySuggestion>()
+                val routes = allActivities.filterIsInstance<StravaActivitySuggestion>()
+                
                 _mapScreenUiState.update {
                     it.copy(
                         places = places,
@@ -84,10 +92,11 @@ class MapScreenViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                _mapScreenUiState.update { it.copy(isLoading = false, errorMessage = e.message) }
+                _mapScreenUiState.update {
+                    it.copy(isLoading = false, errorMessage = e.message)
+                }
             }
         }
-
     }
 
     fun zoomInOnActivity(activity: ActivitySuggestion) {

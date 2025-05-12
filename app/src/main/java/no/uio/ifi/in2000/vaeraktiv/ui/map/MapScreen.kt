@@ -15,7 +15,7 @@ fun MapScreen(viewModel: MapScreenViewModel) {
     val activities by viewModel.activities.observeAsState()
 
     LaunchedEffect(key1 = activities) {
-        activities?.get(0)?.let { viewModel.updatePlacesAndRoutes(it) }
+        activities?.let { viewModel.updatePlacesAndRoutes(it) }
     }
 
     if (uiState.isLoading) {
