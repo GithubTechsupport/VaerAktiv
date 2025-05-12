@@ -9,7 +9,7 @@ import kotlinx.serialization.modules.subclass
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
-import no.uio.ifi.in2000.vaeraktiv.model.ai.PlacesActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.PlaceActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
@@ -23,7 +23,7 @@ private val json = Json {
     serializersModule = SerializersModule {
         polymorphic(ActivitySuggestion::class) {
             subclass(CustomActivitySuggestion::class)
-            subclass(PlacesActivitySuggestion::class)
+            subclass(PlaceActivitySuggestion::class)
             subclass(StravaActivitySuggestion::class)
         }
     }

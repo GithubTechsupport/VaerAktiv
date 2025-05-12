@@ -1,11 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.model.ai
 
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
-import kotlinx.serialization.modules.subclass
-import kotlinx.serialization.serializer
-
 data class Prompt(
     val systemPrompt: String = """
         The user will provide a weather forecast, data about nearby places, and data about nearby running routes and trails from Strava and Overpass.
@@ -272,48 +266,3 @@ data class Prompt(
 
     val temperature: Double = 0.75
 )
-//
-//@OptIn(kotlinx.serialization.InternalSerializationApi::class)
-//fun main() {
-//    val p: ActivitySuggestion = PlacesActivitySuggestion (
-//        month = 7,
-//        dayOfMonth = 1,
-//        timeStart = "10:30",
-//        timeEnd = "11:30",
-//        activityName = "Bibliotekbesøk",
-//        activityDesc = "Les en bok på Oslo Public Library.",
-//        id = "lib-001",
-//        placeName = "Oslo Public Library",
-//        formattedAddress = "Bjørvika, Oslo",
-//        coordinates = Pair(59.9077, 10.7535)
-//    )
-//
-//    val s: ActivitySuggestion = StravaActivitySuggestion(
-//        month = 7,
-//        dayOfMonth = 1,
-//        timeStart = "12:00",
-//        timeEnd = "13:00",
-//        activityName = "Elveløp",
-//        activityDesc = "Løp langs elven på River Walk.",
-//        id = "route-001",
-//        routeName = "River Walk",
-//        distance = 3200.0,
-//        polyline = "encoded_polyline_1"
-//    )
-//
-//    val module = SerializersModule {
-//        polymorphic(ActivitySuggestion::class) {
-//            subclass(CustomActivitySuggestion::class)
-//            subclass(PlacesActivitySuggestion::class)
-//            subclass(StravaActivitySuggestion::class)
-//        }
-//    }
-//
-//    val json = Json {
-//        serializersModule = module
-//        classDiscriminator = "type"
-//    }
-//
-//    println(json.encodeToString(ActivitySuggestion::class.serializer(), p))
-//    println(json.encodeToString(ActivitySuggestion::class.serializer(), s))
-//}
