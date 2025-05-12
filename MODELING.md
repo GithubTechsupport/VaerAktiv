@@ -15,58 +15,86 @@ for eksempel aktivitetsdiagram (flytdiagram) eller tilstandsdiagram.
 ```mermaid
 flowchart BT
     %% === API-er ===
-    sapi((sunrise))
-    aiapi((openAI))
-    gapi((geocoder))
-    mapi((metAlerts))
-    lapi((locationForecast))
-    napi((nowcast))
-    oapi((openStreetMap))
-    goapi((googlePlaces))
-    fapi((fusedLocationProvider))
+    subgraph APIs
+        sapi((Sunrise API))
+        aiapi((OpenAI))
+        gapi((Android Geocoder))
+        mapi((Met Alerts))
+        lapi((Location Forecast))
+        napi((Nowcast))
+        oapi((OpenStreetMap))
+        goapi((Google Places))
+        fapi((FusedLocationProvider))
+        stapi((Strava))
+        json((JSON))
+        jt((Java Time))
+    end
 
     %% === Datasources ===
-    sapi --> sds[SunriseDataSource]
-    aiapi --> air[AiRepository]
-    gapi --> gc[GeocoderClass]
-    mapi --> mds[MetAlertsDataSource]
-    lapi --> lfds[LocationForecastDataSource]
-    napi --> nds[NowcastDataSource]
-    fapi --> dlds[DeviceLocationDataSource]
-
-    ddtds[DeviceDateTimeDataSource]
-    flds[FavoriteLocationDataSource]
-    stds[StravaDataSource]
-    sam[StravaAuthManager] --> stds
-    pds[PreferenceDataSource]
+    subgraph DataSources
+        sds[SunriseDataSource]
+        air[AiRepository]
+        gc[GeocoderClass]
+        mds[MetAlertsDataSource]
+        lfds[LocationForecastDataSource]
+        nds[NowcastDataSource]
+        dlds[DeviceLocationDataSource]
+        stds[StravaDataSource]
+        flds[FavoriteLocationDataSource]
+        ddtds[DeviceDateTimeDataSource]
+        pds[PreferenceDataSource]
+    end
 
     %% === Repositories ===
-    sds --> sr[SunriseRepository]
-    sr --> wr[WeatherRepository]
-    air --> wr
-    gc --> wr
-    dlds --> dlr[DeviceLocationRepository] --> wr
-    flds --> flr[FavoriteLocationRepository]
-    flr --> flvm[FavoriteLocationViewModel]
-    gc --> flr
-    goapi --> plr[PlacesRepository] --> wr
-    stds --> str[StravaRepository] --> wr
-    mds --> mr[MetAlertsRepository] --> wr
-    lfds --> lfr[LocationForecastRepository] --> wr
-    nds --> nr[NowcastRepository] --> wr
-    pds --> pr[PreferenceRepository]
-    pr --> wr
+    subgraph Repositories
+        sr[SunriseRepository]
+        wr[WeatherRepository]
+        dlr[DeviceLocationRepository]
+        flr[FavoriteLocationRepository]
+        plr[PlacesRepository]
+        str[StravaRepository]
+        mr[MetAlertsRepository]
+        lfr[LocationForecastRepository]
+        nr[NowcastRepository]
+        pr[PreferenceRepository]
+        ddtr[DeviceDateTimeRepository]
+    end
 
     %% === ViewModels og Skjermer ===
-    pr --> pvm[PreferencesViewModel]
-    pvm --> ss[SettingsScreen]
-    pvm --> ips[InfoPreferencesScreen]
+    subgraph ViewModels
+        hsvm[HomeScreenViewModel]
+        flvm[FavoriteLocationViewModel]
+        msvm[MapScreenViewModel]
+        pvm[PreferencesViewModel]
+    end
 
-    ddtds --> ddtr[DeviceDateTimeRepository] --> hsvm[HomeScreenViewModel]
-    wr --> hsvm
-    hsvm --> hs[HomeScreen]
+    subgraph Screens
+        hs[HomeScreen]
+        ls[LocationScreen]
+        ms[MapScreen]
+        ss[SettingsScreen]
+        ips[InfoPreferencesScreen]
+        omv[OsmMapView]
+    end
 
-    wr --> flvm --> ls[LocationScreen]
-    wr --> msvm[MapScreenViewModel] --> ms[MapScreen]
-    oapi --> omv[OsmMapView] --> ms
+    %% === Connections ===
+    sapi --> sds --> sr --> wr
+    aiapi --> air --> wr
+    gapi --> gc --> wr
+    fapi --> dlds --> dlr --> wr
+    json --> flds --> flr --> flvm --> ls
+    gc --> flr
+    goapi --> plr --> wr
+    stapi --> stds --> str --> wr
+    mapi --> mds --> mr --> wr
+    lapi --> lfds --> lfr --> wr
+    napi --> nds --> nr --> wr
+    json --> pds --> pr --> wr
+    pr --> pvm --> ss
+    pvm --> ips
+    jt --> ddtds --> ddtr --> hsvm
+    wr --> hsvm --> hs
+    wr --> flvm
+    wr --> msvm --> ms
+    oapi --> omv --> ms
 ```
