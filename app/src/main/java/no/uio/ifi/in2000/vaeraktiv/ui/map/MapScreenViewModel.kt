@@ -83,7 +83,7 @@ class MapScreenViewModel @Inject constructor(
 
                 val places = allActivities.filterIsInstance<PlaceActivitySuggestion>()
                 val routes = allActivities.filterIsInstance<StravaActivitySuggestion>()
-                
+
                 _mapScreenUiState.update {
                     it.copy(
                         places = places,

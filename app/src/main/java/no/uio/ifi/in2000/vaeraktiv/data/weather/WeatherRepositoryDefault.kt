@@ -286,12 +286,17 @@ class WeatherRepositoryDefault @Inject constructor(
         val places = getNearbyPlaces(location)
         val routes = stravaRepository.getRouteSuggestions(location)
         val preferences = preferenceRepository.getEnabledPreferences()
+        val excludedActivities = activities.value
+            ?.flatMap { day -> day?.activities.orEmpty() }
+            ?.joinToString("\n") { "${it.activityName} (${it.timeStart} - ${it.timeEnd}): ${it.activityDesc}" }
+            .orEmpty()
+        val exclusionString = "EXCLUDE THE FOLLOWING ACTIVITIES:\n\n$excludedActivities\n\n"
         if (units == null) {
             throw Exception("Units are null")
         }
         return aiRepository.getSuggestionsForOneDay(
             FormattedForecastDataForPrompt(timeseries, units, location.addressName),
-            places, routes, preferences)
+            places, routes, preferences, exclusionString)
     }
 
     override suspend fun getSuggestedActivity(location: Location, dayNr: Int, index: Int): ActivitySuggestion {
@@ -300,7 +305,6 @@ class WeatherRepositoryDefault @Inject constructor(
         val responseStart = System.currentTimeMillis()
         val response = getTimeSeriesForDay(location, dayNr)
         val responseEnd = System.currentTimeMillis()
-        Log.d("Timing", "getTimeSeriesForDay: ${responseEnd - responseStart} ms")
 
         val timeseries = response.first
         val units = response.second
@@ -308,12 +312,10 @@ class WeatherRepositoryDefault @Inject constructor(
         val placesStart = System.currentTimeMillis()
         val places = getNearbyPlaces(location)
         val placesEnd = System.currentTimeMillis()
-        Log.d("Timing", "getNearbyPlaces: ${placesEnd - placesStart} ms")
 
         val routesStart = System.currentTimeMillis()
         val routes = stravaRepository.getRouteSuggestions(location)
         val routesEnd = System.currentTimeMillis()
-        Log.d("Timing", "getRouteSuggestions: ${routesEnd - routesStart} ms")
 
         val preferences = preferenceRepository.getEnabledPreferences()
 
@@ -331,9 +333,6 @@ class WeatherRepositoryDefault @Inject constructor(
             FormattedForecastDataForPrompt(timeseries, units, location.addressName),
             places, routes, preferences, exclusionString
         )
-
-        val endTime = System.currentTimeMillis()
-        Log.d("Timing", "Total duration: ${endTime - startTime} ms")
 
         return suggestions
     }

@@ -1,31 +1,30 @@
 ```mermaid
+flowchart TD;
+  Start((Start))
+  Navigate[User opens 'Places' screen]
+  PressAdd[User taps 'Add' icon]
+  ShowSearchField[System displays search field]
+  EnterSearch[User enters search text]
+  DecText{Is search text empty?}
+  FetchSuggestions[System fetches suggestions from Places API]
+  DecSuggestions{Did the system find suggestions?}
+  ShowNoResults[System displays 'No results']
+  ShowSuggestions[System displays list of suggestions]
+  SelectSuggestion[User selects a suggestion]
+  DecExists{Is the location already saved?}
+  ShowExists[System notifies: 'Location already exists']
+  AddLocation[System adds new favorite location]
+  UpdateList[System updates favorites list]
+  End((End))
 
-  flowchart TD;
+  Start --> Navigate --> PressAdd --> ShowSearchField --> EnterSearch --> DecText
+  DecText -- Yes --> End
+  DecText -- No --> FetchSuggestions --> DecSuggestions
 
-    Start((Start))
-    NavigerTilLokasjonsskjerm([Bruker navigerer til lokasjonsskjermen])
-    TrykkLeggTilIkon([Bruker trykker på Legg til-ikon])
-    SoekLokasjon([Bruker søker etter lokasjon])
-    VisLokasjon([Lokasjon vises på skjermen])
-    LokasjonEksistererAllerede([Lokasjonen finnes allerede])
-    SlettEksisterendeLokasjon([Bruker sletter eksisterende lokasjon])
+  DecSuggestions -- No --> ShowNoResults --> ShowSearchField
+  DecSuggestions -- Yes --> ShowSuggestions --> SelectSuggestion --> DecExists
 
-    Valg{Er lokasjonen ny?}
-    Valg2{Slette eksisterende lokasjon?}
-
-    Start --> NavigerTilLokasjonsskjerm 
-    NavigerTilLokasjonsskjerm --> TrykkLeggTilIkon
-    TrykkLeggTilIkon --> SoekLokasjon
-    SoekLokasjon --> Valg
-    Valg --> VisLokasjon
-    Valg --> LokasjonEksistererAllerede
-    LokasjonEksistererAllerede --> Valg2
-    Valg2 --> SlettEksisterendeLokasjon
-    SlettEksisterendeLokasjon --> SoekLokasjon
-    Valg2 --> Slutt
-    VisLokasjon --> Slutt
-
-    Slutt((Slutt))
-
+  DecExists -- Yes --> ShowExists --> End
+  DecExists -- No --> AddLocation --> UpdateList --> End
 
 ```
