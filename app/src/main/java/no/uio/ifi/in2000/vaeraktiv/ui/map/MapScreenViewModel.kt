@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.PlacesActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.PlaceActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import org.osmdroid.util.GeoPoint
@@ -77,14 +77,13 @@ class MapScreenViewModel @Inject constructor(
             _mapScreenUiState.update { it.copy(isLoading = true, errorMessage = null) }
 
             try {
-                // Flatten all non-null SuggestedActivities into a single activities list
                 val allActivities = suggestedActivitiesList
                     .filterNotNull()
                     .flatMap { it.activities }
 
                 val places = allActivities.filterIsInstance<PlacesActivitySuggestion>()
                 val routes = allActivities.filterIsInstance<StravaActivitySuggestion>()
-
+                
                 _mapScreenUiState.update {
                     it.copy(
                         places = places,
@@ -103,7 +102,7 @@ class MapScreenViewModel @Inject constructor(
     fun zoomInOnActivity(activity: ActivitySuggestion) {
         try {
             val points = when(activity) {
-                is PlacesActivitySuggestion ->
+                is PlaceActivitySuggestion ->
                     listOf(GeoPoint(activity.coordinates.first, activity.coordinates.second))
                 is StravaActivitySuggestion ->
                     decodePolyline(activity.polyline)
@@ -122,7 +121,7 @@ class MapScreenViewModel @Inject constructor(
 }
 
 data class MapScreenUiState(
-    val places: List<PlacesActivitySuggestion> = emptyList(),
+    val places: List<PlaceActivitySuggestion> = emptyList(),
     val routes: List<StravaActivitySuggestion> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
