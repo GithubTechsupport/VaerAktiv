@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toDrawable
-import no.uio.ifi.in2000.vaeraktiv.model.ai.PlacesActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.PlaceActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -73,7 +73,7 @@ private fun createStartFlagIcon(context: Context, sizePx: Int = 60): BitmapDrawa
 @Composable
 fun OsmMapView(
     context: Context,
-    places: List<PlacesActivitySuggestion>,
+    places: List<PlaceActivitySuggestion>,
     routes: List<StravaActivitySuggestion>,
     decodePolyline: (String) -> List<GeoPoint>,
     selectedActivityPoints: List<GeoPoint>?,
