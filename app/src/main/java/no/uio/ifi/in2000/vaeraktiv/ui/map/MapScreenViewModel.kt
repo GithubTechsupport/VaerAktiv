@@ -81,7 +81,7 @@ class MapScreenViewModel @Inject constructor(
                     .filterNotNull()
                     .flatMap { it.activities }
 
-                val places = allActivities.filterIsInstance<PlacesActivitySuggestion>()
+                val places = allActivities.filterIsInstance<PlaceActivitySuggestion>()
                 val routes = allActivities.filterIsInstance<StravaActivitySuggestion>()
                 
                 _mapScreenUiState.update {
