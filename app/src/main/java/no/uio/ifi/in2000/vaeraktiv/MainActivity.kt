@@ -6,11 +6,11 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +35,17 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var locationTracker: LocationTracker
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Log.d("MainActivity", "Location permission granted")
+            locationTracker.start(this)
+        } else {
+            Log.d("MainActivity", "Location permission denied")
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +58,7 @@ class MainActivity : ComponentActivity() {
             })
         }
         Log.d("MainActivity", "onCreate called")
-        checkPermissions(locationTracker)
+        checkPermissions()
         enableEdgeToEdge()
         setContent {
             VaerAktivTheme {
@@ -63,28 +74,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun checkPermissions(locationTracker: LocationTracker) {
+    private fun checkPermissions() {
         if (!PermissionManager.isLocationPermissionGranted(this)) {
-            PermissionManager.requestLocationPermissions(this)
+            requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
         } else {
             Log.d("MainActivity", "Location permission already granted")
             locationTracker.start(this)
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PermissionManager.LOCATION_PERMISSION_REQUEST_CODE) {
-            if (PermissionManager.isLocationPermissionGranted(this)) {
-                Log.d("MainActivity", "Location permission granted")
-                locationTracker.start(this)
-            } else {
-                Log.d("MainActivity", "Location permission denied")
-            }
         }
     }
 }
