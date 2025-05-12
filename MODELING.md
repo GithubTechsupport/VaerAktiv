@@ -22,6 +22,8 @@ flowchart BT
     lapi((locationForecast))
     napi((nowcast))
     oapi((openStreetMap))
+    goapi((googlePlaces))
+    fapi((fusedLocationProvider))
 
     %% === Datasources ===
     sapi --> sds[SunriseDataSource]
@@ -30,9 +32,9 @@ flowchart BT
     mapi --> mds[MetAlertsDataSource]
     lapi --> lfds[LocationForecastDataSource]
     napi --> nds[NowcastDataSource]
+    fapi --> dlds[DeviceLocationDataSource]
 
     ddtds[DeviceDateTimeDataSource]
-    dlds[DeviceLocationDataSource]
     flds[FavoriteLocationDataSource]
     stds[StravaDataSource]
     sam[StravaAuthManager] --> stds
@@ -47,7 +49,7 @@ flowchart BT
     flds --> flr[FavoriteLocationRepository]
     flr --> flvm[FavoriteLocationViewModel]
     gc --> flr
-    plr[PlacesRepository] --> wr
+    goapi --> plr[PlacesRepository] --> wr
     stds --> str[StravaRepository] --> wr
     mds --> mr[MetAlertsRepository] --> wr
     lfds --> lfr[LocationForecastRepository] --> wr
