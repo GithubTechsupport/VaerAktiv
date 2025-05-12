@@ -22,6 +22,7 @@ flowchart BT
     lapi((locationForecast))
     napi((nowcast))
     oapi((openStreetMap))
+    goapi((googlePlaces))
 
     %% === Datasources ===
     sapi --> sds[SunriseDataSource]
@@ -47,7 +48,7 @@ flowchart BT
     flds --> flr[FavoriteLocationRepository]
     flr --> flvm[FavoriteLocationViewModel]
     gc --> flr
-    plr[PlacesRepository] --> wr
+    goapi --> plr[PlacesRepository] --> wr
     stds --> str[StravaRepository] --> wr
     mds --> mr[MetAlertsRepository] --> wr
     lfds --> lfr[LocationForecastRepository] --> wr
