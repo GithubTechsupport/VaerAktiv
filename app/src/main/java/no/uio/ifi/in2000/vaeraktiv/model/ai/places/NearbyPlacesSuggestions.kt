@@ -6,10 +6,10 @@ data class NearbyPlacesSuggestions(
     override fun toString(): String {
         return suggestions.joinToString(separator = "\n\n") {
             """
-Place name: ${it.placeName}
-Place address: ${it.formattedAddress} 
-Place primary type: ${it.primaryType}
-Place types: ${it.types?.joinToString(", ")}"                
+            Place name: ${it.placeName}
+            Place address: ${it.formattedAddress} 
+            Place primary type: ${it.primaryType}
+            Place types: ${it.types?.joinToString(", ")}"                
             """.trimIndent()
         }
     }
