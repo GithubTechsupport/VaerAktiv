@@ -7,7 +7,7 @@ sequenceDiagram
     participant API
 
     Bruker ->> App: Click on retrive weather app
-    App ->> API: fetchWeatcherButton()
+    App ->> API: fetchWeatherButton()
 
     alt suksess
         API -->> App: Weather is returned
