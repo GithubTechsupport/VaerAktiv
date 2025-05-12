@@ -1,7 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,21 +12,19 @@ import kotlinx.coroutines.test.setMain
 import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
-import no.uio.ifi.in2000.vaeraktiv.model.ui.AlertData
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastForDay
-import no.uio.ifi.in2000.vaeraktiv.model.ui.ForecastToday
+import no.uio.ifi.in2000.vaeraktiv.model.home.AlertData
+import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForDay
+import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.mockito.junit.MockitoJUnitRunner
 

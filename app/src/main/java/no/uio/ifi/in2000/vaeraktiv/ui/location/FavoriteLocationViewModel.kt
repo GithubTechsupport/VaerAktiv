@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
-import no.uio.ifi.in2000.vaeraktiv.model.ui.FavoriteLocation
+import no.uio.ifi.in2000.vaeraktiv.model.home.FavoriteLocation
 import javax.inject.Inject
 
 @HiltViewModel
