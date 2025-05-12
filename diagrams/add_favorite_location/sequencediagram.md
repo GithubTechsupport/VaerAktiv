@@ -1,25 +1,33 @@
 ```mermaid
-
 sequenceDiagram
-
     actor Bruker
-    participant App
-    participant API
+    participant UI as AddPlace\ UI
+    participant ViewModel as FavoriteLocationViewModel
+    participant Repo as FavoriteLocationRepository
+    participant Geocoder as GeocoderClass
+    participant DataSource as FavoriteLocationDataSource
+    participant PlacesAPI as Places\ API
 
-    Bruker ->> App: Click on retrive weather app
-    App ->> API: fetchWeatcherButton()
+    Bruker->>UI: trykk Legg\ til\ sted
+    UI->>ViewModel: fetchPredictions(søketekst)
+    alt søketekst ikke tom
+        ViewModel->>PlacesAPI: getAutocompletePredictions(query, token)
+        PlacesAPI-->>ViewModel: liste\ av\ forslag
+        ViewModel-->>UI: oppdater\ predictions
+    else tom søketekst
+        ViewModel-->>UI: clear\ predictions
+    end
 
-    alt suksess
-        API -->> App: Weather is returned
-        App -->> Bruker: Show weather data
+    Bruker->>UI: velg\ forslag(fullText)
+    UI->>ViewModel: addLocation(fullText)
 
-    else feil
-        API -->> App: Error
-        App -->> Bruker: Show error message
+    ViewModel->>Repo: addLocationByName(fullText)
+    Repo->>Geocoder: getCoordinatesFromLocation(fullText)
+    Geocoder-->>Repo: koordinater(lat, lon)
+    Repo->>DataSource: addLocation(navn, lat, lon)
+    DataSource-->>Repo: bekreft\ lagring
+    Repo-->>ViewModel: ferdig
 
-    end 
-
-
-
-
-``````
+    ViewModel->>ViewModel: loadLocationsAndFetchWeather()
+    ViewModel-->>UI: oppdater\ favorittliste
+```
