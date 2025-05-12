@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SolarEvent(
     val time: String,
-    //val discCentreElevation: Double,
     val visible: Boolean
 )

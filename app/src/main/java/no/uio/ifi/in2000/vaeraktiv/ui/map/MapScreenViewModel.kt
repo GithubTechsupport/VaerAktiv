@@ -26,9 +26,7 @@ class MapScreenViewModel @Inject constructor(
     private val _mapScreenUiState = MutableStateFlow(MapScreenUiState())
     val mapScreenUiState: StateFlow<MapScreenUiState> = _mapScreenUiState.asStateFlow()
 
-    //val deviceLocation: LiveData<Location?> = weatherRepository.deviceLocation
-
-    val activities: LiveData<List<SuggestedActivities?>> = weatherRepository.activities
+    val activities: LiveData<List<SuggestedActivities?>?> = weatherRepository.activities
 
     fun decodePolyline(encoded: String): List<GeoPoint> {
         try {
@@ -72,19 +70,12 @@ class MapScreenViewModel @Inject constructor(
         }
     }
 
-    fun updatePlacesAndRoutes(suggestedActivitiesList: List<SuggestedActivities?>) {
+    fun updatePlacesAndRoutes(suggestedActivities: SuggestedActivities) {
         viewModelScope.launch {
             _mapScreenUiState.update { it.copy(isLoading = true, errorMessage = null) }
-
             try {
-                // Flatten all non-null SuggestedActivities into a single activities list
-                val allActivities = suggestedActivitiesList
-                    .filterNotNull()
-                    .flatMap { it.activities }
-
-                val places = allActivities.filterIsInstance<PlacesActivitySuggestion>()
-                val routes = allActivities.filterIsInstance<StravaActivitySuggestion>()
-
+                val places = suggestedActivities.activities.filterIsInstance<PlacesActivitySuggestion>()
+                val routes = suggestedActivities.activities.filterIsInstance<StravaActivitySuggestion>()
                 _mapScreenUiState.update {
                     it.copy(
                         places = places,
@@ -93,11 +84,10 @@ class MapScreenViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                _mapScreenUiState.update {
-                    it.copy(isLoading = false, errorMessage = e.message)
-                }
+                _mapScreenUiState.update { it.copy(isLoading = false, errorMessage = e.message) }
             }
         }
+
     }
 
     fun zoomInOnActivity(activity: ActivitySuggestion) {
@@ -122,7 +112,7 @@ class MapScreenViewModel @Inject constructor(
 }
 
 data class MapScreenUiState(
-    val places: List<PlacesActivitySuggestion> = emptyList(),
+    val places: List<PlaceActivitySuggestion> = emptyList(),
     val routes: List<StravaActivitySuggestion> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,

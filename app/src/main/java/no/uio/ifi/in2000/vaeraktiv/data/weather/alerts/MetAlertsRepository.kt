@@ -8,7 +8,7 @@ class MetAlertsRepository @Inject constructor(private val metAlertsDataSource: M
     private var alertsCache: List<Features> = emptyList()
 
     private suspend fun fetchAlerts() {
-        val response = metAlertsDataSource.retriveAlertInfo()
+        val response = metAlertsDataSource.retrieveAlertInfo()
         alertsCache = response.features
     }
     

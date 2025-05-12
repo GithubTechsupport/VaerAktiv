@@ -144,7 +144,6 @@ object AppModule {
         metAlertsRepository: MetAlertsRepository,
         locationForecastRepository: LocationForecastRepository,
         sunriseRepository: SunriseRepository,
-        //favoriteLocationRepo: FavoriteLocationRepository,
         aiRepository: AiRepository,
         geocoder: GeocoderClass,
         locationRepository: LocationRepository,

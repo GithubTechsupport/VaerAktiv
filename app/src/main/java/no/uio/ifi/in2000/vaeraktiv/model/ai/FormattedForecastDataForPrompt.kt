@@ -10,13 +10,13 @@ data class FormattedForecastDataForPrompt (
 ) {
     override fun toString(): String {
         val userPrompt = timeseries.joinToString("\n\n") {"""
-datetime: ${it.time}
-airTemperature: ${it.data.instant.details.airTemperature}
-precipitation: ${it.data.next1Hours?.details?.precipitationAmount}
-windSpeed: ${it.data.instant.details.windSpeed}
-cloudAreaFraction: ${it.data.instant.details.cloudAreaFraction}
-fogAreaFraction: ${it.data.instant.details.fogAreaFraction}
-ultravioletIndexClearSky: ${it.data.instant.details.ultravioletIndexClearSky}
+            datetime: ${it.time}
+            airTemperature: ${it.data.instant.details.airTemperature}
+            precipitation: ${it.data.next1Hours?.details?.precipitationAmount}
+            windSpeed: ${it.data.instant.details.windSpeed}
+            cloudAreaFraction: ${it.data.instant.details.cloudAreaFraction}
+            fogAreaFraction: ${it.data.instant.details.fogAreaFraction}
+            ultravioletIndexClearSky: ${it.data.instant.details.ultravioletIndexClearSky}
             """.trimIndent()
         }
         return "The units are: $units\n\n$userPrompt\n\nUser's location is: $location"

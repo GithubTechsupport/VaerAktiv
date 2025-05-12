@@ -5,11 +5,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -41,15 +37,4 @@ class DataStoreTokenStorage @Inject constructor(
             prefs[Keys.EXPIRES] = tokens.expiresAt
         }
     }
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-fun interface StravaModule {
-
-    @Binds
-    @Singleton
-    fun bindTokenStorage(
-        dataStoreTokenStorage: DataStoreTokenStorage
-    ): TokenStorage
 }
