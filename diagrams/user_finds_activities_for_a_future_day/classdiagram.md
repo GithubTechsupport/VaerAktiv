@@ -1,3 +1,6 @@
+  ---
+title: Aktivitetsdiagram - Finn aktiviteter for en fremtidig dag
+---
   ```mermaid
   classDiagram
       WeatherWeekUI "1" o-- "1" HomeScreenViewModel : viewModel

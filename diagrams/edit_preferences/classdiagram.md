@@ -1,3 +1,6 @@
+---
+title: Aktivitetsdiagram - Bruker setter preferanser for første gang
+---
 ```mermaid
 classDiagram
     PreferencesScreen "1" o-- "1" PreferencesViewModel : viewModel
