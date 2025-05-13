@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -78,7 +79,7 @@ fun WelcomeScreen(onStartClick: () -> Unit = {}) {
 @Composable
 fun WelcomeText() {
     Text(
-        text = "Velkommen til VærAktiv",
+        text = stringResource(R.string.velkommen_til_v_raktiv),
         style = TextStyle(
             fontSize = 42.sp,
             fontWeight = FontWeight.Bold,
@@ -92,7 +93,7 @@ fun WelcomeText() {
 @Composable
 fun SlogeText() {
     Text(
-        text = "Aktivitetstips generert spesifikt for deg og dine interesser",
+        text = stringResource(R.string.aktivitetstips_generert_spesifikt_for_deg_og_dine_interesser),
         fontSize = 20.sp,
         fontWeight = FontWeight.Medium,
         color = MaterialTheme.colorScheme.primary,
@@ -105,7 +106,7 @@ fun SlogeText() {
 fun MascotWithSpeech() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            text = "Hei mitt navn er Simon! Klar for å komme i gang?",
+            text = stringResource(R.string.hei_mitt_navn_er_simon_klar_for_komme_i_gang),
             color = MaterialTheme.colorScheme.primary,
             fontStyle = FontStyle.Italic,
             fontSize = 18.sp,
@@ -142,7 +143,7 @@ fun StartButton(onClick: () -> Unit) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = "Kom i gang",
+            text = stringResource(R.string.kom_i_gang),
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onPrimary
         )
