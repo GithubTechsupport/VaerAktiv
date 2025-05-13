@@ -64,6 +64,7 @@ object NetworkModule {
             ignoreUnknownKeys = true
         }
     }
+
     @Provides
     @Singleton
     @Named("prettyPrint-isLenient-ignoreUnknownKeys-Client")

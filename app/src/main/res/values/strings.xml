@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">VaerAktiv</string>
+    <string name="beste_tidspunkt">Beste tidspunkt: %1$s - %2$s</string>
 </resources>

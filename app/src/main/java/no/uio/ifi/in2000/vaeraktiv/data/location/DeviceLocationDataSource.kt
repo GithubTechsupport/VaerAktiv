@@ -21,26 +21,6 @@ class LocationDataSource @Inject constructor(
     private val fusedLocationProviderClient: FusedLocationProviderClient
 ) {
 
-    // Get last known location as a suspendable function
-//    @SuppressLint("MissingPermission")
-//    fun getLastLocation(): Flow<Location?> = callbackFlow {
-//        fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, object : CancellationToken() {
-//            override fun onCanceledRequested(p0: OnTokenCanceledListener) = CancellationTokenSource().token
-//
-//            override fun isCancellationRequested() = false
-//        }).addOnSuccessListener { location: Location? ->
-//            if (location == null) {
-//                throw Exception("Location returned is null")
-//            } else {
-//                trySend(location)
-//                close()
-//            }
-//        }.addOnFailureListener {
-//            close(it)
-//        }
-//        awaitClose {}
-//    }
-
     // Start receiving continuous location updates as suspendable functions
     @SuppressLint("MissingPermission")
     fun getLocationUpdates(): Flow<Location?> = callbackFlow {

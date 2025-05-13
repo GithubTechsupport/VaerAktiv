@@ -92,7 +92,6 @@ fun AddLocationExpanded(defaultPadding: Dp, viewModel: FavoriteLocationViewModel
                 .fillMaxWidth()
         )
 
-        // Suggestions list
         if (predictions.value.isNotEmpty()) {
             SuggestionsOverlay(
                 predictions = predictions.value,

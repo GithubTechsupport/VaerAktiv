@@ -13,7 +13,6 @@ import javax.inject.Named
 class SunriseDataSource @Inject constructor(@Named("ignoreUnknownKeys-Client") private val networkClient: NetworkClient){
     suspend fun getSunrise(lat: String, lon: String, date: String) : SunData? = withContext(Dispatchers.IO) {
         try {
-            // TODO : fikse at den henter dagens dato og plassering
             val response: HttpResponse = networkClient.ktorHttpClient.get("https://in2000.api.met.no/weatherapi/sunrise/3.0/sun?lat=$lat&lon=$lon&date=$date&offset=+01:00")
             return@withContext response.body()
         } catch (e: Exception) {

@@ -41,7 +41,7 @@ fun Activity(
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimary, // White icon when enabled
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.padding(end = 8.dp)
             )
         }

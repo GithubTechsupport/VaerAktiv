@@ -1,7 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.data.location
 
 import android.annotation.SuppressLint
-import android.util.Log
 import javax.inject.Inject
 
 class FavoriteLocationRepository @Inject constructor(

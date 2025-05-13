@@ -4,7 +4,7 @@ import android.util.Log
 import io.ktor.client.call.body
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
-import kotlinx.serialization.SerialName
+import no.uio.ifi.in2000.vaeraktiv.model.strava.RefreshResponse
 import no.uio.ifi.in2000.vaeraktiv.model.strava.StravaAuthTokens
 import no.uio.ifi.in2000.vaeraktiv.model.strava.TokenStorage
 import no.uio.ifi.in2000.vaeraktiv.network.httpclient.NetworkClient
@@ -56,18 +56,4 @@ class StravaAuthManager @Inject constructor(
             throw e
         }
     }
-
-    @kotlinx.serialization.Serializable
-    private data class RefreshResponse(
-        @SerialName("token_type")
-        val tokenType: String,
-        @SerialName("access_token")
-        val accessToken: String,
-        @SerialName("refresh_token")
-        val refreshToken: String,
-        @SerialName("expires_at")
-        val expiresAt: Long,
-        @SerialName("expires_in")
-        val expiresIn: Long,
-    )
 }
