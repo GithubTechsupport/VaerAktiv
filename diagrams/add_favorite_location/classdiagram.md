@@ -1,3 +1,6 @@
+---
+title: Aktivitetsdiagram - Legg til et sted du vil se værdata fra
+---
 ```mermaid
 classDiagram
     AddPlaceUI "1" o-- "1" FavoriteLocationViewModel : viewModel
