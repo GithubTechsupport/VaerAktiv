@@ -62,7 +62,7 @@ fun InformationScreen(onStartApplication: () -> Unit) {
             ){
                 MascotWithEndingSpeech()
                 Spacer(modifier = Modifier.height(32.dp))
-                StartButton(onClick = onStartApplication)
+                StartAppButton(onClick = onStartApplication)
             }
 
         }
@@ -101,7 +101,7 @@ fun MascotWithEndingSpeech() {
 fun StartAppButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onBackground),
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)

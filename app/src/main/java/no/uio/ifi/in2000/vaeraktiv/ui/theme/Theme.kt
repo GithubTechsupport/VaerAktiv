@@ -26,11 +26,11 @@ private val LightColorScheme = lightColorScheme(
     onSecondary = OnSecondaryBackgroundDark,
 )
 
-
+/*This is the theme for the app, it switches between dark and light mode. The colors are defined in the colors.kt file
+* and put in variables to make it easier to change them.*/
 @Composable
 fun VaerAktivTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) DarkColorScheme else LightColorScheme

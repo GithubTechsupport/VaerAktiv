@@ -18,12 +18,7 @@ class LocationRepository @Inject constructor(
     // Reference to the current tracking Job
     private var trackingJob: Job? = null
 
-    /**
-     * Starts location tracking.
-     *
-     * @param lifecycleOwner the lifecycle owner whose lifecycle will be used to start/stop tracking.
-     * @param onLocationUpdate a callback that is invoked each time a new [Location] is received.
-     */
+    // Start tracking location updates
     fun startTracking(
         lifecycleOwner: LifecycleOwner,
         onLocationUpdate: (Location) -> Unit
@@ -38,13 +33,5 @@ class LocationRepository @Inject constructor(
                 }
             }
         }
-    }
-
-    /**
-     * Stops location tracking by cancelling the collection job.
-     */
-    fun stopTracking() {
-        trackingJob?.cancel()
-        trackingJob = null
     }
 }

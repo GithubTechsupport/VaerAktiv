@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.location
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterialApi::class)
-@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
     if(isOnline) {
@@ -51,7 +49,7 @@ fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
             ) {
                 item {
                     Text(
-                        "Steder",
+                        text = "Steder",
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.primary
                     )

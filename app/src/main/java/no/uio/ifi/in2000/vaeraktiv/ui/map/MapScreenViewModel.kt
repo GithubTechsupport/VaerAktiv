@@ -26,8 +26,6 @@ class MapScreenViewModel @Inject constructor(
     private val _mapScreenUiState = MutableStateFlow(MapScreenUiState())
     val mapScreenUiState: StateFlow<MapScreenUiState> = _mapScreenUiState.asStateFlow()
 
-    //val deviceLocation: LiveData<Location?> = weatherRepository.deviceLocation
-
     val activities: LiveData<List<SuggestedActivities?>> = weatherRepository.activities
 
     fun decodePolyline(encoded: String): List<GeoPoint> {

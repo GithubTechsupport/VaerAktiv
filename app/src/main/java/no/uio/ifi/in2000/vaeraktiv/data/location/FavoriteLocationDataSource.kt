@@ -4,14 +4,9 @@ import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.FavoriteLocation
 import java.io.File
 import javax.inject.Inject
-
-data class FavoriteLocation(
-    val name: String,
-    val latitude: Double,
-    val longitude: Double
-)
 
 class FavoriteLocationDataSource @Inject constructor(
     @ApplicationContext private val context: Context

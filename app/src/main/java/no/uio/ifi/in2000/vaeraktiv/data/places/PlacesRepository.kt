@@ -68,7 +68,6 @@ class PlacesRepository @Inject constructor(private val placesClient: PlacesClien
                     placeFields
                     )
                     .setIncludedTypes(includedTypes)
-                    //.setExcludedTypes(excludedTypes)
                     .setMaxResultCount(20)
                     .build()
 
