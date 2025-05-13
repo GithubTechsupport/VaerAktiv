@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Button
@@ -32,19 +30,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.ui.settings.Activity
+import no.uio.ifi.in2000.vaeraktiv.ui.settings.PreferencesContent
 import no.uio.ifi.in2000.vaeraktiv.ui.settings.PreferencesViewModel
-
 
 @Composable
 fun InfoPeferencesScreen(
@@ -59,11 +54,10 @@ fun InfoPeferencesScreen(
         showContent = true
     }
 
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.background),
+            .background(color = MaterialTheme.colorScheme.background)
     ) {
         AnimatedVisibility(visible = showContent, enter = fadeIn()) {
             Column(
@@ -73,44 +67,14 @@ fun InfoPeferencesScreen(
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                LazyColumn(
+                PreferencesContent(
+                    preferences = preferences,
+                    viewModel = viewModel,
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    item {
-                        MascotIntroSpeech()
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-                    item {
-                        SectionHeader("Hvilke aktiviteter liker du?", MaterialTheme.colorScheme.primary)
-                    }
-                    items(preferences.take(5)) { preference ->
-                        Activity(
-                            activity = preference,
-                            viewModel = viewModel
-                        )
-                    }
-                    item {
-                        SectionHeader("Sosial eller alene?", MaterialTheme.colorScheme.primary)
-                    }
-                    items(preferences.slice(5..6)) { preference ->
-                        Activity(
-                            activity = preference,
-                            viewModel = viewModel
-                        )
-                    }
-                    item {
-                        SectionHeader("Vil du bli tilbudt aktiviteter som koster penger?", MaterialTheme.colorScheme.primary)
-                    }
-                    item {
-                        Activity(
-                            activity = preferences[7],
-                            viewModel = viewModel
-                        )
-                    }
-                }
+                    additionalHeaderContent = { MascotIntroSpeech() }
+                )
                 ContinueButton(onClick = onContinueClick)
             }
         }
@@ -121,7 +85,7 @@ fun InfoPeferencesScreen(
 fun MascotIntroSpeech() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            text = "Før vi setter i gang, vil jeg gjerne vite hva du foretrekker og hva du liker å gjøre når du er fysisk aktiv.",
+            text = stringResource(R.string.f_r_vi_setter_i_gang_vil_jeg_gjerne_vite_hva_du_foretrekker_og_hva_du_liker_gj_re_n_r_du_er_fysisk_aktiv),
             color = MaterialTheme.colorScheme.primary,
             fontStyle = FontStyle.Italic,
             fontSize = 18.sp,
@@ -139,22 +103,6 @@ fun MascotIntroSpeech() {
 }
 
 @Composable
-fun SectionHeader(text: String, color: Color) {
-    Text(
-        text = text,
-        style = TextStyle(
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = color,
-            textAlign = TextAlign.Start
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-    )
-}
-
-@Composable
 fun ContinueButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
@@ -165,7 +113,7 @@ fun ContinueButton(onClick: () -> Unit) {
             .padding(vertical = 8.dp)
     ) {
         Text(
-            text = "Fortsett",
+            text = stringResource(R.string.fortsett),
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onPrimary
         )
