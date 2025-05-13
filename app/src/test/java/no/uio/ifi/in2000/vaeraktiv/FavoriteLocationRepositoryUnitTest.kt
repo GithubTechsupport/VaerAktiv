@@ -1,23 +1,8 @@
 package no.uio.ifi.in2000.vaeraktiv
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
-import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
-import no.uio.ifi.in2000.vaeraktiv.model.ai.PlacesActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
-import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
-import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
-import no.uio.ifi.in2000.vaeraktiv.network.aiclient.AiClient
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -26,7 +11,6 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.never
 import org.mockito.Mockito.`when`
-import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 
 class FavoriteLocationRepositoryTest {
