@@ -1,7 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +15,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.home.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TodaysActivitiesSection(
     uiState: HomeScreenUiState,
@@ -48,15 +45,28 @@ fun TodaysActivitiesSection(
                     LoadAllActivities()
                 }
 
-                activities?.get(0) != null -> {
-                    val todaysActivities = activities[0]!!.activities
-                    AddActivitiesForDay(
-                        dayNr = 0,
-                        activityDate = ActivityDate("I dag", todaysActivities),
-                        isLoading = { uiState.loadingActivities },
-                        onRefresh = { dayNr, index -> viewModel.replaceActivityInDay(dayNr, index) },
-                        onViewInMap = { activity -> viewModel.viewActivityInMap(activity) }
-                    )
+                else -> {
+                    activities?.getOrNull(0)?.activities?.let { todaysActivities ->
+                        AddActivitiesForDay(
+                            dayNr = 0,
+                            activityDate = ActivityDate("I dag", todaysActivities),
+                            isLoading = { uiState.loadingActivities },
+                            onRefresh = { dayNr, index ->
+                                viewModel.replaceActivityInDay(
+                                    dayNr,
+                                    index
+                                )
+                            },
+                            onViewInMap = { activity -> viewModel.viewActivityInMap(activity) }
+                        )
+                    } ?: run {
+                        Text(
+                            text = "Ingen aktiviteter for i dag",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
                 }
             }
         }

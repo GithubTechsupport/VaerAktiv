@@ -1,8 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,10 +24,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForHour
 
-@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
 @Composable
 fun DisplayHourlyForecast(data: List<ForecastForHour>) {
@@ -71,34 +67,34 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Image(
-                                    painter = painterResource(id = if (iconResId != 0) iconResId else R.drawable.sun),
+                                    painter = painterResource(id = iconResId),
                                     contentDescription = "Weather icon",
                                     modifier = Modifier.size(40.dp)
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = "${item.temp}°C", // Assumes you have `temperature` in ForecastForHour
+                                    text = "${item.temp}°C",
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
                                     color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = "${item.precipitationAmount}mm", // Assumes you have `temperature` in ForecastForHour
+                                    text = "${item.precipitationAmount}mm",
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
                                     color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = "${item.windSpeed}m/s", // Assumes you have `temperature` in ForecastForHour
+                                    text = "${item.windSpeed}m/s",
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
                                     color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = "${item.uv} UV", // Assumes you have `temperature` in ForecastForHour
+                                    text = "${item.uv}UV",
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
                                     color = MaterialTheme.colorScheme.primary

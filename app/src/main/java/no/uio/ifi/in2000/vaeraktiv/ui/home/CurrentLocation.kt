@@ -34,7 +34,7 @@ import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 
 @Composable
-fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentLocation: (Location) -> Unit, navController: NavController) { // navn på sted, devicelocation
+fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentLocation: (Location) -> Unit, navController: NavController) {
     var expanded by remember { mutableStateOf(false) }
     Column (
         verticalArrangement = Arrangement.Center,

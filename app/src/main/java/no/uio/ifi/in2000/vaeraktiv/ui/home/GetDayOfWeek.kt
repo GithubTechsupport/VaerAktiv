@@ -9,8 +9,7 @@ import java.time.LocalDate
 fun getDayOfWeek(date: String): String {
     return try {
         val localDate = LocalDate.parse(date)
-        val dayOfWeek = localDate.dayOfWeek
-        when (dayOfWeek!!) {
+        when (localDate.dayOfWeek) {
             java.time.DayOfWeek.MONDAY -> "Mandag"
             java.time.DayOfWeek.TUESDAY -> "Tirsdag"
             java.time.DayOfWeek.WEDNESDAY -> "Onsdag"
@@ -18,6 +17,7 @@ fun getDayOfWeek(date: String): String {
             java.time.DayOfWeek.FRIDAY -> "Fredag"
             java.time.DayOfWeek.SATURDAY -> "Lørdag"
             java.time.DayOfWeek.SUNDAY -> "Søndag"
+            else -> "N/A"
         }
     } catch (e: Exception) {
         Log.e("WeatherWeek", "Error getting day of week: ", e)

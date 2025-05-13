@@ -1,9 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 
-@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
 @Composable
 fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
@@ -66,7 +63,6 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            // Icon cell
             Box(
                 modifier = Modifier,
                 contentAlignment = Alignment.Center
@@ -77,7 +73,6 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                     modifier = Modifier.size(145.dp)
                 )
             }
-            // Temperature cell and uv
             Column (
                 modifier = Modifier,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -103,7 +98,6 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                     .padding(horizontal = 16.dp, vertical = 8.dp) // Use the same overall padding as above
             ) {
                 Row {
-                    // UV details
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -117,7 +111,6 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                             textAlign = TextAlign.Center,
                         )
                     }
-                    // Precipitation details
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -144,7 +137,6 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                             textAlign = TextAlign.Center,
                         )
                     }
-                    // Wind speed details
                     Box(
                         modifier = Modifier
                             .weight(1f)
