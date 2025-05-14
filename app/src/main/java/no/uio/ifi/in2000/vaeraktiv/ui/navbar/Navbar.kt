@@ -74,7 +74,7 @@ fun Navbar(
             if (shouldNavigate) {
                 handleNavigation(navController, uiState, "home")
                 preferencesViewModel.onNavigationHandled()
-                uiState = uiState.copy(selectedRoute = "home")
+                bottomNavigationViewModel.updateSelectedRoute("home")
             }
         }
     }

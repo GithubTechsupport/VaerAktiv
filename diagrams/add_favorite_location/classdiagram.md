@@ -1,15 +1,21 @@
----
-title: Aktivitetsdiagram - Legg til et sted du vil se værdata fra
----
 ```mermaid
 classDiagram
-    FavoriteLocationScreen "1" o-- "1" FavoriteLocationViewModel : viewModel
-    FavoriteLocationViewModel "1" -- "1" FavoriteLocationRepository : favoriteLocationRepo
-    FavoriteLocationViewModel ..> PlacesAPI : uses
-    FavoriteLocationRepository "1" -- "1" GeocoderClass : geocoder
-    FavoriteLocationRepository "1" -- "1" FavoriteLocationDataSource : dataSource
-    FavoriteLocationViewModel "1" -- "0..*" AutocompletePrediction
-    FavoriteLocationViewModel "1" -- "0..1" AutocompleteSessionToken
+    FavoriteLocationScreen "1" --o "1" FavoriteLocationViewModel : ViewModel
+    FavoriteLocationViewModel "1" --o "1" FavoriteLocationRepository : Data Repository
+    FavoriteLocationViewModel "1" --o "1" WeatherRepository : Dependency
+    FavoriteLocationRepository "1" --o "1" GeocoderClass : Dependency
+    FavoriteLocationRepository "1" --o "1" FavoriteLocationDataSource : Data Source
+    PlacesClient "1" o-- "1" PlacesRepository : Dependency
+    PlacesRepository "1" o-- "1" WeatherRepository : Dependency
+
+    class WeatherRepository {
+      -placesRepository: PlacesRepository
+            +getAutocompletePredictions(query:String,token:AutocompleteSessionToken): List~AutocompletePrediction~
+    }
+
+    class PlacesClient {
+        -ApiKey : String
+    }
 
     class FavoriteLocationScreen {
       +onSearchInputChanged(query:String):void
@@ -40,7 +46,7 @@ classDiagram
       +getAllLocations():List&lt;String&gt;
     }
 
-    class PlacesAPI {
+    class PlacesRepository {
       +getAutocompletePredictions(query:String,token:AutocompleteSessionToken):List&lt;AutocompletePrediction&gt;
     }
 
