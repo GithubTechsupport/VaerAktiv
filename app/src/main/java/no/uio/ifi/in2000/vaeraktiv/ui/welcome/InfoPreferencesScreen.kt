@@ -38,8 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.R
-import no.uio.ifi.in2000.vaeraktiv.ui.settings.PreferencesContent
-import no.uio.ifi.in2000.vaeraktiv.ui.settings.PreferencesViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.preferences.PreferencesContent
+import no.uio.ifi.in2000.vaeraktiv.ui.preferences.PreferencesViewModel
 
 @Composable
 fun InfoPeferencesScreen(
@@ -53,6 +53,7 @@ fun InfoPeferencesScreen(
         delay(500)
         showContent = true
     }
+
 
     Box(
         modifier = Modifier

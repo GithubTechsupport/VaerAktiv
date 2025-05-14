@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.data.welcome
+package no.uio.ifi.in2000.vaeraktiv.data.preferences
 
 import android.content.Context
 import com.google.gson.Gson

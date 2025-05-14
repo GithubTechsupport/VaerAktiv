@@ -3,42 +3,65 @@ title: Aktivitetsdiagram - Bruker setter preferanser for første gang
 ---
 ```mermaid
 classDiagram
-    PreferencesScreen "1" o-- "1" PreferencesViewModel : viewModel
-    PreferencesViewModel "1" o-- "1" PreferenceRepository : repository
-    PreferenceRepository "1" o-- "1" PreferenceDataSource : dataSource
-    PreferenceDataSource .. "1" UserPreferencesFile : file
-
-    class PreferencesScreen {
-      +togglePreference(pref:Preference, isEnabled:Boolean):void
-    }
-
-    class PreferencesViewModel {
-      -preferenceRepository:PreferenceRepository
-      +userPreferences:StateFlow&lt;List&lt;Preference&gt;&gt;
-      +onPreferenceToggled(pref:Preference, isEnabled:Boolean):void
-    }
-
-    class PreferenceRepository {
-      -dataSource:PreferenceDataSource
-      +userPreference:StateFlow&lt;List&lt;Preference&gt;&gt;
-      +updatePreference(desc:String, isEnabled:Boolean):void
-      +getEnabledPreferences():String
+    class Preference {
+      +String desc
+      +Boolean isEnabled
     }
 
     class PreferenceDataSource {
-      -fileName:String
-      -_userPreference:MutableStateFlow&lt;List&lt;Preference&gt;&gt;
-      +userPreference:StateFlow&lt;List&lt;Preference&gt;&gt;
-      +updatePreference(desc:String, isEnabled:Boolean):suspend void
-      +getEnabledPreferences():List&lt;Preference&gt;
+      -File preferencesFile
+      +StateFlow~List~Preference~~ userPreference
+      +loadPreferences()
+      +updatePreference(desc:String, enabled:Boolean)
     }
 
-    class Preference {
-      +desc:String
-      +isEnabled:Boolean
+    class PreferenceRepository {
+      -PreferenceDataSource dataSource
+      +StateFlow~List~Preference~~ userPreference
+      +updatePreference(desc:String, enabled:Boolean)
+      +getEnabledPreferences(): List\<Preference\>
     }
 
-    class UserPreferencesFile {
-      -fileName:String
+    class PreferencesViewModel {
+      -PreferenceRepository repo
+      +userPreferences: StateFlow~List~Preference~~
+      +onPreferenceToggled(pref:Preference, enabled:Boolean)
+      +navigateBack()
     }
+
+    class PreferencesScreen {
+      +displayPreferences()
+      +onToggle(pref:Preference, enabled:Boolean)
+      +onBack()
+    }
+
+    class HomeScreen {
+        +navigateToPreferences()
+    }
+
+    class HomeScreenViewModel {
+      +navigateToPreferences()
+    }
+
+    class WelcomeScreen {
+      +onContinue()
+    }
+
+    class Navbar {
+      -FavoriteLocationViewModel
+      -HomeScreenViewModel
+      -MapScreenVewModel
+      -PreferencesViewModel
+      -navigateToPreferences()
+    }
+
+    HomeScreen "1" --o "1" HomeScreenViewModel : ViewModel
+    PreferencesViewModel "1" --o "1" Navbar : Dependency
+    PreferenceRepository "1" --o "1" PreferenceDataSource : Data source
+    PreferencesViewModel "1" --o "1" PreferenceRepository : Data repository
+    PreferencesScreen "1" --o "1" PreferencesViewModel : ViewModel
+    HomeScreenViewModel "1" --o "1" Navbar : Dependency
+    WelcomeScreen "1" --o "1" Navbar : Navigation
+    Navbar "1" o-- "1" PreferencesViewModel : Dependency
+    Preference
 ```

@@ -13,7 +13,7 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
-import no.uio.ifi.in2000.vaeraktiv.data.welcome.PreferenceRepository
+import no.uio.ifi.in2000.vaeraktiv.data.preferences.PreferenceRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Features
 import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Properties

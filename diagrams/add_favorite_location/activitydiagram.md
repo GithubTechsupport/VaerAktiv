@@ -4,7 +4,7 @@ title: Aktivitetsdiagram - Legg til et sted du vil se værdata fra
 ```mermaid
 flowchart TD;
   Start((Start))
-  Navigate[User opens 'Places' screen]
+  Navigate[User opens 'FavoriteLocations' screen]
   PressAdd[User taps 'Add' icon]
   ShowSearchField[System displays search field]
   EnterSearch[User enters search text]

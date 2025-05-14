@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.data.welcome
+package no.uio.ifi.in2000.vaeraktiv.data.preferences
 
 import kotlinx.coroutines.flow.StateFlow
 import no.uio.ifi.in2000.vaeraktiv.model.preferences.Preference

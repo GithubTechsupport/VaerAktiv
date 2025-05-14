@@ -3,34 +3,45 @@ title: Aktivitetsdiagram - Legg til et sted du vil se værdata fra
 ---
 ```mermaid
 sequenceDiagram
-    actor Bruker
-    participant UI as AddPlace\ UI
-    participant ViewModel as FavoriteLocationViewModel
-    participant Repo as FavoriteLocationRepository
-    participant Geocoder as GeocoderClass
-    participant DataSource as FavoriteLocationDataSource
-    participant PlacesAPI as Places\ API
+  actor User as User
+  participant UI as FavoriteLocationScreen
+  participant VM as FavoriteLocationViewModel
+  participant Repo as FavoriteLocationRepository
+  participant Geocoder as GeocoderClass
+  participant DS as FavoriteLocationDataSource
+  participant API as PlacesRepository
+  actor Google as Google Places
 
-    Bruker->>UI: trykk Legg\ til\ sted
-    UI->>ViewModel: fetchPredictions(søketekst)
-    alt søketekst ikke tom
-        ViewModel->>PlacesAPI: getAutocompletePredictions(query, token)
-        PlacesAPI-->>ViewModel: liste\ av\ forslag
-        ViewModel-->>UI: oppdater\ predictions
-    else tom søketekst
-        ViewModel-->>UI: clear\ predictions
+  User ->> UI: tap Add icon
+  UI ->> VM: fetchPredictions(query)
+  alt query not empty
+    VM ->> API: getAutocompletePredictions(query, token)
+    API ->> Google: findAutocompletePredictions(query, token, ..)
+    Google ->> API: Response
+    alt suggestions found
+      API -->> VM: list of suggestions
+      VM -->> UI: update predictions
+    else no suggestions
+      API -->> VM: []
+      VM -->> UI: display "No results"
     end
-
-    Bruker->>UI: velg\ forslag(fullText)
-    UI->>ViewModel: addLocation(fullText)
-
-    ViewModel->>Repo: addLocationByName(fullText)
-    Repo->>Geocoder: getCoordinatesFromLocation(fullText)
-    Geocoder-->>Repo: koordinater(lat, lon)
-    Repo->>DataSource: addLocation(navn, lat, lon)
-    DataSource-->>Repo: bekreft\ lagring
-    Repo-->>ViewModel: ferdig
-
-    ViewModel->>ViewModel: loadLocationsAndFetchWeather()
-    ViewModel-->>UI: oppdater\ favorittliste
+  else query empty
+    VM -->> UI: clear predictions
+  end
+  User ->> UI: select suggestion(fullText)
+  UI ->> VM: addLocation(fullText)
+  VM ->> Repo: addLocationByName(fullText)
+  Repo ->> Geocoder: getCoordinatesFromLocation(fullText)
+  Geocoder -->> Repo: coordinates(lat, lon)
+  Repo ->> DS: addLocation(name, lat, lon)
+  alt location not exists
+    DS -->> Repo: confirm storage
+    Repo -->> VM: completed
+    VM ->> VM: loadLocationsAndFetchWeather()
+    VM -->> UI: update favorite list
+  else location already saved
+    DS -->> Repo: already exists
+    Repo -->> VM: notifyExists
+    VM -->> UI: display "Location already exists"
+  end
 ```

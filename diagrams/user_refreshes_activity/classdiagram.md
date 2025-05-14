@@ -1,17 +1,22 @@
 ```mermaid
 classDiagram
-    ActivityCard "1" o-- "1" HomeScreenViewModel : viewModel
-    HomeScreenViewModel "1" o-- "1" WeatherRepository : repo
-    WeatherRepository "1" o-- "1" LocationForecastRepository
-    WeatherRepository "1" o-- "1" PlacesRepository
-    WeatherRepository "1" o-- "1" StravaRepository
-    WeatherRepository "1" o-- "1" PreferencesRepository
-    WeatherRepository "1" o-- "1" AiRepository
-    AiRepository "1" o-- "1" AiClient
-    AiClient ..> OpenAI
+    HomeScreen "1" o-- "1" HomeScreenViewModel : ViewModel
+    HomeScreenViewModel "1" --o "1" WeatherRepository : Dependency
+    WeatherRepository "1" --o "1" LocationForecastRepository: Dependency
+    WeatherRepository "1" --o "1" PlacesRepository: Dependency
+    WeatherRepository "1" --o "1" StravaRepository: Dependency
+    WeatherRepository "1" --o "1" PreferencesRepository: Dependency
+    WeatherRepository "1" --o "1" AiRepository: Dependency
+    AiRepository "1" --o "1" AiClient: Dependency
+    PlacesClient "1" --o "1" PlacesRepository: Dependency
+    HomeScreenUiState "1" o-- "1" HomeScreenViewModel
 
-    class ActivityCard {
-      +onRefresh(day:Int, index:Int):void
+    class HomeScreenUiState {
+
+    }
+
+    class HomeScreen {
+      +onRefreshActivity(day:Int, index:Int):void
     }
 
     class HomeScreenViewModel {
@@ -47,24 +52,15 @@ classDiagram
 
     class AiRepository {
       -client:AiClient
-      +getSingleSuggestionForDay(
-         prompt:FormattedForecastDataForPrompt,
-         nearbyPlaces:NearbyPlacesSuggestions,
-         routes:RoutesSuggestions,
-         preferences:String,
-         exclusion:String
-       ):ActivitySuggestion
++getSingleSuggestionForDay(forecastData, nearbyPlaces, routes, preferences, exclusion):SuggestedActivities
     }
 
     class AiClient {
-      +getSingleSuggestionForDay(
-         forecastData:FormattedForecastDataForPrompt,
-         nearbyPlaces:NearbyPlacesSuggestions,
-         routes:RoutesSuggestions,
-         preferences:String,
-         exclusion:String
-       ):String?
+        -ApiKey : String
++getSingleSuggestionForDay(forecastData, nearbyPlaces, routes, preferences, exclusion):SuggestedActivities
     }
 
-    class OpenAI
+    class PlacesClient {
+        -ApiKey : String
+    }
 ```

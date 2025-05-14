@@ -2,62 +2,23 @@
 title: Aktivitetsdiagram - Bruker setter preferanser for første gang
 ---
 ```mermaid
+flowchart TD
+  DecStart{Starting screen?}
+  Welcome[Welcome Screen]
+  Home[Home Screen]
+  DecStart -- First launch --> Welcome
+  DecStart -- Returning user --> Home
 
-    flowchart TD;
+  Welcome --> UserNav1[User taps 'Kom i gang']
+  Home --> UserNav2[User taps Gear-icon]
 
-    Start((Start))
-    StartApp([Bruker åpner VærAktiv-appen])
-    VisVelkomst([Systemet viser velkomstskjerm])
-    TrykkKomIGang([Bruker trykker Kom i gang])
-    VisPreferanser([Systemet viser preferanseskjerm])
-    VelgPreferanser([Bruker velger preferanser])
-    HoppOverPreferanser([Bruker velger ikke preferanser])
-    TrykkFortsett([Bruker trykker Fortsett])
-    VisInformasjon([Systemet viser informasjonsvindu])
-    TrykkStart([Bruker trykker Kom i gang])
-    AapneHjem([Systemet åpner hjemskjerm])
-    LasterAktiviteter([Systemet laster aktiviteter basert på preferanser])
-    ViserAktiviteter([Systemet viser aktiviteter])
-
-    TrykkFortsettAlt([Bruker trykker Fortsett])
-    VisInformasjonAlt([Systemet viser informasjonsvindu])
-    TrykkStartAlt([Bruker trykker Kom i gang])
-    AapneHjemAlt([Systemet åpner hjemskjerm])
-    TrykkInnstillinger([Bruker trykker på innstillinger])
-    AapnePreferanser([Systemet åpner preferanseskjerm])
-    OppdaterPreferanser([Bruker oppdaterer preferanser])
-    TrykkTilbake([Bruker trykker Tilbake])
-    LagrerEndringer([Systemet lagrer endringer])
-
-    Slutt((Slutt))
-
-    HarPreferanser{Har brukeren valgt preferanser?}
-
-    Start --> StartApp
-    StartApp --> VisVelkomst
-    VisVelkomst --> TrykkKomIGang
-    TrykkKomIGang --> VisPreferanser
-    VisPreferanser --> HarPreferanser
-    HarPreferanser --> VelgPreferanser
-    HarPreferanser --> HoppOverPreferanser
-    VelgPreferanser --> TrykkFortsett
-    TrykkFortsett --> VisInformasjon
-    VisInformasjon --> TrykkStart
-    TrykkStart --> AapneHjem
-    AapneHjem --> LasterAktiviteter
-    LasterAktiviteter --> ViserAktiviteter
-
-    HoppOverPreferanser --> TrykkFortsettAlt
-    TrykkFortsettAlt --> VisInformasjonAlt
-    VisInformasjonAlt --> TrykkStartAlt
-    TrykkStartAlt --> AapneHjemAlt
-    AapneHjemAlt --> TrykkInnstillinger
-    TrykkInnstillinger --> AapnePreferanser
-    AapnePreferanser --> OppdaterPreferanser
-    OppdaterPreferanser --> TrykkTilbake
-    TrykkTilbake --> LagrerEndringer
-    LagrerEndringer --> LasterAktiviteter
-    ViserAktiviteter --> Slutt
-
+  UserNav1 & UserNav2 --> LoadPrefs[Load preferences from file]
+  LoadPrefs --> DisplayPrefs[Display Preferences Screen with preferences to toggle]
+  DisplayPrefs --> Toggle[User toggles a preference]
+  Toggle -- Yes --> UpdateUI[Update UI state]
+  UpdateUI --> Save[Write to file]
+  Save --> More{User wishes to toggle more preferences?}
+  More -- Yes --> Toggle
+  More -- No --> End((End))
 ```
 

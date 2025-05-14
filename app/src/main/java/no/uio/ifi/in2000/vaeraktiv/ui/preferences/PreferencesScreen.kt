@@ -1,14 +1,12 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.settings
+package no.uio.ifi.in2000.vaeraktiv.ui.preferences
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,14 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import no.uio.ifi.in2000.vaeraktiv.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(
+fun PreferencesScreen(
     viewModel: PreferencesViewModel,
-    navController: NavController
 ) {
     val preferences by viewModel.userPreferences.collectAsState()
 
@@ -46,7 +42,7 @@ fun SettingsScreen(
                 .size(48.dp)
                 .clickable(
                     enabled = true,
-                    onClick = { navController.popBackStack("home", false) }
+                    onClick = { viewModel.navigateBack() }
                 )
         )
         PreferencesContent(

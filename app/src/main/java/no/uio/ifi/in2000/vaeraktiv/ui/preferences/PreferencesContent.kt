@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.settings
+package no.uio.ifi.in2000.vaeraktiv.ui.preferences
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth

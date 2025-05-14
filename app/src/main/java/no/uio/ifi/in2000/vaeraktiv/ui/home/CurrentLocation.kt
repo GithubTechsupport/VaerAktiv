@@ -29,12 +29,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 
 @Composable
-fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentLocation: (Location) -> Unit, navController: NavController) {
+fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentLocation: (Location) -> Unit, navigateToPreferences: () -> Unit) { // navn på sted, devicelocation
     var expanded by remember { mutableStateOf(false) }
     Column (
         verticalArrangement = Arrangement.Center,
@@ -53,7 +52,7 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                 tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .padding(vertical = 8.dp)
-                    .clickable { navController.navigate("settings") }
+                    .clickable { navigateToPreferences() }
                     .size(48.dp)
             )
 
@@ -66,10 +65,6 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                         if (locationName != deviceLocation?.addressName) expanded = !expanded
                     }
             ) {
-                Log.d(
-                    "CurrentLocation",
-                    "locationName: $locationName, currentLocation: $deviceLocation"
-                )
                 Text(
                     text = locationName,
                     style = MaterialTheme.typography.headlineLarge,

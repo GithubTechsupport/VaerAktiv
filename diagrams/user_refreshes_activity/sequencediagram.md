@@ -1,7 +1,7 @@
 ```mermaid
 sequenceDiagram
     actor User
-    participant UI as ActivityCard
+    participant UI as HomeScreen
     participant VM as HomeScreenViewModel
     participant Repo as WeatherRepository
     participant LF as LocationForecastRepository
@@ -10,9 +10,9 @@ sequenceDiagram
     participant Pref as PreferencesRepository
     participant AI as AiRepository
     participant Client as AiClient
-    participant OpenAI
+    actor OpenAI
 
-    User->>UI: click refresh icon
+    User->>UI: click refresh icon on an ActivityCard
     UI->>VM: replaceActivityInDay(dayNr, index)
     VM->>Repo: getSuggestedActivity(currentLocation, dayNr, index)
     alt success
@@ -32,7 +32,7 @@ sequenceDiagram
         AI-->>Repo: ActivitySuggestion
         Repo-->>VM: ActivitySuggestion
         VM->>Repo: replaceActivityInDay(dayNr, index, ActivitySuggestion)
-        Repo-->>VM: void
+        Repo-->>VM: emit updated list of activities
         VM-->>UI: updated activity
     else error
         Repo-->>VM: Exception
