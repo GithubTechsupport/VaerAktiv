@@ -1,15 +1,21 @@
----
-title: Aktivitetsdiagram - Legg til et sted du vil se værdata fra
----
 ```mermaid
 classDiagram
-    FavoriteLocationScreen "1" o-- "1" FavoriteLocationViewModel : viewModel
-    FavoriteLocationViewModel "1" -- "1" FavoriteLocationRepository : favoriteLocationRepo
-    FavoriteLocationViewModel ..> PlacesAPI : uses
-    FavoriteLocationRepository "1" -- "1" GeocoderClass : geocoder
-    FavoriteLocationRepository "1" -- "1" FavoriteLocationDataSource : dataSource
-    FavoriteLocationViewModel "1" -- "0..*" AutocompletePrediction
-    FavoriteLocationViewModel "1" -- "0..1" AutocompleteSessionToken
+    FavoriteLocationScreen "1" --o "1" FavoriteLocationViewModel : ViewModel
+    FavoriteLocationViewModel "1" --o "1" FavoriteLocationRepository : Data Repository
+    FavoriteLocationViewModel "1" --o "1" WeatherRepository : Dependency
+    FavoriteLocationRepository "1" --o "1" GeocoderClass : Dependency
+    FavoriteLocationRepository "1" --o "1" FavoriteLocationDataSource : Data Source
+    PlacesClient "1" o-- "1" PlacesRepository : Dependency
+    PlacesRepository "1" o-- "1" WeatherRepository : Dependency
+
+    class WeatherRepository {
+      -placesRepository: PlacesRepository
+            +getAutocompletePredictions(query:String,token:AutocompleteSessionToken): List~AutocompletePrediction~
+    }
+
+    class PlacesClient {
+        -ApiKey : String
+    }
 
     class FavoriteLocationScreen {
       +onSearchInputChanged(query:String):void
@@ -17,8 +23,10 @@ classDiagram
     }
 
     class FavoriteLocationViewModel {
+      +favoriteLocations : MutableStateFlow~List~FavoriteLocation~
+      -weatherRepository: WeatherRepository
       -sessionToken:AutocompleteSessionToken?
-      -predictions:StateFlow&lt;List&lt;AutocompletePrediction&gt;&gt;
+      +predictions: StateFlow~List~AutocompletePrediction~~
       +fetchPredictions(query:String):void
       +addLocation(loc:String):void
     }
@@ -26,22 +34,22 @@ classDiagram
     class FavoriteLocationRepository {
       +addLocationByName(placeName:String):void
       +deleteLocationByName(placeName:String):void
-      +getAllLocations():List&lt;String&gt;
+      +getAllLocations():List~String~
     }
 
     class GeocoderClass {
-      +getCoordinatesFromLocation(placeName:String):Pair&lt;Double,Double&gt;?
+      +getCoordinatesFromLocation(placeName:String):Pair~Double,Double~
     }
 
     class FavoriteLocationDataSource {
       -favoriteLocationsFile : File
       +addLocation(placeName:String,latitude:Double,longitude:Double):void
       +deleteLocation(placeName:String):void
-      +getAllLocations():List&lt;String&gt;
+      +getAllLocations():List~String~
     }
 
-    class PlacesAPI {
-      +getAutocompletePredictions(query:String,token:AutocompleteSessionToken):List&lt;AutocompletePrediction&gt;
+    class PlacesRepository {
+      +getAutocompletePredictions(query:String,token:AutocompleteSessionToken):List~AutocompletePrediction~
     }
 
     class AutocompletePrediction

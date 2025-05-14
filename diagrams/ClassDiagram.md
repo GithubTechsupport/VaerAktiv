@@ -6,38 +6,36 @@ classDiagram
       +onSuggestionClick(fullText:String)
     }
     class FavoriteLocationViewModel {
-      -sessionToken: AutocompleteSessionToken?
-      -predictions: StateFlow\<List\<AutocompletePrediction\>\>
+      +favoriteLocations : MutableStateFlow~List~FavoriteLocation~
+      -weatherRepository: WeatherRepository
+      -sessionToken: AutocompleteSessionToken
+      +predictions: StateFlow~List~AutocompletePrediction~~
       +fetchPredictions(query:String)
       +addLocation(loc:String)
     }
     class FavoriteLocationRepository {
       +addLocationByName(placeName:String)
       +deleteLocationByName(placeName:String)
-      +getAllLocations(): List\<String\>
+      +getAllLocations(): List~String~
     }
     class GeocoderClass {
-      +getCoordinatesFromLocation(placeName:String): Pair\<Double,Double\>?
+      +getCoordinatesFromLocation(placeName:String): Pair~Double,Double~
     }
     class FavoriteLocationDataSource {
       -favoriteLocationsFile: File
       +addLocation(placeName:String,latitude:Double,longitude:Double)
       +deleteLocation(placeName:String)
-      +getAllLocations(): List\<String\>
+      +getAllLocations(): List~String~
     }
-    class PlacesAPI {
-      +getAutocompletePredictions(query:String,token:AutocompleteSessionToken): List\<AutocompletePrediction\>
-    }
+
     class AutocompletePrediction
     class AutocompleteSessionToken
 
-    FavoriteLocationScreen "1" o-- "1" FavoriteLocationViewModel : viewModel
-    FavoriteLocationViewModel "1" -- "1" FavoriteLocationRepository : favoriteLocationRepo
-    FavoriteLocationViewModel ..> PlacesAPI : uses
-    FavoriteLocationRepository "1" -- "1" GeocoderClass : geocoder
-    FavoriteLocationRepository "1" -- "1" FavoriteLocationDataSource : dataSource
-    FavoriteLocationViewModel "1" -- "0..*" AutocompletePrediction
-    FavoriteLocationViewModel "1" -- "0..1" AutocompleteSessionToken
+    FavoriteLocationScreen "1" o-- "1" FavoriteLocationViewModel : ViewModel
+    FavoriteLocationViewModel "1" -- "1" FavoriteLocationRepository : Data Repository
+    FavoriteLocationViewModel ..> WeatherRepository : Dependency
+    FavoriteLocationRepository "1" -- "1" GeocoderClass : Dependency
+    FavoriteLocationRepository "1" -- "1" FavoriteLocationDataSource : DataSource
 
     %% Preferences
     class Preference {
@@ -46,19 +44,19 @@ classDiagram
     }
     class PreferenceDataSource {
       -preferencesFile: File
-      +userPreference: StateFlow\<List\<Preference\>\>
+      +userPreference: StateFlow~List~Preference~~
       +loadPreferences()
       +updatePreference(desc:String, enabled:Boolean)
     }
     class PreferenceRepository {
       -dataSource: PreferenceDataSource
-      +userPreference: StateFlow\<List\<Preference\>\>
+      +userPreference: StateFlow~List~Preference~~
       +updatePreference(desc:String, enabled:Boolean)
-      +getEnabledPreferences(): List\<Preference\>
+      +getEnabledPreferences(): List~Preference~
     }
     class PreferencesViewModel {
       -repo: PreferenceRepository
-      +userPreferences: StateFlow\<List\<Preference\>\>
+      +userPreferences: StateFlow~List~Preference~~
       +onPreferenceToggled(pref:Preference, enabled:Boolean)
       +navigateBack()
     }
@@ -98,17 +96,21 @@ classDiagram
     }
     class HomeScreenViewModel {
       -weatherRepository: WeatherRepository
-      -_navigateToMap: MutableSharedFlow\<ActivitySuggestion\>
-      +navigateToMap: SharedFlow\<ActivitySuggestion\>
+      -_navigateToMap: MutableSharedFlow~ActivitySuggestion~
+      +navigateToMap: SharedFlow~ActivitySuggestion~
       +navigateToPreferences()
       +viewActivityInMap(activity:ActivitySuggestion)
       +getActivitiesForAFutureDay(day:Int)
       +replaceActivityInDay(day:Int,index:Int)
     }
-    class HomeScreenUiState
+
+    class HomeScreenUiState {
+      
+    }
 
     HomeScreen "1" o-- "1" HomeScreenViewModel : viewModel
     HomeScreenViewModel "1" --o "1" WeatherRepository : dependency
+    HomeScreenUiState "1" o-- "1" HomeScreenViewModel : UI State
 
     class WeatherRepository {
       -locationForecastRepository: LocationForecastRepository
@@ -116,15 +118,20 @@ classDiagram
       -stravaRepository: StravaRepository
       -preferenceRepository: PreferencesRepository
       -aiRepository: AiRepository
+      -_currentLocation: _MutableLiveData~Location~
+      -_deviceLocation: _MutableLiveData~Location~
       +getSuggestedActivitiesForOneDay(location: Location, day:Int): SuggestedActivities
       +replaceActivitiesForDay(day:Int, newActivities: SuggestedActivities)
       +getSuggestedActivity(location: Location, day:Int, index:Int): ActivitySuggestion
+      +getNearbyPlaces(loc: Location): NearbyPlacesSuggestions
+      +getAutocompletePredictions(query:String,token:AutocompleteSessionToken): List~AutocompletePrediction~
     }
     class LocationForecastRepository {
-      +getTimeSeriesForDay(loc: Location, day:Int): Pair\<List\<TimeSeries\>, Units?\>
+      +getTimeSeriesForDay(loc: Location, day:Int): Pair~List~TimeSeries~, Units~
     }
     class PlacesRepository {
       +getNearbyPlaces(loc: Location): NearbyPlacesSuggestions
+      +getAutocompletePredictions(query:String,token:AutocompleteSessionToken): List~AutocompletePrediction~
     }
     class StravaRepository {
       +getRouteSuggestions(loc: Location): RoutesSuggestions
@@ -140,7 +147,7 @@ classDiagram
     class AiClient {
       -ApiKey: String
       -BasePrompt: String
-      +getSuggestionsForOneDay(forecastData, nearbyPlaces, routes, preferences, exclusion): String?
+      +getSuggestionsForOneDay(forecastData, nearbyPlaces, routes, preferences, exclusion): String
       +getSingleSuggestionForDay(forecastData, nearbyPlaces, routes, preferences, exclusion): SuggestedActivities
     }
     class PlacesClient {
@@ -160,17 +167,17 @@ classDiagram
       +onNavigate(activity:ActivitySuggestion)
     }
     class MapScreenViewModel {
-      -_mapScreenUiState: MutableStateFlow\<MapScreenUiState\>
+      -_mapScreenUiState: MutableStateFlow~MapScreenUiState~
       +zoomInOnActivity(activity:ActivitySuggestion)
-      +decodePolyline(encoded:String): List\<GeoPoint\>
+      +decodePolyline(encoded:String): List~GeoPoint~
       +clearSelectedActivityPoints()
     }
     class MapScreenUiState {
-      +places: List\<PlaceActivitySuggestion\>
-      +routes: List\<StravaActivitySuggestion\>
+      +places: List~PlaceActivitySuggestion~
+      +routes: List~StravaActivitySuggestion~
       +isLoading: Boolean
       +errorMessage: String
-      +selectedActivityPoints: List\<GeoPoint\>
+      +selectedActivityPoints: List~GeoPoint~
     }
     class OsmMapView {
       -update(places, routes, selectedActivityPoints)
@@ -180,6 +187,7 @@ classDiagram
     class PlaceActivitySuggestion
     class StravaActivitySuggestion
 
+    MapScreenUiState "1" --o "1" MapScreenViewModel : UI State
     MapScreen "1" --o "1" MapScreenViewModel : viewModel
     OsmMapView "1" --o "1" MapScreen : drives view
 ```

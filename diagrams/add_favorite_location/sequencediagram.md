@@ -1,6 +1,3 @@
----
-title: Aktivitetsdiagram - Legg til et sted du vil se værdata fra
----
 ```mermaid
 sequenceDiagram
   actor User as User
@@ -9,18 +6,21 @@ sequenceDiagram
   participant Repo as FavoriteLocationRepository
   participant Geocoder as GeocoderClass
   participant DS as FavoriteLocationDataSource
+  Participant WR as WeatherRepository
   participant API as PlacesRepository
   actor Google as Google Places
 
   User ->> UI: tap Add icon
   UI ->> VM: fetchPredictions(query)
   alt query not empty
-    VM ->> API: getAutocompletePredictions(query, token)
+    VM ->> WR: getAutocompletePredictions(query, token)
+    WR ->> API: getAutocompletePredictions(query, token)
     API ->> Google: findAutocompletePredictions(query, token, ..)
     Google ->> API: Response
     alt suggestions found
-      API -->> VM: list of suggestions
-      VM -->> UI: update predictions
+      API -->> WR: List<AutoCompletePrediction>
+      WR -->> VM: List<AutoCompletePrediction>
+      VM -->> UI: update predictions stateflow
     else no suggestions
       API -->> VM: []
       VM -->> UI: display "No results"
@@ -38,7 +38,7 @@ sequenceDiagram
     DS -->> Repo: confirm storage
     Repo -->> VM: completed
     VM ->> VM: loadLocationsAndFetchWeather()
-    VM -->> UI: update favorite list
+    VM -->> UI: update favoriteLocations stateflow
   else location already saved
     DS -->> Repo: already exists
     Repo -->> VM: notifyExists
