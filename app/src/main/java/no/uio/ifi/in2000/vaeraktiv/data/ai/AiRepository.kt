@@ -21,7 +21,7 @@ import javax.inject.Named
 private val json = Json {
     ignoreUnknownKeys = true
     serializersModule = SerializersModule {
-        polymorphic(ActivitySuggestion::class) {
+        polymorphic(ActivitySuggestion::class) { //define the base class and the possible subclasses to deserialize into.
             subclass(CustomActivitySuggestion::class)
             subclass(PlaceActivitySuggestion::class)
             subclass(StravaActivitySuggestion::class)

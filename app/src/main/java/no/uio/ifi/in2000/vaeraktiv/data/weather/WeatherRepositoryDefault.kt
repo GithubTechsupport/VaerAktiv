@@ -60,7 +60,7 @@ class WeatherRepositoryDefault @Inject constructor(
     private val _deviceLocation = MutableLiveData<Location?>()
     override val deviceLocation: LiveData<Location?> get() = _deviceLocation
 
-    private val _activities = MutableLiveData<List<SuggestedActivities?>>(List(8) { null })
+    private val _activities = MutableLiveData<List<SuggestedActivities?>>(List(8) { null }) // list of the 8 different triplets of suggested activities
     override val activities: LiveData<List<SuggestedActivities?>> get() = _activities
 
     override fun setCurrentLocation(location: Location) {
@@ -110,9 +110,9 @@ class WeatherRepositoryDefault @Inject constructor(
             val data = forecast?.properties?.timeseries?.get(0)?.data
 
             data?.let { forecastData ->
-                val iconCode = forecastData.next6Hours?.summary?.symbolCode ?: "unknown"
-                val iconKey = iconCode.substringBefore("_")
-                val description = weatherDescriptions[iconKey] ?: "Ukjent vær"
+                val iconCode = forecastData.next6Hours?.summary?.symbolCode ?: "unknown" // the code for the icon doubles as an English weather description
+                val iconKey = iconCode.substringBefore("_") // ignores the _night or _daytime part of the code
+                val description = weatherDescriptions[iconKey] ?: "Ukjent vær" // makes the English descriptions Norwegian
 
                 FavoriteLocation(
                     name = placeName,
@@ -180,7 +180,7 @@ class WeatherRepositoryDefault @Inject constructor(
             val response = locationForecastRepository.getForecastByDay(location.lat, location.lon)
             val fullTimeseries = response.first
             val units = response.second
-            val timeseries = fullTimeseries[dayNr].second
+            val timeseries = fullTimeseries[dayNr].second // get only the time series for the specified day.
             return Pair(timeseries, units)
         } catch (e: Exception) {
             Log.e("WeatherRepository", "Error at getTimeSeriesForDay: ", e)
@@ -191,8 +191,8 @@ class WeatherRepositoryDefault @Inject constructor(
     override suspend fun getForecastByDay(location: Location): List<ForecastForDay> {
         try {
             val response = locationForecastRepository.getForecastByDay(location.lat, location.lon).first.drop(1)
-                .dropLast(1) // liste med TimeSeries for datoen
-            val forecast = response.map { (date, timeSeriesList) ->
+                .dropLast(1) // list of time series for each day
+            val forecast = response.map { (date, timeSeriesList) -> // gives the forecast at 12:00 for the coming days
                 val timeSeriesAt12PM = timeSeriesList.find { it.time.substring(11, 16) == "12:00" }
                 ForecastForDay(
                     date = date,
@@ -217,12 +217,12 @@ class WeatherRepositoryDefault @Inject constructor(
                 .dropLast(1)
             
             val utcIntervals = listOf("00", "06", "12", "18")
-            val osloZone = ZoneId.of("Europe/Oslo") // Kan byttes med location?
+            val osloZone = ZoneId.of("Europe/Oslo")
             val utcZone = ZoneId.of("UTC")
 
             val forecastByDay = response.map { (dateStr, timeSeriesList) ->
                 val utcDate = LocalDate.parse(dateStr)
-
+                // the API goes by UTC time and our app goes by Norwegian time so the following code fixes the intervals.
                 utcIntervals.map { utcHourStr ->
                     val utcHour = utcHourStr.toInt()
 
@@ -235,6 +235,7 @@ class WeatherRepositoryDefault @Inject constructor(
                     val localStart = startUtcDateTime.withZoneSameInstant(osloZone)
                     val localEnd = endUtcDateTime.withZoneSameInstant(osloZone)
 
+                    // The interval displayed to the user.
                     val intervalDisplay = "${localStart.hour.toString().padStart(2, '0')} - ${localEnd.hour.toString().padStart(2, '0')}"
 
                     DetailedForecastForDay(
@@ -256,7 +257,7 @@ class WeatherRepositoryDefault @Inject constructor(
 
 
 
-    @RequiresApi(Build.VERSION_CODES.O) // krever API versjon 26
+    @RequiresApi(Build.VERSION_CODES.O) // Requires API version 26
     override suspend fun getForecastForHour(location: Location): List<ForecastForHour> {
         val response = locationForecastRepository.getNext24Hours(location.lat, location.lon)
         Log.d("WeatherRepository", "getWeatherForHour response: $response")
@@ -290,7 +291,7 @@ class WeatherRepositoryDefault @Inject constructor(
             ?.flatMap { day -> day?.activities.orEmpty() }
             ?.joinToString("\n") { "${it.activityName} (${it.timeStart} - ${it.timeEnd}): ${it.activityDesc}" }
             .orEmpty()
-        val exclusionString = "EXCLUDE THE FOLLOWING ACTIVITIES:\n\n$excludedActivities\n\n"
+        val exclusionString = "EXCLUDE THE FOLLOWING ACTIVITIES:\n\n$excludedActivities\n\n" // Format the prompt for the AI
         if (units == null) {
             throw Exception("Units are null")
         }
@@ -310,6 +311,7 @@ class WeatherRepositoryDefault @Inject constructor(
 
         val preferences = preferenceRepository.getEnabledPreferences()
 
+        // The next suggested activities should not be at the same time as the previously suggested ones.
         val previousInterval = activities.value?.get(dayNr)?.activities?.getOrNull(index - 1)?.timeEnd
         val previousIntervalString = previousInterval?.let { "\n\nSUGGESTED ACTIVITY NEEDS TO BE AFTER $it" } ?: ""
         val excludedActivities = activities.value
@@ -328,6 +330,7 @@ class WeatherRepositoryDefault @Inject constructor(
         return suggestions
     }
 
+    // replaces all 3 activities of a day
     override fun replaceActivitiesForDay(dayNr: Int, newActivities: SuggestedActivities) {
         val current = _activities.value ?: return
         val updated = current.toMutableList().apply {
@@ -336,6 +339,7 @@ class WeatherRepositoryDefault @Inject constructor(
         _activities.value = updated
     }
 
+    // replaces 1 of the activities of a day
     override fun replaceActivityInDay(dayNr: Int, index: Int, newActivity: ActivitySuggestion) {
         val current = _activities.value ?: return
         val activitiesAtDay = current[dayNr] ?: return
@@ -370,7 +374,7 @@ class WeatherRepositoryDefault @Inject constructor(
                 return@startTracking
             }
 
-            newLocation
+            newLocation // if the current location changed then track the new one
                 .takeUnless { it == deviceLocation.value }
                 ?.also { _deviceLocation.value = it }
             Log.d("DeviceLocation", "New device location: $newLocation")

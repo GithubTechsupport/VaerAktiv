@@ -24,7 +24,7 @@ class FavoriteLocationDataSource @Inject constructor(
     @Synchronized
     fun addLocation(placeName: String, latitude: Double, longitude: Double) {
         val formattedPlaceName = placeName.trim().lowercase().split(" ")
-            .joinToString(" ") { it.replaceFirstChar(Char::uppercase) }
+            .joinToString(" ") { it.replaceFirstChar(Char::uppercase) } // Ensures that each word of a place name has the first letter capitalized.
 
         val locations = getAllLocationObjects().toMutableList()
 
