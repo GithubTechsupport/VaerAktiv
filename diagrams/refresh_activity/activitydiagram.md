@@ -1,7 +1,4 @@
 ```mermaid
----
-title: Aktivitetsdiagram - Oppdater aktivitet
----
 flowchart TD
     Start((Start))
     A[User presses the refresh-icon on an activity card component for a given day]
