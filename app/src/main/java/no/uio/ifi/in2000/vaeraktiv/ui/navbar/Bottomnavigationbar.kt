@@ -1,7 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.navbar
 
 import androidx.compose.foundation.background
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,32 +14,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import no.uio.ifi.in2000.vaeraktiv.R
 
-/*
-* This is a navigation bar for the application, this function is called in the MainActivity.kt.
-* When this function is called a display in the button wil be called, this display will have tre buttons.
-* One for activity, one for home and one for location.
-* I have used a list and a forEach loop to create the buttons. The rest of the code is just styling, on how the buttons should look like.
-* */
 @Composable
-fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> String, setSelectedRoute: (String) -> Unit) {
-    val navItems = listOf(
-        "location" to R.drawable.location,
-        "home" to R.drawable.sun,
-        "map" to R.drawable.map
-    )
-
+fun BottomNavigationBar(
+    navController: NavController,
+    viewModel: BottomNavigationViewModel
+) {
     BottomAppBar(
         modifier = Modifier.height(80.dp),
         containerColor = MaterialTheme.colorScheme.onBackground,
         contentColor = MaterialTheme.colorScheme.background,
     ) {
-        navItems.forEach { (route, iconId) ->
-            val selected = getSelectedRoute() == route
+        viewModel.navItems.forEach { navItem ->
+            val selected = viewModel.selectedRoute.value == navItem.route
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -49,14 +39,9 @@ fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> St
                     .background(
                         color = if (selected) MaterialTheme.colorScheme.background else Color.Transparent,
                         shape = RoundedCornerShape(10.dp)
-                        )
+                    )
                     .clickable {
-                        if (selected) return@clickable
-                        navController.navigate(route) {
-                            popUpTo(navController.graph.startDestinationId)
-                            launchSingleTop = true
-                        }
-                        setSelectedRoute(route)
+                        viewModel.onNavItemClick(navController, navItem.route)
                     },
                 contentAlignment = Alignment.Center
             ) {
@@ -64,8 +49,8 @@ fun BottomNavigationBar(navController: NavController, getSelectedRoute: () -> St
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Icon(
-                        painter = painterResource(id = iconId),
-                        contentDescription = route,
+                        painter = painterResource(id = navItem.iconId),
+                        contentDescription = navItem.route,
                         tint = if (selected) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.background
                     )
                 }

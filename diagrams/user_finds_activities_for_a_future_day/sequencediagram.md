@@ -1,3 +1,6 @@
+---
+title: Aktivitetsdiagram - Finn aktiviteter for en fremtidig dag
+---
 ```mermaid
 sequenceDiagram
     actor User

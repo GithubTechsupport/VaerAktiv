@@ -1,8 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,10 +23,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.home.DetailedForecastForDay
 
-@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
 @Composable
 fun DisplayIntervalSymbols(data: List<DetailedForecastForDay>) {
@@ -63,7 +59,7 @@ fun DisplayIntervalSymbols(data: List<DetailedForecastForDay>) {
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Image(
-                        painter = painterResource(id = if (iconResId != 0) iconResId else R.drawable.sun),
+                        painter = painterResource(id = iconResId),
                         contentDescription = "Weather icon",
                         modifier = Modifier.size(40.dp)
                     )

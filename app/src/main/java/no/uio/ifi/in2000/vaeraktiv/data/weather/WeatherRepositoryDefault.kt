@@ -301,7 +301,6 @@ class WeatherRepositoryDefault @Inject constructor(
 
     override suspend fun getSuggestedActivity(location: Location, dayNr: Int, index: Int): ActivitySuggestion {
         val response = getTimeSeriesForDay(location, dayNr)
-
         val timeseries = response.first
         val units = response.second
 

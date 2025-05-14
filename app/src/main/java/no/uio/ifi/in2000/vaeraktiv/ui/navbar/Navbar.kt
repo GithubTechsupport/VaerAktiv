@@ -15,7 +15,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -35,7 +37,6 @@ import no.uio.ifi.in2000.vaeraktiv.ui.welcome.InfoPeferencesScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.InformationScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.WelcomeScreen
 import androidx.core.content.edit
-import androidx.navigation.NavHostController
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -46,10 +47,16 @@ fun Navbar(
     preferencesViewModel: PreferencesViewModel,
     navController: NavHostController
 ) {
+    val bottomNavigationViewModel: BottomNavigationViewModel = viewModel()
     var uiState by remember { mutableStateOf(NavbarUiState()) }
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("VaerAktivPrefs", Context.MODE_PRIVATE)
     val startDestination = if (sharedPreferences.getBoolean("isOnboardingCompleted", false)) "home" else "welcome"
+
+    // Set initial selected route based on start destination
+    LaunchedEffect(startDestination) {
+        bottomNavigationViewModel.updateSelectedRoute(startDestination)
+    }
 
     Log.d("Navbar", "Recomposition triggered, current route: ${navController.currentDestination?.route}")
 
@@ -75,9 +82,9 @@ fun Navbar(
     LaunchedEffect(favoriteLocationViewModel.navigateToHome) {
         favoriteLocationViewModel.navigateToHome.observeForever { shouldNavigate ->
             if (shouldNavigate) {
-                handleNavigation(navController, uiState, "home") { navController.navigateToHome() }
+                uiState = handleNavigation(navController, uiState, "home")
                 favoriteLocationViewModel.onNavigationHandled()
-                uiState = uiState.copy(selectedRoute = "home")
+                bottomNavigationViewModel.updateSelectedRoute("home")
             }
         }
     }
@@ -93,9 +100,9 @@ fun Navbar(
 
     LaunchedEffect(homeScreenViewModel.navigateToMap) {
         homeScreenViewModel.navigateToMap.collect { activity ->
-            handleNavigation(navController, uiState, "map") { navController.navigateToMap() }
+            uiState = handleNavigation(navController, uiState, "map")
             mapScreenViewModel.zoomInOnActivity(activity)
-            uiState = uiState.copy(selectedRoute = "map")
+            bottomNavigationViewModel.updateSelectedRoute("map")
         }
     }
 
@@ -108,8 +115,7 @@ fun Navbar(
             if (!uiState.isLoading && routeInfo.showBottomBar) {
                 BottomNavigationBar(
                     navController = navController,
-                    getSelectedRoute = { uiState.selectedRoute },
-                    setSelectedRoute = { uiState = uiState.copy(selectedRoute = it) }
+                    viewModel = bottomNavigationViewModel
                 )
             }
         }
@@ -135,6 +141,7 @@ fun Navbar(
                                 putBoolean("isOnboardingCompleted", true)
                             }
                             navController.navigateToHome(popUpTo = "welcome")
+                            bottomNavigationViewModel.updateSelectedRoute("home")
                         }
                     )
                 }
@@ -187,10 +194,12 @@ private fun getRouteInfo(route: String?): RouteInfo {
 private fun handleNavigation(
     navController: NavController,
     uiState: NavbarUiState,
-    route: String,
-    navigateAction: () -> Unit
+    route: String
 ): NavbarUiState {
-    navigateAction()
+    when (route) {
+        "home" -> navController.navigateToHome()
+        "map" -> navController.navigateToMap()
+    }
     return uiState.copy(selectedRoute = route)
 }
 

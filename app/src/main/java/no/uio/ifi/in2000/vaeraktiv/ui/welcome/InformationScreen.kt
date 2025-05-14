@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,7 +63,7 @@ fun InformationScreen(onStartApplication: () -> Unit) {
             ){
                 MascotWithEndingSpeech()
                 Spacer(modifier = Modifier.height(32.dp))
-                StartButton(onClick = onStartApplication)
+                StartAppButton(onClick = onStartApplication)
             }
 
         }
@@ -74,7 +75,7 @@ fun InformationScreen(onStartApplication: () -> Unit) {
 fun MascotWithEndingSpeech() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            text = "Supert! Du er klar til å sette i gang eventyret. Takk for at du delte interessene dine – nå skal jeg finne aktiviteter som passer perfekt for deg!",
+            text = stringResource(R.string.aktiviteter_som_passer_perfekt_for_deg),
             color = MaterialTheme.colorScheme.primary,
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
@@ -88,7 +89,7 @@ fun MascotWithEndingSpeech() {
                 .size(100.dp)
         )
         Text(
-            text = "Vil du endre preferansene dine senere? Det er enkelt – bare gå til innstillingene via navigasjonsbaren nederst.",
+            text = stringResource(R.string.vil_du_endre_preferansene_dine_senere_det_er_enkelt_bare_g_til_innstillingene_via_navigasjonsbaren_nederst),
             color = MaterialTheme.colorScheme.primary,
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
@@ -101,14 +102,14 @@ fun MascotWithEndingSpeech() {
 fun StartAppButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onBackground),
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
             .padding(vertical = 8.dp)
     ) {
         Text(
-            text = "Start VærAktiv!",
+            text = stringResource(R.string.start_v_raktiv),
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onPrimary
         )

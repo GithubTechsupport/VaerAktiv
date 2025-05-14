@@ -1,3 +1,6 @@
+---
+title: Aktivitetsdiagram - Bruker setter preferanser for første gang
+---
 ```mermaid
 classDiagram
     class Preference {

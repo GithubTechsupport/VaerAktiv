@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
-import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -30,7 +29,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.home.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
 
 @RequiresApi(Build.VERSION_CODES.O)
-@SuppressLint("DiscouragedApi")
 @Composable
 fun WeatherWeek(
     activities: List<SuggestedActivities?>?,

@@ -87,6 +87,10 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.cbor)
     implementation(libs.ktor.serialization.kotlinx.protobuf)
 
+    //Geocoder
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
     // navigation
     implementation(libs.androidx.navigation.compose)
 
@@ -104,9 +108,6 @@ dependencies {
     // saving favorite locations with json
     implementation(libs.gson)
 
-
-    // deepseek
-//    implementation(libs.deepseek.kotlin)
 
     // deepseek dependencies (ktor client logging)
     implementation(libs.ktor.client.logging)
@@ -141,8 +142,6 @@ dependencies {
     // hilt testing
     testImplementation(libs.hilt.android.testing)
     kaptTest(libs.hilt.android.compiler)
-
-
 
     // osm
     implementation(libs.osmdroid.android)
