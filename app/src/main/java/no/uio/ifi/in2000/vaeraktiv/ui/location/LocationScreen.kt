@@ -46,6 +46,7 @@ fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
             .background(MaterialTheme.colorScheme.background)
             .padding(vertical = 8.dp)
         ) {
+            // LazyColumn for displaying the list of favorite locations
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -57,6 +58,7 @@ fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
                     )
                 }
                 item { AddPlace(8.dp, viewModel) }
+                // Display each favorite location using PlaceCard
                 items(list) {
                     PlaceCard(it, 8.dp, viewModel)
                 }

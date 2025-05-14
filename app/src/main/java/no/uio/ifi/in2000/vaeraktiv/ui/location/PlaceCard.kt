@@ -88,6 +88,7 @@ fun PlaceCard(
                         }
                     )
             ) {
+                // This icon wil delete the PlaceCard
                 Icon(
                     imageVector = Icons.Filled.Delete,
                     contentDescription = "Delete Icon",
@@ -123,6 +124,7 @@ fun PlaceCard(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
             ){
+                // Short description, UV, highest and lowest temp
                 Row (
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
@@ -157,6 +159,7 @@ fun PlaceCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
+                    // Wind and downPour
                     Text(
                         text = stringResource(R.string.m_s, location.wind),
                         style = MaterialTheme.typography.bodyLarge,

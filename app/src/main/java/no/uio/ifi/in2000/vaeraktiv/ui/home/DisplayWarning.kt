@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
@@ -35,7 +36,7 @@ fun DisplayWarning(data: List<AlertData>) {
     if (data.isNotEmpty()) {
         var isExpanded by remember { mutableStateOf(false) }
         val cornerDp = 10.dp
-        val contactInfo = data.first().contact ?: "N/A"
+        val contactInfo = data.first().contact ?: stringResource(R.string.n_a)
 
         Column(
             modifier = Modifier
@@ -71,7 +72,7 @@ private fun WarningHeader() {
             modifier = Modifier.size(40.dp)
         )
         Text(
-            text = "Advarsel",
+            text = stringResource(R.string.advarsel),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
@@ -98,7 +99,7 @@ private fun ExpandedWarningContent(warnings: List<AlertData>, contactInfo: Strin
             WarningDetailItem(warning = warning)
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "Kontaktinformasjon: $contactInfo",
+                text = stringResource(R.string.kontaktinformasjon, contactInfo),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center

@@ -22,8 +22,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.home.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
@@ -50,7 +52,7 @@ fun WeatherWeek(
             .padding(20.dp)
     ) {
         Text(
-            text = "Kommende uke",
+            text = stringResource(R.string.kommende_uke),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onPrimary,
             textAlign = TextAlign.Start,
@@ -89,7 +91,7 @@ fun WeatherWeek(
                     Spacer(modifier = Modifier.padding(4.dp))
                     DataSection(
                         data = activitiesForThisDay?.takeIf { it.activities.isNotEmpty() },
-                        error = if (uiState.isErrorFutureActivities) "Kunne ikke hente aktiviteter" else null,
+                        error = if (uiState.isErrorFutureActivities) stringResource(R.string.kunne_ikke_hente_aktiviteter) else null,
                         loading = isLoading,
                         errorMessagePrefix = "Feil:",
                         loadingContent = { LoadAllActivities() }

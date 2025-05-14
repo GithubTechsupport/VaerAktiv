@@ -87,7 +87,7 @@ fun ActivityCard(
             ){
                 if (activity !is CustomActivitySuggestion) {
                     Text(
-                        text = "Vis i kart",
+                        text = stringResource(R.string.vis_i_kart),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.primary,
                         maxLines = 1,

@@ -25,7 +25,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForDay
 
 @SuppressLint("DiscouragedApi")
@@ -55,7 +57,7 @@ fun WeatherWeekRow(
         )
         Spacer(modifier = Modifier.weight(0.8f))
         Text(
-            text = "${day.maxTemp}°",
+            text = stringResource(R.string.temp, day.maxTemp),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.wrapContentWidth()
@@ -64,7 +66,9 @@ fun WeatherWeekRow(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End,
-            modifier = Modifier.wrapContentWidth().weight(1f)
+            modifier = Modifier
+                .wrapContentWidth()
+                .weight(1f)
         ) {
             Image(
                 painter = painterResource(id = context.resources.getIdentifier(iconResId, "drawable", context.packageName)),

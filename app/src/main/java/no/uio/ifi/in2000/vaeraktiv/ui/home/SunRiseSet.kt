@@ -15,13 +15,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 
 @Composable
 fun SunRiseSet(sunData : List<String>) {
-    val sunRise = sunData.getOrNull(0) ?: "N/A"
-    val sunSet = sunData.getOrNull(1) ?: "N/A"
+    val sunRise = sunData.getOrNull(0) ?: stringResource(R.string.n_a)
+    val sunSet = sunData.getOrNull(1) ?: stringResource(R.string.n_a)
     val cornerDp = 10.dp
     Spacer(modifier = Modifier.height(12.dp))
     Column(
@@ -29,18 +30,22 @@ fun SunRiseSet(sunData : List<String>) {
         modifier = Modifier
             .background(
                 MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(cornerDp))
+                shape = RoundedCornerShape(cornerDp)
+            )
             .fillMaxWidth()
             .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(10.dp))
     ) {
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.onPrimary, shape = RoundedCornerShape(cornerDp))
+                .background(
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    shape = RoundedCornerShape(cornerDp)
+                )
                 .border(1.dp, MaterialTheme.colorScheme.background, RoundedCornerShape(cornerDp)),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            SunDisplayBox(sunRise, R.drawable.sunrise_color, "Sol opp")
+            SunDisplayBox(sunRise, R.drawable.sunrise_color, stringResource(R.string.sol_opp))
             Box(
                 modifier = Modifier
                     .height(60.dp)
@@ -48,7 +53,7 @@ fun SunRiseSet(sunData : List<String>) {
                     .background(MaterialTheme.colorScheme.onBackground)
                     .align(Alignment.CenterVertically)
             )
-            SunDisplayBox(sunSet, R.drawable.sunset_color, "Sol ned")
+            SunDisplayBox(sunSet, R.drawable.sunset_color, stringResource(R.string.sol_ned))
         }
     }
 }
