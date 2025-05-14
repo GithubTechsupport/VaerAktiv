@@ -1,3 +1,5 @@
+package no.uio.ifi.in2000.vaeraktiv
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -10,7 +12,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
 import no.uio.ifi.in2000.vaeraktiv.model.ai.PlaceActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.network.aiclient.AiClient
 import org.junit.After
@@ -22,13 +23,14 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-@ExperimentalCoroutinesApi
+
 class AiRepositoryUnitTest {
 
     private lateinit var repository: AiRepository
     private lateinit var client: AiClient
     private val testDispatcher = StandardTestDispatcher()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
@@ -36,6 +38,7 @@ class AiRepositoryUnitTest {
         repository = AiRepository(client)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @After
     fun tearDown() {
         Dispatchers.resetMain()
