@@ -13,9 +13,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.R
 
 @Composable
 fun AddLocationDefault(defaultPadding: Dp) {
@@ -24,7 +26,7 @@ fun AddLocationDefault(defaultPadding: Dp) {
         horizontalArrangement = Arrangement.Center
     ){
         Text(
-            text = "Legg til sted",
+            text = stringResource(R.string.legg_til_sted),
             style = MaterialTheme.typography.titleLarge ,
             color = MaterialTheme.colorScheme.onPrimary,
             textAlign = TextAlign.Left,

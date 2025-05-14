@@ -14,4 +14,11 @@
     <string name="aktivitetstips_generert_spesifikt_for_deg_og_dine_interesser">Aktivitetstips generert spesifikt for deg og dine interesser</string>
     <string name="hei_mitt_navn_er_simon_klar_for_komme_i_gang">Hei mitt navn er Simon! Klar for å komme i gang?</string>
     <string name="kom_i_gang">Kom i gang</string>
+    <string name="legg_til_sted">Legg til sted</string>
+    <string name="s_k">Søk</string>
+    <string name="steder">Steder</string>
+    <string name="uv">%1$s UV</string>
+    <string name="hoghest_lowest_temp">%1$s°/%2$s°</string>
+    <string name="m_s">%1$s m/s</string>
+    <string name="nedb_r_ml">nedbør: %1$s ml</string>
 </resources>

@@ -26,9 +26,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.R
 
 @Composable
 fun AddLocationExpanded(defaultPadding: Dp, viewModel: FavoriteLocationViewModel) {
@@ -44,7 +46,7 @@ fun AddLocationExpanded(defaultPadding: Dp, viewModel: FavoriteLocationViewModel
             modifier = Modifier.padding(defaultPadding)
         ) {
             Text(
-                text = "Legg til sted",
+                text = stringResource(R.string.legg_til_sted),
                 style = MaterialTheme.typography.titleLarge ,
                 color = MaterialTheme.colorScheme.onPrimary,
                 textAlign = TextAlign.Left,
@@ -69,7 +71,7 @@ fun AddLocationExpanded(defaultPadding: Dp, viewModel: FavoriteLocationViewModel
                 searchText = it
                 viewModel.fetchPredictions(it)
             },
-            placeholder = { Text("Søk") },
+            placeholder = { Text(stringResource(R.string.s_k)) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Filled.Search,

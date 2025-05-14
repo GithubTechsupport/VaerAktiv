@@ -26,8 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.home.FavoriteLocation
 
@@ -52,7 +54,7 @@ fun PlaceCard(
             .background(
                 color = MaterialTheme.colorScheme.onBackground,
             )
-            .clickable (
+            .clickable(
                 onClick = {
                     Log.d("LocationScreen", "Clicked on ${location.name}")
                     viewModel.updateCurrentLocation(
@@ -133,14 +135,18 @@ fun PlaceCard(
                             .padding(defaultPadding)
                     )
                     Text(
-                        text = "${location.uv} UV",
+                        text = stringResource(R.string.uv, location.uv),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
                     Text(
-                        text = "${location.highestTemp}°/${location.lowestTemp}°",
+                        text = stringResource(
+                            R.string.hoghest_lowest_temp,
+                            location.highestTemp,
+                            location.lowestTemp
+                        ),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
@@ -152,14 +158,14 @@ fun PlaceCard(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "${location.wind} m/s",
+                        text = stringResource(R.string.m_s, location.wind),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
                     Text(
-                        text = "nedbør: ${location.downPour} ml",
+                        text = stringResource(R.string.nedb_r_ml, location.downPour),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
