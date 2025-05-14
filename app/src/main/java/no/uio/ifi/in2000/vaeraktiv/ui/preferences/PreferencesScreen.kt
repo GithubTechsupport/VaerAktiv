@@ -2,14 +2,11 @@ package no.uio.ifi.in2000.vaeraktiv.ui.preferences
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,24 +18,20 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import no.uio.ifi.in2000.vaeraktiv.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PreferencesScreen(
-    viewModel: PreferencesViewModel
+    viewModel: PreferencesViewModel,
 ) {
     val preferences by viewModel.userPreferences.collectAsState()
 
-
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)
     ) {
         Icon(
@@ -52,67 +45,22 @@ fun PreferencesScreen(
                     onClick = { viewModel.navigateBack() }
                 )
         )
-
-        LazyColumn(
+        PreferencesContent(
+            preferences = preferences,
+            viewModel = viewModel,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .padding(top = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            item {
-            }
-            item {
+                .padding(top = 35.dp, bottom = 2.dp),
+            additionalHeaderContent = {
                 Text(
-                    "Preferanser",
+                    text = stringResource(R.string.innstillinger),
                     style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(16.dp)
                 )
             }
-            item {
-                SectionHeader("Hvilke aktiviteter liker du?", MaterialTheme.colorScheme.primary)
-            }
-            items(preferences.take(5)) { preference ->
-                Activity(
-                    activity = preference,
-                    viewModel = viewModel
-                )
-            }
-            item {
-                SectionHeader("Sosial eller alene?", MaterialTheme.colorScheme.primary)
-            }
-            items(preferences.slice(5..6)) { preference ->
-                Activity(
-                    activity = preference,
-                    viewModel = viewModel
-                )
-            }
-            item {
-                SectionHeader("Vil du bli tilbudt aktiviteter som koster penger?", MaterialTheme.colorScheme.primary)
-            }
-            item {
-                Activity(
-                    activity = preferences[7],
-                    viewModel = viewModel
-                )
-            }
-        }
+        )
     }
-}
-
-@Composable
-fun SectionHeader(text: String, color: Color) {
-    Text(
-        text = text,
-        style = TextStyle(
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = color,
-            textAlign = TextAlign.Start
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-    )
 }

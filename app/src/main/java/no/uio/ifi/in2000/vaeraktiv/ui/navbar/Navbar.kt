@@ -72,7 +72,7 @@ fun Navbar(
     LaunchedEffect(preferencesViewModel.navigateBack) {
         preferencesViewModel.navigateBack.observeForever { shouldNavigate ->
             if (shouldNavigate) {
-                handleNavigation(navController, uiState, "home") { navController.popBackStack("home", false) }
+                handleNavigation(navController, uiState, "home")
                 preferencesViewModel.onNavigationHandled()
                 uiState = uiState.copy(selectedRoute = "home")
             }
@@ -92,7 +92,7 @@ fun Navbar(
     LaunchedEffect(homeScreenViewModel.navigateToPreferences) {
         homeScreenViewModel.navigateToPreferences.observeForever { shouldNavigate ->
             if (shouldNavigate) {
-                handleNavigation(navController, uiState, "preferences") { navController.navigateToPreferences() }
+                handleNavigation(navController, uiState, "preferences")
                 homeScreenViewModel.onNavigationHandled()
             }
         }
@@ -199,6 +199,7 @@ private fun handleNavigation(
     when (route) {
         "home" -> navController.navigateToHome()
         "map" -> navController.navigateToMap()
+        "preferences" -> navController.navigateToPreferences()
     }
     return uiState.copy(selectedRoute = route)
 }
