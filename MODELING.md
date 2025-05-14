@@ -13,7 +13,7 @@ sekvensdiagrammene.
 ● Andre diagrammer bør også være inkludert for å få frem andre perspektiver,  
 for eksempel aktivitetsdiagram (flytdiagram) eller tilstandsdiagram.
 
-# App Dataflowchart
+# Dataflowchart
 
 ```mermaid
 flowchart BT
@@ -180,11 +180,11 @@ flowchart BT
 5.1. System fails to retrieve data or receive AI suggestions.      
 5.2. System displays an error message on the home screen.
 
-[Activity Diagram](./diagrams/user_finds_activities_for_a_future_day/activitydiagram.md)
+[Activity Diagram](diagrams/find_activities_for_a_future_day/activitydiagram.md)
 
-[Sequence Diagram](./diagrams/user_finds_activities_for_a_future_day/sequencediagram.md)
+[Sequence Diagram](diagrams/find_activities_for_a_future_day/sequencediagram.md)
 
-[Class Diagram](./diagrams/user_finds_activities_for_a_future_day/classdiagram.md)
+[Class Diagram](diagrams/find_activities_for_a_future_day/classdiagram.md)
 
 ## Refresh Activity
 
@@ -212,11 +212,11 @@ flowchart BT
 3.2. System restores the previous activity card state.      
 3.3. System displays an error indicator on the card.
 
-[Activity Diagram](./diagrams/user_refreshes_activity/activitydiagram.md)
+[Activity Diagram](diagrams/refresh_activity/activitydiagram.md)
 
-[Sequence Diagram](./diagrams/user_refreshes_activity/sequencediagram.md)
+[Sequence Diagram](diagrams/refresh_activity/sequencediagram.md)
 
-[Class Diagram](./diagrams/user_refreshes_activity/classdiagram.md)
+[Class Diagram](diagrams/refresh_activity/classdiagram.md)
 
 ## View Activity in Map
 

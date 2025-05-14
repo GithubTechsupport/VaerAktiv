@@ -1,6 +1,3 @@
----
-title: Aktivitetsdiagram - Bruker setter preferanser for første gang
----
 ```mermaid
 flowchart TD
   DecStart{Starting screen?}
