@@ -1,7 +1,9 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,11 +33,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
 @Composable
 fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
@@ -49,17 +54,20 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable (
+            .clickable(
                 interactionSource = interactionSource,
                 indication = null
-            ){ expanded = !expanded }
+            ) { expanded = !expanded }
             .background(
                 MaterialTheme.colorScheme.background,
                 shape = RoundedCornerShape(10.dp),
             )
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(top = 12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+                .padding(top = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceAround
         ) {
@@ -78,13 +86,13 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "${data?.tempNow}°",
+                    text = stringResource(R.string.temp, data?.tempNow!!),
                     style = MaterialTheme.typography.displayMedium,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "${data?.uv} UV",
+                    text = stringResource(R.string.uv, data.uv!!),
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center
@@ -105,7 +113,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "L: ${data?.tempMin}°",
+                            text = stringResource(R.string.L_temp, data?.tempMin!!),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
@@ -118,7 +126,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "H: ${data?.tempMax}°",
+                            text = stringResource(R.string.H_temp, data?.tempMax!!),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
@@ -131,7 +139,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "${data?.precipitationAmount} mm",
+                            text = stringResource(R.string.ml, data?.precipitationAmount!!),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
@@ -144,7 +152,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "${data?.windSpeed} m/s",
+                            text = stringResource(R.string.m_s, data?.windSpeed!!),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
@@ -176,7 +184,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
             verticalAlignment = Alignment.CenterVertically,
         ){
             Text(
-                text = "Detaljer",
+                text = stringResource(R.string.detaljer),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center

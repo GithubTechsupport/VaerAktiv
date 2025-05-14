@@ -10,7 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.home.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
@@ -29,7 +31,7 @@ fun TodaysActivitiesSection(
         horizontalAlignment = Alignment.Start
     ) {
         Text(
-            text = "I dag",
+            text = stringResource(R.string.i_dag),
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 4.dp)
@@ -61,7 +63,7 @@ fun TodaysActivitiesSection(
                         )
                     } ?: run {
                         Text(
-                            text = "Ingen aktiviteter for i dag",
+                            text = stringResource(R.string.ingen_aktiviteter_for_i_dag),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier.padding(16.dp)

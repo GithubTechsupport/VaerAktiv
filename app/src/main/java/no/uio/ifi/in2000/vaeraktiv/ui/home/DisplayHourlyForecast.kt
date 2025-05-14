@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
@@ -71,12 +72,12 @@ private fun HourlyForecastItem(forecast: ForecastForHour) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            ForecastText(text = forecast.time ?: "N/A", style = MaterialTheme.typography.labelMedium)
+            ForecastText(text = forecast.time ?: stringResource(R.string.n_a), style = MaterialTheme.typography.labelMedium)
             WeatherIcon(iconResId = iconResId)
-            ForecastText(text = "${forecast.temp}°C", style = MaterialTheme.typography.labelSmall)
-            ForecastText(text = "${forecast.precipitationAmount}mm", style = MaterialTheme.typography.labelSmall)
-            ForecastText(text = "${forecast.windSpeed}m/s", style = MaterialTheme.typography.labelSmall)
-            ForecastText(text = "${forecast.uv} UV", style = MaterialTheme.typography.labelSmall)
+            ForecastText(text = stringResource(R.string.temp, forecast.temp!!), style = MaterialTheme.typography.labelSmall)
+            ForecastText(text = stringResource(R.string.nedb_r_ml, forecast.precipitationAmount!!), style = MaterialTheme.typography.labelSmall)
+            ForecastText(text = stringResource(R.string.m_s, forecast.windSpeed!!), style = MaterialTheme.typography.labelSmall)
+            ForecastText(text = stringResource(R.string.uv, forecast.uv!!), style = MaterialTheme.typography.labelSmall)
         }
     }
 }

@@ -17,6 +17,7 @@ fun AddActivitiesForDay(
     onRefresh: (Int, Int) -> Unit,
     onViewInMap: (ActivitySuggestion) -> Unit
     ) {
+    // Column for each day
     Column(
         modifier = modifier
             .fillMaxWidth(),

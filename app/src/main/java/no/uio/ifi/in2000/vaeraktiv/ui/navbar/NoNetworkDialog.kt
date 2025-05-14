@@ -8,7 +8,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import no.uio.ifi.in2000.vaeraktiv.R
 
 
 /*
@@ -20,8 +22,8 @@ import androidx.compose.ui.unit.dp
 fun NoNetworkDialog(onRetry: () -> Unit, onClose: () -> Unit) {
     AlertDialog(
         onDismissRequest = { },
-        title = { Text("Ingen Internettforbindelse") },
-        text = { Text("Du må være tilkoblet internett for å laste inn data.") },
+        title = { Text(stringResource(R.string.ingen_internettforbindelse)) },
+        text = { Text(stringResource(R.string.du_m_v_re_tilkoblet_internett_for_laste_inn_data)) },
         confirmButton = {
             Button(
                 onClick = { onRetry() },
@@ -29,7 +31,7 @@ fun NoNetworkDialog(onRetry: () -> Unit, onClose: () -> Unit) {
                     containerColor = MaterialTheme.colorScheme.onBackground,
                     contentColor = MaterialTheme.colorScheme.background
                 )) {
-                Text("Prøv igjen")
+                Text(stringResource(R.string.pr_v_igjen))
             }
         },
         dismissButton = {
@@ -39,7 +41,7 @@ fun NoNetworkDialog(onRetry: () -> Unit, onClose: () -> Unit) {
                     containerColor = MaterialTheme.colorScheme.onBackground,
                     contentColor = MaterialTheme.colorScheme.background
                 )) {
-                Text("Avslutt")
+                Text(stringResource(R.string.avslutt))
             }
         },
         modifier = Modifier.padding(16.dp)

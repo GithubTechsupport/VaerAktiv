@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,12 +23,12 @@ import no.uio.ifi.in2000.vaeraktiv.model.home.AlertData
 
 @Composable
 fun WarningDetailItem(warning: AlertData) {
-    val iconType = warning.awarenessType?.split("; ")?.getOrNull(1) ?: "generic"
+    val iconType = warning.awarenessType?.split("; ")?.getOrNull(1) ?: stringResource(R.string.generic)
     val dangerColor = warning.riskMatrixColor.orEmpty()
-    val instruct = warning.instruction ?: "N/A"
-    val type = warning.eventAwarenessName ?: "Ingen data"
+    val instruct = warning.instruction ?: stringResource(R.string.n_a)
+    val type = warning.eventAwarenessName ?: stringResource(R.string.ingen_data)
 
-    if (warning.description != null || !warning.riskMatrixColor.isNullOrEmpty() || iconType != "generic") {
+    if (warning.description != null || !warning.riskMatrixColor.isNullOrEmpty() || iconType != stringResource(R.string.generic)) {
         val iconResId = getWarningResId(
             context = LocalContext.current,
             warningType = iconType,
@@ -53,7 +54,7 @@ fun WarningDetailItem(warning: AlertData) {
                     fontSize = 18.sp
                 )
                 Text(
-                    text = "Instruksjoner: $instruct",
+                    text = stringResource(R.string.instruksjoner, instruct),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Start
