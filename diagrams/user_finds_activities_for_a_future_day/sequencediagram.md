@@ -10,7 +10,7 @@ sequenceDiagram
     participant Pref as PreferencesRepository
     participant AI as AiRepository
     participant Client as AiClient
-    participant OpenAI
+    actor OpenAI
 
     User->>UI: select future day (dayNr)
     UI->>VM: getActivitiesForAFutureDay(dayNr)
@@ -27,12 +27,12 @@ sequenceDiagram
         Repo->>AI: getSuggestionsForOneDay(forecastData, nearbyPlaces, routes, preferences, exclusion)
         AI->>Client: getSuggestionsForOneDay(...)
         Client->>OpenAI: chatCompletion(request)
-        OpenAI-->>Client: responseJson
-        Client-->>AI: responseJson
+        OpenAI-->>Client: response
+        Client-->>AI: response
         AI-->>Repo: SuggestedActivities
         Repo-->>VM: SuggestedActivities
         VM->>Repo: replaceActivitiesForDay(dayNr, SuggestedActivities)
-        Repo-->>VM: void
+        Repo-->>VM: emit updated list of activities
         VM-->>UI: display updated activities
     else error
         Repo-->>VM: Exception

@@ -30,7 +30,7 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
-import no.uio.ifi.in2000.vaeraktiv.data.welcome.PreferenceRepository
+import no.uio.ifi.in2000.vaeraktiv.data.preferences.PreferenceRepository
 import javax.inject.Singleton
 
 @Module

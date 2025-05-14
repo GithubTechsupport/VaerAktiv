@@ -1,50 +1,67 @@
   ```mermaid
-  classDiagram
-      WeatherWeekUI "1" o-- "1" HomeScreenViewModel : viewModel
-      HomeScreenViewModel "1" -- "1" IWeatherRepository : weatherRepo
-      IWeatherRepository <|-- WeatherRepository
-      WeatherRepository "1" -- "1" LocationForecastRepository : locationForecastRepo
-      WeatherRepository "1" -- "1" PlacesRepository : placesRepo
-      WeatherRepository "1" -- "1" StravaRepository : stravaRepo
-      WeatherRepository "1" -- "1" PreferenceRepository : preferenceRepo
-      WeatherRepository ..> AiRepository : aiRepo
+classDiagram
+    HomeScreen "1" o-- "1" HomeScreenViewModel : viewModel
+    HomeScreenViewModel "1" o-- "1" WeatherRepository : repo
+    WeatherRepository "1" o-- "1" LocationForecastRepository
+    WeatherRepository "1" o-- "1" PlacesRepository
+    WeatherRepository "1" o-- "1" StravaRepository
+    WeatherRepository "1" o-- "1" PreferencesRepository
+    WeatherRepository "1" o-- "1" AiRepository
+    AiRepository "1" o-- "1" AiClient
+    PlacesClient "1" o-- "1" PlacesRepository
+    HomeScreenUiState "1" o-- "1" HomeScreenViewModel
 
-      class WeatherWeekUI {
-        
-      }
+    class HomeScreenUiState {
 
-      class HomeScreenViewModel {
-        +getActivitiesForAFutureDay(dayNr:Int):void
-      }
+    }
 
-      class IWeatherRepository {
-        <<interface>>
-        +getSuggestedActivitiesForOneDay(location:Location, dayNr:Int):SuggestedActivities
-        +replaceActivitiesForDay(dayNr:Int, newActivities:SuggestedActivities):void
-      }
+    class HomeScreen {
+      +onDaySelected(day:Int):void
+    }
 
-      class WeatherRepository {
-        +getSuggestedActivitiesForOneDay(location:Location, dayNr:Int):SuggestedActivities
-        +replaceActivitiesForDay(dayNr:Int, newActivities:SuggestedActivities):void
-      }
+    class HomeScreenViewModel {
+      -weatherRepository:WeatherRepository
+      +getActivitiesForAFutureDay(day:Int):void
+    }
 
-      class LocationForecastRepository {
-        +getForecastByDay(lat:String, lon:String):Pair\<List\<Pair\<LocalDate, List\<TimeSeries\>\>\>, Units\>
-      }
+    class WeatherRepository {
+      -locationForecastRepository:LocationForecastRepository
+      -placesRepository:PlacesRepository
+      -stravaRepository:StravaRepository
+      -preferenceRepository:PreferencesRepository
+      -aiRepository:AiRepository
+      +getSuggestedActivitiesForOneDay(location:Location, day:Int):SuggestedActivities
+      +replaceActivitiesForDay(day:Int, newActivities:SuggestedActivities):void
+    }
 
-      class PlacesRepository {
-        +getNearbyPlaces(location:LatLng):NearbyPlacesSuggestions
-      }
+    class LocationForecastRepository {
+      +getTimeSeriesForDay(loc:Location, day:Int):Pair<List<TimeSeries>,Units?>
+    }
 
-      class StravaRepository {
-        +getRouteSuggestions(location:Location):RoutesSuggestions
-      }
+    class PlacesRepository {
+      +getNearbyPlaces(loc:Location):NearbyPlacesSuggestions
+    }
 
-      class PreferenceRepository {
-        +getEnabledPreferences():String
-      }
+    class StravaRepository {
+      +getRouteSuggestions(loc:Location):RoutesSuggestions
+    }
 
-      class AiRepository {
-        +getSuggestionsForOneDay(prompt:FormattedForecastDataForPrompt, nearbyPlaces:NearbyPlacesSuggestions, routes:RoutesSuggestions, preferences:String, exclusion:String):SuggestedActivities
-      }
+    class PreferencesRepository {
+      +getEnabledPreferences():String
+    }
+
+    class AiRepository {
+      -client:AiClient
++getSuggestionsForOneDay(forecastData, nearbyPlaces, routes, preferences, exclusion):SuggestedActivities
+    }
+
+    class AiClient {
+        -ApiKey : String
+        -BasePrompt : String
+      +getSuggestionsForOneDay(forecastData, nearbyPlaces, routes, preferences, exclusion):String?
+    }
+
+    class PlacesClient {
+        -ApiKey : String
+    }
   ```

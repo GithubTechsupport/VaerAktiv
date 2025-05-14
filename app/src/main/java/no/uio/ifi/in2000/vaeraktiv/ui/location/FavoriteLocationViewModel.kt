@@ -57,9 +57,7 @@ class FavoriteLocationViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val locations = favoriteLocationRepo.getAllLocations()
-                Log.d("New Location", locations.toString())
                 val favoriteData = weatherRepo.getFavoriteLocationsData(locations)
-                Log.d("New Location", favoriteData.toString())
                 withContext(Dispatchers.Main) {
                     _data.value = favoriteData
                 }

@@ -23,8 +23,7 @@ fun HomeContent(
     uiState: HomeScreenUiState,
     deviceLocation: Location?,
     activities: List<SuggestedActivities?>?,
-    viewModel: HomeScreenViewModel,
-    navController: NavHostController
+    viewModel: HomeScreenViewModel
 ) {
     Column(
         modifier = Modifier
@@ -36,7 +35,7 @@ fun HomeContent(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { CurrentLocation(uiState.locationName, deviceLocation, setCurrentLocation = { location -> viewModel.setCurrentLocation(location) }, navController) }
+            item { CurrentLocation(uiState.locationName, deviceLocation, setCurrentLocation = { location -> viewModel.setCurrentLocation(location) }, {viewModel.navigateToPreferences()}) }
 
             item {
                 DataSection(

@@ -1,40 +1,47 @@
 ```mermaid
 classDiagram
-    ActivityCard "1" o-- "1" HomeScreenViewModel : viewModel
-    Navbar "1" o-- "1" HomeScreenViewModel : homeViewModel
-    Navbar "1" o-- "1" MapScreenViewModel : mapViewModel
-    MapScreenViewModel "1" o-- "1" OsmMapView : view
+    HomeScreenViewModel "1" --o "1" Navbar : Dependency
+    MapScreenViewModel "1" --o "1" Navbar : Dependency
+    HomeScreen "1" --o "1" HomeScreenViewModel : ViewModel
+    MapScreen "1" --o "1" MapScreenViewModel : ViewModel
+    OsmMapView "1" --o "1" MapScreen  : drives view
+    MapScreenUiState "1" --o "1" MapScreenViewModel : Ui State
 
-    class ActivityCard {
-      +onViewInMap(activity:ActivitySuggestion):void
+    class HomeScreen {
+      +onViewActivityInMap(activity:ActivitySuggestion):void
     }
 
     class HomeScreenViewModel {
-      -_navigateToMap:MutableSharedFlow\<ActivitySuggestion\>
-      +navigateToMap:SharedFlow\<ActivitySuggestion\>
+      -_navigateToMap: MutableSharedFlow\<ActivitySuggestion\>
       +viewActivityInMap(activity:ActivitySuggestion):void
+      +navigateToMap: SharedFlow\<ActivitySuggestion\>
     }
 
     class Navbar {
-      -homeViewModel:HomeScreenViewModel
-      -mapViewModel:MapScreenViewModel
-      +navigateToMap():void
-      +showErrorDialog(error:Exception):void
+      +navigateToMap(activity:ActivitySuggestion):void
     }
 
+    class MapScreen {
+      +onNavigate(activity:ActivitySuggestion):void
+    }
+
+    class MapScreenUiState{
+    places: List~PlaceActivitySuggestion~
+    routes: List~StravaActivitySuggestion~
+    isLoading: Boolean
+    errorMessage: String
+    selectedActivityPoints: List~GeoPoint~
+  }
+
     class MapScreenViewModel {
-      -_mapScreenUiState:MutableStateFlow\<MapScreenUiState\>
+      -_mapScreenUiState: MutableStateFlow~MapScreenUiState~
       +zoomInOnActivity(activity:ActivitySuggestion):void
-      +decodePolyline(encoded:String):List\<GeoPoint\>
-      +onError(error:Exception):void
+      +decodePolyline(encoded:String):List~GeoPoint~
+      +clearSelectedActivityPoints():void
     }
 
     class OsmMapView {
-      +update(
-        places:List\<PlaceActivitySuggestion\>,
-        routes:List\<StravaActivitySuggestion\>,
-        selectedActivityPoints:List\<GeoPoint\>?,
-        onZoomHandled:() -> Unit
-      ):void
+      -update(places, routes, selectedActivityPoints)
+      +onZoomHandled()
     }
 ```

@@ -1,12 +1,14 @@
 ```mermaid
 classDiagram
-    AddPlaceUI "1" o-- "1" FavoriteLocationViewModel : viewModel
+    FavoriteLocationScreen "1" o-- "1" FavoriteLocationViewModel : viewModel
     FavoriteLocationViewModel "1" -- "1" FavoriteLocationRepository : favoriteLocationRepo
     FavoriteLocationViewModel ..> PlacesAPI : uses
     FavoriteLocationRepository "1" -- "1" GeocoderClass : geocoder
     FavoriteLocationRepository "1" -- "1" FavoriteLocationDataSource : dataSource
+    FavoriteLocationViewModel "1" -- "0..*" AutocompletePrediction
+    FavoriteLocationViewModel "1" -- "0..1" AutocompleteSessionToken
 
-    class AddPlaceUI {
+    class FavoriteLocationScreen {
       +onSearchInputChanged(query:String):void
       +onSuggestionClick(fullText:String):void
     }
@@ -29,7 +31,7 @@ classDiagram
     }
 
     class FavoriteLocationDataSource {
-      -fileName:String
+      -favoriteLocationsFile : File
       +addLocation(placeName:String,latitude:Double,longitude:Double):void
       +deleteLocation(placeName:String):void
       +getAllLocations():List&lt;String&gt;

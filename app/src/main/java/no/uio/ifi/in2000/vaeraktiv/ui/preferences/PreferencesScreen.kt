@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.settings
+package no.uio.ifi.in2000.vaeraktiv.ui.preferences
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,12 +27,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(
-    viewModel: PreferencesViewModel, navController: NavController
+fun PreferencesScreen(
+    viewModel: PreferencesViewModel
 ) {
     val preferences by viewModel.userPreferences.collectAsState()
 
@@ -50,7 +49,7 @@ fun SettingsScreen(
                 .size(48.dp)
                 .clickable(
                     enabled = true,
-                    onClick = { navController.popBackStack("home", false) }
+                    onClick = { viewModel.navigateBack() }
                 )
         )
 
@@ -66,7 +65,7 @@ fun SettingsScreen(
             }
             item {
                 Text(
-                    "Innstillinger",
+                    "Preferanser",
                     style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.primary,
                 )

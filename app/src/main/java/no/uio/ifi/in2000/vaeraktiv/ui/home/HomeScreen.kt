@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,10 +17,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 
@@ -50,10 +55,17 @@ fun HomeScreen(
         viewModel.initialize(lifecycleOwner)
     }
 
-    LaunchedEffect(currentLocation) {
-        currentLocation
-            ?.takeIf { it.addressName != uiState.locationName }
-            ?.let { viewModel.resetScreenState() }
+    LaunchedEffect(Unit) {
+        snapshotFlow { currentLocation?.addressName }
+            .filterNotNull()
+            .distinctUntilChanged()
+            .collectLatest { newName ->
+                if (newName != uiState.locationName) {
+                    Log.d("HomeScreen", "Current location changed")
+                    Log.d("HomeScreen", "New location: $newName, old location: ${uiState.locationName}")
+                    viewModel.resetScreenState()
+                }
+            }
     }
 
     Box(Modifier
@@ -62,7 +74,7 @@ fun HomeScreen(
     ) {
         when {
             uiState.isLoading -> LoadingScreen()
-            isOnline -> HomeContent(uiState, deviceLocation, activities, viewModel, navController)
+            isOnline -> HomeContent(uiState, deviceLocation, activities, viewModel)
             else -> ErrorMessage("You're offline.")
         }
         PullRefreshIndicator(

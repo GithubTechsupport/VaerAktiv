@@ -23,8 +23,8 @@ import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.MainActivity
 import no.uio.ifi.in2000.vaeraktiv.model.navbar.NavbarUiState
 import no.uio.ifi.in2000.vaeraktiv.network.connection.NetworkObserver
-import no.uio.ifi.in2000.vaeraktiv.ui.settings.PreferencesViewModel
-import no.uio.ifi.in2000.vaeraktiv.ui.settings.SettingsScreen
+import no.uio.ifi.in2000.vaeraktiv.ui.preferences.PreferencesViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.preferences.PreferencesScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
@@ -62,12 +62,31 @@ fun Navbar(
     }
 
     // Handle navigation from ViewModels
+    LaunchedEffect(preferencesViewModel.navigateBack) {
+        preferencesViewModel.navigateBack.observeForever { shouldNavigate ->
+            if (shouldNavigate) {
+                handleNavigation(navController, uiState, "home") { navController.popBackStack("home", false) }
+                preferencesViewModel.onNavigationHandled()
+                uiState = uiState.copy(selectedRoute = "home")
+            }
+        }
+    }
+
     LaunchedEffect(favoriteLocationViewModel.navigateToHome) {
         favoriteLocationViewModel.navigateToHome.observeForever { shouldNavigate ->
             if (shouldNavigate) {
                 handleNavigation(navController, uiState, "home") { navController.navigateToHome() }
                 favoriteLocationViewModel.onNavigationHandled()
                 uiState = uiState.copy(selectedRoute = "home")
+            }
+        }
+    }
+
+    LaunchedEffect(homeScreenViewModel.navigateToPreferences) {
+        homeScreenViewModel.navigateToPreferences.observeForever { shouldNavigate ->
+            if (shouldNavigate) {
+                handleNavigation(navController, uiState, "preferences") { navController.navigateToPreferences() }
+                homeScreenViewModel.onNavigationHandled()
             }
         }
     }
@@ -124,9 +143,8 @@ fun Navbar(
                     viewModel = homeScreenViewModel,
                     navController = navController
                 ) }
-                composable("settings") {
-                    Log.d("Navbar", "Navigating to SettingsScreen")
-                    SettingsScreen(preferencesViewModel, navController)
+                composable("preferences") {
+                    PreferencesScreen(preferencesViewModel)
                 }
                 composable("location") { LocationScreen(uiState.isOnline, favoriteLocationViewModel) }
                 composable("map") { MapScreen(mapScreenViewModel) }
@@ -179,6 +197,14 @@ private fun handleNavigation(
 // Extension functions for navigation
 private fun NavController.navigateToHome(popUpTo: String? = null) {
     navigate("home") {
+        popUpTo?.let { popUpTo(it) { inclusive = true } }
+        popUpTo(graph.startDestinationId)
+        launchSingleTop = true
+    }
+}
+
+private fun NavController.navigateToPreferences(popUpTo: String? = null) {
+    navigate("preferences") {
         popUpTo?.let { popUpTo(it) { inclusive = true } }
         popUpTo(graph.startDestinationId)
         launchSingleTop = true

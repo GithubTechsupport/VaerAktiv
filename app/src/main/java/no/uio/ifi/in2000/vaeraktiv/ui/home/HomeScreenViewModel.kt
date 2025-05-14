@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -47,6 +48,9 @@ class HomeScreenViewModel @Inject constructor(
     private val _navigateToMap = MutableSharedFlow<ActivitySuggestion>()
     val navigateToMap = _navigateToMap.asSharedFlow()
 
+    private val _navigateToPreferences = MutableLiveData(false)
+    val navigateToPreferences: LiveData<Boolean> get() = _navigateToPreferences
+
     private fun <T> LiveData<T>.observeOnce(
         lifecycleOwner: LifecycleOwner,
         onChange: (T) -> Unit
@@ -67,7 +71,7 @@ class HomeScreenViewModel @Inject constructor(
             _homeScreenUiState.update { it.copy(isLoading = true) }
 
             weatherRepository.setCurrentLocation((Location("Oslo", "59.914", "10.752")))
-            resetScreenState()
+
             _homeScreenUiState.update { it.copy(isLoading = false) }
             initialized = true
         // wait for first device location
@@ -87,6 +91,10 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun setCurrentLocation(location: Location) = weatherRepository.setCurrentLocation(location)
+
+    fun onNavigationHandled() {
+        _navigateToPreferences.value = false
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun resetScreenState() {
@@ -290,6 +298,12 @@ class HomeScreenViewModel @Inject constructor(
     fun viewActivityInMap(activity: ActivitySuggestion) {
         viewModelScope.launch {
             _navigateToMap.emit(activity)
+        }
+    }
+
+    fun navigateToPreferences() {
+        viewModelScope.launch {
+            _navigateToPreferences.value = true
         }
     }
 }

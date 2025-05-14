@@ -1,6 +1,3 @@
----
-title: Aktivitetsdiagram - Finn aktiviteter for en fremtidig dag
----
 ```mermaid
 flowchart TD
     Start((Start))
@@ -12,7 +9,7 @@ flowchart TD
     E{Does loading of activities succeed?}
     F[System updates list and displays activities]
     G[System displays an error message]
-    Slutt((Slutt))
+    Slutt((End))
 
     Start --> A --> B --> C
     C -- Yes --> F --> Slutt

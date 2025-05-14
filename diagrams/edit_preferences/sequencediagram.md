@@ -1,26 +1,41 @@
 ```mermaid
 sequenceDiagram
     actor User
-    participant UI as PreferencesScreen
-    participant VM as PreferencesViewModel
+    participant Welcome as WelcomeScreen
+    participant Home as HomeScreen
+    participant HomeVM as HomeScreenViewModel
+    participant Nav as Navbar
+
+    participant PrefUI as PreferencesScreen
+    participant PrefVM as PreferencesViewModel
     participant Repo as PreferenceRepository
     participant DS as PreferenceDataSource
-    participant File as `user_preferences.json`
+    participant File as user_preferences.json
 
-    User->>UI: togglePreference(pref, isEnabled)
-    UI->>VM: onPreferenceToggled(pref, isEnabled)
-    VM->>Repo: updatePreference(pref.desc, isEnabled)
-    Repo->>DS: updatePreference(pref.desc, isEnabled)
-    DS->>File: write updated preferences
-    alt write success
-        File-->>DS: confirmation
-        DS-->>Repo: return Unit
-        Repo-->>VM: return Unit
-        VM-->>UI: refresh displayed preferences
-    else write failure
-        File-->>DS: error
-        DS-->>Repo: throw Exception
-        Repo-->>VM: throw Exception
-        VM-->>UI: show error message
+    alt first-time user
+        User->>Welcome: click "Kom i gang"
+        Welcome->>Nav: navigate("onboarding")
+    else returning user
+        User->>Home: click Settings icon
+        Home->>HomeVM: navigateToPreferences()
+        HomeVM->>Nav: navigateToPreferences()
+        Nav->>PrefUI: navigateToPreferences()
     end
+    PrefUI->>PrefVM: collectAsState(userPreferences)
+    PrefVM->>Repo: get userPreference (StateFlow)
+    Repo->>DS: userPreference
+    DS-->>Repo: emit List<Preference>
+    Repo-->>PrefVM: emit StateFlow<List<Preference>>
+    PrefVM-->>PrefUI: display list
+
+    User->>PrefUI: toggle Preference X
+    PrefUI->>PrefVM: onPreferenceToggled(pref, true)
+    PrefVM->>Repo: updatePreference(desc, true)
+    Repo->>DS: updatePreference(desc, true)
+    DS->>DS: update _userPreference.value
+    DS->>File: file.write(pref)
+    File-->>DS: success
+    DS-->>Repo: emit updated List<Preference>
+    Repo-->>PrefVM: emit updated StateFlow<List<Preference>>
+    PrefVM-->>PrefUI: display updated list of preferences
 ```

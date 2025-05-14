@@ -11,7 +11,7 @@ flowchart TD
     E{Does loading of new activitysuggestion succeed?}
     F[System updates existing activities with new suggestion and displays them]
     G[System displays an error]
-    Slutt((Slutt))
+    Slutt((End))
 
     Start --> A --> B --> C --> D --> E
     E -- Yes --> F --> Slutt

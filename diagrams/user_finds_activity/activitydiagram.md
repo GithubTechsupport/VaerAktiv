@@ -9,7 +9,7 @@
     OppdaterAktiviteter([Bruker oppdaterer dagens aktiviteter])
     VisNyeAktiviteter([Systemet viser nye aktiviteter])
     AvslutterFornøyd([Brukeren er fornøyd med en aktivitet])
-    Slutt((Slutt)) 
+    Slutt((End)) 
 
     ErFornøyd{Fornøyd?}
 
