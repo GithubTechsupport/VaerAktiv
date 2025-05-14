@@ -3,10 +3,8 @@ package no.uio.ifi.in2000.vaeraktiv.ui.home
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.vaeraktiv.data.datetime.DeviceDateTimeRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
+import no.uio.ifi.in2000.vaeraktiv.data.weather.IAggregateRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
@@ -31,16 +29,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val weatherRepository: WeatherRepository,
+    private val aggregateRepository: IAggregateRepository,
     private val deviceDateTimeRepository: DeviceDateTimeRepository
 ) : ViewModel() {
 
     private var initialized = false
 
-    val currentLocation: LiveData<Location?> = weatherRepository.currentLocation
-    val deviceLocation: LiveData<Location?> = weatherRepository.deviceLocation
+    val currentLocation: LiveData<Location?> = aggregateRepository.currentLocation
+    val deviceLocation: LiveData<Location?> = aggregateRepository.deviceLocation
 
-    val activities: LiveData<List<SuggestedActivities?>> = weatherRepository.activities
+    val activities: LiveData<List<SuggestedActivities?>> = aggregateRepository.activities
 
     private val _homeScreenUiState = MutableStateFlow(HomeScreenUiState())
     val homeScreenUiState: StateFlow<HomeScreenUiState> = _homeScreenUiState.asStateFlow()
@@ -58,14 +56,14 @@ class HomeScreenViewModel @Inject constructor(
             // start loading
             _homeScreenUiState.update { it.copy(isLoading = true) }
 
-            weatherRepository.setCurrentLocation((Location("Oslo", "59.914", "10.752")))
+            aggregateRepository.setCurrentLocation((Location("Oslo", "59.914", "10.752")))
 
             _homeScreenUiState.update { it.copy(isLoading = false) }
             initialized = true
         }
     }
 
-    fun setCurrentLocation(location: Location) = weatherRepository.setCurrentLocation(location)
+    fun setCurrentLocation(location: Location) = aggregateRepository.setCurrentLocation(location)
 
     fun onNavigationHandled() {
         _navigateToPreferences.value = false
@@ -81,7 +79,7 @@ class HomeScreenViewModel @Inject constructor(
 
     private fun resetActivities() {
         viewModelScope.launch {
-            weatherRepository.resetActivities()
+            aggregateRepository.resetActivities()
         }
     }
 
@@ -111,7 +109,7 @@ class HomeScreenViewModel @Inject constructor(
             var dayIntervalsError: String?
 
             try {
-                todaysWeather = weatherRepository.getForecastToday(location)
+                todaysWeather = aggregateRepository.getForecastToday(location)
                 todaysWeatherError = null
             } catch (e: Exception) {
                 todaysWeatherError = e.toString()
@@ -120,7 +118,7 @@ class HomeScreenViewModel @Inject constructor(
 
             // Fetch weekly forecast
             try {
-                thisWeeksWeather = weatherRepository.getForecastByDay(location)
+                thisWeeksWeather = aggregateRepository.getForecastByDay(location)
                 thisWeeksWeatherError = null
             } catch (e: Exception) {
                 thisWeeksWeatherError = e.toString()
@@ -129,7 +127,7 @@ class HomeScreenViewModel @Inject constructor(
 
             // Fetch alerts for location
             try {
-                alerts = weatherRepository.getAlertsForLocation(location)
+                alerts = aggregateRepository.getAlertsForLocation(location)
                 alertsError = null
             } catch (e: Exception) {
                 alertsError = e.toString()
@@ -139,7 +137,7 @@ class HomeScreenViewModel @Inject constructor(
             // Retrieve device date time and then sunrise/sunset data
             try {
                 val dateTime = deviceDateTimeRepository.getDateTime()
-                sunRiseSet = weatherRepository.getSunRiseData(location, dateTime)
+                sunRiseSet = aggregateRepository.getSunRiseData(location, dateTime)
                 sunRiseSetError = null
             } catch (e: Exception) {
                 sunRiseSetError = e.toString()
@@ -147,14 +145,14 @@ class HomeScreenViewModel @Inject constructor(
             }
 
             try {
-                next24Hours = weatherRepository.getForecastForHour(location)
+                next24Hours = aggregateRepository.getForecastForHour(location)
                 next24HoursError = null
             } catch (e: Exception) {
                 next24HoursError = e.toString()
             }
 
             try {
-                dayIntervals = weatherRepository.getForecastByDayIntervals(location)
+                dayIntervals = aggregateRepository.getForecastByDayIntervals(location)
                 dayIntervalsError = null
             } catch (e: Exception) {
                 dayIntervalsError = e.toString()
@@ -190,14 +188,14 @@ class HomeScreenViewModel @Inject constructor(
         viewModelScope.launch {
             _homeScreenUiState.update { it.copy(isLoadingActivitiesToday = true, isErrorActivitiesToday = false) }
             try {
-                val activities = weatherRepository.getSuggestedActivitiesForOneDay(
+                val activities = aggregateRepository.getSuggestedActivitiesForOneDay(
                     currentLocation.value!!,
                     0
                 )
                 if (activities == null) {
                     throw Exception("Activities are null")
                 }
-                weatherRepository.replaceActivitiesForDay(0, activities)
+                aggregateRepository.replaceActivitiesForDay(0, activities)
                 _homeScreenUiState.update {
                     it.copy(
                         isErrorActivitiesToday = false,
@@ -222,11 +220,11 @@ class HomeScreenViewModel @Inject constructor(
         viewModelScope.launch {
             _homeScreenUiState.update { it.copy(loadingFutureActivities = it.loadingFutureActivities + dayNr, isErrorFutureActivities = false) }
             try {
-                weatherRepository.getSuggestedActivitiesForOneDay(
+                aggregateRepository.getSuggestedActivitiesForOneDay(
                     currentLocation.value!!,
                     dayNr
                 )?.let {
-                    weatherRepository.replaceActivitiesForDay(dayNr, it)
+                    aggregateRepository.replaceActivitiesForDay(dayNr, it)
                 }
                     ?: throw Exception("Activities are null")
                 _homeScreenUiState.update {
@@ -256,9 +254,9 @@ class HomeScreenViewModel @Inject constructor(
                 it.copy(loadingActivities = it.loadingActivities + (dayNr to index))
             }
             try {
-                weatherRepository.getSuggestedActivity(currentLocation.value!!, dayNr, index)
+                aggregateRepository.getSuggestedActivity(currentLocation.value!!, dayNr, index)
                     ?.let {
-                        weatherRepository.replaceActivityInDay(dayNr, index, it)
+                        aggregateRepository.replaceActivityInDay(dayNr, index, it)
                     } ?: throw Exception("New activity is null")
                 Log.d("HomeScreenViewModel", "Successfully replaced activity")
             } catch (e: Exception) {

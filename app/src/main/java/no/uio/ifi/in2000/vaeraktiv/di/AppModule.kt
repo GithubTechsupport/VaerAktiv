@@ -19,9 +19,10 @@ import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.places.PlacesRepository
+import no.uio.ifi.in2000.vaeraktiv.data.preferences.PreferenceRepository
 import no.uio.ifi.in2000.vaeraktiv.data.strava.StravaRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepositoryDefault
+import no.uio.ifi.in2000.vaeraktiv.data.weather.IAggregateRepository
+import no.uio.ifi.in2000.vaeraktiv.data.weather.AggregateRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource
@@ -30,7 +31,6 @@ import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
-import no.uio.ifi.in2000.vaeraktiv.data.preferences.PreferenceRepository
 import javax.inject.Singleton
 
 @Module
@@ -151,8 +151,8 @@ object AppModule {
         placesRepository: PlacesRepository,
         stravaRepository: StravaRepository,
         preferenceRepository: PreferenceRepository
-    ): WeatherRepository {
-        return WeatherRepositoryDefault(
+    ): IAggregateRepository {
+        return AggregateRepository(
             metAlertsRepository, locationForecastRepository, sunriseRepository,
             aiRepository, locationRepository, geocoder,
             nowcastRepository, placesRepository, stravaRepository, preferenceRepository
