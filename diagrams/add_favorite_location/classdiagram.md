@@ -23,8 +23,10 @@ classDiagram
     }
 
     class FavoriteLocationViewModel {
+      +favoriteLocations : MutableStateFlow~List~FavoriteLocation~
+      -weatherRepository: WeatherRepository
       -sessionToken:AutocompleteSessionToken?
-      -predictions:StateFlow&lt;List&lt;AutocompletePrediction&gt;&gt;
+      +predictions: StateFlow~List~AutocompletePrediction~~
       +fetchPredictions(query:String):void
       +addLocation(loc:String):void
     }
@@ -32,22 +34,22 @@ classDiagram
     class FavoriteLocationRepository {
       +addLocationByName(placeName:String):void
       +deleteLocationByName(placeName:String):void
-      +getAllLocations():List&lt;String&gt;
+      +getAllLocations():List~String~
     }
 
     class GeocoderClass {
-      +getCoordinatesFromLocation(placeName:String):Pair&lt;Double,Double&gt;?
+      +getCoordinatesFromLocation(placeName:String):Pair~Double,Double~
     }
 
     class FavoriteLocationDataSource {
       -favoriteLocationsFile : File
       +addLocation(placeName:String,latitude:Double,longitude:Double):void
       +deleteLocation(placeName:String):void
-      +getAllLocations():List&lt;String&gt;
+      +getAllLocations():List~String~
     }
 
     class PlacesRepository {
-      +getAutocompletePredictions(query:String,token:AutocompleteSessionToken):List&lt;AutocompletePrediction&gt;
+      +getAutocompletePredictions(query:String,token:AutocompleteSessionToken):List~AutocompletePrediction~
     }
 
     class AutocompletePrediction
