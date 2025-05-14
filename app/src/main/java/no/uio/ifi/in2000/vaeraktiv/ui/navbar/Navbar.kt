@@ -147,8 +147,7 @@ fun Navbar(
                 }
                 composable("home") { HomeScreen(
                     isOnline = uiState.isOnline,
-                    viewModel = homeScreenViewModel,
-                    navController = navController
+                    viewModel = homeScreenViewModel
                 ) }
                 composable("preferences") {
                     PreferencesScreen(preferencesViewModel)

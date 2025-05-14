@@ -51,20 +51,8 @@ class HomeScreenViewModel @Inject constructor(
     private val _navigateToPreferences = MutableLiveData(false)
     val navigateToPreferences: LiveData<Boolean> get() = _navigateToPreferences
 
-    private fun <T> LiveData<T>.observeOnce(
-        lifecycleOwner: LifecycleOwner,
-        onChange: (T) -> Unit
-    ) {
-        observe(lifecycleOwner, object : Observer<T> {
-            override fun onChanged(value: T) {
-                onChange(value)
-                removeObserver(this)
-            }
-        })
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
-    fun initialize(lifecycleOwner: LifecycleOwner) {
+    fun initialize() {
         initialized.takeIf { !it }?.also {
             Log.d("HomeScreen", "Initializing")
             // start loading
@@ -74,19 +62,6 @@ class HomeScreenViewModel @Inject constructor(
 
             _homeScreenUiState.update { it.copy(isLoading = false) }
             initialized = true
-        // wait for first device location
-//            deviceLocation.observeOnce(lifecycleOwner) { loc ->
-//                val startLoc = loc
-//                    .takeUnless { it?.addressName == "Unknown location" }
-//                    ?: Location("Oslo", "59.914", "10.752")
-//
-//                weatherRepository.setCurrentLocation(startLoc)
-//                getActivitiesForToday()
-//
-//                // stop loading and mark initialized
-//                _homeScreenUiState.update { it.copy(isLoading = false) }
-//                initialized = true
-//            }
         }
     }
 

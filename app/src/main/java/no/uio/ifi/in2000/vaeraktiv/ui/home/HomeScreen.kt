@@ -33,8 +33,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 @Composable
 fun HomeScreen(
     isOnline: Boolean,
-    viewModel: HomeScreenViewModel,
-    navController: NavHostController
+    viewModel: HomeScreenViewModel
 ) {
     val uiState by viewModel.homeScreenUiState.collectAsState()
     val currentLocation by viewModel.currentLocation.observeAsState()
@@ -52,7 +51,7 @@ fun HomeScreen(
     )
 
     LaunchedEffect(Unit) {
-        viewModel.initialize(lifecycleOwner)
+        viewModel.initialize()
     }
 
     LaunchedEffect(Unit) {
