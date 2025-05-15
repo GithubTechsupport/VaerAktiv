@@ -51,7 +51,8 @@ The app uses a unidirectional data flow (UDF) principle:
 
 ## API Level
 
-The app targets API level 24, ensuring compatibility with most Android devices in use today. No dependencies require a higher API level.
+The app targets API level 26, ensuring compatibility with most Android devices in use today. No dependencies require a higher API level.
+We used API level 23 initially, but changed to API level 26 because we needed to use various date and time functions that required this level.
 
 ## Folder Structure
 

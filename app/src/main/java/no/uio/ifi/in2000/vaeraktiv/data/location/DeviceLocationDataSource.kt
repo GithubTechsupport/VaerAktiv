@@ -16,12 +16,17 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Streams device location updates as a Flow using FusedLocationProviderClient.
+ */
 @Singleton
 class LocationDataSource @Inject constructor(
     private val fusedLocationProviderClient: FusedLocationProviderClient
 ) {
 
-    // Start receiving continuous location updates as suspendable functions
+    /**
+     * Emits the latest location periodically until the flow is closed.
+     */
     @SuppressLint("MissingPermission")
     fun getLocationUpdates(): Flow<Location?> = callbackFlow {
         val thread = HandlerThread("LocationUpdatesThread").apply { start() }
@@ -44,3 +49,4 @@ class LocationDataSource @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 }
+

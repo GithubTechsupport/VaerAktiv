@@ -6,13 +6,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
-import no.uio.ifi.in2000.vaeraktiv.model.ai.PlaceActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
-import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
-import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
+import no.uio.ifi.in2000.vaeraktiv.model.ai.*
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.network.aiclient.AiClient
 import javax.inject.Inject
@@ -29,8 +23,22 @@ private val json = Json {
     }
 }
 
-class AiRepository @Inject constructor(@Named("OpenAi-Client") private val client: AiClient) {
-    suspend fun getSuggestionsForOneDay(prompt: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, preferences: String, exclusion: String = ""): SuggestedActivities = withContext(Dispatchers.IO) {
+/**
+ * Fetches and decodes AI-generated activity suggestions via AiClient.
+ */
+class AiRepository @Inject constructor(
+    @Named("OpenAi-Client") private val client: AiClient
+) {
+    /**
+     * Retrieves a full-day SuggestedActivities object.
+     */
+    suspend fun getSuggestionsForOneDay(
+        prompt: FormattedForecastDataForPrompt,
+        nearbyPlaces: NearbyPlacesSuggestions,
+        routes: RoutesSuggestions,
+        preferences: String,
+        exclusion: String = ""
+    ): SuggestedActivities = withContext(Dispatchers.IO) {
         try {
             val response = client.getSuggestionsForOneDay(prompt, nearbyPlaces, routes, preferences, exclusion)
                     ?: throw IllegalArgumentException("Response is null")
@@ -40,7 +48,16 @@ class AiRepository @Inject constructor(@Named("OpenAi-Client") private val clien
         }
     }
 
-    suspend fun getSingleSuggestionForDay(prompt: FormattedForecastDataForPrompt, nearbyPlaces: NearbyPlacesSuggestions, routes: RoutesSuggestions, preferences: String, exclusion: String = ""): ActivitySuggestion = withContext(Dispatchers.IO) {
+    /**
+     * Retrieves a single ActivitySuggestion for a given day.
+     */
+    suspend fun getSingleSuggestionForDay(
+        prompt: FormattedForecastDataForPrompt,
+        nearbyPlaces: NearbyPlacesSuggestions,
+        routes: RoutesSuggestions,
+        preferences: String,
+        exclusion: String = ""
+    ) = withContext(Dispatchers.IO) {
         try {
             val response = client.getSingleSuggestionForDay(prompt, nearbyPlaces, routes, preferences, exclusion)
                 ?: throw IllegalArgumentException("Response is null")

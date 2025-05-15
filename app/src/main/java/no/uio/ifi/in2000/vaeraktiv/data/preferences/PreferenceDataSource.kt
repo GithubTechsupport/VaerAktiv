@@ -12,7 +12,12 @@ import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
-class PreferenceDataSource @Inject constructor(@ApplicationContext private val context: Context) {
+/**
+ * Persists and loads user preferences as JSON in app storage.
+ */
+class PreferenceDataSource @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
 
     private val gson = Gson()
     private val fileName = "user_preferences.json"
@@ -89,6 +94,12 @@ class PreferenceDataSource @Inject constructor(@ApplicationContext private val c
         }
     }
 
+    /**
+     * Updates a single preference state and persists to file.
+     *
+     * @param preferenceDesc identifier of the preference.
+     * @param isEnabled new enabled state.
+     */
     suspend fun updatePreference(preferenceDesc: String, isEnabled: Boolean) {
         withContext(Dispatchers.IO) {
             val currentPreferences = _userPreference.value.toMutableList()
@@ -101,6 +112,7 @@ class PreferenceDataSource @Inject constructor(@ApplicationContext private val c
         }
     }
 
+    /** Returns the currently enabled preferences. */
     fun getEnabledPreferences(): List<Preference> {
         return _userPreference.value.filter { it.isEnabled }
     }

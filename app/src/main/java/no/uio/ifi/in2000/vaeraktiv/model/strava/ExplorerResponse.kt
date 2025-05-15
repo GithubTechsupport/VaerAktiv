@@ -3,7 +3,9 @@ package no.uio.ifi.in2000.vaeraktiv.model.strava
 import kotlinx.serialization.Serializable
 
 /**
- * Response model for Strava explorer API containing a list of segments.
+ * Response from Strava Explorer API containing a list of segments.
+ *
+ * @param segments list of popular route segments
  */
 @Serializable
 data class ExplorerResponse(

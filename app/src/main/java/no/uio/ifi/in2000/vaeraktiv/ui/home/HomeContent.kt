@@ -14,6 +14,19 @@ import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
 
+
+/**
+ * Main content composable for the Home screen.
+ *
+ * Displays the user's current location, weather alerts, today's weather,
+ * suggested activities, and the weekly weather forecast.
+ *
+ * @param uiState The current UI state containing weather, alerts, and location data.
+ * @param deviceLocation The device's current geographic location, if available.
+ * @param activities List of suggested activities.
+ * @param viewModel The ViewModel responsible for handling UI logic and data updates.
+ */
+
 @Composable
 fun HomeContent(
     uiState: HomeScreenUiState,
@@ -31,8 +44,17 @@ fun HomeContent(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { CurrentLocation(uiState.locationName, deviceLocation, setCurrentLocation = { location -> viewModel.setCurrentLocation(location) }, {viewModel.navigateToPreferences()}) }
+            // Display the current location with option to change or navigate to preferences
+            item {
+                CurrentLocation(
+                    uiState.locationName,
+                    deviceLocation,
+                    setCurrentLocation = { location -> viewModel.setCurrentLocation(location) },
+                    navigateToPreferences = { viewModel.navigateToPreferences() }
+                )
+            }
 
+            // Display weather alerts section, handle loading and errors
             item {
                 DataSection(
                     data = uiState.alerts,
@@ -41,6 +63,7 @@ fun HomeContent(
                 ) { DisplayWarning(it) }
             }
 
+            // Display today's weather section, handle loading and errors
             item {
                 DataSection(
                     data = uiState.weatherToday,
@@ -49,10 +72,12 @@ fun HomeContent(
                 ) { DisplayWeather(it, uiState) }
             }
 
+            // Display today's suggested activities section
             item {
                 TodaysActivitiesSection(uiState, activities, viewModel)
             }
 
+            // Display the weekly weather forecast section, handle errors
             item {
                 DataSection(
                     data = Unit,

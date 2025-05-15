@@ -16,6 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.preferences.Preference
 
+/**
+ * Renders a toggleable button for a single user preference.
+ *
+ * @param activity the Preference item to display and toggle
+ * @param viewModel ViewModel handling preference state changes
+ */
 @Composable
 fun Activity(
     activity: Preference,

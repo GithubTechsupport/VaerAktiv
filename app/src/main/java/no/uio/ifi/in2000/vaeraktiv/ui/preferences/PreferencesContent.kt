@@ -20,6 +20,14 @@ import androidx.compose.ui.unit.sp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.preferences.Preference
 
+/**
+ * Displays grouped user preferences in a scrollable column.
+ *
+ * @param preferences list of Preference models to show
+ * @param viewModel ViewModel handling preference toggles
+ * @param modifier optional layout modifier
+ * @param additionalHeaderContent optional slot for extra header UI
+ */
 @Composable
 fun PreferencesContent(
     preferences: List<Preference>,
@@ -70,6 +78,12 @@ fun PreferencesContent(
     }
 }
 
+/**
+ * Renders a styled header for preference sections.
+ *
+ * @param text the header title
+ * @param color text color to use
+ */
 @Composable
 fun SectionHeader(text: String, color: Color) {
     Text(

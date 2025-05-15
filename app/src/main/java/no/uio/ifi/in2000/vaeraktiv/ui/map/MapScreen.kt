@@ -7,6 +7,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 
+/**
+ * Hosts the map view, shows loading state or OSM map with places and routes.
+ *
+ * @param viewModel provides map UI state and actions.
+ */
 @Composable
 fun MapScreen(viewModel: MapScreenViewModel) {
 

@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.R
 
-/*
+/**
  * This is the final screen in the welcome flow.
  * It informs the user that they can change their selected preferences later
  * if they wish to receive different activity suggestions.

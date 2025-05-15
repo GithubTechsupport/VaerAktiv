@@ -17,6 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 
+/**
+ * The composable which contains either the expanded or closed searchbar.
+ */
 @Composable
 fun AddPlace(defaultPadding: Dp, viewModel: FavoriteLocationViewModel) {
     var expanded by remember { mutableStateOf(false) }

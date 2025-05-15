@@ -3,6 +3,18 @@ package no.uio.ifi.in2000.vaeraktiv.model.strava
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Represents a single Strava segment/route.
+ *
+ * @param id unique segment identifier
+ * @param name segment name or title
+ * @param distance total length of the segment in meters
+ * @param averageGrade average incline percentage
+ * @param elevationGain total elevation gain in meters
+ * @param polyline encoded route polyline
+ * @param startPosition [latitude, longitude] of segment start
+ * @param endPosition [latitude, longitude] of segment end
+ */
 @Serializable
 data class ExplorerSegment(
     val id: Long,

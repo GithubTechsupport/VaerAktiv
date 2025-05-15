@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -28,6 +27,20 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.home.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
 
+
+/**
+ * Displays the weather and activity forecast for the upcoming week.
+ *
+ * For each of the next 7 days, it shows a row with a summary of weather data,
+ * and when expanded, details including interval symbols and suggested activities.
+ *
+ * Activities are fetched on-demand when a day is expanded and no cached data exists.
+ *
+ * @param activities A list of [SuggestedActivities] for each day of the week (nullable for missing data).
+ * @param viewModel The [HomeScreenViewModel] used to fetch and update activity data.
+ * @param uiState A [HomeScreenUiState] holding the UI's current state, including weather and loading flags.
+ */
+
 @Composable
 fun WeatherWeek(
     activities: List<SuggestedActivities?>?,
@@ -37,7 +50,9 @@ fun WeatherWeek(
     val cornerDp = 10.dp
     val context = LocalContext.current
     val data = uiState.thisWeeksWeather
+
     Spacer(modifier = Modifier.height(12.dp))
+
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
@@ -48,14 +63,16 @@ fun WeatherWeek(
             .fillMaxWidth()
             .padding(20.dp)
     ) {
+        // Section title
         Text(
             text = stringResource(R.string.kommende_uke),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onPrimary,
             textAlign = TextAlign.Start,
-            modifier = Modifier
-                .padding(start = 8.dp)
+            modifier = Modifier.padding(start = 8.dp)
         )
+
+        // Divider
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -65,6 +82,7 @@ fun WeatherWeek(
                 .background(MaterialTheme.colorScheme.onBackground)
         )
 
+        // Iterate over the first 7 days of weather data
         data.take(7).forEachIndexed { index, day ->
             val dayNr = index + 1
             val isLoading = uiState.loadingFutureActivities.contains(dayNr)
@@ -76,19 +94,24 @@ fun WeatherWeek(
                 }
                 expanded = !expanded
             })
-            Log.d("WeatherWeek", "expanded: $expanded")
+
+            // Expandable section for showing details
             AnimatedVisibility(visible = expanded) {
-                Column (
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 4.dp)
-                ){
-                    // Shows weather for day
+                ) {
+                    // Weather symbols for different times of day
                     DisplayIntervalSymbols(uiState.dayIntervals[index])
                     Spacer(modifier = Modifier.padding(4.dp))
+
+                    // Display activities, loading, or error based on state
                     DataSection(
                         data = activitiesForThisDay?.takeIf { it.activities.isNotEmpty() },
-                        error = if (uiState.isErrorFutureActivities) stringResource(R.string.kunne_ikke_hente_aktiviteter) else null,
+                        error = if (uiState.isErrorFutureActivities)
+                            stringResource(R.string.kunne_ikke_hente_aktiviteter)
+                        else null,
                         loading = isLoading,
                         errorMessagePrefix = "Feil:",
                         loadingContent = { LoadAllActivities() }
@@ -100,12 +123,18 @@ fun WeatherWeek(
                                 activities = activityDate.activities
                             ),
                             isLoading = { uiState.loadingActivities },
-                            onRefresh = { dayNr, indexParam -> viewModel.replaceActivityInDay(dayNr, indexParam) },
-                            onViewInMap = { activity -> viewModel.viewActivityInMap(activity) },
+                            onRefresh = { dayNr, indexParam ->
+                                viewModel.replaceActivityInDay(dayNr, indexParam)
+                            },
+                            onViewInMap = { activity ->
+                                viewModel.viewActivityInMap(activity)
+                            },
                         )
                     }
                 }
             }
+
+            // Divider between days
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

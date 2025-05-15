@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun LoadingActivityCard(modifier: Modifier = Modifier) {
     val shimmerBrush = rememberShimmerBrush()
+    // Card showing a shimmer loading placeholder for an activity
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -35,6 +36,7 @@ fun LoadingActivityCard(modifier: Modifier = Modifier) {
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
+            // Top row simulating title and icon placeholders
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -60,6 +62,7 @@ fun LoadingActivityCard(modifier: Modifier = Modifier) {
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
+            // Simulated lines for activity description placeholders
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
@@ -86,6 +89,7 @@ fun LoadingActivityCard(modifier: Modifier = Modifier) {
 
 @Composable
 private fun rememberShimmerBrush(): Brush {
+    // Creates an infinite shimmer animation brush for loading placeholders
     val transition = rememberInfiniteTransition()
     val translateAnim = transition.animateFloat(
         initialValue = 0f,

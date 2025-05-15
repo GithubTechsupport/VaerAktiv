@@ -19,12 +19,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 
+/**
+ * Displays sunrise and sunset information in a styled horizontal layout.
+ *
+ * @param sunData A list containing sunrise and sunset times as strings. If unavailable, defaults to "N/A".
+ */
 @Composable
-fun SunRiseSet(sunData : List<String>) {
+fun SunRiseSet(sunData: List<String>) {
     val sunRise = sunData.getOrNull(0) ?: stringResource(R.string.n_a)
     val sunSet = sunData.getOrNull(1) ?: stringResource(R.string.n_a)
     val cornerDp = 10.dp
+
     Spacer(modifier = Modifier.height(12.dp))
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -35,7 +42,7 @@ fun SunRiseSet(sunData : List<String>) {
             .fillMaxWidth()
             .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(10.dp))
     ) {
-        Row (
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
@@ -45,7 +52,10 @@ fun SunRiseSet(sunData : List<String>) {
                 .border(1.dp, MaterialTheme.colorScheme.background, RoundedCornerShape(cornerDp)),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            // Sunrise display
             SunDisplayBox(sunRise, R.drawable.sunrise_color, stringResource(R.string.sol_opp))
+
+            // Vertical divider between sunrise and sunset
             Box(
                 modifier = Modifier
                     .height(60.dp)
@@ -53,6 +63,8 @@ fun SunRiseSet(sunData : List<String>) {
                     .background(MaterialTheme.colorScheme.onBackground)
                     .align(Alignment.CenterVertically)
             )
+
+            // Sunset display
             SunDisplayBox(sunSet, R.drawable.sunset_color, stringResource(R.string.sol_ned))
         }
     }

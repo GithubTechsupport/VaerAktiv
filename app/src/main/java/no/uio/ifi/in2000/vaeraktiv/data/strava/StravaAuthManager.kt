@@ -40,13 +40,13 @@ class StravaAuthManager @Inject constructor(
 
     private suspend fun refresh(refreshToken: String?): StravaAuthTokens {
         return try {
-            // Make a POST request with the required parameters
+
             val resp = networkClient.ktorHttpClient.post(tokenUrl) {
                 parameter("client_id", clientId)
                 parameter("client_secret", clientSecret)
                 parameter("grant_type", "refresh_token")
                 parameter("refresh_token", refreshToken)
-            }.body<RefreshResponse>() // Parse the response into a RefreshResponse object
+            }.body<RefreshResponse>()
             StravaAuthTokens(
                 accessToken = resp.accessToken,
                 refreshToken = resp.refreshToken,

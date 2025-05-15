@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 
 
-/*
+/**
 * This function NoNetworkDialog is a dialog that will be displayed when the device is offline.
 * This dialog has information about that the device is offline and has two buttons, one to retry and one to close the app.
 *

@@ -11,6 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+/**
+ * A refresh button with a rotating animation when loading.
+ *
+ * @param onClick Lambda invoked when the button is clicked.
+ * @param enabled Enables or disables the button click.
+ */
 @Composable
 fun RefreshButton(
     onClick: () -> Unit,

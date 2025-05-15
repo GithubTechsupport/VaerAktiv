@@ -18,14 +18,11 @@ import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
-/* This is a composable function that is used to observe the network status of the device.
- it takes in a function that is called when the network status changes true or false.
- sinse this is a mor complex composable function there are more comments in the code so it is easier to understand.
-
- This will always observe the network status of the device.
+/**
+ * Observes network connectivity changes with debounce logic.
+ *
+ * @param onNetworkStatusChanged invoked with true when online, false when lost
  */
-
 @Composable
 fun NetworkObserver(onNetworkStatusChanged: (Boolean) -> Unit) {
     val context = LocalContext.current
