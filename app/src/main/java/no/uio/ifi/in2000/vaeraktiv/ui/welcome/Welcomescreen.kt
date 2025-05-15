@@ -39,6 +39,12 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.R
 
+/*
+* The welcome screen is shown only the first time the user opens the app.
+* Here, the user is introduced to Simon, along with a homepage-style layout featuring a title,
+* mascot, and slogan. A "Get Started" button allows the user to proceed to the next screen.
+*/
+
 @Composable
 fun WelcomeScreen(onStartClick: () -> Unit = {}) {
     var showContent by remember { mutableStateOf(false) }

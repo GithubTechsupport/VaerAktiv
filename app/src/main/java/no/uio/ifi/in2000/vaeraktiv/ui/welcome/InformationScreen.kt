@@ -37,6 +37,12 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.R
 
+/*
+ * This is the final screen in the welcome flow.
+ * It informs the user that they can change their selected preferences later
+ * if they wish to receive different activity suggestions.
+ */
+
 @Composable
 fun InformationScreen(onStartApplication: () -> Unit) {
 
@@ -89,7 +95,7 @@ fun MascotWithEndingSpeech() {
                 .size(100.dp)
         )
         Text(
-            text = stringResource(R.string.vil_du_endre_preferansene_dine_senere_det_er_enkelt_bare_g_til_innstillingene_via_navigasjonsbaren_nederst),
+            text = stringResource(R.string.innstillingene_via_tannhjulet_nederst),
             color = MaterialTheme.colorScheme.primary,
             fontSize = 16.sp,
             textAlign = TextAlign.Center,

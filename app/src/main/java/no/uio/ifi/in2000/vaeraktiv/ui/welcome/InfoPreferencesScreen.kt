@@ -41,6 +41,18 @@ import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.ui.preferences.PreferencesContent
 import no.uio.ifi.in2000.vaeraktiv.ui.preferences.PreferencesViewModel
 
+/*
+
+ * This is the second screen in the welcome flow.
+ * Here, the user is asked to select their preferences so that Simon can generate activities based on them.
+ * After this screen, the user continues to the third and final welcome screen.
+ *
+ * This class uses a shared layout called PreferenceContent.kt, which is reused in two different places.
+ * Reusing that component makes the design more intuitive and consistent.
+ * In this welcome version, we add a custom title and a navigation button that are not shown in the regular preferences settings.
+*/
+
+
 @Composable
 fun InfoPeferencesScreen(
     viewModel: PreferencesViewModel,
