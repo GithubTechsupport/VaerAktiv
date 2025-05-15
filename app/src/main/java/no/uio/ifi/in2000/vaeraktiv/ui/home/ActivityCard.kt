@@ -61,8 +61,9 @@ fun ActivityCard(
                     overflow = TextOverflow.Ellipsis
                 )
                 RefreshButton(
-                    onClick = { onRefresh.invoke() },
-                    isLoading = false,
+                    onClick = {
+                        onRefresh.invoke()
+                              },
                     enabled = true
                 )
             }

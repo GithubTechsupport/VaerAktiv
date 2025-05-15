@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.data.location
 
-import android.annotation.SuppressLint
 import java.util.Locale
 import javax.inject.Inject
 
@@ -12,7 +11,6 @@ class FavoriteLocationRepository @Inject constructor(
     private val geocoder: GeocoderClass
 ) {
     /** Adds a location by name after geocoding. */
-    @SuppressLint("DefaultLocale")
     fun addLocationByName(placeName: String) {
         val response = geocoder.getCoordinatesFromLocation(placeName)
         val name = placeName.split(",")[0]
