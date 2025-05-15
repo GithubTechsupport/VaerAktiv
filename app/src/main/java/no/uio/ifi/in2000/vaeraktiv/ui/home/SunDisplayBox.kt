@@ -19,6 +19,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
+/**
+ * A UI component that displays a sun-related data point,
+ * along with an icon and a description.
+ *
+ * @param sunData The data to display.
+ * @param icon Resource ID of the icon to display.
+ * @param description Description text for the data.
+ */
 @Composable
 fun SunDisplayBox(sunData: String, icon: Int, description: String) {
     Box(
@@ -30,12 +38,14 @@ fun SunDisplayBox(sunData: String, icon: Int, description: String) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // Display sun icon
                 Image(
                     painter = painterResource(id = icon),
                     contentDescription = "Sun icon",
                     modifier = Modifier.size(50.dp)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
+                // Display icon description text
                 Text(
                     text = description,
                     style = MaterialTheme.typography.labelSmall,
@@ -49,6 +59,7 @@ fun SunDisplayBox(sunData: String, icon: Int, description: String) {
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier.padding(top = 20.dp)
             ) {
+                // Display the actual sun data
                 Text(
                     text = sunData,
                     style = MaterialTheme.typography.headlineMedium,

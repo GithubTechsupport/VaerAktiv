@@ -29,6 +29,11 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForHour
 
+/**
+ * Displays a horizontal list of hourly weather forecasts.
+ *
+ * @param data List of hourly weather data.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DisplayHourlyForecast(data: List<ForecastForHour>) {
@@ -42,6 +47,11 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
     }
 }
 
+/**
+ * A box that displays weather data for one hour.
+ *
+ * @param forecast Hourly weather data.
+ */
 @SuppressLint("DiscouragedApi")
 @Composable
 private fun HourlyForecastItem(forecast: ForecastForHour) {
@@ -72,16 +82,37 @@ private fun HourlyForecastItem(forecast: ForecastForHour) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            ForecastText(text = forecast.time ?: stringResource(R.string.n_a), style = MaterialTheme.typography.labelMedium)
+            ForecastText(
+                text = forecast.time ?: stringResource(R.string.n_a),
+                style = MaterialTheme.typography.labelMedium
+            )
             WeatherIcon(iconResId = iconResId)
-            ForecastText(text = stringResource(R.string.temp, forecast.temp!!), style = MaterialTheme.typography.labelSmall)
-            ForecastText(text = stringResource(R.string.nedb_r_ml, forecast.precipitationAmount!!), style = MaterialTheme.typography.labelSmall)
-            ForecastText(text = stringResource(R.string.m_s, forecast.windSpeed!!), style = MaterialTheme.typography.labelSmall)
-            ForecastText(text = stringResource(R.string.uv, forecast.uv!!), style = MaterialTheme.typography.labelSmall)
+            ForecastText(
+                text = stringResource(R.string.temp, forecast.temp!!),
+                style = MaterialTheme.typography.labelSmall
+            )
+            ForecastText(
+                text = stringResource(R.string.nedb_r_ml, forecast.precipitationAmount!!),
+                style = MaterialTheme.typography.labelSmall
+            )
+            ForecastText(
+                text = stringResource(R.string.m_s, forecast.windSpeed!!),
+                style = MaterialTheme.typography.labelSmall
+            )
+            ForecastText(
+                text = stringResource(R.string.uv, forecast.uv!!),
+                style = MaterialTheme.typography.labelSmall
+            )
         }
     }
 }
 
+/**
+ * Text component for use in weather cards.
+ *
+ * @param text The text to display.
+ * @param style Text style.
+ */
 @Composable
 private fun ForecastText(text: String, style: androidx.compose.ui.text.TextStyle) {
     Text(
@@ -92,6 +123,11 @@ private fun ForecastText(text: String, style: androidx.compose.ui.text.TextStyle
     )
 }
 
+/**
+ * Displays a weather icon based on resource ID. Shows a sun icon as fallback.
+ *
+ * @param iconResId Resource ID of the weather icon.
+ */
 @Composable
 private fun WeatherIcon(iconResId: Int) {
     Image(

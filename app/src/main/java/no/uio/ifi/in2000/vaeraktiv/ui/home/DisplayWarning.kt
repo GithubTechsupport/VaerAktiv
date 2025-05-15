@@ -31,6 +31,11 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.home.AlertData
 
+/**
+ * Displays a warning if data exists, with the option to expand the content.
+ *
+ * @param data List of alert data.
+ */
 @Composable
 fun DisplayWarning(data: List<AlertData>) {
     if (data.isNotEmpty()) {
@@ -59,6 +64,7 @@ fun DisplayWarning(data: List<AlertData>) {
     }
 }
 
+/** Displays the warning header with icon and text. */
 @Composable
 private fun WarningHeader() {
     Row(
@@ -80,6 +86,12 @@ private fun WarningHeader() {
     }
 }
 
+/**
+ * Displays detailed content for warnings, including contact information.
+ *
+ * @param warnings List of alerts.
+ * @param contactInfo Contact information as text.
+ */
 @Composable
 private fun ExpandedWarningContent(warnings: List<AlertData>, contactInfo: String) {
     Column (

@@ -21,13 +21,23 @@ import androidx.compose.ui.unit.sp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.home.AlertData
 
+/**
+ * Displays a detailed warning item including an icon, type, and safety instructions.
+ *
+ * The icon is determined based on the warning's type and danger color, falling back to a generic warning icon
+ * if the specific resource cannot be found.
+ *
+ * @param warning An AlertData object containing the details of the warning.
+ */
 @Composable
 fun WarningDetailItem(warning: AlertData) {
+    // Extract or provide fallbacks for warning metadata
     val iconType = warning.awarenessType?.split("; ")?.getOrNull(1) ?: stringResource(R.string.generic)
     val dangerColor = warning.riskMatrixColor.orEmpty()
     val instruct = warning.instruction ?: stringResource(R.string.n_a)
     val type = warning.eventAwarenessName ?: stringResource(R.string.ingen_data)
 
+    // Display content only if there is meaningful data
     if (warning.description != null || !warning.riskMatrixColor.isNullOrEmpty() || iconType != stringResource(R.string.generic)) {
         val iconResId = getWarningResId(
             context = LocalContext.current,
@@ -41,11 +51,14 @@ fun WarningDetailItem(warning: AlertData) {
                 .padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(30.dp)
         ) {
+            // Warning icon
             Image(
                 painter = painterResource(id = iconResId),
                 contentDescription = "Warning icon: $type, $dangerColor",
                 modifier = Modifier.size(60.dp)
             )
+
+            // Warning text details
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = type,
@@ -64,11 +77,19 @@ fun WarningDetailItem(warning: AlertData) {
     }
 }
 
+/**
+ * Attempts to resolve a drawable resource ID for a warning icon based on the type and danger level.
+ *
+ * @param context The Android context used to resolve resources.
+ * @param warningType The warning type name (parsed from awareness type).
+ * @param dangerColor The color representing the severity of the warning.
+ * @return The drawable resource ID for the warning icon, or a generic yellow warning icon if not found.
+ */
 @SuppressLint("DiscouragedApi")
 private fun getWarningResId(context: android.content.Context, warningType: String, dangerColor: String): Int {
     val basePrefix = "icon_warning_"
     val parts = warningType.split("-").filter { it.isNotEmpty() }
-    val noColorIcons = setOf("extreme")
+    val noColorIcons = setOf("extreme") // Icons that do not use color variants
 
     fun tryIcon(type: String): Int {
         val combinedLower = type.lowercase()
@@ -80,10 +101,12 @@ private fun getWarningResId(context: android.content.Context, warningType: Strin
         return context.resources.getIdentifier(iconName, "drawable", context.packageName)
     }
 
+    // Try combined and fallback icon name resolutions
     val combined = parts.joinToString("") { it.trim() }
-    tryIcon(combined).takeIf { it != 0 }?.let {return it}
+    tryIcon(combined).takeIf { it != 0 }?.let { return it }
     tryIcon(parts.getOrNull(0) ?: "generic").takeIf { it != 0 }?.let { return it }
     tryIcon(parts.getOrNull(1) ?: "generic").takeIf { it != 0 }?.let { return it }
 
+    // Fallback generic warning icon
     return R.drawable.icon_warning_generic_yellow
 }

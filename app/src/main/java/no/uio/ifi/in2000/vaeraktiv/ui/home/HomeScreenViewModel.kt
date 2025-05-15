@@ -26,7 +26,8 @@ import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastToday
 import javax.inject.Inject
 
 /**
- * ViewModel for the home screen, handling weather data and activity suggestions.
+ * ViewModel for the home screen, managing weather data, activity suggestions,
+ * UI state, and navigation events.
  */
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
@@ -38,7 +39,6 @@ class HomeScreenViewModel @Inject constructor(
 
     val currentLocation: LiveData<Location?> = aggregateRepository.currentLocation
     val deviceLocation: LiveData<Location?> = aggregateRepository.deviceLocation
-
     val activities: LiveData<List<SuggestedActivities?>> = aggregateRepository.activities
 
     private val _homeScreenUiState = MutableStateFlow(HomeScreenUiState())
@@ -51,30 +51,30 @@ class HomeScreenViewModel @Inject constructor(
     val navigateToPreferences: LiveData<Boolean> get() = _navigateToPreferences
 
     /**
-     * Initializes default location and UI state on first call.
+     * Initializes default location and UI state once.
      */
     fun initialize() {
-        initialized.takeIf { !it }?.also {
+        if (!initialized) {
             Log.d("HomeScreen", "Initializing")
-            // start loading
             _homeScreenUiState.update { it.copy(isLoading = true) }
-
-            aggregateRepository.setCurrentLocation((Location("Oslo", "59.914", "10.752")))
-
+            aggregateRepository.setCurrentLocation(Location("Oslo", "59.914", "10.752"))
             _homeScreenUiState.update { it.copy(isLoading = false) }
             initialized = true
         }
     }
 
-    /** Updates the current location in the repository. */
+    /** Updates current location in repository. */
     fun setCurrentLocation(location: Location) = aggregateRepository.setCurrentLocation(location)
 
-    /** Resets the navigation flag after preferences screen handled. */
+    /** Resets navigation flag after preferences screen handled. */
     fun onNavigationHandled() {
         _navigateToPreferences.value = false
     }
 
-    /** Refreshes all home screen data and activity suggestions. */
+
+    /** Refreshes all home screen data and activities. */
+    @RequiresApi(Build.VERSION_CODES.O)
+
     fun resetScreenState() {
         getHomeScreenData()
         resetActivities()
@@ -88,7 +88,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     /**
-     * Fetches weather, alerts, and sunrise/sunset for the current location.
+     * Fetches weather data, alerts, sunrise/sunset, and updates UI state.
      */
     fun getHomeScreenData() {
         val location = currentLocation.value ?: return
@@ -119,35 +119,28 @@ class HomeScreenViewModel @Inject constructor(
                 todaysWeatherError = null
             } catch (e: Exception) {
                 todaysWeatherError = e.toString()
-
             }
 
-            // Fetch weekly forecast
             try {
                 thisWeeksWeather = aggregateRepository.getForecastByDay(location)
                 thisWeeksWeatherError = null
             } catch (e: Exception) {
                 thisWeeksWeatherError = e.toString()
-
             }
 
-            // Fetch alerts for location
             try {
                 alerts = aggregateRepository.getAlertsForLocation(location)
                 alertsError = null
             } catch (e: Exception) {
                 alertsError = e.toString()
-
             }
 
-            // Retrieve device date time and then sunrise/sunset data
             try {
                 val dateTime = deviceDateTimeRepository.getDateTime()
                 sunRiseSet = aggregateRepository.getSunRiseData(location, dateTime)
                 sunRiseSetError = null
             } catch (e: Exception) {
                 sunRiseSetError = e.toString()
-
             }
 
             try {
@@ -164,8 +157,7 @@ class HomeScreenViewModel @Inject constructor(
                 dayIntervalsError = e.toString()
             }
 
-
-            // Update the UI state after collecting all data/errors.
+            // Update UI state with fetched data and errors
             _homeScreenUiState.update { currentState ->
                 currentState.copy(
                     weatherToday = todaysWeather,
@@ -190,31 +182,22 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    /** Retrieves today's activity suggestions and updates repository. */
+    /** Fetches today's activity suggestions and updates repository. */
     private fun getActivitiesForToday() {
         viewModelScope.launch {
             _homeScreenUiState.update { it.copy(isLoadingActivitiesToday = true, isErrorActivitiesToday = false) }
             try {
                 val activities = aggregateRepository.getSuggestedActivitiesForOneDay(
-                    currentLocation.value!!,
-                    0
-                )
-                if (activities == null) {
-                    throw Exception("Activities are null")
-                }
+                    currentLocation.value!!, 0
+                ) ?: throw Exception("Activities are null")
+
                 aggregateRepository.replaceActivitiesForDay(0, activities)
                 _homeScreenUiState.update {
-                    it.copy(
-                        isErrorActivitiesToday = false,
-                        errorMessageActivitiesToday = "",
-                    )
+                    it.copy(isErrorActivitiesToday = false, errorMessageActivitiesToday = "")
                 }
             } catch (e: Exception) {
                 _homeScreenUiState.update {
-                    it.copy(
-                        isErrorActivitiesToday = true,
-                        errorMessageActivitiesToday = e.toString()
-                    )
+                    it.copy(isErrorActivitiesToday = true, errorMessageActivitiesToday = e.toString())
                 }
                 Log.e("ActivityViewModel", "Error fetching today's activities: ", e)
             } finally {
@@ -223,42 +206,40 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Retrieves activity suggestions for a specific future day.
-     */
+    /** Fetches activity suggestions for a future day and updates repository. */
     fun getActivitiesForAFutureDay(dayNr: Int) {
         viewModelScope.launch {
-            _homeScreenUiState.update { it.copy(loadingFutureActivities = it.loadingFutureActivities + dayNr, isErrorFutureActivities = false) }
+            _homeScreenUiState.update {
+                it.copy(
+                    loadingFutureActivities = it.loadingFutureActivities + dayNr,
+                    isErrorFutureActivities = false
+                )
+            }
             try {
                 aggregateRepository.getSuggestedActivitiesForOneDay(
-                    currentLocation.value!!,
-                    dayNr
+                    currentLocation.value!!, dayNr
                 )?.let {
                     aggregateRepository.replaceActivitiesForDay(dayNr, it)
-                }
-                    ?: throw Exception("Activities are null")
+                } ?: throw Exception("Activities are null")
+
                 _homeScreenUiState.update {
-                    it.copy(
-                        isErrorFutureActivities = false,
-                        errorMessageFutureActivities = "",
-                    )
+                    it.copy(isErrorFutureActivities = false, errorMessageFutureActivities = "")
                 }
             } catch (e: Exception) {
                 _homeScreenUiState.update {
-                    it.copy(
-                        isErrorFutureActivities = true,
-                        errorMessageFutureActivities = e.toString()
-                    )
+                    it.copy(isErrorFutureActivities = true, errorMessageFutureActivities = e.toString())
                 }
-                Log.e("ActivityViewModel", "Error fetching a future days activities ", e)
+                Log.e("ActivityViewModel", "Error fetching a future day's activities", e)
             } finally {
-                _homeScreenUiState.update { it.copy(loadingFutureActivities = it.loadingFutureActivities - dayNr) }
+                _homeScreenUiState.update {
+                    it.copy(loadingFutureActivities = it.loadingFutureActivities - dayNr)
+                }
             }
         }
     }
 
     /**
-     * Replaces an activity suggestion for a given day and index.
+     * Replaces a specific activity suggestion for a given day and index.
      */
     fun replaceActivityInDay(dayNr: Int, index: Int) {
         viewModelScope.launch {
@@ -271,19 +252,19 @@ class HomeScreenViewModel @Inject constructor(
                     ?.let {
                         aggregateRepository.replaceActivityInDay(dayNr, index, it)
                     } ?: throw Exception("New activity is null")
+
                 Log.d("HomeScreenViewModel", "Successfully replaced activity")
             } catch (e: Exception) {
                 Log.e("HomeScreenViewModel", "Error replacing activity: ", e)
-            }
-            finally {
-                _homeScreenUiState.update { it.copy(loadingActivities = it.loadingActivities - (dayNr to index)) }
+            } finally {
+                _homeScreenUiState.update {
+                    it.copy(loadingActivities = it.loadingActivities - (dayNr to index))
+                }
             }
         }
     }
 
-    /**
-     * Emits navigation event to map for the selected activity.
-     */
+    /** Emits navigation event to show the activity on the map. */
     fun viewActivityInMap(activity: ActivitySuggestion) {
         viewModelScope.launch {
             _navigateToMap.emit(activity)
@@ -297,3 +278,39 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 }
+
+/**
+ * UI state for the home screen, including weather data, activity states,
+ * loading indicators, and error messages.
+ */
+data class HomeScreenUiState(
+    val errorMessage: String? = null,
+    val isLoading: Boolean = false,
+    val locationName: String = "",
+    val alerts: List<AlertData> = emptyList(),
+    val weatherToday: ForecastToday? = null,
+    val thisWeeksWeather: List<ForecastForDay> = emptyList(),
+    val sunRiseSet: List<String> = emptyList(),
+    val next24Hours: List<ForecastForHour> = emptyList(),
+    val dayIntervals: List<List<DetailedForecastForDay>> = emptyList(),
+
+    // Errors and loading state for activities
+    val todaysWeatherError: String? = null,
+    val loadingActivities: Set<Pair<Int, Int>> = emptySet(),
+
+    val isLoadingActivitiesToday: Boolean = false,
+    val isErrorActivitiesToday: Boolean = false,
+    val errorMessageActivitiesToday: String = "",
+
+    val loadingFutureActivities: Set<Int> = emptySet(),
+    val isErrorFutureActivities: Boolean = false,
+    val errorMessageFutureActivities: String = "",
+
+    // Errors for weather and alerts
+    val weatherTodayError: String? = null,
+    val thisWeeksWeatherError: String? = null,
+    val alertsError: String? = null,
+    val sunRiseSetError: String? = null,
+    val next24HoursError: String? = null,
+    val dayIntervalsError: String? = null
+)
