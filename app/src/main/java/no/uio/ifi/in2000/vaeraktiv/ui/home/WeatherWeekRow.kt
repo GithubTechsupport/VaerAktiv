@@ -2,8 +2,6 @@ package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,7 +41,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForDay
  * @param onClick Callback function invoked when the row is clicked.
  */
 @SuppressLint("DiscouragedApi")
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WeatherWeekRow(
     day: ForecastForDay,

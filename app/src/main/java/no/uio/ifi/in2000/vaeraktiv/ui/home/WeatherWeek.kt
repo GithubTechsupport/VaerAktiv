@@ -1,8 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -30,6 +28,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.home.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
 
+
 /**
  * Displays the weather and activity forecast for the upcoming week.
  *
@@ -43,6 +42,7 @@ import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
  * @param uiState A [HomeScreenUiState] holding the UI's current state, including weather and loading flags.
  */
 @RequiresApi(Build.VERSION_CODES.O)
+
 @Composable
 fun WeatherWeek(
     activities: List<SuggestedActivities?>?,

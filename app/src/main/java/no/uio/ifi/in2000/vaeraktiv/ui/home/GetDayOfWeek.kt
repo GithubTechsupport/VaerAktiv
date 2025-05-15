@@ -1,9 +1,8 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import java.time.LocalDate
+
 
 /**
  * Returns the day of the week for a given date string.
@@ -12,6 +11,7 @@ import java.time.LocalDate
  * @return The name of the day of the week. Returns "error" if parsing fails.
  */
 @RequiresApi(Build.VERSION_CODES.O)
+
 fun getDayOfWeek(date: String): String {
     return try {
         val localDate = LocalDate.parse(date)

@@ -1,8 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -55,7 +53,6 @@ class HomeScreenViewModel @Inject constructor(
     /**
      * Initializes default location and UI state once.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun initialize() {
         if (!initialized) {
             Log.d("HomeScreen", "Initializing")
@@ -74,8 +71,10 @@ class HomeScreenViewModel @Inject constructor(
         _navigateToPreferences.value = false
     }
 
+
     /** Refreshes all home screen data and activities. */
     @RequiresApi(Build.VERSION_CODES.O)
+
     fun resetScreenState() {
         getHomeScreenData()
         resetActivities()
@@ -91,7 +90,6 @@ class HomeScreenViewModel @Inject constructor(
     /**
      * Fetches weather data, alerts, sunrise/sunset, and updates UI state.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getHomeScreenData() {
         val location = currentLocation.value ?: return
 

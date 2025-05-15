@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
+
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
@@ -33,7 +34,6 @@ import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
  * @param viewModel The ViewModel managing screen data and state.
  */
 @OptIn(ExperimentalMaterialApi::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     isOnline: Boolean,
