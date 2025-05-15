@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId = "no.uio.ifi.in2000.vaeraktiv"
-        minSdk = 26
+        minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

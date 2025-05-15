@@ -1,8 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForHour
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DisplayHourlyForecast(data: List<ForecastForHour>) {
     LazyRow(

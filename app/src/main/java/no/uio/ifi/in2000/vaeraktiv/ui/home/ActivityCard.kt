@@ -56,7 +56,6 @@ fun ActivityCard(
                     onClick = {
                         onRefresh.invoke()
                               },
-                    isLoading = false,
                     enabled = true
                 )
             }
