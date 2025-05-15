@@ -1,9 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.navbar
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -24,7 +22,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.MainActivity
-import no.uio.ifi.in2000.vaeraktiv.model.navbar.NavbarUiState
 import no.uio.ifi.in2000.vaeraktiv.network.connection.NetworkObserver
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
@@ -38,7 +35,6 @@ import no.uio.ifi.in2000.vaeraktiv.ui.welcome.InfoPeferencesScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.InformationScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.WelcomeScreen
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navbar(
     favoriteLocationViewModel: FavoriteLocationViewModel,

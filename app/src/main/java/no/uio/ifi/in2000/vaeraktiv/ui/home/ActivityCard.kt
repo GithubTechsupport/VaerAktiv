@@ -21,7 +21,13 @@ import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
 
-
+/**
+ * Displays a card with an activity suggestion.
+ *
+ * @param activity The activity being displayed.
+ * @param onRefresh Called when the refresh button is pressed.
+ * @param onViewInMap Called when "View in map" is pressed.
+ */
 @Composable
 fun ActivityCard(
     activity: ActivitySuggestion,
@@ -29,6 +35,7 @@ fun ActivityCard(
     onViewInMap: (() -> Unit)
 ) {
 
+    // Card that shows the content
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -40,6 +47,7 @@ fun ActivityCard(
             modifier = Modifier
                 .padding(12.dp)
         ) {
+            // Header with the activity's name and refresh button
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -53,13 +61,13 @@ fun ActivityCard(
                     overflow = TextOverflow.Ellipsis
                 )
                 RefreshButton(
-                    onClick = {
-                        onRefresh.invoke()
-                              },
+                    onClick = { onRefresh.invoke() },
                     isLoading = false,
                     enabled = true
                 )
             }
+
+            // Time period for the activity
             Row {
                 Text(
                     text = stringResource(
@@ -73,6 +81,8 @@ fun ActivityCard(
                     overflow = TextOverflow.Ellipsis
                 )
             }
+
+            // Activity description
             Row {
                 Text(
                     text = activity.activityDesc,
@@ -82,9 +92,11 @@ fun ActivityCard(
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            Row (
+
+            // Link to map view (if not a custom activity)
+            Row(
                 modifier = Modifier.align(Alignment.End)
-            ){
+            ) {
                 if (activity !is CustomActivitySuggestion) {
                     Text(
                         text = stringResource(R.string.vis_i_kart),

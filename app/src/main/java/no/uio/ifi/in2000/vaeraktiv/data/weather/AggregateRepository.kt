@@ -1,9 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.data.weather
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -89,7 +87,6 @@ class AggregateRepository @Inject constructor(
      * @param date ISO date string (yyyy-MM-dd)
      * @return list of local time strings "HH:mm"
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getSunRiseData(location: Location, date: String): List<String> {
         Log.d("WeatherRepository", "getSunRiseData called with location: $location and date: $date")
         val response = sunriseRepository.getSunriseTime(location.lat, location.lon, date)
@@ -117,7 +114,7 @@ class AggregateRepository @Inject constructor(
         }
     }
 
-
+    /** Parses "name,lat,lon" line into a Triple or null if malformed. */
     private fun parseLocationLine(line: String): Triple<String, String, String>? {
         val parts = line.split(",")
         if (parts.size != 3) {
@@ -127,6 +124,9 @@ class AggregateRepository @Inject constructor(
         return Triple(parts[0], parts[1], parts[2])
     }
 
+    /**
+     * Fetches forecast and maps it to a FavoriteLocation or null on error.
+     */
     private suspend fun fetchAndProcessForecast(placeName: String, latitude: String, longitude: String): FavoriteLocation? {
         return try {
             val forecast = locationForecastRepository.getForecast(latitude, longitude)
@@ -191,7 +191,6 @@ class AggregateRepository @Inject constructor(
      * @param location coordinates for weather lookup
      * @return ForecastToday object
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getForecastToday(location: Location): ForecastToday {
         val forecast = locationForecastRepository.getForecast(location.lat, location.lon)
         val locationData = forecast?.properties?.timeseries?.get(0)?.data
@@ -210,6 +209,9 @@ class AggregateRepository @Inject constructor(
         return forecastToday
     }
 
+    /**
+     * Returns time series and units for a specific day; throws on failure.
+     */
     override suspend fun getTimeSeriesForDay(location: Location, dayNr: Int): Pair<List<TimeSeries>, Units?> {
         try {
             val response = locationForecastRepository.getForecastByDay(location.lat, location.lon)
@@ -223,6 +225,9 @@ class AggregateRepository @Inject constructor(
         }
     }
 
+    /**
+     * Extracts daily forecasts at 12:00 for upcoming days.
+     */
     override suspend fun getForecastByDay(location: Location): List<ForecastForDay> {
         try {
             val response = locationForecastRepository.getForecastByDay(location.lat, location.lon).first.drop(1)
@@ -248,7 +253,6 @@ class AggregateRepository @Inject constructor(
      * @param location coordinates to query
      * @return list of ForecastForHour entries
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getForecastByDayIntervals(location: Location): List<List<DetailedForecastForDay>> {
         try {
             val response = locationForecastRepository
@@ -296,7 +300,9 @@ class AggregateRepository @Inject constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O) // Requires API version 26
+    /**
+     * Retrieves next 24-hour hourly forecasts with local times.
+     */
     override suspend fun getForecastForHour(location: Location): List<ForecastForHour> {
         val response = locationForecastRepository.getNext24Hours(location.lat, location.lon)
         Log.d("WeatherRepository", "getWeatherForHour response: $response")

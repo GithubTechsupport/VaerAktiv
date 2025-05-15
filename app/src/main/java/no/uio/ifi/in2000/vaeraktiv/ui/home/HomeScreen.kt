@@ -1,7 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
+
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,8 +26,14 @@ import kotlinx.coroutines.flow.filterNotNull
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 
+/**
+ * Main composable for the Home screen.
+ * Handles UI state, data refresh, and location changes.
+ *
+ * @param isOnline Indicates if the device has internet connectivity.
+ * @param viewModel The ViewModel managing screen data and state.
+ */
 @OptIn(ExperimentalMaterialApi::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     isOnline: Boolean,
@@ -51,22 +57,22 @@ fun HomeScreen(
         viewModel.initialize()
     }
 
+    // Reset UI when location name changes
     LaunchedEffect(Unit) {
         snapshotFlow { currentLocation?.addressName }
             .filterNotNull()
             .distinctUntilChanged()
             .collectLatest { newName ->
                 if (newName != uiState.locationName) {
-                    Log.d("HomeScreen", "Current location changed")
-                    Log.d("HomeScreen", "New location: $newName, old location: ${uiState.locationName}")
                     viewModel.resetScreenState()
                 }
             }
     }
 
-    Box(Modifier
-        .fillMaxSize()
-        .pullRefresh(refreshState)
+    Box(
+        Modifier
+            .fillMaxSize()
+            .pullRefresh(refreshState)
     ) {
         when {
             uiState.isLoading -> LoadingScreen()

@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.model.navbar
+package no.uio.ifi.in2000.vaeraktiv.ui.navbar
 
 data class NavbarUiState(
     val isOnline: Boolean = true,

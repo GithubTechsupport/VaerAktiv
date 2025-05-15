@@ -33,6 +33,10 @@ import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.home.FavoriteLocation
 
+/**
+ * The card template for all the weather information to be filled into.
+ * @param FavoriteLocation The dataclass which has the weather information for the specific location
+ */
 @SuppressLint("DiscouragedApi")
 @Composable
 fun PlaceCard(

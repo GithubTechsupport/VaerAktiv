@@ -32,10 +32,24 @@ import androidx.compose.ui.unit.sp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 
+/**
+ * Displays the user's selected location, with the option to navigate to settings and select device location.
+ *
+ * @param locationName The name of the selected location.
+ * @param deviceLocation The device's current position (if available).
+ * @param setCurrentLocation Called when the user chooses to use the device location.
+ * @param navigateToPreferences Navigates to the preferences/settings screen.
+ */
 @Composable
-fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentLocation: (Location) -> Unit, navigateToPreferences: () -> Unit) { // navn på sted, devicelocation
+fun CurrentLocation(
+    locationName: String,
+    deviceLocation: Location?,
+    setCurrentLocation: (Location) -> Unit,
+    navigateToPreferences: () -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
-    Column (
+
+    Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -47,6 +61,7 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                 .fillMaxWidth()
                 .clipToBounds()
         ) {
+            // Settings icon that navigates to preferences
             Icon(
                 imageVector = Icons.Default.Settings,
                 contentDescription = "Settings",
@@ -57,13 +72,16 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                     .size(48.dp)
             )
 
+            // Displays location name and opens option to select device location
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .weight(1f)
                     .clickable {
-                        if (locationName != deviceLocation?.addressName) expanded = !expanded
+                        if (locationName != deviceLocation?.addressName) {
+                            expanded = !expanded
+                        }
                     }
             ) {
                 Text(
@@ -75,6 +93,8 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+
+                // Option to use device location
                 if (expanded) {
                     Row(
                         modifier = Modifier.clickable {
@@ -102,6 +122,8 @@ fun CurrentLocation(locationName: String, deviceLocation: Location?, setCurrentL
                 }
             }
         }
+
+        // Horizontal line below the location name
         Box(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp)
