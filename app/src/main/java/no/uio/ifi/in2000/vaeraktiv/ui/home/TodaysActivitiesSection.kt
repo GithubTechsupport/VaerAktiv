@@ -17,6 +17,16 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.home.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 
+/**
+ * Displays the "Today's Activities" section in the home screen.
+ *
+ * Based on the UI state, it conditionally shows a loading indicator, an error message,
+ * or the list of activities for the current day. If no activities are available, a fallback message is shown.
+ *
+ * @param uiState The UI state of the home screen, used to determine loading/error states.
+ * @param activities List of activities retrieved for today.
+ * @param viewModel ViewModel used to trigger actions like refreshing or viewing activities on a map.
+ */
 @Composable
 fun TodaysActivitiesSection(
     uiState: HomeScreenUiState,
@@ -30,6 +40,7 @@ fun TodaysActivitiesSection(
             .background(MaterialTheme.colorScheme.onBackground, shape = RoundedCornerShape(10.dp)),
         horizontalAlignment = Alignment.Start
     ) {
+        // Section header
         Text(
             text = stringResource(R.string.i_dag),
             style = MaterialTheme.typography.headlineSmall,
@@ -39,14 +50,17 @@ fun TodaysActivitiesSection(
 
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
             when {
+                // Show error message if fetching today's activities failed
                 uiState.isErrorActivitiesToday -> {
                     ErrorMessage("Error fetching today's activities: ${uiState.errorMessageActivitiesToday}")
                 }
 
+                // Show loading shimmer while fetching data
                 uiState.isLoadingActivitiesToday -> {
                     LoadAllActivities()
                 }
 
+                // Display activities if available
                 else -> {
                     activities?.getOrNull(0)?.activities?.let { todaysActivities ->
                         AddActivitiesForDay(
@@ -54,14 +68,14 @@ fun TodaysActivitiesSection(
                             activityDate = ActivityDate("I dag", todaysActivities),
                             isLoading = { uiState.loadingActivities },
                             onRefresh = { dayNr, index ->
-                                viewModel.replaceActivityInDay(
-                                    dayNr,
-                                    index
-                                )
+                                viewModel.replaceActivityInDay(dayNr, index)
                             },
-                            onViewInMap = { activity -> viewModel.viewActivityInMap(activity) }
+                            onViewInMap = { activity ->
+                                viewModel.viewActivityInMap(activity)
+                            }
                         )
                     } ?: run {
+                        // Fallback if no activities are available
                         Text(
                             text = stringResource(R.string.ingen_aktiviteter_for_i_dag),
                             style = MaterialTheme.typography.bodyMedium,
@@ -74,4 +88,5 @@ fun TodaysActivitiesSection(
         }
     }
 }
+
 
