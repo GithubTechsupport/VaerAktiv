@@ -38,7 +38,6 @@ fun HomeScreen(
     val currentLocation by viewModel.currentLocation.observeAsState()
     val deviceLocation by viewModel.deviceLocation.observeAsState()
     val activities by viewModel.activities.observeAsState()
-    val lifecycleOwner = LocalLifecycleOwner.current
     var isRefreshing by remember { mutableStateOf(false) }
     val refreshState = rememberPullRefreshState (
         refreshing = isRefreshing,
