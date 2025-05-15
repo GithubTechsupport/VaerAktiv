@@ -71,3 +71,4 @@ The app uses several libraries and frameworks:
 - Parameter 'lifecycleOwner' is never used in `HomeScreenViewModel.kt` - The code this parameter belongs to is temporarily commented out to work with virtual emulators. 
 - Property "deviceLocation" is never used in `HomeScreenViewModel.kt` - Used in `HomeScreen.kt`
 - Functions "getFromLocationName" and "getFromLocation" in `GeocoderClass.kt` become deprecated in API level 33, and to remove the warning needs API level 33, which only 48% of android users have.
+- All provide functions get a never used warning in `AppModule.kt` and `ViewModelModule.kt` , but they are infact used by hilt. The IDE just can't detect this.
