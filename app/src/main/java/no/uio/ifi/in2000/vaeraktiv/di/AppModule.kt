@@ -21,8 +21,8 @@ import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.places.PlacesRepository
 import no.uio.ifi.in2000.vaeraktiv.data.preferences.PreferenceRepository
 import no.uio.ifi.in2000.vaeraktiv.data.strava.StravaRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.IAggregateRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.AggregateRepository
+import no.uio.ifi.in2000.vaeraktiv.data.weather.IAggregateRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsDataSource
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastDataSource

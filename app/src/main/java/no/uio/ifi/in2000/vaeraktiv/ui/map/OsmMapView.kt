@@ -6,8 +6,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.BitmapDrawable
-import android.preference.PreferenceManager
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.viewinterop.AndroidView
@@ -72,7 +72,6 @@ private fun createStartFlagIcon(context: Context, sizePx: Int = 60): BitmapDrawa
 
 @Composable
 fun OsmMapView(
-    context: Context,
     places: List<PlaceActivitySuggestion>,
     routes: List<StravaActivitySuggestion>,
     decodePolyline: (String) -> List<GeoPoint>,
@@ -85,8 +84,7 @@ fun OsmMapView(
 
             // Initialize OSMdroid configuration
             val appCtx = ctx.applicationContext
-            Configuration.getInstance()
-                .load(appCtx, PreferenceManager.getDefaultSharedPreferences(appCtx))
+            Configuration.getInstance().load(appCtx, appCtx.getSharedPreferences("osm_prefs", Context.MODE_PRIVATE))
             Configuration.getInstance().userAgentValue = appCtx.packageName
 
             MapView(appCtx).apply {
@@ -110,7 +108,7 @@ fun OsmMapView(
                         title = place.activityName
                         // tint the default marker icon red
                         icon = icon?.mutate()
-                        icon?.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN)
+                        icon?.colorFilter = PorterDuffColorFilter(Color.RED, PorterDuff.Mode.SRC_IN)
                         setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                     }.also { mapView.overlays.add(it) }
                 }

@@ -2,11 +2,10 @@ package no.uio.ifi.in2000.vaeraktiv
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -35,16 +34,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var locationTracker: LocationTracker
 
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            Log.d("MainActivity", "Location permission granted")
-            locationTracker.start(this)
-        } else {
-            Log.d("MainActivity", "Location permission denied")
-        }
-    }
+    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +47,24 @@ class MainActivity : ComponentActivity() {
                 }
             })
         }
-        Log.d("MainActivity", "onCreate called")
-        checkPermissions()
+
+        permissionLauncher = PermissionManager.registerForLocationPermissions(this) { granted ->
+            if (granted) {
+                locationTracker.start(this)
+            }
+        }
+
+        if (PermissionManager.isLocationPermissionGranted(this)) {
+            locationTracker.start(this)
+        } else {
+            permissionLauncher.launch(
+                arrayOf(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+
         enableEdgeToEdge()
         setContent {
             VaerAktivTheme {
@@ -71,15 +77,6 @@ class MainActivity : ComponentActivity() {
                     navController
                 )
             }
-        }
-    }
-
-    private fun checkPermissions() {
-        if (!PermissionManager.isLocationPermissionGranted(this)) {
-            requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
-        } else {
-            Log.d("MainActivity", "Location permission already granted")
-            locationTracker.start(this)
         }
     }
 }
