@@ -1,7 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +14,6 @@ import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeContent(
     uiState: HomeScreenUiState,
