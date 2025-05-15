@@ -3,12 +3,7 @@
 
 ## Documentation
 
-Documentation is available in the `docs` folder in the project's root directory.    
-Open the `index.html` file in a browser to view the documentation.
-
-You can generate the documentation by cloning the project and running `./gradlew dokkaHtml` from the root directory.
-
-Alternatively, you can read the documentation files directly in a text editor.
+Documentation on functions and classes can be viewed within the codebase.
 
 ## Running the app
 
