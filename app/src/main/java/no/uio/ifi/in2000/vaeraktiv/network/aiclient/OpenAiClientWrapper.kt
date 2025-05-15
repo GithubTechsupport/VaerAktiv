@@ -14,9 +14,15 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import javax.inject.Inject
 
+/**
+ * Wrapper around OpenAI client to fetch chat-based activity suggestions.
+ */
 class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiClient() {
     private val model = ModelId("gpt-4.1")
 
+    /**
+     * Requests JSON-formatted suggestions for a full day prompt.
+     */
     override suspend fun getSuggestionsForOneDay(
         forecastData: FormattedForecastDataForPrompt,
         nearbyPlaces: NearbyPlacesSuggestions,
@@ -39,6 +45,9 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
         return@withContext response
     }
 
+    /**
+     * Requests a single activity suggestion for a day and logs the request timing.
+     */
     override suspend fun getSingleSuggestionForDay(
         forecastData: FormattedForecastDataForPrompt,
         nearbyPlaces: NearbyPlacesSuggestions,

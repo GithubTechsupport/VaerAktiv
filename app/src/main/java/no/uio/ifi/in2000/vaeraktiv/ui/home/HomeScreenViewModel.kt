@@ -27,6 +27,9 @@ import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForHour
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastToday
 import javax.inject.Inject
 
+/**
+ * ViewModel for the home screen, handling weather data and activity suggestions.
+ */
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val aggregateRepository: IAggregateRepository,
@@ -49,6 +52,9 @@ class HomeScreenViewModel @Inject constructor(
     private val _navigateToPreferences = MutableLiveData(false)
     val navigateToPreferences: LiveData<Boolean> get() = _navigateToPreferences
 
+    /**
+     * Initializes default location and UI state on first call.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun initialize() {
         initialized.takeIf { !it }?.also {
@@ -63,12 +69,15 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    /** Updates the current location in the repository. */
     fun setCurrentLocation(location: Location) = aggregateRepository.setCurrentLocation(location)
 
+    /** Resets the navigation flag after preferences screen handled. */
     fun onNavigationHandled() {
         _navigateToPreferences.value = false
     }
 
+    /** Refreshes all home screen data and activity suggestions. */
     @RequiresApi(Build.VERSION_CODES.O)
     fun resetScreenState() {
         getHomeScreenData()
@@ -83,6 +92,9 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Fetches weather, alerts, and sunrise/sunset for the current location.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun getHomeScreenData() {
         val location = currentLocation.value ?: return
@@ -184,6 +196,7 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    /** Retrieves today's activity suggestions and updates repository. */
     private fun getActivitiesForToday() {
         viewModelScope.launch {
             _homeScreenUiState.update { it.copy(isLoadingActivitiesToday = true, isErrorActivitiesToday = false) }
@@ -216,6 +229,9 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Retrieves activity suggestions for a specific future day.
+     */
     fun getActivitiesForAFutureDay(dayNr: Int) {
         viewModelScope.launch {
             _homeScreenUiState.update { it.copy(loadingFutureActivities = it.loadingFutureActivities + dayNr, isErrorFutureActivities = false) }
@@ -247,6 +263,9 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Replaces an activity suggestion for a given day and index.
+     */
     fun replaceActivityInDay(dayNr: Int, index: Int) {
         viewModelScope.launch {
             Log.d("HomeScreenViewModel", "Replacing activity in day $dayNr at index $index")
@@ -268,18 +287,26 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Emits navigation event to map for the selected activity.
+     */
     fun viewActivityInMap(activity: ActivitySuggestion) {
         viewModelScope.launch {
             _navigateToMap.emit(activity)
         }
     }
 
+    /** Triggers navigation to the preferences screen. */
     fun navigateToPreferences() {
         viewModelScope.launch {
             _navigateToPreferences.value = true
         }
     }
 }
+
+/**
+ * UI state for the home screen: weather, activities, loading and errors.
+ */
 data class HomeScreenUiState(
     val errorMessage: String? = null,
     val isLoading: Boolean = false,

@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.data.location
 
 import android.annotation.SuppressLint
+import java.util.Locale
 import javax.inject.Inject
 
 class FavoriteLocationRepository @Inject constructor(
@@ -18,8 +19,8 @@ class FavoriteLocationRepository @Inject constructor(
         if (addresses != null) {
             dataSource.addLocation(
                 name,
-                String.format("%.3f", addresses.first).toDouble(), // Save the place name and coordinates to the first 3 digits along with the
-                String.format("%.3f", addresses.second).toDouble()
+                String.format(Locale.US, "%.3f", addresses.first).toDouble(), // Save the place name and coordinates to the first 3 digits along with the
+                String.format(Locale.US, "%.3f", addresses.second).toDouble()
             )
         }
     }

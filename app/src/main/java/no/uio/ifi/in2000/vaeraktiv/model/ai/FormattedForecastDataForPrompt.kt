@@ -3,12 +3,16 @@ package no.uio.ifi.in2000.vaeraktiv.model.ai
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
 
+/**
+ * Holds a list of TimeSeries and units for constructing AI prompts.
+ */
 data class FormattedForecastDataForPrompt (
     val timeseries: List<TimeSeries>,
     val units: Units?,
     val location: String
 ) {
     override fun toString(): String {
+        // Formats each time series entry into a prompt section
         val userPrompt = timeseries.joinToString("\n\n") {"""
             datetime: ${it.time}
             airTemperature: ${it.data.instant.details.airTemperature}

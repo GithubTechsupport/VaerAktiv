@@ -3,7 +3,9 @@ package no.uio.ifi.in2000.vaeraktiv.model.ai
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
+/**
+ * AI-suggested custom activity with date, time and description.
+ */
 @Serializable
 @SerialName("CustomActivitySuggestion")
 data class CustomActivitySuggestion (

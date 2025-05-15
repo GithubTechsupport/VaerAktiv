@@ -15,7 +15,7 @@ Alternatively, you can read the documentation files directly in a text editor.
 1. Clone the repository and open the root folder in Android Studio.
 2. The app requires an Android emulator or device with a minimum API level of 23 (Android 6.0).
 3. The app requires location permissions to function correctly. You will be prompted to grant location access when running the app.
-5. Run the app from Android Studio using the "Run" button or by selecting your device/emulator.
+4. Run the app from Android Studio using the "Run" button or by selecting your device/emulator.
 
 ## Dependencies
 

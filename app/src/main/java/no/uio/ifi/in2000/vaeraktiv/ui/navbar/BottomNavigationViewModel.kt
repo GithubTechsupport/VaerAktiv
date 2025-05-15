@@ -8,6 +8,9 @@ import no.uio.ifi.in2000.vaeraktiv.R
 
 data class NavItem(val route: String, val iconId: Int)
 
+/**
+ * ViewModel for bottom navigation bar state and actions.
+ */
 class BottomNavigationViewModel : ViewModel() {
     private val _navItems = listOf(
         NavItem("location", R.drawable.location),
@@ -19,6 +22,9 @@ class BottomNavigationViewModel : ViewModel() {
     private val _selectedRoute = mutableStateOf("home")
     val selectedRoute: State<String> = _selectedRoute
 
+    /**
+     * Handles navigation item selection and performs navigation.
+     */
     fun onNavItemClick(navController: NavController, route: String) {
         if (_selectedRoute.value == route) return
         _selectedRoute.value = route
@@ -28,6 +34,9 @@ class BottomNavigationViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Updates the selected route if it exists in the nav items.
+     */
     fun updateSelectedRoute(route: String) {
         if (_navItems.any { it.route == route }) {
             _selectedRoute.value = route

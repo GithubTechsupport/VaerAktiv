@@ -4,10 +4,16 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 
+/**
+ * Helper for requesting and checking location permissions at runtime.
+ */
 class PermissionManager {
     companion object {
         const val LOCATION_PERMISSION_REQUEST_CODE = 100
 
+        /**
+         * Returns true if either fine or coarse location permission is granted.
+         */
         fun isLocationPermissionGranted(activity: Activity): Boolean {
             return ActivityCompat.checkSelfPermission(
                 activity,
@@ -18,6 +24,9 @@ class PermissionManager {
             ) == PackageManager.PERMISSION_GRANTED
         }
 
+        /**
+         * Prompts the user to grant fine and coarse location permissions.
+         */
         fun requestLocationPermissions(activity: Activity) {
             ActivityCompat.requestPermissions(
                 activity,
