@@ -1,7 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
