@@ -61,7 +61,7 @@ class PlacesRepository @Inject constructor(private val placesClient: PlacesClien
 
         var currentRadius = initialRadius
 
-        while (places.isEmpty() && currentRadius <= maxRadius) {
+        while (places.isEmpty() && currentRadius <= maxRadius) { // tries to find locations in the specified radius range until a location is found.
             try {
                 val request = SearchNearbyRequest.builder(
                     CircularBounds.newInstance(center, currentRadius),

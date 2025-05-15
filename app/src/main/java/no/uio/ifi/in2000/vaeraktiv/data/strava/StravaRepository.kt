@@ -10,7 +10,8 @@ class StravaRepository @Inject constructor(
     private val datasource: StravaDatasource
 ) {
     /**
-     * Retrieves and transforms Strava running segments into RouteSuggestions.
+     * Retrieves and transforms Strava running segments into RouteSuggestions
+     * within a rectangular are around the specified location
      */
     suspend fun getRouteSuggestions(
         location: Location,
@@ -25,6 +26,8 @@ class StravaRepository @Inject constructor(
         val neLng = lon + width
 
         val segments = datasource.fetchPopularRunSegments(swLat, swLng, neLat, neLng)
+
+        // Transform each Strava segment into a RouteSuggestion object
         val suggestions = segments.map { segment ->
             RouteSuggestion(
                 id = segment.id.toString(),

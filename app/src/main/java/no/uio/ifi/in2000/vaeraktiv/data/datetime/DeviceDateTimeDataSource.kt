@@ -7,7 +7,7 @@ import java.time.ZoneId
 
 class DeviceDateTimeDataSource {
     @RequiresApi(Build.VERSION_CODES.O)
-    private val zoneId = ZoneId.systemDefault()
+    private val zoneId = ZoneId.systemDefault() //Get the timezone id of the system timezone.
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentLocalDateTime(): LocalDateTime {

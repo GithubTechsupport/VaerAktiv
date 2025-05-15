@@ -41,7 +41,7 @@ class PreferenceDataSource @Inject constructor(@ApplicationContext private val c
     }
 
     private fun loadPreferences() {
-        if (!file.exists()) {
+        if (!file.exists()) { // set the preferences to the default value if there is no preference file.
             _userPreference.value = allPossiblePreferences
             savePreference(_userPreference.value)
             return
