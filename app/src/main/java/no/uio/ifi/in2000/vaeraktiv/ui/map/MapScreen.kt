@@ -5,7 +5,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.platform.LocalContext
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 
 @Composable
@@ -21,8 +20,8 @@ fun MapScreen(viewModel: MapScreenViewModel) {
     if (uiState.isLoading) {
         LoadingScreen()
     } else {
+
         OsmMapView(
-            context = LocalContext.current,
             places = uiState.places,
             routes = uiState.routes,
             decodePolyline = {polyline -> viewModel.decodePolyline(polyline)},

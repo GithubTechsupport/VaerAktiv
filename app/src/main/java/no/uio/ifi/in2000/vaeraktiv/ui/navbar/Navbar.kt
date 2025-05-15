@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.edit
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -25,18 +26,17 @@ import kotlinx.coroutines.delay
 import no.uio.ifi.in2000.vaeraktiv.MainActivity
 import no.uio.ifi.in2000.vaeraktiv.model.navbar.NavbarUiState
 import no.uio.ifi.in2000.vaeraktiv.network.connection.NetworkObserver
-import no.uio.ifi.in2000.vaeraktiv.ui.preferences.PreferencesViewModel
-import no.uio.ifi.in2000.vaeraktiv.ui.preferences.PreferencesScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.FavoriteLocationViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.location.LocationScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.map.MapScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.map.MapScreenViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.preferences.PreferencesScreen
+import no.uio.ifi.in2000.vaeraktiv.ui.preferences.PreferencesViewModel
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.InfoPeferencesScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.InformationScreen
 import no.uio.ifi.in2000.vaeraktiv.ui.welcome.WelcomeScreen
-import androidx.core.content.edit
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
