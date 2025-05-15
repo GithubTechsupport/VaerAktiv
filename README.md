@@ -13,7 +13,7 @@ Alternatively, you can read the documentation files directly in a text editor.
 ## Running the app
 
 1. Clone the repository and open the root folder in Android Studio.
-2. The app requires an Android emulator or device with a minimum API level of 23 (Android 6.0).
+2. The app requires an Android emulator or device with a minimum API level of 26 (Android 8).
 3. The app requires location permissions to function correctly. You will be prompted to grant location access when running the app.
 4. Run the app from Android Studio using the "Run" button or by selecting your device/emulator.
 
@@ -62,7 +62,6 @@ The app uses several libraries and frameworks:
 
 ## Notes
 
-- Make sure to add your own API keys for Google Places and other services in the `secrets.properties` file as described in the project documentation.
 - The app is intended for educational purposes and may require additional setup for production use.
 
 ## Warnings
