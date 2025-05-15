@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.data.location
 
-import android.annotation.SuppressLint
 import java.util.Locale
 import javax.inject.Inject
 
