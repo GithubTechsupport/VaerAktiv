@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv
 
-import MainDispatcherRule
 import no.uio.ifi.in2000.vaeraktiv.ui.map.MapScreenViewModel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData

@@ -1,3 +1,5 @@
+package no.uio.ifi.in2000.vaeraktiv
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestDispatcher
