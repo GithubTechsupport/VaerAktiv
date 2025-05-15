@@ -2,13 +2,13 @@
 classDiagram
     FavoriteLocationScreen "1" --o "1" FavoriteLocationViewModel : ViewModel
     FavoriteLocationViewModel "1" --o "1" FavoriteLocationRepository : Data Repository
-    FavoriteLocationViewModel "1" --o "1" WeatherRepository : Dependency
+    FavoriteLocationViewModel "1" --o "1" AggregateRepository : Dependency
     FavoriteLocationRepository "1" --o "1" GeocoderClass : Dependency
     FavoriteLocationRepository "1" --o "1" FavoriteLocationDataSource : Data Source
     PlacesClient "1" o-- "1" PlacesRepository : Dependency
-    PlacesRepository "1" o-- "1" WeatherRepository : Dependency
+    PlacesRepository "1" o-- "1" AggregateRepository : Dependency
 
-    class WeatherRepository {
+    class AggregateRepository {
       -placesRepository: PlacesRepository
             +getAutocompletePredictions(query:String,token:AutocompleteSessionToken): List~AutocompletePrediction~
     }
@@ -24,7 +24,7 @@ classDiagram
 
     class FavoriteLocationViewModel {
       +favoriteLocations : MutableStateFlow~List~FavoriteLocation~
-      -weatherRepository: WeatherRepository
+      -aggregateRepository: AggregateRepository
       -sessionToken:AutocompleteSessionToken?
       +predictions: StateFlow~List~AutocompletePrediction~~
       +fetchPredictions(query:String):void

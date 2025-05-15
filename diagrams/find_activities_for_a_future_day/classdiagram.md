@@ -1,15 +1,12 @@
-  ---
-title: Aktivitetsdiagram - Finn aktiviteter for en fremtidig dag
----
-  ```mermaid
+```mermaid
 classDiagram
     HomeScreen "1" o-- "1" HomeScreenViewModel : viewModel
-    HomeScreenViewModel "1" o-- "1" WeatherRepository : repo
-    WeatherRepository "1" o-- "1" LocationForecastRepository
-    WeatherRepository "1" o-- "1" PlacesRepository
-    WeatherRepository "1" o-- "1" StravaRepository
-    WeatherRepository "1" o-- "1" PreferencesRepository
-    WeatherRepository "1" o-- "1" AiRepository
+    HomeScreenViewModel "1" o-- "1" AggregateRepository : repo
+    AggregateRepository "1" o-- "1" LocationForecastRepository
+    AggregateRepository "1" o-- "1" PlacesRepository
+    AggregateRepository "1" o-- "1" StravaRepository
+    AggregateRepository "1" o-- "1" PreferencesRepository
+    AggregateRepository "1" o-- "1" AiRepository
     AiRepository "1" o-- "1" AiClient
     PlacesClient "1" o-- "1" PlacesRepository
     HomeScreenUiState "1" o-- "1" HomeScreenViewModel
@@ -23,11 +20,11 @@ classDiagram
     }
 
     class HomeScreenViewModel {
-      -weatherRepository:WeatherRepository
+      -aggregateRepository:AggregateRepository
       +getActivitiesForAFutureDay(day:Int):void
     }
 
-    class WeatherRepository {
+    class AggregateRepository {
       -locationForecastRepository:LocationForecastRepository
       -placesRepository:PlacesRepository
       -stravaRepository:StravaRepository

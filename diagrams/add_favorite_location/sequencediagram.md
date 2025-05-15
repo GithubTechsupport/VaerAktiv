@@ -6,7 +6,7 @@ sequenceDiagram
   participant Repo as FavoriteLocationRepository
   participant Geocoder as GeocoderClass
   participant DS as FavoriteLocationDataSource
-  Participant WR as WeatherRepository
+  Participant WR as AggregateRepository
   participant API as PlacesRepository
   actor Google as Google Places
 

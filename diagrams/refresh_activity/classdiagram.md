@@ -1,12 +1,12 @@
 ```mermaid
 classDiagram
     HomeScreen "1" o-- "1" HomeScreenViewModel : ViewModel
-    HomeScreenViewModel "1" --o "1" WeatherRepository : Dependency
-    WeatherRepository "1" --o "1" LocationForecastRepository: Dependency
-    WeatherRepository "1" --o "1" PlacesRepository: Dependency
-    WeatherRepository "1" --o "1" StravaRepository: Dependency
-    WeatherRepository "1" --o "1" PreferencesRepository: Dependency
-    WeatherRepository "1" --o "1" AiRepository: Dependency
+    HomeScreenViewModel "1" --o "1" AggregateRepository : Dependency
+    AggregateRepository "1" --o "1" LocationForecastRepository: Dependency
+    AggregateRepository "1" --o "1" PlacesRepository: Dependency
+    AggregateRepository "1" --o "1" StravaRepository: Dependency
+    AggregateRepository "1" --o "1" PreferencesRepository: Dependency
+    AggregateRepository "1" --o "1" AiRepository: Dependency
     AiRepository "1" --o "1" AiClient: Dependency
     PlacesClient "1" --o "1" PlacesRepository: Dependency
     HomeScreenUiState "1" o-- "1" HomeScreenViewModel
@@ -20,11 +20,11 @@ classDiagram
     }
 
     class HomeScreenViewModel {
-      -weatherRepository:WeatherRepository
+      -aggregateRepository:AggregateRepository
       +replaceActivityInDay(day:Int, index:Int):void
     }
 
-    class WeatherRepository {
+    class AggregateRepository {
       -locationForecastRepository:LocationForecastRepository
       -placesRepository:PlacesRepository
       -stravaRepository:StravaRepository

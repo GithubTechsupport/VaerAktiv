@@ -3,7 +3,7 @@ sequenceDiagram
     actor User
     participant UI as HomeScreen
     participant VM as HomeScreenViewModel
-    participant Repo as WeatherRepository
+    participant Repo as AggregateRepository
     participant LF as LocationForecastRepository
     participant Places as PlacesRepository
     participant Strava as StravaRepository

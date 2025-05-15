@@ -7,7 +7,7 @@ classDiagram
     }
     class FavoriteLocationViewModel {
       +favoriteLocations : MutableStateFlow~List~FavoriteLocation~
-      -weatherRepository: WeatherRepository
+      -aggregateRepository: AggregateRepository
       -sessionToken: AutocompleteSessionToken
       +predictions: StateFlow~List~AutocompletePrediction~~
       +fetchPredictions(query:String)
@@ -33,7 +33,7 @@ classDiagram
 
     FavoriteLocationScreen "1" o-- "1" FavoriteLocationViewModel : ViewModel
     FavoriteLocationViewModel "1" -- "1" FavoriteLocationRepository : Data Repository
-    FavoriteLocationViewModel ..> WeatherRepository : Dependency
+    FavoriteLocationViewModel ..> AggregateRepository : Dependency
     FavoriteLocationRepository "1" -- "1" GeocoderClass : Dependency
     FavoriteLocationRepository "1" -- "1" FavoriteLocationDataSource : DataSource
 
@@ -95,7 +95,7 @@ classDiagram
       +onViewActivityInMap(activity:ActivitySuggestion)
     }
     class HomeScreenViewModel {
-      -weatherRepository: WeatherRepository
+      -aggregateRepository: AggregateRepository
       -_navigateToMap: MutableSharedFlow~ActivitySuggestion~
       +navigateToMap: SharedFlow~ActivitySuggestion~
       +navigateToPreferences()
@@ -109,10 +109,10 @@ classDiagram
     }
 
     HomeScreen "1" o-- "1" HomeScreenViewModel : viewModel
-    HomeScreenViewModel "1" --o "1" WeatherRepository : dependency
+    HomeScreenViewModel "1" --o "1" AggregateRepository : dependency
     HomeScreenUiState "1" o-- "1" HomeScreenViewModel : UI State
 
-    class WeatherRepository {
+    class AggregateRepository {
       -locationForecastRepository: LocationForecastRepository
       -placesRepository: PlacesRepository
       -stravaRepository: StravaRepository
@@ -154,11 +154,11 @@ classDiagram
       -ApiKey: String
     }
 
-    WeatherRepository "1" -- "1" LocationForecastRepository : dependency
-    WeatherRepository "1" -- "1" PlacesRepository : dependency
-    WeatherRepository "1" -- "1" StravaRepository : dependency
-    WeatherRepository "1" -- "1" PreferencesRepository : dependency
-    WeatherRepository "1" -- "1" AiRepository : dependency
+    AggregateRepository "1" -- "1" LocationForecastRepository : dependency
+    AggregateRepository "1" -- "1" PlacesRepository : dependency
+    AggregateRepository "1" -- "1" StravaRepository : dependency
+    AggregateRepository "1" -- "1" PreferencesRepository : dependency
+    AggregateRepository "1" -- "1" AiRepository : dependency
     AiRepository "1" -- "1" AiClient : dependency
     PlacesClient "1" -- "1" PlacesRepository : dependency
 
