@@ -1,13 +1,11 @@
 package no.uio.ifi.in2000.vaeraktiv
 
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
@@ -36,7 +34,6 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         KeepAliveManager().apply {

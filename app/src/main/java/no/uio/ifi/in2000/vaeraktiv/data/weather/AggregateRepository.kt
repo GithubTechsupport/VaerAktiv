@@ -1,9 +1,7 @@
 package no.uio.ifi.in2000.vaeraktiv.data.weather
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -79,7 +77,6 @@ class AggregateRepository @Inject constructor(
     /**
      * Fetches and formats sunrise times for given location and date.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getSunRiseData(location: Location, date: String): List<String> {
         Log.d("WeatherRepository", "getSunRiseData called with location: $location and date: $date")
         val response = sunriseRepository.getSunriseTime(location.lat, location.lon, date)
@@ -174,7 +171,6 @@ class AggregateRepository @Inject constructor(
     /**
      * Combines nowcast and location forecast into today's summary.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getForecastToday(location: Location): ForecastToday {
         val forecast = locationForecastRepository.getForecast(location.lat, location.lon)
         val locationData = forecast?.properties?.timeseries?.get(0)?.data
@@ -234,7 +230,6 @@ class AggregateRepository @Inject constructor(
     /**
      * Generates detailed 6-hour interval forecasts in local (Oslo) time.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getForecastByDayIntervals(location: Location): List<List<DetailedForecastForDay>> {
         try {
             val response = locationForecastRepository
@@ -285,7 +280,6 @@ class AggregateRepository @Inject constructor(
     /**
      * Retrieves next 24-hour hourly forecasts with local times.
      */
-    @RequiresApi(Build.VERSION_CODES.O) // Requires API version 26
     override suspend fun getForecastForHour(location: Location): List<ForecastForHour> {
         val response = locationForecastRepository.getNext24Hours(location.lat, location.lon)
         Log.d("WeatherRepository", "getWeatherForHour response: $response")

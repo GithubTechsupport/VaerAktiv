@@ -1,8 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -55,7 +53,6 @@ class HomeScreenViewModel @Inject constructor(
     /**
      * Initializes default location and UI state on first call.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun initialize() {
         initialized.takeIf { !it }?.also {
             Log.d("HomeScreen", "Initializing")
@@ -78,12 +75,10 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     /** Refreshes all home screen data and activity suggestions. */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun resetScreenState() {
         getHomeScreenData()
         resetActivities()
         getActivitiesForToday()
-
     }
 
     private fun resetActivities() {
@@ -95,7 +90,6 @@ class HomeScreenViewModel @Inject constructor(
     /**
      * Fetches weather, alerts, and sunrise/sunset for the current location.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getHomeScreenData() {
         val location = currentLocation.value ?: return
 
@@ -303,37 +297,3 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 }
-
-/**
- * UI state for the home screen: weather, activities, loading and errors.
- */
-data class HomeScreenUiState(
-    val errorMessage: String? = null,
-    val isLoading: Boolean = false,
-    val locationName: String = "",
-    val alerts: List<AlertData> = emptyList(),
-    val weatherToday: ForecastToday? = null,
-    val thisWeeksWeather: List<ForecastForDay> = emptyList(),
-    val sunRiseSet: List<String> = emptyList(),
-    val next24Hours: List<ForecastForHour> = emptyList(),
-    val dayIntervals: List<List<DetailedForecastForDay>> = emptyList(),
-
-    // errors
-    val todaysWeatherError: String? = null,
-    val loadingActivities: Set<Pair<Int, Int>> = emptySet(),
-    // todays activities
-    val isLoadingActivitiesToday: Boolean = false,
-    val isErrorActivitiesToday: Boolean = false,
-    val errorMessageActivitiesToday: String = "",
-    // rest of the week
-    val loadingFutureActivities: Set<Int> = emptySet(),
-    val isErrorFutureActivities: Boolean = false,
-    val errorMessageFutureActivities: String = "",
-    // errors for other data
-    val weatherTodayError: String? = null,
-    val thisWeeksWeatherError: String? = null,
-    val alertsError: String? = null,
-    val sunRiseSetError: String? = null,
-    val next24HoursError: String? = null,
-    val dayIntervalsError: String? = null
-)
