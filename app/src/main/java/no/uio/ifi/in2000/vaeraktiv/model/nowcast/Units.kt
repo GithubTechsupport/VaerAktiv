@@ -3,7 +3,15 @@ package no.uio.ifi.in2000.vaeraktiv.model.nowcast
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
+/**
+ * Unit labels for each meteorological parameter.
+ *
+ * @param airTemperature unit for air temperature
+ * @param precipitationAmount unit for precipitation amount
+ * @param relativeHumidity unit for relative humidity
+ * @param windFromDirection unit for wind direction
+ * @param windSpeed unit for wind speed
+ */
 @Serializable
 data class Units(
     @SerialName("air_temperature")

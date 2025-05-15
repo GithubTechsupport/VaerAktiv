@@ -23,8 +23,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
-
-// Helper: red circle + white inner circle
+/** Creates a circular place marker drawable. */
 private fun createPlaceIcon(context: Context, sizePx: Int = 48): BitmapDrawable {
     val bmp = createBitmap(sizePx, sizePx)
     val canvas = Canvas(bmp)
@@ -36,7 +35,7 @@ private fun createPlaceIcon(context: Context, sizePx: Int = 48): BitmapDrawable 
     return bmp.toDrawable(context.resources)
 }
 
-// Helper: red circle + white flag triangle
+/** Creates a start-flag marker drawable (flag on red circle). */
 private fun createStartFlagIcon(context: Context, sizePx: Int = 60): BitmapDrawable {
     val bmp = createBitmap(sizePx, sizePx)
     val canvas = Canvas(bmp)
@@ -70,13 +69,22 @@ private fun createStartFlagIcon(context: Context, sizePx: Int = 60): BitmapDrawa
     return bmp.toDrawable(context.resources)
 }
 
+/**
+ * Renders an OSM map in Compose, plots place markers and polylines.
+ *
+ * @param places list of place-based activities to mark.
+ * @param routes list of route activities to draw.
+ * @param decodePolyline function to convert encoded polyline to GeoPoints.
+ * @param selectedActivityPoints focus points for zooming.
+ * @param onZoomHandled callback after zoom action completes.
+ */
 @Composable
 fun OsmMapView(
     places: List<PlaceActivitySuggestion>,
     routes: List<StravaActivitySuggestion>,
     decodePolyline: (String) -> List<GeoPoint>,
     selectedActivityPoints: List<GeoPoint>?,
-    onZoomHandled: () -> Unit // <-- add this callback
+    onZoomHandled: () -> Unit
 ) {
 
     AndroidView(

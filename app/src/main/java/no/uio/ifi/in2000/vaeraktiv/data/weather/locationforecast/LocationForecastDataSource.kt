@@ -13,7 +13,15 @@ import javax.inject.Named
 
 private val json = Json { ignoreUnknownKeys = true }
 
-class LocationForecastDataSource @Inject constructor(@Named("prettyPrint-isLenient-ignoreUnknownKeys-Client") private val networkClient: NetworkClient) {
+/**
+ * Fetches complete location forecast JSON and decodes to model.
+ */
+class LocationForecastDataSource @Inject constructor(
+    @Named("prettyPrint-isLenient-ignoreUnknownKeys-Client") private val networkClient: NetworkClient
+) {
+    /**
+     * Retrieves and parses a LocationForecastResponse from the given URL.
+     */
     suspend fun getResponse(url: String): LocationForecastResponse = withContext(Dispatchers.IO) {
         try {
             val response = networkClient.ktorHttpClient.get(url)

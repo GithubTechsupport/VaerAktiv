@@ -6,11 +6,22 @@ import kotlinx.serialization.json.float
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonPrimitive
 
+/**
+ * Geometry data for a met alerts feature, holding raw JSON coordinates.
+ *
+ * @param coordinates JSON element representing polygon or multipolygon coords
+ * @param type the GeoJSON geometry type ("Polygon" or "MultiPolygon")
+ */
 @Serializable
 data class Geometry(
     val coordinates : JsonElement,
     val type : String
 ) {
+    /**
+     * Parses raw JSON coordinates into a nested list of floats.
+     *
+     * @return List of rings each containing points [longitude, latitude]
+     */
     fun getCoordinatesAsList(): List<List<List<Float>>> {
         return when (type) {
             "Polygon" -> {

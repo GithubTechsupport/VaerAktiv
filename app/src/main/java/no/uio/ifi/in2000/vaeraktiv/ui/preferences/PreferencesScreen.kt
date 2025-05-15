@@ -22,6 +22,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 
+/**
+ * Screen for adjusting user preferences with a back navigation action.
+ *
+ * @param viewModel ViewModel coordinating preference data and navigation events
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PreferencesScreen(

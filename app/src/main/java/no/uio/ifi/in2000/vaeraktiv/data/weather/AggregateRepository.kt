@@ -43,8 +43,9 @@ import java.time.ZonedDateTime
 import javax.inject.Inject
 
 /**
- * Implementation of IAggregateRepository for fetching and processing
- * weather, location, AI, places and Strava data.
+ * Aggregates data repositories for external and internal APIs to combine and format data.
+ *
+ * @constructor Injects all required repositories for data composition.
  */
 class AggregateRepository @Inject constructor(
     private val metAlertsRepository: IMetAlertsRepository,
@@ -67,6 +68,11 @@ class AggregateRepository @Inject constructor(
     private val _activities = MutableLiveData<List<SuggestedActivities?>>(List(8) { null })
     override val activities: LiveData<List<SuggestedActivities?>> get() = _activities
 
+    /**
+     * Sets current location to be displayed on homescreen.
+     *
+     * @param location new location to apply.
+     */
     override fun setCurrentLocation(location: Location) {
         Log.d("setCurrentLocation", "setCurrentLocation called with location: $location")
         if (location == _currentLocation.value) {
@@ -77,7 +83,11 @@ class AggregateRepository @Inject constructor(
     }
 
     /**
-     * Fetches and formats sunrise times for given location and date.
+     * Retrieves formatted sunrise/sunset times for a date.
+     *
+     * @param location location coordinates
+     * @param date ISO date string (yyyy-MM-dd)
+     * @return list of local time strings "HH:mm"
      */
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getSunRiseData(location: Location, date: String): List<String> {
@@ -92,7 +102,10 @@ class AggregateRepository @Inject constructor(
     }
 
     /**
-     * Processes stored favorite location strings into FavoriteLocation models.
+     * Retrieves favorite locations stored in JSON files.
+     *
+     * @param locationsList list of "name,lat,lon" strings
+     * @return list of FavoriteLocation or empty on parse errors
      */
     override suspend fun getFavoriteLocationsData(locationsList: List<String>): List<FavoriteLocation> {
         return locationsList.mapNotNull { line ->
@@ -104,7 +117,7 @@ class AggregateRepository @Inject constructor(
         }
     }
 
-    /** Parses "name,lat,lon" line into a Triple or null if malformed. */
+
     private fun parseLocationLine(line: String): Triple<String, String, String>? {
         val parts = line.split(",")
         if (parts.size != 3) {
@@ -114,9 +127,6 @@ class AggregateRepository @Inject constructor(
         return Triple(parts[0], parts[1], parts[2])
     }
 
-    /**
-     * Fetches forecast and maps it to a FavoriteLocation or null on error.
-     */
     private suspend fun fetchAndProcessForecast(placeName: String, latitude: String, longitude: String): FavoriteLocation? {
         return try {
             val forecast = locationForecastRepository.getForecast(latitude, longitude)
@@ -150,7 +160,10 @@ class AggregateRepository @Inject constructor(
     }
 
     /**
-     * Retrieves and maps meteorological alerts to AlertData list.
+     * Fetches active alerts for the given location.
+     *
+     * @param location coordinates to query
+     * @return list of AlertData
      */
     override suspend fun getAlertsForLocation(location: Location): MutableList<AlertData> {
         val alertDataList: MutableList<AlertData> = mutableListOf()
@@ -172,7 +185,11 @@ class AggregateRepository @Inject constructor(
     }
 
     /**
-     * Combines nowcast and location forecast into today's summary.
+     * Uses nowcast to get weather forecast today.
+     * Uses location forecast for min and max temp, uv, and icon.
+     *
+     * @param location coordinates for weather lookup
+     * @return ForecastToday object
      */
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getForecastToday(location: Location): ForecastToday {
@@ -193,9 +210,6 @@ class AggregateRepository @Inject constructor(
         return forecastToday
     }
 
-    /**
-     * Returns time series and units for a specific day; throws on failure.
-     */
     override suspend fun getTimeSeriesForDay(location: Location, dayNr: Int): Pair<List<TimeSeries>, Units?> {
         try {
             val response = locationForecastRepository.getForecastByDay(location.lat, location.lon)
@@ -209,9 +223,6 @@ class AggregateRepository @Inject constructor(
         }
     }
 
-    /**
-     * Extracts daily forecasts at 12:00 for upcoming days.
-     */
     override suspend fun getForecastByDay(location: Location): List<ForecastForDay> {
         try {
             val response = locationForecastRepository.getForecastByDay(location.lat, location.lon).first.drop(1)
@@ -232,7 +243,10 @@ class AggregateRepository @Inject constructor(
     }
 
     /**
-     * Generates detailed 6-hour interval forecasts in local (Oslo) time.
+     * Returns next 24 h hourly forecast in local time.
+     *
+     * @param location coordinates to query
+     * @return list of ForecastForHour entries
      */
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getForecastByDayIntervals(location: Location): List<List<DetailedForecastForDay>> {
@@ -282,9 +296,6 @@ class AggregateRepository @Inject constructor(
         }
     }
 
-    /**
-     * Retrieves next 24-hour hourly forecasts with local times.
-     */
     @RequiresApi(Build.VERSION_CODES.O) // Requires API version 26
     override suspend fun getForecastForHour(location: Location): List<ForecastForHour> {
         val response = locationForecastRepository.getNext24Hours(location.lat, location.lon)
@@ -304,13 +315,23 @@ class AggregateRepository @Inject constructor(
         return hourDataList
     }
 
-    /** Returns raw LocationForecastResponse from API. */
+    /**
+     * Retrieves location forecast response.
+     *
+     * @param location coordinates to query
+     * @return LocationForecastResponse
+     */
     override suspend fun getWeatherForecast(location: Location): LocationForecastResponse? {
         return locationForecastRepository.getForecast(location.lat, location.lon)
     }
 
     /**
-     * Requests AI-generated suggestions for an entire day, excluding prior activities.
+     * Gets AI-suggested activities for a full day.
+     * 3 activities for different intervals.
+     *
+     * @param location where to suggest
+     * @param dayNr zero-based day index
+     * @return SuggestedActivities for that day
      */
     override suspend fun getSuggestedActivitiesForOneDay(location: Location, dayNr: Int): SuggestedActivities {
         val response = getTimeSeriesForDay(location, dayNr)
@@ -334,7 +355,12 @@ class AggregateRepository @Inject constructor(
     }
 
     /**
-     * Requests one AI-generated activity suggestion, ensuring no time overlap.
+     * Gets a single AI activity suggestion avoiding overlaps.
+     *
+     * @param location where to suggest
+     * @param dayNr zero-based day index
+     * @param index position in existing list
+     * @return a new ActivitySuggestion
      */
     override suspend fun getSuggestedActivity(location: Location, dayNr: Int, index: Int): ActivitySuggestion {
         val response = getTimeSeriesForDay(location, dayNr)
@@ -366,7 +392,12 @@ class AggregateRepository @Inject constructor(
         return suggestions
     }
 
-    /** Replaces all activities for a given day slot. */
+    /**
+     * Replaces cached activities for a specified day with new ones.
+     *
+     * @param dayNr zero-based day index
+     * @param newActivities new SuggestedActivities list
+     */
     override fun replaceActivitiesForDay(dayNr: Int, newActivities: SuggestedActivities) {
         val current = _activities.value ?: return
         val updated = current.toMutableList().apply {
@@ -375,7 +406,13 @@ class AggregateRepository @Inject constructor(
         _activities.value = updated
     }
 
-    /** Updates a single activity within a day's list. */
+    /**
+     * Replaces one cached activity in a day.
+     *
+     * @param dayNr zero-based day index
+     * @param index activity position
+     * @param newActivity replacement ActivitySuggestion
+     */
     override fun replaceActivityInDay(dayNr: Int, index: Int, newActivity: ActivitySuggestion) {
         val current = _activities.value ?: return
         val activitiesAtDay = current[dayNr] ?: return
@@ -390,13 +427,17 @@ class AggregateRepository @Inject constructor(
         _activities.value = updated
     }
 
-    /** Clears all activity suggestions. */
+    /**
+     * Resets all cached AI activity suggestions.
+     */
     override fun resetActivities() {
         _activities.value = List(8) { null }
     }
 
     /**
-     * Starts device location tracking and updates LiveData when changed.
+     * Starts device location tracking with lifecycle awareness.
+     *
+     * @param lifecycleOwner host lifecycle for callbacks
      */
     @SuppressLint("DefaultLocale")
     override fun trackDeviceLocation(lifecycleOwner: LifecycleOwner) {
@@ -421,12 +462,23 @@ class AggregateRepository @Inject constructor(
         }
     }
 
-    /** Delegates autocomplete query to PlacesRepository. */
+    /**
+     * Retrieves place autocomplete suggestions.
+     *
+     * @param query user input string
+     * @param sessionToken Google Places session token
+     * @return list of AutocompletePrediction
+     */
     override suspend fun getAutocompletePredictions(query: String, sessionToken: AutocompleteSessionToken): List<AutocompletePrediction> {
         return placesRepository.getAutocompletePredictions(query, sessionToken)
     }
 
-    /** Converts raw nearby places into domain suggestions model. */
+    /**
+     * Fetches nearby place suggestions.
+     *
+     * @param location coordinates to search around
+     * @return NearbyPlacesSuggestions model
+     */
     override suspend fun getNearbyPlaces(location: Location): NearbyPlacesSuggestions {
         val response = placesRepository.getNearbyPlaces(LatLng(location.lat.toDouble(), location.lon.toDouble()))
         return NearbyPlacesSuggestions(response.map { place ->

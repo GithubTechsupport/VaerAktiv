@@ -3,12 +3,17 @@ package no.uio.ifi.in2000.vaeraktiv.network.connection
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-/*
-* This object is used to check if the device is connected to the internet or not.
-*
-* */
+
+/**
+ * Utility to check device network connectivity status.
+ */
 object NetworkConnection {
-    // isOnline takes in a context and returns a boolean. A context is used to get the connectivity manager.
+    /**
+     * Returns true if device has active internet via Wi-Fi or Cellular.
+     *
+     * @param context Android context for system services
+     * @return boolean network connectivity state
+     */
     fun isOnline(context: Context): Boolean {
         //connectivityManager is a system service that is used to check the network status.
         val connectivityManager =

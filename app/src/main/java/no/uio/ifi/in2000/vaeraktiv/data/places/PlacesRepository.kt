@@ -14,9 +14,20 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class PlacesRepository @Inject constructor(private val placesClient: PlacesClient) {
+/**
+ * Fetches place autocomplete predictions and nearby place results.
+ */
+class PlacesRepository @Inject constructor(
+    private val placesClient: PlacesClient
+) {
 
-    suspend fun getAutocompletePredictions(query: String, sessionToken: AutocompleteSessionToken?): List<AutocompletePrediction> = withContext(Dispatchers.IO) {
+    /**
+     * Retrieves autocomplete suggestions for a query.
+     */
+    suspend fun getAutocompletePredictions(
+        query: String,
+        sessionToken: AutocompleteSessionToken?
+    ): List<AutocompletePrediction> = withContext(Dispatchers.IO) {
         require(query.isNotBlank()) {
             throw IllegalArgumentException("Query cannot be blank")
         }
@@ -39,6 +50,9 @@ class PlacesRepository @Inject constructor(private val placesClient: PlacesClien
         }
     }
 
+    /**
+     * Searches for nearby places around center within expanding radius.
+     */
     suspend fun getNearbyPlaces(center: LatLng): List<Place> = withContext(Dispatchers.IO) {
         val initialRadius = 10000.0 // 10 km
         val maxRadius = 50000.0 // 50 km

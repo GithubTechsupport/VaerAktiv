@@ -4,7 +4,15 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * AI-suggested custom activity with date, time and description.
+ * Data class representing a response from the model.
+ * This activity is completely custom and is not based on any data from the APIs.
+ *
+ * @property month The month of the activity suggestion.
+ * @property dayOfMonth The day of the month of the activity suggestion.
+ * @property timeStart The start time of the activity suggestion.
+ * @property timeEnd The end time of the activity suggestion.
+ * @property activityName The name of the suggested activity.
+ * @property activityDesc A description of the suggested activity.
  */
 @Serializable
 @SerialName("CustomActivitySuggestion")

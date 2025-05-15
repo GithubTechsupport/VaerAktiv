@@ -5,10 +5,14 @@ import androidx.annotation.RequiresApi
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+/**
+ * Default implementation of DeviceDateTimeRepository that formats dates.
+ */
+class DeviceDateTimeRepositoryDefault @Inject constructor(
+    private val deviceDateTimeDataSource: DeviceDateTimeDataSource
+) : DeviceDateTimeRepository {
 
-class DeviceDateTimeRepositoryDefault @Inject constructor(private val deviceDateTimeDataSource : DeviceDateTimeDataSource)
-    : DeviceDateTimeRepository
-{
+    /** Returns current date as a string in 'yyyy-MM-dd' format. */
     @RequiresApi(Build.VERSION_CODES.O)
     override fun getDateTime(): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")

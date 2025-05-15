@@ -8,6 +8,9 @@ import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.FavoriteLocation
 import java.io.File
 import javax.inject.Inject
 
+/**
+ * Persists favorite locations to JSON file and retrieves them.
+ */
 class FavoriteLocationDataSource @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
@@ -17,14 +20,15 @@ class FavoriteLocationDataSource @Inject constructor(
 
     init {
         if (!file.exists()) {
-            file.writeText("[]") // initialize with empty JSON array
+            file.writeText("[]")
         }
     }
 
+    /** Adds a formatted location if not already present. */
     @Synchronized
     fun addLocation(placeName: String, latitude: Double, longitude: Double) {
         val formattedPlaceName = placeName.trim().lowercase().split(" ")
-            .joinToString(" ") { it.replaceFirstChar(Char::uppercase) } // Ensures that each word of a place name has the first letter capitalized.
+            .joinToString(" ") { it.replaceFirstChar(Char::uppercase) }
 
         val locations = getAllLocationObjects().toMutableList()
 
@@ -39,6 +43,7 @@ class FavoriteLocationDataSource @Inject constructor(
         }
     }
 
+    /** Deletes a location by its formatted name. */
     @Synchronized
     fun deleteLocation(placeName: String) {
         val formattedPlaceName = placeName.trim().lowercase().split(" ")
@@ -50,6 +55,7 @@ class FavoriteLocationDataSource @Inject constructor(
         saveLocationsToFile(locations)
     }
 
+    /** Returns all locations as CSV strings. */
     fun getAllLocations(): List<String> {
         return getAllLocationObjects().map {
             "${it.name},${it.latitude},${it.longitude}"
