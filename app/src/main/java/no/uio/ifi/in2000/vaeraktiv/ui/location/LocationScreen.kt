@@ -24,6 +24,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 
+/**
+ * The screen which gets the location data from the viewModel ond fills it into each placeCard.
+ */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun LocationScreen(isOnline: Boolean, viewModel: FavoriteLocationViewModel) {
