@@ -7,12 +7,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun LoadAllActivities(modifier : Modifier = Modifier) {
+fun LoadAllActivities(modifier: Modifier = Modifier) {
+    // Displays a vertical list of placeholder loading cards for activities
     Column(
         modifier = modifier
             .fillMaxWidth(),
         horizontalAlignment = Alignment.Start
-    ){
+    ) {
         LoadingActivityCard()
         LoadingActivityCard()
         LoadingActivityCard()

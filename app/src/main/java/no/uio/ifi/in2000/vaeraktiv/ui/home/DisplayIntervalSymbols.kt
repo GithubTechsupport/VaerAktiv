@@ -25,6 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.home.DetailedForecastForDay
 
+/**
+ * Displays weather icons for different times throughout the day in a horizontal row.
+ *
+ * @param data List of detailed weather forecasts for one day.
+ */
 @SuppressLint("DiscouragedApi")
 @Composable
 fun DisplayIntervalSymbols(data: List<DetailedForecastForDay>) {

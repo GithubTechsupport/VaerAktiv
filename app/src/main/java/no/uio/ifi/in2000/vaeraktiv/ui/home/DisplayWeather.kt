@@ -40,6 +40,12 @@ import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 
+/**
+ * Composable function that displays today's weather with the option to expand for more details.
+ *
+ * @param data Weather data for the day.
+ * @param uiState UI state containing errors and hourly forecasts.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
 @Composable
@@ -48,7 +54,10 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
     val iconResId = context.resources.getIdentifier(data?.iconNow, "drawable", context.packageName)
     var expanded by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
+
     Spacer(modifier = Modifier.height(12.dp))
+
+    // Main container with clickable expansion toggle
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -63,6 +72,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 shape = RoundedCornerShape(10.dp),
             )
     ) {
+        // Row displaying weather icon and current temp + UV index
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -99,6 +109,8 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 )
             }
         }
+
+        // Expanded details shown on click
         if (expanded) {
             Column(
                 modifier = Modifier
@@ -106,6 +118,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                     .padding(horizontal = 16.dp, vertical = 8.dp) // Use the same overall padding as above
             ) {
                 Row {
+                    // Display low temperature
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -119,6 +132,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                             textAlign = TextAlign.Center,
                         )
                     }
+                    // Display high temperature
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -132,6 +146,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                             textAlign = TextAlign.Center,
                         )
                     }
+                    // Display precipitation amount
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -145,6 +160,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                             textAlign = TextAlign.Center,
                         )
                     }
+                    // Display wind speed
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -160,6 +176,8 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
+
+                // Show error or hourly forecast
                 uiState.next24HoursError?.let {
                     ErrorMessage(
                         message = "Error fetching today's weather: ${uiState.next24HoursError}"
@@ -169,6 +187,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                     DisplayHourlyForecast(uiState.next24Hours)
                 }
 
+                // Show error or sunrise/sunset info
                 uiState.sunRiseSetError?.let {
                     ErrorMessage(
                         message = "Error fetching today's weather: ${uiState.sunRiseSetError}"
@@ -179,6 +198,8 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 }
             }
         }
+
+        // Expand/collapse indicator row
         Row (
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,

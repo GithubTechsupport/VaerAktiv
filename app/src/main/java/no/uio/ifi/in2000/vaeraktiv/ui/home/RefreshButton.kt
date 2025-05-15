@@ -18,6 +18,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+/**
+ * A refresh button with a rotating animation when loading.
+ *
+ * @param onClick Lambda invoked when the button is clicked.
+ * @param isLoading Controls whether the refresh icon should rotate.
+ * @param enabled Enables or disables the button click.
+ */
 @Composable
 fun RefreshButton(
     onClick: () -> Unit,
@@ -25,6 +32,8 @@ fun RefreshButton(
     enabled: Boolean
 ) {
     val rotation = remember { Animatable(0f) }
+
+    // Rotate icon infinitely when loading; reset rotation when not loading
     LaunchedEffect(isLoading) {
         if (isLoading) {
             rotation.animateTo(
@@ -38,6 +47,8 @@ fun RefreshButton(
             rotation.snapTo(0f)
         }
     }
+
+    // Refresh icon with clickable modifier, showing rotation animation
     Icon(
         imageVector = Icons.Default.Refresh,
         contentDescription = "Refresh button/Get new activity",
