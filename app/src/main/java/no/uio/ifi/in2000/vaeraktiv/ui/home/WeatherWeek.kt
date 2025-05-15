@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -95,7 +94,6 @@ fun WeatherWeek(
                 }
                 expanded = !expanded
             })
-            Log.d("WeatherWeek", "expanded: $expanded")
 
             // Expandable section for showing details
             AnimatedVisibility(visible = expanded) {
