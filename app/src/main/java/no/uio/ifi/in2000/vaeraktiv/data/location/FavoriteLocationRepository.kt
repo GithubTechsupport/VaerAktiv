@@ -18,7 +18,7 @@ class FavoriteLocationRepository @Inject constructor(
         if (addresses != null) {
             dataSource.addLocation(
                 name,
-                String.format("%.3f", addresses.first).toDouble(),
+                String.format("%.3f", addresses.first).toDouble(), // Save the place name and coordinates to the first 3 digits along with the
                 String.format("%.3f", addresses.second).toDouble()
             )
         }

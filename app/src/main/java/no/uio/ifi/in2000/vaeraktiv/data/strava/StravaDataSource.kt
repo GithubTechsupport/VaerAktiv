@@ -18,7 +18,7 @@ class StravaDatasource @Inject constructor(
     private val authManager: StravaAuthManager
 ) {
     suspend fun fetchPopularRunSegments(
-        swLat: Double, swLng: Double,
+        swLat: Double, swLng: Double, // Defines the area where the run segments should be.
         neLat: Double, neLng: Double
     ): List<ExplorerSegment> {
         val token = authManager.getAccessToken()
