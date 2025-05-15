@@ -19,6 +19,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 
+/**
+ * The default closed searchbar.
+ */
 @Composable
 fun AddLocationDefault(defaultPadding: Dp) {
     Row(

@@ -32,6 +32,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 
+/**
+ * The expanded search bar to write a location into
+ */
 @Composable
 fun AddLocationExpanded(defaultPadding: Dp, viewModel: FavoriteLocationViewModel) {
     var searchText by remember { mutableStateOf("") }
