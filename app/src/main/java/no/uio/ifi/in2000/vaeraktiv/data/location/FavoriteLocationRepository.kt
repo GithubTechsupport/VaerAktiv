@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import java.util.Locale
 import javax.inject.Inject
 
+/**
+ * Repository for adding, deleting and listing favorite locations by name.
+ */
 class FavoriteLocationRepository @Inject constructor(
     private val dataSource: FavoriteLocationDataSource,
     private val geocoder: GeocoderClass
 ) {
-
-
+    /** Adds a location by name after geocoding. */
     @SuppressLint("DefaultLocale")
     fun addLocationByName(placeName: String) {
         val response = geocoder.getCoordinatesFromLocation(placeName)
@@ -19,19 +21,19 @@ class FavoriteLocationRepository @Inject constructor(
         if (addresses != null) {
             dataSource.addLocation(
                 name,
-                String.format(Locale.US, "%.3f", addresses.first).toDouble(), // Save the place name and coordinates to the first 3 digits along with the
+                String.format(Locale.US, "%.3f", addresses.first).toDouble(),
                 String.format(Locale.US, "%.3f", addresses.second).toDouble()
             )
         }
     }
 
+    /** Removes a favorite location by its name. */
     fun deleteLocationByName(placeName: String) {
         dataSource.deleteLocation(placeName)
     }
 
+    /** Returns stored locations as "name,lat,lon" strings. */
     fun getAllLocations(): List<String> {
         return dataSource.getAllLocations()
     }
 }
-
-

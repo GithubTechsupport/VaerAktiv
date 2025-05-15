@@ -5,12 +5,20 @@ import no.uio.ifi.in2000.vaeraktiv.model.preferences.Preference
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Provides preference flow and formatted preference string for AI prompts.
+ */
 @Singleton
-class PreferenceRepository @Inject constructor(private val preferenceDataSource: PreferenceDataSource) {
+class PreferenceRepository @Inject constructor(
+    private val preferenceDataSource: PreferenceDataSource
+) {
 
     val userPreference: StateFlow<List<Preference>>
         get() = preferenceDataSource.userPreference
 
+    /**
+     * Builds a prompt string listing enabled preferences.
+     */
     fun getEnabledPreferences(): String {
         val preferences = preferenceDataSource.getEnabledPreferences()
         return if (preferences.isNotEmpty()) {
@@ -32,6 +40,9 @@ class PreferenceRepository @Inject constructor(private val preferenceDataSource:
         }
     }
 
+    /**
+     * Toggles and persists a preference by description.
+     */
     suspend fun updatePreference(preferenceDesc: String, isEnabled: Boolean) {
         preferenceDataSource.updatePreference(preferenceDesc, isEnabled)
     }

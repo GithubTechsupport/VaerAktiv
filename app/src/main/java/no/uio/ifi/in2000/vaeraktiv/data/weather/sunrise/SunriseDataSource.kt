@@ -10,8 +10,15 @@ import no.uio.ifi.in2000.vaeraktiv.network.httpclient.NetworkClient
 import javax.inject.Inject
 import javax.inject.Named
 
-class SunriseDataSource @Inject constructor(@Named("ignoreUnknownKeys-Client") private val networkClient: NetworkClient){
-    suspend fun getSunrise(lat: String, lon: String, date: String) : SunData? = withContext(Dispatchers.IO) {
+/**
+ * Fetches sunrise and sunset times from the MET Sunrise API.
+ */
+class SunriseDataSource @Inject constructor(
+    @Named("ignoreUnknownKeys-Client") private val networkClient: NetworkClient
+) {
+
+    /** Returns SunData for given lat, lon and date or throws on error. */
+    suspend fun getSunrise(lat: String, lon: String, date: String): SunData? = withContext(Dispatchers.IO) {
         try {
             val response: HttpResponse = networkClient.ktorHttpClient.get("https://in2000.api.met.no/weatherapi/sunrise/3.0/sun?lat=$lat&lon=$lon&date=$date&offset=+01:00")
             return@withContext response.body()

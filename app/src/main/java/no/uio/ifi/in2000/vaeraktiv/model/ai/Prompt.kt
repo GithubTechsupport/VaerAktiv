@@ -263,6 +263,8 @@ data class Prompt(
         $examplesSingular
         
         """.trimIndent(),
-
+    /**
+     * The temperature parameter is used to control the randomness of the output.
+     */
     val temperature: Double = 0.75
 )

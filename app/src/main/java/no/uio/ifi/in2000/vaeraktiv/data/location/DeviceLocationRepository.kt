@@ -15,17 +15,13 @@ class LocationRepository @Inject constructor(
     private val locationDataSource: LocationDataSource
 ) {
 
-    // Reference to the current tracking Job
     private var trackingJob: Job? = null
 
-    // Start tracking location updates
     fun startTracking(
         lifecycleOwner: LifecycleOwner,
         onLocationUpdate: (Location) -> Unit
     ) {
-        // Cancel existing jobs before starting a new one
         trackingJob?.cancel()
-        // Launch a coroutine in the lifecycleOwner's scope.
         trackingJob = lifecycleOwner.lifecycleScope.launch {
             lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 locationDataSource.getLocationUpdates().collect { location ->

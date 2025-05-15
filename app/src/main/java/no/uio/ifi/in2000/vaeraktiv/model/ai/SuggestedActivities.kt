@@ -2,6 +2,11 @@ package no.uio.ifi.in2000.vaeraktiv.model.ai
 
 import kotlinx.serialization.Serializable
 
+/**
+ * Data class representing a list of responses from the model for activity suggestions.
+ *
+ * @property activities A list of activity suggestions.
+ */
 @Serializable
 data class SuggestedActivities (
     val activities: List<ActivitySuggestion>

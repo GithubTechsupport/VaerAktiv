@@ -4,7 +4,11 @@ import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
 
 /**
- * Holds a list of TimeSeries and units for constructing AI prompts.
+ * Data class representing formatted forecast data for a prompt.
+ *
+ * @property timeseries A list of time series data.
+ * @property units The units of measurement used in the forecast data.
+ * @property location The location for which the forecast data is provided.
  */
 data class FormattedForecastDataForPrompt (
     val timeseries: List<TimeSeries>,

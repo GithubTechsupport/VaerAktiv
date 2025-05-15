@@ -3,6 +3,16 @@ package no.uio.ifi.in2000.vaeraktiv.model.nowcast
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Detailed meteorological parameters at an instant.
+ *
+ * @param airTemperature air temperature (°C)
+ * @param precipitationAmount precipitation amount (mm)
+ * @param relativeHumidity relative humidity (%)
+ * @param windFromDirection wind direction (degrees)
+ * @param windSpeed wind speed (m/s)
+ */
+
 @Serializable
 data class Details(
     @SerialName("air_temperature")
