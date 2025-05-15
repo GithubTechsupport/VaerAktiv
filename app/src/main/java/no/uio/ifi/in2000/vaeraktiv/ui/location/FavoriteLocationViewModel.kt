@@ -15,14 +15,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import no.uio.ifi.in2000.vaeraktiv.data.location.FavoriteLocationRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepository
+import no.uio.ifi.in2000.vaeraktiv.data.weather.IAggregateRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.home.FavoriteLocation
 import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteLocationViewModel @Inject constructor(
-    private val weatherRepo: WeatherRepository,
+    private val aggregateRepository: IAggregateRepository,
     private val favoriteLocationRepo: FavoriteLocationRepository,
 ) : ViewModel() {
 
@@ -45,7 +45,7 @@ class FavoriteLocationViewModel @Inject constructor(
     }
 
     fun updateCurrentLocation(location: Location) {
-        weatherRepo.setCurrentLocation(location)
+        aggregateRepository.setCurrentLocation(location)
         _navigateToHome.value = true
     }
 
@@ -57,7 +57,7 @@ class FavoriteLocationViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val locations = favoriteLocationRepo.getAllLocations()
-                val favoriteData = weatherRepo.getFavoriteLocationsData(locations)
+                val favoriteData = aggregateRepository.getFavoriteLocationsData(locations)
                 withContext(Dispatchers.Main) {
                     _data.value = favoriteData
                 }
@@ -101,7 +101,7 @@ class FavoriteLocationViewModel @Inject constructor(
         }
         val token = sessionToken!!
         viewModelScope.launch(Dispatchers.IO) {
-            val response = weatherRepo.getAutocompletePredictions(query, token)
+            val response = aggregateRepository.getAutocompletePredictions(query, token)
             withContext(Dispatchers.Main) {
                 _predictions.value = response
             }

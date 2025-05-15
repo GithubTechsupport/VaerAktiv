@@ -21,7 +21,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -39,7 +38,6 @@ fun HomeScreen(
     val currentLocation by viewModel.currentLocation.observeAsState()
     val deviceLocation by viewModel.deviceLocation.observeAsState()
     val activities by viewModel.activities.observeAsState()
-    val lifecycleOwner = LocalLifecycleOwner.current
     var isRefreshing by remember { mutableStateOf(false) }
     val refreshState = rememberPullRefreshState (
         refreshing = isRefreshing,

@@ -8,17 +8,17 @@ import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
-import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
-import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
-import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
 import no.uio.ifi.in2000.vaeraktiv.model.home.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.home.DetailedForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.home.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForHour
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastToday
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
 
-interface WeatherRepository {
+interface IAggregateRepository {
 
     // LiveData properties exposed for observing current values
     val currentLocation: LiveData<Location?>

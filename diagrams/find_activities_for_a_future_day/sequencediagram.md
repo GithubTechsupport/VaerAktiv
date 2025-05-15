@@ -1,12 +1,9 @@
----
-title: Aktivitetsdiagram - Finn aktiviteter for en fremtidig dag
----
 ```mermaid
 sequenceDiagram
     actor User
     participant UI as WeatherWeekRow
     participant VM as HomeScreenViewModel
-    participant Repo as WeatherRepository
+    participant Repo as AggregateRepository
     participant LF as LocationForecastRepository
     participant Places as PlacesRepository
     participant Strava as StravaRepository

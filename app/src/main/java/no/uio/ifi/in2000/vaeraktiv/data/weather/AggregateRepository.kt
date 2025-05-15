@@ -14,27 +14,27 @@ import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.places.PlacesRepository
+import no.uio.ifi.in2000.vaeraktiv.data.preferences.PreferenceRepository
 import no.uio.ifi.in2000.vaeraktiv.data.strava.StravaRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.IMetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
-import no.uio.ifi.in2000.vaeraktiv.data.preferences.PreferenceRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlaceSuggestion
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
-import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
-import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
-import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
 import no.uio.ifi.in2000.vaeraktiv.model.home.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.home.DetailedForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.home.FavoriteLocation
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForHour
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastToday
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
+import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
 import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
 import java.time.LocalDate
 import java.time.LocalTime
@@ -42,7 +42,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
-class WeatherRepositoryDefault @Inject constructor(
+class AggregateRepository @Inject constructor(
     private val metAlertsRepository: IMetAlertsRepository,
     private val locationForecastRepository: LocationForecastRepository,
     private val sunriseRepository: SunriseRepository,
@@ -53,7 +53,7 @@ class WeatherRepositoryDefault @Inject constructor(
     private val placesRepository: PlacesRepository,
     private val stravaRepository: StravaRepository,
     private val preferenceRepository: PreferenceRepository
-) : WeatherRepository {
+) : IAggregateRepository {
     private val _currentLocation = MutableLiveData<Location?>()
     override val currentLocation: LiveData<Location?> get() = _currentLocation
 
