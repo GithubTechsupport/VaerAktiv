@@ -7,13 +7,13 @@ import no.uio.ifi.in2000.vaeraktiv.data.ai.AiRepository
 import no.uio.ifi.in2000.vaeraktiv.data.location.GeocoderClass
 import no.uio.ifi.in2000.vaeraktiv.data.location.LocationRepository
 import no.uio.ifi.in2000.vaeraktiv.data.places.PlacesRepository
+import no.uio.ifi.in2000.vaeraktiv.data.preferences.PreferenceRepository
 import no.uio.ifi.in2000.vaeraktiv.data.strava.StravaRepository
-import no.uio.ifi.in2000.vaeraktiv.data.weather.WeatherRepositoryDefault
+import no.uio.ifi.in2000.vaeraktiv.data.weather.AggregateRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.alerts.MetAlertsRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.locationforecast.LocationForecastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.nowcast.NowcastRepository
 import no.uio.ifi.in2000.vaeraktiv.data.weather.sunrise.SunriseRepository
-import no.uio.ifi.in2000.vaeraktiv.data.preferences.PreferenceRepository
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Features
 import no.uio.ifi.in2000.vaeraktiv.model.metalerts.Properties
@@ -22,13 +22,13 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 
 @ExperimentalCoroutinesApi
-class WeatherRepositoryDefaultTest {
+class AggregateRepositoryUnitTest {
 
     // Mocks
     private val metAlertsRepository: MetAlertsRepository = mock(MetAlertsRepository::class.java)
 
     // Create other mocks if needed but we can use nulls or relaxed fakes for unused deps
-    private val weatherRepository = WeatherRepositoryDefault(
+    private val weatherRepository = AggregateRepository(
         metAlertsRepository = metAlertsRepository,
         locationForecastRepository = mock(LocationForecastRepository::class.java),
         sunriseRepository = mock(SunriseRepository::class.java),
