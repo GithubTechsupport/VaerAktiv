@@ -10,7 +10,6 @@ import java.time.LocalDate
  * @param date The date as a string.
  * @return The name of the day of the week. Returns "error" if parsing fails.
  */
-@RequiresApi(Build.VERSION_CODES.O)
 
 fun getDayOfWeek(date: String): String {
     return try {

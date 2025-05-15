@@ -26,7 +26,6 @@ import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
  * @param activities List of suggested activities.
  * @param viewModel The ViewModel responsible for handling UI logic and data updates.
  */
-@RequiresApi(Build.VERSION_CODES.O)
 
 @Composable
 fun HomeContent(

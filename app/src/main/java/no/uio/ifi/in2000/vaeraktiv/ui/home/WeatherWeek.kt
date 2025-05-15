@@ -41,7 +41,6 @@ import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
  * @param viewModel The [HomeScreenViewModel] used to fetch and update activity data.
  * @param uiState A [HomeScreenUiState] holding the UI's current state, including weather and loading flags.
  */
-@RequiresApi(Build.VERSION_CODES.O)
 
 @Composable
 fun WeatherWeek(

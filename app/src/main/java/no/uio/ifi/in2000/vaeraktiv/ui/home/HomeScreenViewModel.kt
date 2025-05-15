@@ -73,8 +73,6 @@ class HomeScreenViewModel @Inject constructor(
 
 
     /** Refreshes all home screen data and activities. */
-    @RequiresApi(Build.VERSION_CODES.O)
-
     fun resetScreenState() {
         getHomeScreenData()
         resetActivities()
