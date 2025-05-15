@@ -18,6 +18,9 @@ import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
 
+/**
+ * ViewModel managing map UI state, including places, routes, and activity selection.
+ */
 @HiltViewModel
 class MapScreenViewModel @Inject constructor(
     aggregateRepository: IAggregateRepository
@@ -28,6 +31,11 @@ class MapScreenViewModel @Inject constructor(
 
     val activities: LiveData<List<SuggestedActivities?>> = aggregateRepository.activities
 
+    /**
+     * Decodes an encoded polyline into GeoPoints.
+     *
+     * @throws Exception if decoding fails.
+     */
     fun decodePolyline(encoded: String): List<GeoPoint> {
         try {
             val points = mutableListOf<GeoPoint>()
@@ -70,6 +78,9 @@ class MapScreenViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Updates UI state with place and route suggestions from the provided list.
+     */
     fun updatePlacesAndRoutes(suggestedActivitiesList: List<SuggestedActivities?>) {
         viewModelScope.launch {
             _mapScreenUiState.update { it.copy(isLoading = true, errorMessage = null) }
@@ -97,6 +108,9 @@ class MapScreenViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Sets selectedActivityPoints to zoom in on the given activity.
+     */
     fun zoomInOnActivity(activity: ActivitySuggestion) {
         try {
             val points = when(activity) {
@@ -113,11 +127,15 @@ class MapScreenViewModel @Inject constructor(
         }
     }
 
+    /** Clears any selected activity points on the map. */
     fun clearSelectedActivityPoints() {
         _mapScreenUiState.update { it.copy(selectedActivityPoints = null) }
     }
 }
 
+/**
+ * UI state for the map screen, holding loading flags, data and optional errors.
+ */
 data class MapScreenUiState(
     val places: List<PlaceActivitySuggestion> = emptyList(),
     val routes: List<StravaActivitySuggestion> = emptyList(),

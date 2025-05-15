@@ -7,6 +7,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+/**
+ * Displays an error message in red text with default padding.
+ *
+ * @param message the error text to show
+ * @param modifier optional layout modifiers
+ */
 @Composable
 fun ErrorMessage(message: String, modifier: Modifier = Modifier) {
     Text(
