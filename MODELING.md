@@ -36,7 +36,7 @@ flowchart BT
     %% === Repositories ===
     subgraph Repositories
         sr[SunriseRepository]
-        wr[WeatherRepository]
+        ar[AggregateRepository]
         dlr[DeviceLocationRepository]
         flr[FavoriteLocationRepository]
         plr[PlacesRepository]
@@ -66,24 +66,24 @@ flowchart BT
     end
 
     %% === Connections ===
-    sapi --> sds --> sr --> wr
-    aiapi --> air --> wr
-    gapi --> gc --> wr
-    fapi --> dlds --> dlr --> wr
+    sapi --> sds --> sr --> ar
+    aiapi --> air --> ar
+    gapi --> gc --> ar
+    fapi --> dlds --> dlr --> ar
     json --> flds --> flr --> flvm --> ls
     gc --> flr
-    goapi --> plr --> wr
-    stapi --> stds --> str --> wr
-    mapi --> mds --> mr --> wr
-    lapi --> lfds --> lfr --> wr
-    napi --> nds --> nr --> wr
-    json --> pds --> pr --> wr
+    goapi --> plr --> ar
+    stapi --> stds --> str --> ar
+    mapi --> mds --> mr --> ar
+    lapi --> lfds --> lfr --> ar
+    napi --> nds --> nr --> ar
+    json --> pds --> pr --> ar
     pr --> pvm --> ss
     pvm --> ips
     jt --> ddtds --> ddtr --> hsvm
-    wr --> hsvm --> hs
-    wr --> flvm
-    wr --> msvm --> ms
+    ar --> hsvm --> hs
+    ar --> flvm
+    ar --> msvm --> ms
     oapi --> omv --> ms
 ```
 
