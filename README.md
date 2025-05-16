@@ -18,9 +18,9 @@ Documentation on functions and classes can be viewed within the codebase.
 
 	cd path/to/your/folder
 
--To se what folders or files Are in your current location, use `ls`:
+- To se what folders or files Are in your current location, use `ls`:
 
--Now you clone the project repository by following the instructions in the next section.
+- Now you clone the project repository by following the instructions in the next section.
 
 ### 3. Clone the repository via Github
 if you Are unfamilliar with Clintons a GitHub repository, follow these steps: 
@@ -30,7 +30,7 @@ if you Are unfamilliar with Clintons a GitHub repository, follow these steps:
 
 	git clone https://github.uio.no/IN2000-V25/team-31
 
--This will download the project to your folder 
+- This will download the project to your folder 
 
 ### 4. Run the application in Andorid studios
 - Open Android studios
