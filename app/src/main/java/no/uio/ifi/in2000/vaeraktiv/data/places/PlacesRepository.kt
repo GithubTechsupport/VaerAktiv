@@ -87,11 +87,6 @@ class PlacesRepository @Inject constructor(
 
                 val response = placesClient.searchNearby(request).await()
                 places = response.places
-                if (places.isNotEmpty()) {
-                    Log.d("placesRepository", "Found ${places.size} nearby places within radius $currentRadius")
-                } else {
-                    Log.d("placesRepository", "No nearby places found within radius $currentRadius")
-                }
             } catch (e: Exception) {
                 Log.e("placesRepository", "Error fetching nearby places within radius $currentRadius", e)
                 return@withContext emptyList()

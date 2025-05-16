@@ -55,7 +55,6 @@ class HomeScreenViewModel @Inject constructor(
      */
     fun initialize() {
         if (!initialized) {
-            Log.d("HomeScreen", "Initializing")
             _homeScreenUiState.update { it.copy(isLoading = true) }
             aggregateRepository.setCurrentLocation(Location("Oslo", "59.914", "10.752"))
             _homeScreenUiState.update { it.copy(isLoading = false) }
@@ -75,7 +74,6 @@ class HomeScreenViewModel @Inject constructor(
     /** Refreshes all home screen data and activities. */
     fun resetScreenState() {
         viewModelScope.launch {
-            Log.d("resetScreenState", "Current location is: ${currentLocation.value}")
             getHomeScreenData()
             resetActivities()
             getActivitiesForToday()
@@ -192,7 +190,6 @@ class HomeScreenViewModel @Inject constructor(
                 val newActivities = aggregateRepository.getSuggestedActivitiesForOneDay(
                     currentLocation.value!!, 0
                 ) ?: throw Exception("Activities are null")
-                Log.d("resetScreenState", "Activities are: ${activities.value!![0]}")
                 aggregateRepository.replaceActivitiesForDay(0, newActivities)
                 _homeScreenUiState.update {
                     it.copy(isErrorActivitiesToday = false, errorMessageActivitiesToday = "")
@@ -204,7 +201,6 @@ class HomeScreenViewModel @Inject constructor(
                 Log.e("ActivityViewModel", "Error fetching today's activities: ", e)
             } finally {
                 _homeScreenUiState.update { it.copy(isLoadingActivitiesToday = false, activities = activities.value) }
-                Log.d("resetScreenState", "Activities are: ${activities.value!![0]}")
             }
         }
     }
@@ -246,7 +242,6 @@ class HomeScreenViewModel @Inject constructor(
      */
     fun replaceActivityInDay(dayNr: Int, index: Int) {
         viewModelScope.launch {
-            Log.d("HomeScreenViewModel", "Replacing activity in day $dayNr at index $index")
             _homeScreenUiState.update {
                 it.copy(loadingActivities = it.loadingActivities + (dayNr to index))
             }
@@ -255,8 +250,6 @@ class HomeScreenViewModel @Inject constructor(
                     ?.let {
                         aggregateRepository.replaceActivityInDay(dayNr, index, it)
                     } ?: throw Exception("New activity is null")
-
-                Log.d("HomeScreenViewModel", "Successfully replaced activity")
             } catch (e: Exception) {
                 Log.e("HomeScreenViewModel", "Error replacing activity: ", e)
             } finally {

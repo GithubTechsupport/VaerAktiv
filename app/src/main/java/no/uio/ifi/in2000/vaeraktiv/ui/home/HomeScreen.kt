@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
@@ -65,10 +64,6 @@ fun HomeScreen(
                     viewModel.resetScreenState()
                 }
             }
-    }
-
-    LaunchedEffect(activities) {
-        Log.d("resetScreenState", "Activities changed: ${activities?.get(0)}")
     }
 
     Box(

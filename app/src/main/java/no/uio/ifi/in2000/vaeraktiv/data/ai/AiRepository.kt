@@ -6,7 +6,13 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import no.uio.ifi.in2000.vaeraktiv.model.ai.*
+import no.uio.ifi.in2000.vaeraktiv.model.ai.ActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.CustomActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.FormattedForecastDataForPrompt
+import no.uio.ifi.in2000.vaeraktiv.model.ai.PlaceActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.RoutesSuggestions
+import no.uio.ifi.in2000.vaeraktiv.model.ai.StravaActivitySuggestion
+import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.ai.places.NearbyPlacesSuggestions
 import no.uio.ifi.in2000.vaeraktiv.network.aiclient.AiClient
 import javax.inject.Inject

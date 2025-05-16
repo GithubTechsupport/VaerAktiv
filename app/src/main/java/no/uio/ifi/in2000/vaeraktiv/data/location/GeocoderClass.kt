@@ -3,7 +3,6 @@ package no.uio.ifi.in2000.vaeraktiv.data.location
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
-import android.util.Log
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
@@ -24,8 +23,6 @@ class GeocoderClass @Inject constructor(val context: Context) {
 
             return if (!addressList.isNullOrEmpty()) {
                 val address: Address = addressList[0]
-
-                Log.d("GeocoderClass", "Returned name: $address")
 
                 val latitude: Double = address.latitude
                 val longitude: Double = address.longitude

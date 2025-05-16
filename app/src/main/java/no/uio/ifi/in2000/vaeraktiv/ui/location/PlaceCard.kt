@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.location
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -54,7 +53,6 @@ fun PlaceCard(
             )
             .clickable(
                 onClick = {
-                    Log.d("LocationScreen", "Clicked on ${location.name}")
                     viewModel.updateCurrentLocation(
                         Location(location.name, location.lat, location.lon)
                     )

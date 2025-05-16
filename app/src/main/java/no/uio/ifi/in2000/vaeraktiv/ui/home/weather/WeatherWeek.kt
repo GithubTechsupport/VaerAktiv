@@ -91,7 +91,7 @@ fun WeatherWeek(
             val dayNr = index + 1
             val isLoading = uiState.loadingFutureActivities.contains(dayNr)
             var expanded by remember { mutableStateOf(false) }
-            val activitiesForThisDay = uiState.activities[dayNr]
+            val activitiesForThisDay = uiState.activities?.get(dayNr)
             WeatherWeekRow(day, day.icon, context, expanded = expanded, onClick = {
                 if (activitiesForThisDay == null && !isLoading) {
                     viewModel.getActivitiesForAFutureDay(dayNr)
