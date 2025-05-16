@@ -245,6 +245,47 @@ flowchart BT
 
 [Class Diagram](./diagrams/view_activity_in_map/classdiagram.md)
 
+## Edit User Preferences
+
+**Name:** Edit User Preferences      
+**Actors:** User
+
+**Preconditions:**
+- App is installed and opened.
+- User is either a first-time user or a returning user.
+
+**Postconditions:**
+- User preferences are updated in persistent storage.
+- Preferences Screen displays the updated list of preferences.
+
+**Main flow:**
+1. System checks if the user is a first-time user or a returning user.
+2. For a returning user, the system displays the Home Screen.
+3. Returning user taps the Gear icon on the Home Screen.
+4. System loads preferences.
+5. System navigates to the Preferences Screen.
+6. User toggles a preference on the Preferences Screen.
+7. System updates the UI state to reflect the change.
+8. System saves selected preferences. 
+9. If the user wishes to toggle more preferences, repeat from step 6; otherwise, the process ends.
+
+**Alternative flow – First-Time User:**
+
+1.1. System identifies the user as a first-time user.
+1.2. System displays the Welcome Screen.
+1.3. User taps "Kom i gang" on the Welcome Screen.
+1.4. Continue from step 4 in the main flow.
+
+[Activity Diagram](./diagrams/edit_preferences/activitydiagram.md)
+
+[Sequence Diagram](./diagrams/edit_preferences/sequencediagram.md)
+
+[Class Diagram](./diagrams/edit_preferences/classdiagram.md)
+
 **Use Case Diagram**
 
 [Use_Case_Diagram](./diagrams/usecase/UsecaseDiagram.svg)
+
+**Class Diagram**
+
+[Class Diagram](./diagrams/ClassDiagram.md)
