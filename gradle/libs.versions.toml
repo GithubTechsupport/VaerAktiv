@@ -1,6 +1,6 @@
 [versions]
 
-agp = "8.9.2"
+agp = "8.9.3"
 androidxDatastorePreferences = "1.1.6"
 byteBuddy = "1.14.14"
 coreTesting = "2.2.0"
@@ -34,7 +34,7 @@ openaiClient = "4.0.1"
 osmdroidAndroid = "6.1.16"
 places = "4.2.0"
 playServicesLocation = "21.3.0"
-media3CommonKtx = "1.6.1"
+media3CommonKtx = "1.7.0"
 robolectric = "4.12.2"
 runtimeLivedata = "1.8.1"
 secretsGradlePlugin = "2.0.1"
