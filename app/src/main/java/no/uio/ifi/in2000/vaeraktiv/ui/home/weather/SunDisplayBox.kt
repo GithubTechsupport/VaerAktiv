@@ -50,7 +50,7 @@ fun SunDisplayBox(sunData: String, icon: Int, description: String) {
                     text = description,
                     style = MaterialTheme.typography.labelSmall,
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
             Spacer(modifier = Modifier.width(12.dp))
@@ -64,7 +64,7 @@ fun SunDisplayBox(sunData: String, icon: Int, description: String) {
                     text = sunData,
                     style = MaterialTheme.typography.headlineMedium,
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }

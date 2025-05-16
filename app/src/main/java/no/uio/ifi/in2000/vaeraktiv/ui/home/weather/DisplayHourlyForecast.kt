@@ -80,19 +80,19 @@ private fun HourlyForecastItem(forecast: ForecastForHour) {
             )
             WeatherIcon(iconResId = iconResId)
             ForecastText(
-                text = stringResource(R.string.temp, forecast.temp!!),
+                text = stringResource(R.string.temp, forecast.temp?: 0.0),
                 style = MaterialTheme.typography.labelSmall
             )
             ForecastText(
-                text = stringResource(R.string.nedb_r_ml, forecast.precipitationAmount!!),
+                text = stringResource(R.string.nedb_r_ml, forecast.precipitationAmount?: 0.0),
                 style = MaterialTheme.typography.labelSmall
             )
             ForecastText(
-                text = stringResource(R.string.m_s, forecast.windSpeed!!),
+                text = stringResource(R.string.m_s, forecast.windSpeed?: 0.0),
                 style = MaterialTheme.typography.labelSmall
             )
             ForecastText(
-                text = stringResource(R.string.uv, forecast.uv!!),
+                text = stringResource(R.string.uv, forecast.uv?: 0.0),
                 style = MaterialTheme.typography.labelSmall
             )
         }
