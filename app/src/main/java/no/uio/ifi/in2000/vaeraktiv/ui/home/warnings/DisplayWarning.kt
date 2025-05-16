@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.home
+package no.uio.ifi.in2000.vaeraktiv.ui.home.warnings
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image

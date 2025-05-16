@@ -13,6 +13,10 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
+import no.uio.ifi.in2000.vaeraktiv.ui.home.activity.TodaysActivitiesSection
+import no.uio.ifi.in2000.vaeraktiv.ui.home.warnings.DisplayWarning
+import no.uio.ifi.in2000.vaeraktiv.ui.home.weather.DisplayWeather
+import no.uio.ifi.in2000.vaeraktiv.ui.home.weather.WeatherWeek
 
 
 /**
