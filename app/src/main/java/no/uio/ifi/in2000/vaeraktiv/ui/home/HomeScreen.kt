@@ -72,7 +72,7 @@ fun HomeScreen(
     ) {
         when {
             uiState.isLoading -> LoadingScreen()
-            isOnline -> HomeContent(uiState, deviceLocation, activities, viewModel)
+            else -> HomeContent(uiState, deviceLocation, activities, viewModel)
         }
         PullRefreshIndicator(
             refreshing = isRefreshing,
