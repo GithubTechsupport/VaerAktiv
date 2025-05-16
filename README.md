@@ -37,21 +37,23 @@ if you Are unfamilliar with Clintons a GitHub repository, follow these steps:
 - Select **Open** or **Open Project**
 - Navigate to the **team-31** folder you cloned and click open.
 - Once the project is loaded, locate the device manager on the right side.
-- Click the + button to create a new viritual device
+- Click the + button to create a new virtual device
 - Choose a device with **API level 26** or higher (Android 8.0+)
 - Follow the prompt to set ut the emulator.
-- After setting ut the emulator, click on the green Run button in the topp-right corner of Android studio.
+- After setting ut the emulator, click on the green Run button in the top-right corner of Android studio.
 - Now you have launch the emulator and the app will start running.
 
 
 ## Dependencies
 
-In addition to the other dependencies bellow, the application rekkes on to key-based dependencies. These keys have been added to the repository, but it is critical that typen keys are valid and function properly for the application to run as expected.
- 
-- **Strava key** 
-		- This key handel and computing router for the choosen activity
-- **Chat-GPT key** 
-		- This key processes prompte and generator aktivitets. 
+In addition to the other dependencies below, the app requires several API keys for external services. These keys are used to access various APIs and services that provide data and functionality for the app.
+
+- **Google Places API-key** 
+        - This key allows the app to access the Google Places API for location autocomplete and nearby place suggestions.
+- **Strava API-key** 
+		- This key allows the app to access the Strava API for fetching route suggestions.
+- **OpenAI API-key** 
+		- This key allows the app to access the OpenAI API for generating activity suggestions.
 
 The app uses several libraries and frameworks:
 
@@ -89,9 +91,6 @@ The app uses several libraries and frameworks:
 - [Kotlinx Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
     - Used for asynchronous programming and background tasks.
 
-- Internett
-	- An internet connection is required to run the application. Witouth it, data cannot be retriever and the application will not function.
-
 ## Permissions
 
 - The app requires location permissions (`ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`, and `ACCESS_BACKGROUND_LOCATION`) to provide weather data and map features based on the user's location.
@@ -99,7 +98,8 @@ The app uses several libraries and frameworks:
 
 ## Notes
 
-- The app is intended for educational purposes and may require additional setup for production use.
+- Before this app could be used in production additional setup might be needed.
+- The most important of which is to move all openly defined API keys to a `secrets.properties` file.
 
 ## Warnings
 
