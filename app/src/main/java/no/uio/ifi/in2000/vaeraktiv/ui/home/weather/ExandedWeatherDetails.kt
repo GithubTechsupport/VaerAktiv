@@ -32,7 +32,7 @@ fun ExpandedWeatherDetails(data: ForecastToday) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(R.string.L_temp, data.tempMin),
+                    text = stringResource(R.string.L_temp, data.tempMin ?: stringResource(R.string.n_a)),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
@@ -46,7 +46,7 @@ fun ExpandedWeatherDetails(data: ForecastToday) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(R.string.H_temp, data.tempMax!!),
+                    text = stringResource(R.string.H_temp, data.tempMax ?: stringResource(R.string.n_a)),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
@@ -60,7 +60,7 @@ fun ExpandedWeatherDetails(data: ForecastToday) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(R.string.ml, data.precipitationAmount ?: "N/A"),
+                    text = stringResource(R.string.ml, data.precipitationAmount ?: stringResource(R.string.n_a)),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
@@ -74,7 +74,7 @@ fun ExpandedWeatherDetails(data: ForecastToday) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(R.string.m_s, data.windSpeed!!),
+                    text = stringResource(R.string.m_s, data.windSpeed ?: stringResource(R.string.n_a)),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,

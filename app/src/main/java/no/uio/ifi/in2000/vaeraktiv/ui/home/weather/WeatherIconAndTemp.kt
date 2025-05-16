@@ -39,13 +39,13 @@ fun WeatherIconAndTemp(data: ForecastToday, iconResId: Int) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.temp, data.tempNow ?: "N/A"),
+                text = stringResource(R.string.temp, data.tempNow ?: stringResource(R.string.n_a)),
                 style = MaterialTheme.typography.displayMedium,
                 color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center
             )
             Text(
-                text = stringResource(R.string.uv, data.uv ?: "N/A"),
+                text = stringResource(R.string.uv, data.uv ?: stringResource(R.string.n_a)),
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center
