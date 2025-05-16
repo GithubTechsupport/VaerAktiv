@@ -74,14 +74,18 @@ class HomeScreenViewModel @Inject constructor(
 
     /** Refreshes all home screen data and activities. */
     fun resetScreenState() {
-        getHomeScreenData()
-        resetActivities()
-        getActivitiesForToday()
+        viewModelScope.launch {
+            Log.d("resetScreenState", "Current location is: ${currentLocation.value}")
+            getHomeScreenData()
+            resetActivities()
+            getActivitiesForToday()
+        }
     }
 
     private fun resetActivities() {
         viewModelScope.launch {
             aggregateRepository.resetActivities()
+            _homeScreenUiState.update { it.copy(activities = activities.value) }
         }
     }
 
@@ -185,11 +189,11 @@ class HomeScreenViewModel @Inject constructor(
         viewModelScope.launch {
             _homeScreenUiState.update { it.copy(isLoadingActivitiesToday = true, isErrorActivitiesToday = false) }
             try {
-                val activities = aggregateRepository.getSuggestedActivitiesForOneDay(
+                val newActivities = aggregateRepository.getSuggestedActivitiesForOneDay(
                     currentLocation.value!!, 0
                 ) ?: throw Exception("Activities are null")
-
-                aggregateRepository.replaceActivitiesForDay(0, activities)
+                Log.d("resetScreenState", "Activities are: ${activities.value!![0]}")
+                aggregateRepository.replaceActivitiesForDay(0, newActivities)
                 _homeScreenUiState.update {
                     it.copy(isErrorActivitiesToday = false, errorMessageActivitiesToday = "")
                 }
@@ -199,7 +203,8 @@ class HomeScreenViewModel @Inject constructor(
                 }
                 Log.e("ActivityViewModel", "Error fetching today's activities: ", e)
             } finally {
-                _homeScreenUiState.update { it.copy(isLoadingActivitiesToday = false) }
+                _homeScreenUiState.update { it.copy(isLoadingActivitiesToday = false, activities = activities.value) }
+                Log.d("resetScreenState", "Activities are: ${activities.value!![0]}")
             }
         }
     }
@@ -230,7 +235,7 @@ class HomeScreenViewModel @Inject constructor(
                 Log.e("ActivityViewModel", "Error fetching a future day's activities", e)
             } finally {
                 _homeScreenUiState.update {
-                    it.copy(loadingFutureActivities = it.loadingFutureActivities - dayNr)
+                    it.copy(loadingFutureActivities = it.loadingFutureActivities - dayNr, activities = activities.value)
                 }
             }
         }
@@ -256,7 +261,7 @@ class HomeScreenViewModel @Inject constructor(
                 Log.e("HomeScreenViewModel", "Error replacing activity: ", e)
             } finally {
                 _homeScreenUiState.update {
-                    it.copy(loadingActivities = it.loadingActivities - (dayNr to index))
+                    it.copy(loadingActivities = it.loadingActivities - (dayNr to index), activities = activities.value)
                 }
             }
         }
