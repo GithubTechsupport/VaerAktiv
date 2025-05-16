@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.location
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -89,11 +88,9 @@ class FavoriteLocationViewModel @Inject constructor(
     }
 
     fun fetchPredictions(query: String) {
-        Log.d("FavoriteLocationViewModel", "fetchPredictions called with query: $query")
         if (query.isBlank()) {
             _predictions.value = emptyList()
             sessionToken = null
-            Log.d("FavoriteLocationViewModel", "fetchPredictions returned with predictions: ${_predictions.value}")
             return
         }
         if (sessionToken == null) {

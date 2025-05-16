@@ -21,7 +21,7 @@ data class HomeScreenUiState(
     val next24Hours: List<ForecastForHour> = emptyList(),
     val dayIntervals: List<List<DetailedForecastForDay>> = emptyList(),
 
-    val activities: List<SuggestedActivities?> = List(8) { null },
+    val activities: List<SuggestedActivities?>? = List(8) { null },
     // errors
     val todaysWeatherError: String? = null,
     val loadingActivities: Set<Pair<Int, Int>> = emptySet(),

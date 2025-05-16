@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home.weather
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -179,7 +178,6 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         message = "Error fetching today's weather: ${uiState.next24HoursError}"
                     )
                 } ?: run {
-                    Log.d("DisplayHourlyForecast", "Forecast: ${uiState.next24Hours}")
                     DisplayHourlyForecast(uiState.next24Hours)
                 }
 
@@ -189,7 +187,6 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         message = "Error fetching today's weather: ${uiState.sunRiseSetError}"
                     )
                 } ?: run {
-                    Log.d("DisplayHourlyForecast", "Forecast: ${uiState.sunRiseSet}")
                     SunRiseSet(uiState.sunRiseSet)
                 }
             }

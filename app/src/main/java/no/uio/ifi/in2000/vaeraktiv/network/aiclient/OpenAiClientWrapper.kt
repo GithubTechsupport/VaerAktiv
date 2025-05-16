@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.network.aiclient
 
-import android.util.Log
 import com.aallam.openai.api.chat.ChatCompletionRequest
 import com.aallam.openai.api.chat.ChatMessage
 import com.aallam.openai.api.chat.ChatResponseFormat
@@ -22,6 +21,12 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
 
     /**
      * Requests JSON-formatted suggestions for a full day prompt.
+     *
+     * @param forecastData The formatted forecast data for the prompt.
+     * @param nearbyPlaces The nearby places suggestions.
+     * @param routes The routes suggestions.
+     * @param preferences User preferences for the suggestions.
+     * @param exclusion Exclusion criteria for the suggestions.
      */
     override suspend fun getSuggestionsForOneDay(
         forecastData: FormattedForecastDataForPrompt,
@@ -30,7 +35,6 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
         preferences: String,
         exclusion: String): String? = withContext(Dispatchers.IO) {
         val absolutePrompt = "${prompt.fullPrompt}${exclusion}${preferences}WEATHERFORECAST START:\n\n<<<\n$forecastData\n>>>\n\nWEATHERFORECAST END\n\nNEARBY PLACES START:\n\n<<<\n$nearbyPlaces\n>>>\n\nNEARBY PLACES END\n\nNEARBY ROUTES START:\n\n<<<\n$routes\n>>>\n\nNEARBY ROUTES END"
-        Log.d("Prompt", absolutePrompt)
         val messages = listOf(
             ChatMessage(role = ChatRole.System, content = prompt.systemPrompt),
             ChatMessage(role = ChatRole.User, content = absolutePrompt)
@@ -46,7 +50,14 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
     }
 
     /**
-     * Requests a single activity suggestion for a day and logs the request timing.
+     * Requests a single activity suggestion for a day.
+     *
+     * @param forecastData The formatted forecast data for the prompt.
+     * @param nearbyPlaces The nearby places suggestions.
+     * @param routes The routes suggestions.
+     * @param preferences User preferences for the suggestions.
+     * @param exclusion Exclusion criteria for the suggestions.
+     *
      */
     override suspend fun getSingleSuggestionForDay(
         forecastData: FormattedForecastDataForPrompt,
@@ -55,7 +66,6 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
         preferences: String,
         exclusion: String): String? = withContext(Dispatchers.IO) {
         val absolutePrompt = "${prompt.fullPromptSingular}$exclusion${preferences}WEATHERFORECAST START:\n\n<<<\n$forecastData\n>>>\n\nWEATHERFORECAST END\n\nNEARBY PLACES START:\n\n<<<\n$nearbyPlaces\n>>>\n\nNEARBY PLACES END\n\nNEARBY ROUTES START:\n\n<<<\n$routes\n>>>\n\nNEARBY ROUTES END"
-        Log.d("Prompt", absolutePrompt)
         val messages = listOf(
             ChatMessage(role = ChatRole.System, content = prompt.systemPromptSingular),
             ChatMessage(role = ChatRole.User, content = absolutePrompt)
@@ -66,10 +76,7 @@ class OpenAiClientWrapper @Inject constructor(private val client: OpenAI) : AiCl
             temperature = prompt.temperature,
             responseFormat = ChatResponseFormat.JsonObject
         )
-        val suggestionsStart = System.currentTimeMillis()
         val response: String? = client.chatCompletion(request).choices.firstOrNull()?.message?.content
-        val suggestionsEnd = System.currentTimeMillis()
-        Log.d("Timing", "getSingleSuggestionForDay: ${suggestionsEnd - suggestionsStart} ms")
         return@withContext response
     }
 

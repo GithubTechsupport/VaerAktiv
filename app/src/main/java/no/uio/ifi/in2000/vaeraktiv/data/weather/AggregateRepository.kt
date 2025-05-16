@@ -75,8 +75,6 @@ class AggregateRepository @Inject constructor(
      * @param location new location to apply.
      */
     override fun setCurrentLocation(location: Location) {
-        Log.d("setCurrentLocation", "called with $location")
-
         val lat = location.lat.toDoubleOrNull()
         val lon = location.lon.toDoubleOrNull()
         if (lat == null || lon == null || !isInNorway(lat, lon)) {
@@ -100,9 +98,7 @@ class AggregateRepository @Inject constructor(
      * @return list of local time strings "HH:mm"
      */
     override suspend fun getSunRiseData(location: Location, date: String): List<String> {
-        Log.d("AggregateRepository", "getSunRiseData called with location: $location and date: $date")
         val response = sunriseRepository.getSunriseTime(location.lat, location.lon, date)
-        Log.d("AggregateRepository", "getSunRiseData response: $response")
         return response.map { timestring ->
             val utcTime = java.time.OffsetDateTime.parse(timestring)
             val cetTime = utcTime.plusHours(1)
@@ -121,8 +117,6 @@ class AggregateRepository @Inject constructor(
             parseLocationLine(line)?.let { (placeName, latitude, longitude) ->
                 fetchAndProcessForecast(placeName, latitude, longitude)
             }
-        }.also {
-            Log.d("AggregateRepository", "All favorite locations data processed")
         }
     }
 
@@ -160,7 +154,7 @@ class AggregateRepository @Inject constructor(
                     uv = forecastData.instant.details.ultravioletIndexClearSky?.toString() ?: "N/A",
                     lat = latitude,
                     lon = longitude
-                ).also { Log.d("AggregateRepository", "Favorite location data: $it") }
+                )
             } ?: run {
                 Log.w("AggregateRepository", "No forecast data available for $placeName")
                 null
@@ -303,8 +297,6 @@ class AggregateRepository @Inject constructor(
                     )
                 }
             }
-
-            Log.d("AggregateRepository", "forecastByDay: $forecastByDay")
             return forecastByDay
 
         } catch (e: Exception) {
@@ -318,7 +310,6 @@ class AggregateRepository @Inject constructor(
      */
     override suspend fun getForecastForHour(location: Location): List<ForecastForHour> {
         val response = locationForecastRepository.getNext24Hours(location.lat, location.lon)
-        Log.d("AggregateRepository", "getWeatherForHour response: $response")
         val hourDataList: List<ForecastForHour> = response?.map { timeSeries ->
             val forecastForHour = ForecastForHour(
                 time = ZonedDateTime.parse(timeSeries.time).withZoneSameInstant(ZoneId.of("Europe/Oslo")).toString().substring(11, 13),
@@ -330,7 +321,6 @@ class AggregateRepository @Inject constructor(
             )
             forecastForHour
         } ?: emptyList()
-        Log.d("AggregateRepository", "getWeatherForHour response: $hourDataList")
         return hourDataList
     }
 
@@ -477,7 +467,6 @@ class AggregateRepository @Inject constructor(
             newLocation // if the current location changed then track the new one
                 .takeUnless { it == deviceLocation.value }
                 ?.also { _deviceLocation.value = it }
-            Log.d("DeviceLocation", "New device location: $newLocation")
         }
     }
 
