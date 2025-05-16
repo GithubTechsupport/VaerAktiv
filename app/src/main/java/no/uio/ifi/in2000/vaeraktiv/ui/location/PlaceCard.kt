@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.location
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -32,24 +30,20 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.aggregateModels.Location
 import no.uio.ifi.in2000.vaeraktiv.model.home.FavoriteLocation
+import no.uio.ifi.in2000.vaeraktiv.utils.IconMapper
 
 /**
  * The card template for all the weather information to be filled into.
  * @param FavoriteLocation The dataclass which has the weather information for the specific location
  */
-@SuppressLint("DiscouragedApi")
+
 @Composable
 fun PlaceCard(
     location: FavoriteLocation,
     defaultPadding: Dp,
     viewModel: FavoriteLocationViewModel,
 ) {
-    val context = LocalContext.current
-    val resourceId = context.resources.getIdentifier(
-        location.iconDesc,
-        "drawable",
-        context.packageName
-    )
+    val resourceId = IconMapper.fromName(location.iconDesc)
     Column(
         modifier = Modifier
             .fillMaxWidth()

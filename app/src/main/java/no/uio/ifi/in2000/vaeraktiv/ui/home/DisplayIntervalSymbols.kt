@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,21 +18,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.home.DetailedForecastForDay
+import no.uio.ifi.in2000.vaeraktiv.utils.IconMapper
 
 /**
  * Displays weather icons for different times throughout the day in a horizontal row.
  *
  * @param data List of detailed weather forecasts for one day.
  */
-@SuppressLint("DiscouragedApi")
 @Composable
 fun DisplayIntervalSymbols(data: List<DetailedForecastForDay>) {
-    val context = LocalContext.current
     val spacing = 4.dp
 
     Row(
@@ -42,7 +39,7 @@ fun DisplayIntervalSymbols(data: List<DetailedForecastForDay>) {
         horizontalArrangement = Arrangement.spacedBy(spacing)
     ) {
         data.forEach { forecast ->
-            val iconResId = context.resources.getIdentifier(forecast.icon, "drawable", context.packageName)
+            val iconResId = IconMapper.fromName(forecast.icon)
 
             Box(
                 modifier = Modifier
