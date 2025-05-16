@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
-import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
 import no.uio.ifi.in2000.vaeraktiv.ui.navbar.LoadingScreen
 
 /**
@@ -74,7 +73,6 @@ fun HomeScreen(
         when {
             uiState.isLoading -> LoadingScreen()
             isOnline -> HomeContent(uiState, deviceLocation, activities, viewModel)
-            else -> ErrorMessage("You're offline.")
         }
         PullRefreshIndicator(
             refreshing = isRefreshing,
