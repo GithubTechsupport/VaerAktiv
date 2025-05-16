@@ -1,5 +1,7 @@
 
-# VærAktiv
+# VærAktiv - README
+
+This is the readme file for the application. —- NOE—
 
 ## Documentation
 
@@ -7,12 +9,46 @@ Documentation on functions and classes can be viewed within the codebase.
 
 ## Running the app
 
-1. Clone the repository and open the root folder in Android Studio.
-2. The app requires an Android emulator or device with a minimum API level of 26 (Android 8).
-3. The app requires location permissions to function correctly. You will be prompted to grant location access when running the app.
-4. Run the app from Android Studio using the "Run" button or by selecting your device/emulator.
+
+### 1.Install Androider studio
+-Go to [https://developer.android.com/studio](https://developer.android.com/studio) and install Android Studio on your device. Instructions for downloading and setting it out are available on the site.
+
+### 2. Clone the project to your computer
+-Go to **Finder** (or file Explorer) and create a new folder where you want to store the project. Name it something relevant.
+-Open a **terminal window**
+-Navigate to the folder you just created using the `cd` command. For example:
+
+	cd path/to/your/folder
+
+-To se what folders or files Are in your current location, use:
+
+  ls 
+
+Now you clone the project repository by following the instructions in the next section.
+
+###3. Clone the repository via Github
+if you Are unfamilliar with Clintons a GitHub repository, follow these steps: 
+-Go to the repository [https://github.uio.no/IN2000-V25/team-31](https://github.uio.no/IN2000-V25/team-31)
+-Click on the green button and copy the HTTPS link provided
+-In your terminal window inside your folder, run:
+
+	git clone https://github.uio.no/IN2000-V25/team-31
+-This will download the project to your folder 
+
+###4. Run the application in Andorid studios
+Open Android studios
+Select **Open** or **Open Project**
+Navigate to the **team-31** folder you cloned and click open.
+Once the project is loaded, locate the device manager on the right side.
+Click the + button to create a new viritual device
+Choose a device with API level 26 or higher (Android 8.0+)
+Follow the prompt to set ut the emulator.
+After setting ut the emulator, click on the green Run button in the topp-right corner of Android studio.
+Now you have launch the emulator and the app will start running.
+
 
 ## Dependencies
+
 
 The app uses several libraries and frameworks:
 
@@ -54,6 +90,8 @@ The app uses several libraries and frameworks:
 
 - The app requires location permissions (`ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`, and `ACCESS_BACKGROUND_LOCATION`) to provide weather data and map features based on the user's location.
 - Additionally the app requires internet permissions (`INTERNET` and `ACCESS_NETWORK_STATE`) to access external APIs and services.
+
+
 
 ## Notes
 
