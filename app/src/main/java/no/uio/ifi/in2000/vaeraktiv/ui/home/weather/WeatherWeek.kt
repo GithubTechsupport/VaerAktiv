@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.home
+package no.uio.ifi.in2000.vaeraktiv.ui.home.weather
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -26,6 +26,11 @@ import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.home.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
+import no.uio.ifi.in2000.vaeraktiv.ui.home.DisplayIntervalSymbols
+import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenUiState
+import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
+import no.uio.ifi.in2000.vaeraktiv.ui.home.activity.AddActivitiesForDay
+import no.uio.ifi.in2000.vaeraktiv.ui.home.activity.LoadAllActivities
 
 
 /**
@@ -37,8 +42,8 @@ import no.uio.ifi.in2000.vaeraktiv.ui.DataSection
  * Activities are fetched on-demand when a day is expanded and no cached data exists.
  *
  * @param activities A list of [SuggestedActivities] for each day of the week (nullable for missing data).
- * @param viewModel The [HomeScreenViewModel] used to fetch and update activity data.
- * @param uiState A [HomeScreenUiState] holding the UI's current state, including weather and loading flags.
+ * @param viewModel The [no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel] used to fetch and update activity data.
+ * @param uiState A [no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenUiState] holding the UI's current state, including weather and loading flags.
  */
 
 @Composable

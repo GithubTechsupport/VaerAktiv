@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.home
+package no.uio.ifi.in2000.vaeraktiv.ui.home.weather
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
+import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenUiState
 import no.uio.ifi.in2000.vaeraktiv.utils.IconMapper
 
 /**

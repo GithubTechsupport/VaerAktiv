@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.home
+package no.uio.ifi.in2000.vaeraktiv.ui.home.activity
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -63,7 +63,7 @@ fun ActivityCard(
                 RefreshButton(
                     onClick = {
                         onRefresh.invoke()
-                              },
+                    },
                     enabled = true
                 )
             }
