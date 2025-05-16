@@ -476,10 +476,10 @@ classDiagram
 
 **Alternative flow – First-Time User:**
 
-1.1. System identifies the user as a first-time user.
-1.2. System displays the Welcome Screen.
-1.3. User taps "Kom i gang" on the Welcome Screen. 
-1.4. Continue from step 4 in the main flow. 
+1.1. System identifies the user as a first-time user.  
+1.2. System displays the Welcome Screen.  
+1.3. User taps "Kom i gang" on the Welcome Screen.  
+1.4. Continue from step 4 in the main flow.  
 
 [Activity Diagram](./diagrams/edit_preferences/activitydiagram.md)
 
