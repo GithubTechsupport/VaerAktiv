@@ -105,4 +105,5 @@ The app uses several libraries and frameworks:
 
 - Functions "getFromLocationName" and "getFromLocation" in `GeocoderClass.kt` become deprecated in API level 33, and to remove the warning needs API level 33, which only 48% of android users have.
 
-- All functions used by hilt get a never used warning in some versions av Android Studio. These functions are located in: `AppModule.kt`, `ViewModelModule.kt` `StravaModule.kt`, `AiClientModule.kt`, `NetworkClient.kt` and `PlacesClient.kt`, but they are infact used by hilt. The IDE just can't detect this sometimes.
+- All functions used by hilt get a never used warning in some versions of Android Studio. These functions are located in: `AppModule.kt`, `ViewModelModule.kt` `StravaModule.kt`, `AiClientModule.kt`, `NetworkClient.kt` and `PlacesClient.kt`, but they are in fact used by hilt. The IDE just can't detect this sometimes.
+- The function "trackDeviceLocation" in `AggregateRepository.kt` is suppressed for a warning that is only fixable with API level 35. We don't want to use an API level this high because too few devices support this level.
