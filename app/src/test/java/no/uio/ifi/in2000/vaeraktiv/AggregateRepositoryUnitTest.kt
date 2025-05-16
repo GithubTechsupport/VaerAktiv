@@ -28,7 +28,7 @@ class AggregateRepositoryUnitTest {
     private val metAlertsRepository: MetAlertsRepository = mock(MetAlertsRepository::class.java)
 
     // Create other mocks if needed but we can use nulls or relaxed fakes for unused deps
-    private val weatherRepository = AggregateRepository(
+    private val aggregateRepository = AggregateRepository(
         metAlertsRepository = metAlertsRepository,
         locationForecastRepository = mock(LocationForecastRepository::class.java),
         sunriseRepository = mock(SunriseRepository::class.java),
@@ -63,7 +63,7 @@ class AggregateRepositoryUnitTest {
         `when`(metAlertsRepository.getAlertsForLocation(60.391.toString(), 5.322.toString())).thenReturn(listOf(fakeFeature))
 
         // Act
-        val result = weatherRepository.getAlertsForLocation(testLocation)
+        val result = aggregateRepository.getAlertsForLocation(testLocation)
 
         // Assert
         assertEquals(1, result.size)
