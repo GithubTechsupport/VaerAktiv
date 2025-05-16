@@ -92,13 +92,13 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(R.string.temp, data?.tempNow!!),
+                    text = stringResource(R.string.temp, data?.tempNow?: 0.0),
                     style = MaterialTheme.typography.displayMedium,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = stringResource(R.string.uv, data.uv!!),
+                    text = stringResource(R.string.uv, data?.uv ?: 0.0),
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center
@@ -122,7 +122,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = stringResource(R.string.L_temp, data?.tempMin!!),
+                            text = stringResource(R.string.L_temp, data?.tempMin?: 0.0),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
@@ -136,7 +136,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = stringResource(R.string.H_temp, data?.tempMax!!),
+                            text = stringResource(R.string.H_temp, data?.tempMax?: 0.0),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
@@ -150,7 +150,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = stringResource(R.string.ml, data?.precipitationAmount!!),
+                            text = stringResource(R.string.ml, data?.precipitationAmount?: 0.0),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
@@ -164,7 +164,7 @@ fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = stringResource(R.string.m_s, data?.windSpeed!!),
+                            text = stringResource(R.string.m_s, data?.windSpeed?: 0.0),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
