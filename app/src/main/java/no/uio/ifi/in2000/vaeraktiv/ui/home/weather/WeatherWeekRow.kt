@@ -60,7 +60,7 @@ fun WeatherWeekRow(
     ) {
         // Display the day of the week
         Text(
-            text = getDayOfWeek(day.date),
+            text = getDayOfWeek(day.date, context),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.width(80.dp)

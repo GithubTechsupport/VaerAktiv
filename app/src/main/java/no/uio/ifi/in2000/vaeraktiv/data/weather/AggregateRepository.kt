@@ -145,19 +145,19 @@ class AggregateRepository @Inject constructor(
             val data = forecast?.properties?.timeseries?.get(0)?.data
 
             data?.let { forecastData ->
-                val iconCode = forecastData.next6Hours?.summary?.symbolCode ?: "unknown" // the code for the icon doubles as an English weather description
-                val iconKey = iconCode.substringBefore("_") // ignores the _night or _daytime part of the code
-                val description = weatherDescriptions[iconKey] ?: "Ukjent vær" // makes the English descriptions Norwegian
+                val iconCode = forecastData.next6Hours?.summary?.symbolCode // the code for the icon doubles as an English weather description
+                val iconKey = iconCode?.substringBefore("_") // ignores the _night or _daytime part of the code
+                val description = weatherDescriptions[iconKey] // makes the English descriptions Norwegian
 
                 FavoriteLocation(
                     name = placeName,
                     iconDesc = iconCode,
                     shortDesc = description,
-                    highestTemp = forecastData.next6Hours?.details?.airTemperatureMax?.toString() ?: "N/A",
-                    lowestTemp = forecastData.next6Hours?.details?.airTemperatureMin?.toString() ?: "N/A",
-                    wind = forecastData.instant.details.windSpeed?.toString() ?: "N/A",
-                    downPour = forecastData.next6Hours?.details?.precipitationAmount?.toString() ?: "N/A",
-                    uv = forecastData.instant.details.ultravioletIndexClearSky?.toString() ?: "N/A",
+                    highestTemp = forecastData.next6Hours?.details?.airTemperatureMax?.toString(),
+                    lowestTemp = forecastData.next6Hours?.details?.airTemperatureMin?.toString(),
+                    wind = forecastData.instant.details.windSpeed?.toString(),
+                    downPour = forecastData.next6Hours?.details?.precipitationAmount?.toString(),
+                    uv = forecastData.instant.details.ultravioletIndexClearSky?.toString(),
                     lat = latitude,
                     lon = longitude
                 ).also { Log.d("AggregateRepository", "Favorite location data: $it") }
@@ -299,7 +299,7 @@ class AggregateRepository @Inject constructor(
                     DetailedForecastForDay(
                         date = dateStr,
                         interval = intervalDisplay,
-                        icon = timeSeries?.data?.next6Hours?.summary?.symbolCode ?: "N/A"
+                        icon = timeSeries?.data?.next6Hours?.summary?.symbolCode
                     )
                 }
             }
