@@ -1,7 +1,7 @@
 
 # VærAktiv - README
 
-This is the readme file for the application. —- NOE—
+This is the readme file for the application. This file provides an overview of the project, inclusion instructions on how to download and run Væraktiv. It also outlines the key dependencies, location and warnings present in the code.
 
 ## Documentation
 
@@ -22,20 +22,21 @@ Documentation on functions and classes can be viewed within the codebase.
 
 -To se what folders or files Are in your current location, use:
 
-  ls 
+  ls
 
-Now you clone the project repository by following the instructions in the next section.
+-Now you clone the project repository by following the instructions in the next section.
 
-###3. Clone the repository via Github
+### 3. Clone the repository via Github
 if you Are unfamilliar with Clintons a GitHub repository, follow these steps: 
 -Go to the repository [https://github.uio.no/IN2000-V25/team-31](https://github.uio.no/IN2000-V25/team-31)
 -Click on the green button and copy the HTTPS link provided
 -In your terminal window inside your folder, run:
 
 	git clone https://github.uio.no/IN2000-V25/team-31
+
 -This will download the project to your folder 
 
-###4. Run the application in Andorid studios
+### 4. Run the application in Andorid studios
 Open Android studios
 Select **Open** or **Open Project**
 Navigate to the **team-31** folder you cloned and click open.
@@ -49,6 +50,10 @@ Now you have launch the emulator and the app will start running.
 
 ## Dependencies
 
+In addition to the other dependencies bellow, the application rekkes on to key-based dependencies. These keys have been added to the repository, but it is critical that typen keys are valid and function properly for the application to run as expected.
+ 
+-**Strava key** - This key handel and computing router for the choosen activity
+-**Chat-GPT key** - This key processes prompte and generator aktivitets. 
 
 The app uses several libraries and frameworks:
 
@@ -86,12 +91,13 @@ The app uses several libraries and frameworks:
 - [Kotlinx Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
     - Used for asynchronous programming and background tasks.
 
+-Internett
+- An internet connection is required to run the application. Witouth it, data cannot be retriever and the application will not function.
+
 ## Permissions
 
 - The app requires location permissions (`ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`, and `ACCESS_BACKGROUND_LOCATION`) to provide weather data and map features based on the user's location.
 - Additionally the app requires internet permissions (`INTERNET` and `ACCESS_NETWORK_STATE`) to access external APIs and services.
-
-
 
 ## Notes
 
@@ -100,4 +106,6 @@ The app uses several libraries and frameworks:
 ## Warnings
 
 - Functions "getFromLocationName" and "getFromLocation" in `GeocoderClass.kt` become deprecated in API level 33, and to remove the warning needs API level 33, which only 48% of android users have.
+
 - All functions used by hilt get a never used warning in some versions av Android Studio. These functions are located in: `AppModule.kt`, `ViewModelModule.kt` `StravaModule.kt`, `AiClientModule.kt`, `NetworkClient.kt` and `PlacesClient.kt`, but they are infact used by hilt. The IDE just can't detect this sometimes.
+
