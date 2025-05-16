@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.home
+package no.uio.ifi.in2000.vaeraktiv.ui.home.activity
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -16,6 +16,8 @@ import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.home.ActivityDate
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
+import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenUiState
+import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel
 
 /**
  * Displays the "Today's Activities" section in the home screen.

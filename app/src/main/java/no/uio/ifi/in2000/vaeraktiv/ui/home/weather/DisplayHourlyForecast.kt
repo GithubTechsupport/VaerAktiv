@@ -1,6 +1,5 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.home
+package no.uio.ifi.in2000.vaeraktiv.ui.home.weather
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,13 +18,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForHour
+import no.uio.ifi.in2000.vaeraktiv.utils.IconMapper
 
 /**
  * Displays a horizontal list of hourly weather forecasts.
@@ -50,15 +50,9 @@ fun DisplayHourlyForecast(data: List<ForecastForHour>) {
  *
  * @param forecast Hourly weather data.
  */
-@SuppressLint("DiscouragedApi")
 @Composable
 private fun HourlyForecastItem(forecast: ForecastForHour) {
-    val context = LocalContext.current
-    val iconResId = context.resources.getIdentifier(
-        forecast.icon,
-        "drawable",
-        context.packageName
-    )
+    val iconResId = IconMapper.fromName(forecast.icon?:"")
 
     Box(
         modifier = Modifier
@@ -112,7 +106,7 @@ private fun HourlyForecastItem(forecast: ForecastForHour) {
  * @param style Text style.
  */
 @Composable
-private fun ForecastText(text: String, style: androidx.compose.ui.text.TextStyle) {
+private fun ForecastText(text: String, style: TextStyle) {
     Text(
         text = text,
         style = style,

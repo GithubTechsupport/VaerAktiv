@@ -100,9 +100,9 @@ class AggregateRepository @Inject constructor(
      * @return list of local time strings "HH:mm"
      */
     override suspend fun getSunRiseData(location: Location, date: String): List<String> {
-        Log.d("WeatherRepository", "getSunRiseData called with location: $location and date: $date")
+        Log.d("AggregateRepository", "getSunRiseData called with location: $location and date: $date")
         val response = sunriseRepository.getSunriseTime(location.lat, location.lon, date)
-        Log.d("WeatherRepository", "getSunRiseData response: $response")
+        Log.d("AggregateRepository", "getSunRiseData response: $response")
         return response.map { timestring ->
             val utcTime = java.time.OffsetDateTime.parse(timestring)
             val cetTime = utcTime.plusHours(1)
@@ -122,7 +122,7 @@ class AggregateRepository @Inject constructor(
                 fetchAndProcessForecast(placeName, latitude, longitude)
             }
         }.also {
-            Log.d("WeatherRepository", "All favorite locations data processed")
+            Log.d("AggregateRepository", "All favorite locations data processed")
         }
     }
 
@@ -130,7 +130,7 @@ class AggregateRepository @Inject constructor(
     private fun parseLocationLine(line: String): Triple<String, String, String>? {
         val parts = line.split(",")
         if (parts.size != 3) {
-            Log.e("WeatherRepository", "Invalid location format: $line")
+            Log.e("AggregateRepository", "Invalid location format: $line")
             return null
         }
         return Triple(parts[0], parts[1], parts[2])
@@ -160,13 +160,13 @@ class AggregateRepository @Inject constructor(
                     uv = forecastData.instant.details.ultravioletIndexClearSky?.toString() ?: "N/A",
                     lat = latitude,
                     lon = longitude
-                ).also { Log.d("WeatherRepository", "Favorite location data: $it") }
+                ).also { Log.d("AggregateRepository", "Favorite location data: $it") }
             } ?: run {
-                Log.w("WeatherRepository", "No forecast data available for $placeName")
+                Log.w("AggregateRepository", "No forecast data available for $placeName")
                 null
             }
         } catch (e: Exception) {
-            Log.e("WeatherRepository", "Error fetching forecast for $placeName", e)
+            Log.e("AggregateRepository", "Error fetching forecast for $placeName", e)
             null
         }
     }
@@ -232,7 +232,7 @@ class AggregateRepository @Inject constructor(
             val timeseries = fullTimeseries[dayNr].second // get only the time series for the specified day.
             return Pair(timeseries, units)
         } catch (e: Exception) {
-            Log.e("WeatherRepository", "Error at getTimeSeriesForDay: ", e)
+            Log.e("AggregateRepository", "Error at getTimeSeriesForDay: ", e)
             throw e
         }
     }
@@ -244,7 +244,8 @@ class AggregateRepository @Inject constructor(
         try {
             val response = locationForecastRepository.getForecastByDay(location.lat, location.lon).first.drop(1)
                 .dropLast(1) // list of time series for each day
-            val forecast = response.map { (date, timeSeriesList) -> // gives the forecast at 12:00 for the coming days
+            val forecast = response.map { (date, timeSeriesList) ->
+                // finds the forecast at 12:00 for the coming days
                 val timeSeriesAt12PM = timeSeriesList.find { it.time.substring(11, 16) == "12:00" }
                 ForecastForDay(
                     date = date,
@@ -254,7 +255,7 @@ class AggregateRepository @Inject constructor(
             }
             return forecast
         } catch (e: Exception) {
-            Log.e("WeatherRepository", "Error at getForecastByDay: ", e)
+            Log.e("AggregateRepository", "Error at getForecastByDay: ", e)
             throw e
         }
     }
@@ -279,7 +280,7 @@ class AggregateRepository @Inject constructor(
 
             val forecastByDay = response.map { (dateStr, timeSeriesList) ->
                 val utcDate = LocalDate.parse(dateStr)
-                // the API goes by UTC time and our app goes by Norwegian time so the following code fixes the intervals.
+                // the API goes by UTC time and our app uses Norwegian (CET/CEST) time so the following code fixes the intervals.
                 utcIntervals.map { utcHourStr ->
                     val utcHour = utcHourStr.toInt()
 
@@ -303,7 +304,7 @@ class AggregateRepository @Inject constructor(
                 }
             }
 
-            Log.d("WeatherRepository", "forecastByDay: $forecastByDay")
+            Log.d("AggregateRepository", "forecastByDay: $forecastByDay")
             return forecastByDay
 
         } catch (e: Exception) {
@@ -317,7 +318,7 @@ class AggregateRepository @Inject constructor(
      */
     override suspend fun getForecastForHour(location: Location): List<ForecastForHour> {
         val response = locationForecastRepository.getNext24Hours(location.lat, location.lon)
-        Log.d("WeatherRepository", "getWeatherForHour response: $response")
+        Log.d("AggregateRepository", "getWeatherForHour response: $response")
         val hourDataList: List<ForecastForHour> = response?.map { timeSeries ->
             val forecastForHour = ForecastForHour(
                 time = ZonedDateTime.parse(timeSeries.time).withZoneSameInstant(ZoneId.of("Europe/Oslo")).toString().substring(11, 13),
@@ -329,7 +330,7 @@ class AggregateRepository @Inject constructor(
             )
             forecastForHour
         } ?: emptyList()
-        Log.d("WeatherRepository", "getWeatherForHour response: $hourDataList")
+        Log.d("AggregateRepository", "getWeatherForHour response: $hourDataList")
         return hourDataList
     }
 
@@ -469,7 +470,7 @@ class AggregateRepository @Inject constructor(
                     ?.getAddressLine(0)
                 Location(addressLine ?: "Unknown location", lat, lon)
             } catch (e: Exception) {
-                Log.e("WeatherRepository", "Error getting device location: ", e)
+                Log.e("AggregateRepository", "Error getting device location: ", e)
                 return@startTracking
             }
 

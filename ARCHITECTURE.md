@@ -13,13 +13,13 @@ The VaerAktiv app follows a layered MVVM (Model-View-ViewModel) architecture, de
 
 ### Domain Layer
 
-- **Business Logic**: Though discrete use cases aren't encapsulated in separate files, they are all contained within an aggregate repository `WeatherRepository`, which is also responsible for data caching. The reason for this design choice is to be able to add and change use cases without having to constantly update dependency injections. Though it goes against the principles of high cohesion and low coupling, we also felt that over-separating could add unnecessary complexity given the scale of the project.
+- **Business Logic**: Though discrete use cases aren't encapsulated in separate files, they are all contained within an aggregate repository `AggregateRepository`, which is also responsible for data caching. The reason for this design choice is to be able to add and change use cases without having to constantly update dependency injections. Though it goes against the principles of high cohesion and low coupling, we also felt that over-separating could add unnecessary complexity given the scale of the project.
 
 ### Data Layer
 
 - **Data Sources**: Each data source (e.g., `LocationForecastDataSource`, `NowcastDataSource`, `SunriseDataSource`) is responsible for a single source of data, such as a network API, local database, or device sensor.
 
--  **Repositories**: Data sources have corresponding repositories, which further process and format the data. Repositories are then combined into an aggregate data repository called `WeatherRepository` which acts as the main interface between the ViewModel and the repositories, where data is also cached and further processed.
+-  **Repositories**: Data sources have corresponding repositories, which further process and format the data. Repositories are then combined into an aggregate data repository called `AggregateRepository` which acts as the main interface between the ViewModel and the repositories, where data is also cached and further processed.
 
 - **Models**: Data models are defined in the `model/` package, organized by feature (e.g., `aggregateModels/Location`, `ai/ActivitySuggestion`, `locationforecast/LocationForecastResponse`).
 

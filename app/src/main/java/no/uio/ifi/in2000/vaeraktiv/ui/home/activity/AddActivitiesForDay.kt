@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.home
+package no.uio.ifi.in2000.vaeraktiv.ui.home.activity
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
