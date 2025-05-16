@@ -74,4 +74,4 @@ The architecture ensures that:
 This approach ensures UI consistency and maintainability.
     
 ---   
-*For a visual overview, see the architecture diagram (if available).*
+*For a visual overview, see the [MODELING](https://github.uio.no/IN2000-V25/team-31/blob/main/MODELING.md) markdown file.*
