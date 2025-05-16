@@ -89,6 +89,10 @@ flowchart BT
 
 # Use cases
 
+## Use Case Diagram
+
+![Use_Case_Diagram](./diagrams/usecase/UsecaseDiagram.svg)
+
 ## Add Favorite Location
 
 **Name:** Add Favorite Location      
@@ -289,3 +293,29 @@ flowchart BT
 **Class Diagram**
 
 [Class Diagram](./diagrams/ClassDiagram.md)
+
+## Choice of diagrams
+
+The selected use cases and diagrams describes the applications core functionality, as well as addressing many of the requirements 
+listed in the project requirements. We have also made sure that the use cases are covering different components, so they provide 
+a good overview of the application.
+
+## Activity diagrams
+
+The activity diagrams shows how the user interacts with the system and what happens in response. With these diagrams we aim
+to give a better perspective on how conditional branches and loops work in the application depending on the users actions
+and the state of the application.
+
+## Sequence diagrams
+
+The sequence diagrams illustrates how the different components of the program interact and communicate over time to
+reach the postconditions of each use case. These diagrams are used to give a better overview of the responsibilities of
+the viewModels, repositories and data sources and how they communicate in response to user actions.
+
+## Class diagrams
+
+Class diagrams provide a structural overview of the use cases, including classes that are involved and their relationships. 
+They are used to highlight the use of design patterns and ensure that dependencies between classes are correctly aligned with 
+architecture principles. 
+
+
