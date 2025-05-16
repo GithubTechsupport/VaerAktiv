@@ -32,7 +32,7 @@ fun ExpandedWeatherDetails(data: ForecastToday) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(R.string.L_temp, data.tempMin!!),
+                    text = stringResource(R.string.L_temp, data.tempMin),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
@@ -60,7 +60,7 @@ fun ExpandedWeatherDetails(data: ForecastToday) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(R.string.ml, data.precipitationAmount!!),
+                    text = stringResource(R.string.ml, data.precipitationAmount ?: "N/A"),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
