@@ -33,7 +33,7 @@ import no.uio.ifi.in2000.vaeraktiv.utils.IconMapper
 
 /**
  * The card template for all the weather information to be filled into.
- * @param FavoriteLocation The dataclass which has the weather information for the specific location
+ * @param location The dataclass which has the weather information for the specific location
  */
 
 @Composable
@@ -42,7 +42,7 @@ fun PlaceCard(
     defaultPadding: Dp,
     viewModel: FavoriteLocationViewModel,
 ) {
-    val resourceId = IconMapper.fromName(location.iconDesc)
+    val resourceId = IconMapper.fromName(location.iconDesc ?: stringResource(R.string.n_a))
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -126,14 +126,14 @@ fun PlaceCard(
                     horizontalArrangement = Arrangement.Center
                 ){
                     Text(
-                        text = location.shortDesc,
+                        text = location.shortDesc ?: stringResource(R.string.n_a),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
                     Text(
-                        text = stringResource(R.string.uv, location.uv),
+                        text = stringResource(R.string.uv, location.uv ?: stringResource(R.string.n_a)),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
@@ -142,8 +142,8 @@ fun PlaceCard(
                     Text(
                         text = stringResource(
                             R.string.hoghest_lowest_temp,
-                            location.highestTemp,
-                            location.lowestTemp
+                            location.highestTemp ?: stringResource(R.string.n_a),
+                            location.lowestTemp ?: stringResource(R.string.n_a)
                         ),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onPrimary,
@@ -157,14 +157,14 @@ fun PlaceCard(
                 ) {
                     // Wind and downPour
                     Text(
-                        text = stringResource(R.string.m_s, location.wind),
+                        text = stringResource(R.string.m_s, location.wind ?: stringResource(R.string.n_a)),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
                             .padding(defaultPadding)
                     )
                     Text(
-                        text = stringResource(R.string.nedb_r_ml, location.downPour),
+                        text = stringResource(R.string.nedb_r_ml, location.downPour ?: stringResource(R.string.n_a)),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier

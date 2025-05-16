@@ -47,4 +47,12 @@
     <string name="avslutt">Avslutt</string>
     <string name="du_m_v_re_tilkoblet_internett_for_laste_inn_data">Du må være tilkoblet internett for å laste inn data.</string>
     <string name="ingen_internettforbindelse">Ingen Internettforbindelse</string>
+    <string name="mandag">Mandag</string>
+    <string name="tirsdag">Tirsdag</string>
+    <string name="torsdag">Torsdag</string>
+    <string name="lordag">Lørdag</string>
+    <string name="sondag">Søndag</string>
+    <string name="fredag">Fredag</string>
+    <string name="onsdag">Onsdag</string>
+    <string name="error">Error</string>
 </resources>
