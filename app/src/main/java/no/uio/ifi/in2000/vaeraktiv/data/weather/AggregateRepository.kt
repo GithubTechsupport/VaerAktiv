@@ -33,6 +33,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.LocationForecastResponse
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.TimeSeries
 import no.uio.ifi.in2000.vaeraktiv.model.locationforecast.Units
+import no.uio.ifi.in2000.vaeraktiv.utils.isInNorway
 import no.uio.ifi.in2000.vaeraktiv.utils.weatherDescriptions
 import java.time.LocalDate
 import java.time.LocalTime
@@ -68,15 +69,26 @@ class AggregateRepository @Inject constructor(
 
     /**
      * Sets current location to be displayed on homescreen.
+     * Filters out locations outside Norway.
+     * Does not assign location if it is the same as the current one.
      *
      * @param location new location to apply.
      */
     override fun setCurrentLocation(location: Location) {
-        Log.d("setCurrentLocation", "setCurrentLocation called with location: $location")
-        if (location == _currentLocation.value) {
-            Log.d("setCurrentLocation", "Location is the same as current location, not updating.")
+        Log.d("setCurrentLocation", "called with $location")
+
+        val lat = location.lat.toDoubleOrNull()
+        val lon = location.lon.toDoubleOrNull()
+        if (lat == null || lon == null || !isInNorway(lat, lon)) {
+            Log.d("setCurrentLocation", "Ignored outside Norway: $location")
             return
         }
+
+        if (location == _currentLocation.value) {
+            Log.d("setCurrentLocation", "No change, not updating.")
+            return
+        }
+
         _currentLocation.value = location
     }
 

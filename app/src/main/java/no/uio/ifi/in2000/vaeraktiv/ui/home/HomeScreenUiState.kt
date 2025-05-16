@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.vaeraktiv.ui.home
 
+import no.uio.ifi.in2000.vaeraktiv.model.ai.SuggestedActivities
 import no.uio.ifi.in2000.vaeraktiv.model.home.AlertData
 import no.uio.ifi.in2000.vaeraktiv.model.home.DetailedForecastForDay
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForDay
@@ -20,6 +21,7 @@ data class HomeScreenUiState(
     val next24Hours: List<ForecastForHour> = emptyList(),
     val dayIntervals: List<List<DetailedForecastForDay>> = emptyList(),
 
+    val activities: List<SuggestedActivities?> = List(8) { null },
     // errors
     val todaysWeatherError: String? = null,
     val loadingActivities: Set<Pair<Int, Int>> = emptySet(),
