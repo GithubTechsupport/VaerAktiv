@@ -1,6 +1,5 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.home
+package no.uio.ifi.in2000.vaeraktiv.ui.home.weather
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -18,10 +17,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastToday
 import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
+import no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenUiState
+import no.uio.ifi.in2000.vaeraktiv.utils.IconMapper
 
 /**
  * Composable function that displays today's weather with the option to expand for more details.
@@ -30,15 +30,13 @@ import no.uio.ifi.in2000.vaeraktiv.ui.ErrorMessage
  * @param uiState UI state containing errors and hourly forecasts.
  */
 
-@SuppressLint("DiscouragedApi")
 @Composable
 fun DisplayWeather(data: ForecastToday?, uiState: HomeScreenUiState) {
     if (data == null) {
         ErrorMessage(message = "Ingen værdata tilgjengelig")
         return
     }
-    val context = LocalContext.current
-    val iconResId = context.resources.getIdentifier(data.iconNow, "drawable", context.packageName)
+    val iconResId = IconMapper.fromName(data.iconNow?:"")
     var expanded by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
 

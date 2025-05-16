@@ -140,7 +140,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideWeatherRepository(
+    fun provideAggregateRepository(
         metAlertsRepository: MetAlertsRepository,
         locationForecastRepository: LocationForecastRepository,
         sunriseRepository: SunriseRepository,

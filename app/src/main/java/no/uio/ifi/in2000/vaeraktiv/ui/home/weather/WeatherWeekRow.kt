@@ -1,6 +1,5 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.home
+package no.uio.ifi.in2000.vaeraktiv.ui.home.weather
 
-import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -27,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.uio.ifi.in2000.vaeraktiv.R
 import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForDay
+import no.uio.ifi.in2000.vaeraktiv.utils.IconMapper
 
 /**
  * A single row in the weekly weather forecast, showing the day name, max temperature,
@@ -40,7 +40,7 @@ import no.uio.ifi.in2000.vaeraktiv.model.home.ForecastForDay
  * @param expanded A Boolean indicating whether the row is currently expanded.
  * @param onClick Callback function invoked when the row is clicked.
  */
-@SuppressLint("DiscouragedApi")
+
 @Composable
 fun WeatherWeekRow(
     day: ForecastForDay,
@@ -89,7 +89,7 @@ fun WeatherWeekRow(
             // Weather icon resolved at runtime
             Image(
                 painter = painterResource(
-                    id = context.resources.getIdentifier(iconResId, "drawable", context.packageName)
+                    id = IconMapper.fromName(iconResId)
                 ),
                 contentDescription = "Today's weather",
                 modifier = Modifier.size(40.dp)

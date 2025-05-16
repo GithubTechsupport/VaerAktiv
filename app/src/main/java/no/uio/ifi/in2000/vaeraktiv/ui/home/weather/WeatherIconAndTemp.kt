@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.home
+package no.uio.ifi.in2000.vaeraktiv.ui.home.weather
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

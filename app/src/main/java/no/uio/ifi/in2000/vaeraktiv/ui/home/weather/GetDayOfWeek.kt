@@ -1,6 +1,7 @@
-package no.uio.ifi.in2000.vaeraktiv.ui.home
+package no.uio.ifi.in2000.vaeraktiv.ui.home.weather
 
 import android.util.Log
+import java.time.DayOfWeek
 import java.time.LocalDate
 
 
@@ -15,13 +16,13 @@ fun getDayOfWeek(date: String): String {
     return try {
         val localDate = LocalDate.parse(date)
         when (localDate.dayOfWeek) {
-            java.time.DayOfWeek.MONDAY -> "Mandag"
-            java.time.DayOfWeek.TUESDAY -> "Tirsdag"
-            java.time.DayOfWeek.WEDNESDAY -> "Onsdag"
-            java.time.DayOfWeek.THURSDAY -> "Torsdag"
-            java.time.DayOfWeek.FRIDAY -> "Fredag"
-            java.time.DayOfWeek.SATURDAY -> "Lørdag"
-            java.time.DayOfWeek.SUNDAY -> "Søndag"
+            DayOfWeek.MONDAY -> "Mandag"
+            DayOfWeek.TUESDAY -> "Tirsdag"
+            DayOfWeek.WEDNESDAY -> "Onsdag"
+            DayOfWeek.THURSDAY -> "Torsdag"
+            DayOfWeek.FRIDAY -> "Fredag"
+            DayOfWeek.SATURDAY -> "Lørdag"
+            DayOfWeek.SUNDAY -> "Søndag"
             else -> "N/A"
         }
     } catch (e: Exception) {
