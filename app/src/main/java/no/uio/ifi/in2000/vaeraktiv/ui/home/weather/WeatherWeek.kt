@@ -41,14 +41,13 @@ import no.uio.ifi.in2000.vaeraktiv.ui.home.activity.LoadAllActivities
  *
  * Activities are fetched on-demand when a day is expanded and no cached data exists.
  *
- * @param activities A list of [SuggestedActivities] for each day of the week (nullable for missing data).
+// * @param activities A list of [SuggestedActivities] for each day of the week (nullable for missing data).
  * @param viewModel The [no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenViewModel] used to fetch and update activity data.
  * @param uiState A [no.uio.ifi.in2000.vaeraktiv.ui.home.HomeScreenUiState] holding the UI's current state, including weather and loading flags.
  */
 
 @Composable
 fun WeatherWeek(
-    activities: List<SuggestedActivities?>?,
     viewModel: HomeScreenViewModel,
     uiState: HomeScreenUiState
 ) {
@@ -92,7 +91,7 @@ fun WeatherWeek(
             val dayNr = index + 1
             val isLoading = uiState.loadingFutureActivities.contains(dayNr)
             var expanded by remember { mutableStateOf(false) }
-            val activitiesForThisDay = uiState.activities?.get(dayNr)
+            val activitiesForThisDay = uiState.activities[dayNr]
             WeatherWeekRow(day, day.icon, context, expanded = expanded, onClick = {
                 if (activitiesForThisDay == null && !isLoading) {
                     viewModel.getActivitiesForAFutureDay(dayNr)
@@ -124,7 +123,7 @@ fun WeatherWeek(
                         AddActivitiesForDay(
                             dayNr = dayNr,
                             activityDate = ActivityDate(
-                                date = getDayOfWeek(day.date),
+                                date = getDayOfWeek(day.date, context),
                                 activities = activityDate.activities
                             ),
                             isLoading = { uiState.loadingActivities },

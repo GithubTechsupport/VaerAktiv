@@ -88,7 +88,7 @@ fun HomeContent(
                     error = uiState.thisWeeksWeatherError,
                     errorMessagePrefix = "Error fetching weekly forecast"
                 ) {
-                    WeatherWeek(activities, viewModel, uiState)
+                    WeatherWeek(viewModel, uiState)
                 }
             }
         }
