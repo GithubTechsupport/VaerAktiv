@@ -64,7 +64,7 @@ fun TodaysActivitiesSection(
 
                 // Display activities if available
                 else -> {
-                    activities?.getOrNull(0)?.activities?.let { todaysActivities ->
+                    uiState.activities?.getOrNull(0)?.activities?.let { todaysActivities ->
                         AddActivitiesForDay(
                             dayNr = 0,
                             activityDate = ActivityDate("I dag", todaysActivities),
