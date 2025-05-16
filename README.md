@@ -1,6 +1,6 @@
 # VærAktiv - README
 
-This is the readme file for the application. This file provides an overview of the project, inclusion instructions on how to download and run Væraktiv. It also outlines the key dependencies, location and warnings present in the code.
+This is the readme file for the application. This file provides an overview of the project, inclusion instructions on how to download and run VærAktiv. It also outlines the key dependencies, location and warnings present in the code.
 
 ## Documentation
 
@@ -8,7 +8,7 @@ Documentation on functions and classes can be viewed within the codebase.
 
 ## Running the app
 
-### 1.Install Androider studio
+### 1.Install Android studio
 - Go to [https://developer.android.com/studio](https://developer.android.com/studio) and install Android Studio on your device. Instructions for downloading and setting it out are available on the site.
 
 ### 2. Clone the project to your computer
@@ -23,7 +23,7 @@ Documentation on functions and classes can be viewed within the codebase.
 - Now you clone the project repository by following the instructions in the next section.
 
 ### 3. Clone the repository via Github
-if you Are unfamilliar with Clintons a GitHub repository, follow these steps: 
+If you are unfamiliar with cloning a GitHub repository, follow these steps: 
 - Go to the repository [https://github.uio.no/IN2000-V25/team-31](https://github.uio.no/IN2000-V25/team-31)
 - Click on the green button and copy the HTTPS link provided
 - In your terminal window inside your folder, run:
@@ -32,7 +32,7 @@ if you Are unfamilliar with Clintons a GitHub repository, follow these steps:
 
 - This will download the project to your folder 
 
-### 4. Run the application in Andorid studios
+### 4. Run the application in Android studios
 - Open Android studios
 - Select **Open** or **Open Project**
 - Navigate to the **team-31** folder you cloned and click open.
