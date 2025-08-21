@@ -20,11 +20,11 @@ object AiClientModule {
     @Singleton
     @Named("OpenAi-Client")
     fun provideOpenAiClient(): AiClient {
-        val apiKey = "3yoURlTha7POk9V41F9wbifVAKkkrvpEEvfsFZZvBHhLgii2QhXPJQQJ99BDACfhMk5XJ3w3AAABACOG6HGy"
+        val apiKey = "YOUR_OPENAI_API_KEY"
         val azureHost = OpenAIHost.azure(
-            resourceName = "UIO-MN-IFI-IN2000-SWE1",
-            deploymentId = "gpt-4.1-T31",
-            apiVersion = "2024-12-01-preview"
+            resourceName = "YOUR_RESOURCE_NAME",
+            deploymentId = "YOUR_DEPLOYMENT_ID",
+            apiVersion = "YOUR_API_VERSION" // e.g., "2024-05-13"
         )
         val client = OpenAI(
             OpenAIConfig(

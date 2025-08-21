@@ -18,7 +18,7 @@ object PlacesClientModule {
     fun providePlacesClientModule(
         @ApplicationContext context: Context
     ): PlacesClient {
-        Places.initializeWithNewPlacesApiEnabled(context, "AIzaSyAd7O7mvzNTGqRaFYhWWsJdJvq-GyVbedA")
+        Places.initializeWithNewPlacesApiEnabled(context, "YOUR_PLACES_API_KEY")
         return Places.createClient(context)
     }
 }
