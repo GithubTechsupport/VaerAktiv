@@ -17,9 +17,9 @@ class StravaAuthManager @Inject constructor(
     private val storage: TokenStorage,
 ) {
     private val tokenUrl = "https://www.strava.com/oauth/token"
-    private val initialRefreshToken = "cee197301f38b58044bcb4b573f53682c8a5f6d0"
-    private val clientId = "156834"
-    private val clientSecret = "59676a32980c48e129b589b2d076e4a23f619e4b"
+    private val initialRefreshToken = "YOUR_STRAVA_REFRESH_TOKEN"
+    private val clientId = "YOUR_STRAVA_CLIENT_ID"
+    private val clientSecret = "YOUR_STRAVA_CLIENT_SECRET"
 
     suspend fun getAccessToken(): String {
         val stored = storage.getTokens()
