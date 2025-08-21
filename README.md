@@ -55,6 +55,11 @@ In addition to the other dependencies below, the app requires several API keys f
 - **OpenAI API-key** 
 		- This key allows the app to access the OpenAI API for generating activity suggestions.
 
+Default values for API keys can be replaced at:
+`network/placesclient/PlacesClient.kt` in `Line: 21`
+`data/strava/StravaAuthManager.kt` in `Line: 20`, `Line: 21` & `Line: 22`
+`network/aiclient/AiClientModule.kt` in `Line: 25`, `Line: 26` & `Line: 27`
+
 The app uses several libraries and frameworks:
 
 - [Ktor](https://ktor.io/)
